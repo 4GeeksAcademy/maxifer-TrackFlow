@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="TrackFlow es una empresa de logística de última milla y gestión de almacenes para marcas e-commerce en Estados Unidos y España."
+      content="TrackFlow coordina inventario, preparación de pedidos, transportistas y devoluciones para marcas e-commerce que operan entre Estados Unidos y España."
     />
     <title>TrackFlow | Logística de última milla para e-commerce</title>
     <link rel="canonical" href="index.html" />
@@ -17,13 +17,134 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="TrackFlow" />
     <meta property="og:title" content="TrackFlow | Logística de última milla para e-commerce" />
-    <meta property="og:description" content="TrackFlow almacena inventario, prepara pedidos, coordina envíos con transportistas y gestiona devoluciones para marcas e-commerce en Estados Unidos y España." />
+    <meta property="og:description" content="TrackFlow coordina inventario, preparación de pedidos, transportistas y devoluciones para marcas e-commerce que operan entre Estados Unidos y España." />
     <meta property="og:image" content="assets/trackflow-hero.png" />
     <meta property="og:locale" content="es_ES" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="TrackFlow | Logística de última milla para e-commerce" />
-    <meta name="twitter:description" content="Operación logística de última milla, almacenes, transportistas, incidencias y devoluciones para marcas e-commerce." />
+    <meta name="twitter:description" content="Inventario, preparación de pedidos, transportistas y devoluciones para operaciones e-commerce en crecimiento." />
     <meta name="twitter:image" content="assets/trackflow-hero.png" />
+    <style>
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: var(--header-anchor-offset, 4.5rem);
+      }
+
+      [id] {
+        scroll-margin-top: var(--header-anchor-offset, 4.5rem);
+      }
+
+      [data-nav-link] {
+        position: relative;
+        isolation: isolate;
+        color: #cbd5e1;
+        font-weight: 500;
+        transition:
+          color 180ms ease,
+          text-shadow 180ms ease,
+          background-color 180ms ease,
+          border-color 180ms ease;
+      }
+
+      [data-nav-link]::before,
+      [data-nav-link]::after {
+        content: "";
+        position: absolute;
+        pointer-events: none;
+        opacity: 0;
+        transition:
+          opacity 180ms ease,
+          transform 220ms ease;
+      }
+
+      [data-nav-link][data-active="true"] {
+        color: #f8fafc;
+        text-shadow: 0 0 18px rgb(16 185 129 / 0.35);
+      }
+
+      @media (min-width: 768px) {
+        [data-nav-link] {
+          padding-block: 0.45rem;
+        }
+
+        [data-nav-link]::before {
+          left: 50%;
+          top: -0.2rem;
+          height: 0.35rem;
+          width: 0.35rem;
+          border-radius: 999px;
+          background: #f59e0b;
+          box-shadow: 0 0 18px rgb(245 158 11 / 0.7);
+          transform: translateX(-50%) scale(0.4);
+        }
+
+        [data-nav-link]::after {
+          inset-inline: -0.2rem;
+          bottom: -0.35rem;
+          height: 0.16rem;
+          border-radius: 999px;
+          background: linear-gradient(90deg, transparent, #10b981 20%, #f59e0b 80%, transparent);
+          box-shadow: 0 0 16px rgb(16 185 129 / 0.45);
+          transform: scaleX(0.18);
+        }
+
+        [data-nav-link][data-active="true"]::before,
+        [data-nav-link][data-active="true"]::after {
+          opacity: 1;
+          transform: translateX(-50%) scale(1);
+        }
+
+        [data-nav-link][data-active="true"]::after {
+          transform: scaleX(1);
+        }
+      }
+
+      @media (max-width: 767px) {
+        [data-mobile-menu] [data-nav-link] {
+          border: 1px solid transparent;
+        }
+
+        [data-mobile-menu] [data-nav-link]::before {
+          left: 0.55rem;
+          top: 50%;
+          height: 1.4rem;
+          width: 0.18rem;
+          border-radius: 999px;
+          background: linear-gradient(180deg, #f59e0b, #10b981);
+          box-shadow: 0 0 18px rgb(16 185 129 / 0.45);
+          transform: translateY(-50%) scaleY(0.4);
+        }
+
+        [data-mobile-menu] [data-nav-link][data-active="true"] {
+          border-color: rgb(16 185 129 / 0.28);
+          background:
+            linear-gradient(90deg, rgb(16 185 129 / 0.18), rgb(245 158 11 / 0.08)),
+            rgb(255 255 255 / 0.04);
+          padding-left: 2rem;
+        }
+
+        [data-mobile-menu] [data-nav-link][data-active="true"]::before {
+          opacity: 1;
+          transform: translateY(-50%) scaleY(1);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        [data-mobile-menu],
+        [data-mobile-menu-content],
+        [data-faq-panel],
+        [data-faq-icon],
+        [data-nav-link],
+        [data-nav-link]::before,
+        [data-nav-link]::after {
+          transition-duration: 1ms !important;
+        }
+      }
+    </style>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -95,7 +216,7 @@
             "@id": "index.html#webpage",
             "url": "index.html",
             "name": "TrackFlow | Logística de última milla para e-commerce",
-            "description": "Servicios de almacenamiento, preparación de pedidos, coordinación de transportistas, seguimiento de incidencias y logística inversa para marcas e-commerce.",
+            "description": "TrackFlow coordina inventario, preparación de pedidos, transportistas y devoluciones para marcas e-commerce que necesitan operar entre Estados Unidos y España.",
             "isPartOf": {
               "@id": "index.html#website"
             },
@@ -106,7 +227,10 @@
               "@type": "ImageObject",
               "url": "assets/trackflow-hero.png"
             },
-            "inLanguage": "es"
+            "inLanguage": "es",
+            "mainEntity": {
+              "@id": "index.html#faqs"
+            }
           },
           {
             "@type": "Service",
@@ -169,6 +293,66 @@
             }
           },
           {
+            "@type": "FAQPage",
+            "@id": "index.html#faqs",
+            "url": "index.html#faqs",
+            "name": "Preguntas frecuentes sobre TrackFlow",
+            "inLanguage": "es",
+            "about": {
+              "@id": "index.html#logistics-service"
+            },
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "¿Qué es TrackFlow?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "TrackFlow es una empresa de logística de última milla y gestión de almacenes para marcas e-commerce. Fue fundada en 2009 en Los Ángeles y opera con equipos y almacenes en Estados Unidos y España."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Qué servicios logísticos ofrece TrackFlow?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "TrackFlow ofrece almacenamiento de inventario, preparación y embalaje de pedidos, coordinación de última milla, seguimiento de entregas, gestión de incidencias, logística inversa y soporte operativo para marcas y destinatarios."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿En qué países opera TrackFlow?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "TrackFlow opera en Estados Unidos y España, con almacenes en Los Ángeles y Zaragoza y equipos distribuidos entre ambos mercados."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Qué tipo de empresas trabajan con TrackFlow?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "TrackFlow trabaja con marcas e-commerce que necesitan externalizar o mejorar su operación logística, desde el almacenamiento del inventario hasta la entrega y gestión de devoluciones."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Cómo gestiona TrackFlow la última milla y los transportistas?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "TrackFlow coordina envíos con una red de 8 transportistas en Estados Unidos y España y gestiona incidencias como entregas fallidas, paquetes perdidos o direcciones incorrectas."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Cómo gestiona TrackFlow las devoluciones?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "TrackFlow gestiona devoluciones que pueden representar entre el 18% y el 25% del volumen operativo según cliente y país. El proceso incluye revisión de casos y decisiones sobre recogida, reacondicionamiento o descarte."
+                }
+              }
+            ]
+          },
+          {
             "@type": "BreadcrumbList",
             "@id": "index.html#breadcrumbs",
             "itemListElement": [
@@ -186,9 +370,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="bg-[#0F172A] text-[#F8FAFC] antialiased">
-    <header class="fixed inset-x-0 top-0 z-40 border-b border-[#1E293B] bg-[#0F172A]/80 backdrop-blur">
-      <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8" aria-label="Navegación principal">
-        <a href="index.html" class="flex items-center gap-3" aria-label="TrackFlow inicio">
+    <header class="fixed inset-x-0 top-0 z-40">
+      <div class="border-b border-[#1E293B] bg-[#0F172A]/80 backdrop-blur">
+        <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8" aria-label="Navegación principal">
+        <a href="#inicio" class="flex items-center gap-3" aria-label="TrackFlow inicio">
           <img src="assets/trackflow-logo.svg" alt="" class="h-10 w-10 rounded" aria-hidden="true" />
           <span>
             <span class="block text-base font-semibold tracking-wide">TrackFlow</span>
@@ -196,16 +381,15 @@
           </span>
         </a>
         <div class="hidden items-center gap-8 text-sm text-[#CBD5E1] md:flex">
-          <a class="hover:text-white" href="#operacion">Operación</a>
-          <a class="hover:text-white" href="#plataforma">Servicios</a>
-          <a class="hover:text-white" href="#mercados">Mercados</a>
-          <a class="hover:text-white" href="#contacto">Contacto</a>
+          <a class="transition hover:text-white" href="#plataforma" data-nav-link>Servicios</a>
+          <a class="transition hover:text-white" href="#mercados" data-nav-link>Mercados</a>
+          <a class="transition hover:text-white" href="#faqs" data-nav-link>FAQs</a>
         </div>
         <a
           href="application.html"
           class="hidden rounded bg-[#10B981] px-4 py-2 text-sm font-semibold text-[#0F172A] transition hover:bg-[#34D399] focus:outline-none focus:ring-2 focus:ring-[#10B981] focus:ring-offset-2 focus:ring-offset-[#0F172A] md:inline-flex"
         >
-          Completar formulario
+          Contáctanos
         </a>
         <button
           type="button"
@@ -222,24 +406,24 @@
             <span class="absolute left-0 top-4 block h-0.5 w-5 rounded bg-current transition" data-menu-line="bottom"></span>
           </span>
         </button>
-      </nav>
-      <div id="mobile-menu" class="hidden border-t border-[#1E293B] bg-[#0F172A]/95 px-5 pb-5 pt-2 shadow-2xl md:hidden" data-mobile-menu>
-        <div class="mx-auto flex max-w-7xl flex-col gap-1 text-sm font-medium text-[#CBD5E1]">
-          <a class="rounded px-3 py-3 transition hover:bg-white/10 hover:text-white" href="#operacion">Operación</a>
-          <a class="rounded px-3 py-3 transition hover:bg-white/10 hover:text-white" href="#plataforma">Servicios</a>
-          <a class="rounded px-3 py-3 transition hover:bg-white/10 hover:text-white" href="#mercados">Mercados</a>
-          <a class="rounded px-3 py-3 transition hover:bg-white/10 hover:text-white" href="#contacto">Contacto</a>
+        </nav>
+      </div>
+      <div id="mobile-menu" class="pointer-events-none grid grid-rows-[0fr] border-b border-white/10 bg-[#0F172A]/70 px-5 opacity-0 shadow-md shadow-[#0F172A]/20 backdrop-blur-sm transition-all duration-300 ease-out md:hidden" aria-hidden="true" inert data-mobile-menu>
+        <div class="mx-auto flex w-full max-w-7xl -translate-y-3 flex-col gap-1 overflow-hidden pb-0 pt-0 text-sm font-medium text-[#CBD5E1] transition-all duration-300 ease-out" data-mobile-menu-content>
+          <a class="block w-full rounded px-3 py-3 transition hover:bg-white/10 hover:text-white" href="#plataforma" data-nav-link>Servicios</a>
+          <a class="block w-full rounded px-3 py-3 transition hover:bg-white/10 hover:text-white" href="#mercados" data-nav-link>Mercados</a>
+          <a class="block w-full rounded px-3 py-3 transition hover:bg-white/10 hover:text-white" href="#faqs" data-nav-link>FAQs</a>
           <a
             href="application.html"
-            class="mt-3 inline-flex items-center justify-center rounded bg-[#10B981] px-4 py-3 text-sm font-semibold text-[#0F172A] transition hover:bg-[#34D399] focus:outline-none focus:ring-2 focus:ring-[#10B981] focus:ring-offset-2 focus:ring-offset-[#0F172A]"
+            class="mt-3 inline-flex w-full items-center justify-center rounded bg-[#10B981] px-4 py-3 text-sm font-semibold text-[#0F172A] transition hover:bg-[#34D399] focus:outline-none focus:ring-2 focus:ring-[#10B981] focus:ring-offset-2 focus:ring-offset-[#0F172A]"
           >
-            Completar formulario
+            Contáctanos
           </a>
         </div>
       </div>
     </header>
 
-    <main>
+    <main id="inicio">
       <section class="relative min-h-screen overflow-hidden pt-24">
         <img
           src="assets/trackflow-hero.png"
@@ -255,19 +439,17 @@
               Fundada en 2009 | Los Ángeles + Zaragoza
             </p>
             <h1 class="text-5xl font-black leading-[0.95] text-white sm:text-6xl lg:text-7xl">
-              Logística de última milla y almacenes para marcas e-commerce.
+              Logística, última milla y devoluciones para operaciones e-commerce en crecimiento.
             </h1>
             <p class="mt-6 max-w-2xl text-lg leading-8 text-[#CBD5E1]">
-              TrackFlow almacena inventario, prepara pedidos, coordina envíos con transportistas
-              y gestiona devoluciones para marcas que necesitan mover productos desde el almacén
-              hasta la puerta del cliente.
+              TrackFlow coordina inventario, preparación de pedidos, transportistas y devoluciones para marcas e-commerce que necesitan operar entre Estados Unidos y España sin perder visibilidad de su logística.
             </p>
             <div class="mt-9 flex flex-col gap-3 sm:flex-row">
               <a
                 href="application.html"
                 class="inline-flex items-center justify-center rounded bg-[#10B981] px-6 py-4 text-sm font-bold text-[#0F172A] transition hover:bg-[#34D399] focus:outline-none focus:ring-2 focus:ring-[#10B981] focus:ring-offset-2 focus:ring-offset-[#0F172A]"
               >
-                Completar formulario
+                Contáctanos
               </a>
               <a
                 href="#plataforma"
@@ -292,11 +474,11 @@
           </article>
           <article class="rounded border border-[#1E293B] bg-white/[0.03] p-5">
             <p class="text-3xl font-black text-[#F59E0B]">8</p>
-            <p class="mt-2 text-sm text-[#CBD5E1]">transportistas coordinados para última milla</p>
+            <p class="mt-2 text-sm text-[#CBD5E1]">transportistas coordinados diariamente para operaciones de última milla</p>
           </article>
           <article class="rounded border border-[#1E293B] bg-white/[0.03] p-5">
-            <p class="text-3xl font-black text-[#F59E0B]">18-25%</p>
-            <p class="mt-2 text-sm text-[#CBD5E1]">volumen de devoluciones según cliente y país</p>
+            <p class="text-3xl font-black text-[#F59E0B]">18–25%</p>
+            <p class="mt-2 text-sm text-[#CBD5E1]">del volumen operativo corresponde a devoluciones según cliente y mercado</p>
           </article>
         </div>
       </section>
@@ -306,8 +488,7 @@
           <p class="text-sm font-bold uppercase tracking-[0.25em] text-[#F59E0B]">Qué ofrecemos hoy</p>
           <h2 class="mt-4 text-4xl font-black text-white sm:text-5xl">Operación logística para marcas e-commerce.</h2>
           <p class="mt-5 text-lg leading-8 text-[#CBD5E1]">
-            TrackFlow se hace cargo de la operación desde que entra un pedido hasta que se entrega
-            o vuelve como devolución: inventario, preparación, embalaje, transportistas e incidencias.
+            TrackFlow gestiona la operación desde que entra un pedido hasta que se entrega o vuelve como devolución: inventario, preparación, embalaje, transportistas, incidencias y logística inversa.
           </p>
         </div>
 
@@ -315,22 +496,22 @@
           <article class="rounded border border-[#1E293B] bg-[#111827] p-6">
             <span class="text-2xl font-black text-[#F59E0B]" aria-hidden="true">01</span>
             <h3 class="mt-5 text-xl font-bold text-white">Almacenamiento de inventario</h3>
-            <p class="mt-3 text-[#CBD5E1]">Gestión física de inventario para marcas e-commerce en almacenes de Los Ángeles y Zaragoza.</p>
+            <p class="mt-3 text-[#CBD5E1]">Gestión física de inventario para marcas e-commerce desde almacenes ubicados en Los Ángeles y Zaragoza.</p>
           </article>
           <article class="rounded border border-[#1E293B] bg-[#111827] p-6">
             <span class="text-2xl font-black text-[#F59E0B]" aria-hidden="true">02</span>
             <h3 class="mt-5 text-xl font-bold text-white">Preparación y embalaje</h3>
-            <p class="mt-3 text-[#CBD5E1]">Recepción de pedidos, picking, preparación de paquetes y entrega al transportista correspondiente.</p>
+            <p class="mt-3 text-[#CBD5E1]">Recepción de pedidos, picking, preparación de paquetes y coordinación con el transportista asignado.</p>
           </article>
           <article class="rounded border border-[#1E293B] bg-[#111827] p-6">
             <span class="text-2xl font-black text-[#F59E0B]" aria-hidden="true">03</span>
             <h3 class="mt-5 text-xl font-bold text-white">Última milla</h3>
-            <p class="mt-3 text-[#CBD5E1]">Coordinación de envíos con una red de 8 transportistas en Estados Unidos y España.</p>
+            <p class="mt-3 text-[#CBD5E1]">Coordinación de envíos y entregas con una red de transportistas en Estados Unidos y España.</p>
           </article>
           <article class="rounded border border-[#1E293B] bg-[#111827] p-6">
             <span class="text-2xl font-black text-[#F59E0B]" aria-hidden="true">04</span>
-            <h3 class="mt-5 text-xl font-bold text-white">Seguimiento e incidencias</h3>
-            <p class="mt-3 text-[#CBD5E1]">Seguimiento de entregas y gestión de incidencias como paquetes perdidos, entregas fallidas o direcciones incorrectas.</p>
+            <h3 class="mt-5 text-xl font-bold text-white">Seguimiento operativo e incidencias</h3>
+            <p class="mt-3 text-[#CBD5E1]">Seguimiento de entregas y resolución de incidencias entre almacenes, transportistas y clientes finales.</p>
           </article>
           <article class="rounded border border-[#1E293B] bg-[#111827] p-6">
             <span class="text-2xl font-black text-[#F59E0B]" aria-hidden="true">05</span>
@@ -339,8 +520,8 @@
           </article>
           <article class="rounded border border-[#1E293B] bg-[#111827] p-6">
             <span class="text-2xl font-black text-[#F59E0B]" aria-hidden="true">06</span>
-            <h3 class="mt-5 text-xl font-bold text-white">Atención a marcas y destinatarios</h3>
-            <p class="mt-3 text-[#CBD5E1]">Soporte para marcas que consultan su operación y consumidores finales que preguntan por sus paquetes.</p>
+            <h3 class="mt-5 text-xl font-bold text-white">Atención operativa para marcas y clientes finales</h3>
+            <p class="mt-3 text-[#CBD5E1]">Gestión de consultas relacionadas con pedidos, entregas, incidencias y devoluciones en ambos mercados.</p>
           </article>
         </div>
       </section>
@@ -349,27 +530,137 @@
         <div class="mx-auto grid max-w-7xl gap-12 px-5 py-24 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
           <div>
             <p class="text-sm font-bold uppercase tracking-[0.25em] text-[#B45309]">Dos mercados</p>
-            <h2 class="mt-4 text-4xl font-black sm:text-5xl">Operación logística entre Estados Unidos y España.</h2>
+            <h2 class="mt-4 text-4xl font-black sm:text-5xl">Dos países. Una operación logística conectada.</h2>
             <p class="mt-5 text-lg leading-8 text-[#475569]">
-              TrackFlow trabaja con almacenes en Los Ángeles y Zaragoza, equipos distribuidos entre ambos países
-              y una red de transportistas que incluye UPS, FedEx, DHL, MRW y SEUR.
+              Los equipos de TrackFlow operan entre Los Ángeles y Zaragoza coordinando almacenes, transportistas, incidencias y devoluciones para marcas e-commerce en dos mercados distintos.
             </p>
           </div>
           <div class="grid gap-4 sm:grid-cols-2">
             <article class="rounded border border-[#CBD5E1] bg-[#F8FAFC] p-6">
               <h3 class="text-2xl font-black">Los Ángeles</h3>
-              <p class="mt-3 text-[#475569]">Sede ejecutiva y almacén para la operación en Estados Unidos.</p>
+              <p class="mt-3 text-[#475569]">Sede ejecutiva y almacén para la operación logística en Estados Unidos.</p>
             </article>
             <article class="rounded border border-[#CBD5E1] bg-[#F8FAFC] p-6">
               <h3 class="text-2xl font-black">Zaragoza</h3>
-              <p class="mt-3 text-[#475569]">Oficina tecnológica y almacén para la operación en España.</p>
+              <p class="mt-3 text-[#475569]">Oficina tecnológica y almacén para la operación logística en España.</p>
             </article>
             <article class="rounded border border-[#CBD5E1] bg-[#F8FAFC] p-6 sm:col-span-2">
               <h3 class="text-2xl font-black">Cobertura operativa</h3>
               <p class="mt-3 text-[#475569]">
-                Equipos de almacén, última milla, logística inversa, atención al cliente, comercial
-                y tecnología trabajan distribuidos entre ambos países.
+                Equipos de almacén, última milla, logística inversa, atención al cliente y tecnología trabajan distribuidos entre ambos países.
               </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="faqs" class="border-y border-[#1E293B] bg-[#111827]/70">
+        <div class="mx-auto max-w-7xl px-5 py-24 lg:px-8">
+          <div class="max-w-3xl">
+            <p class="text-sm font-bold uppercase tracking-[0.25em] text-[#F59E0B]">FAQs</p>
+            <h2 class="mt-4 text-4xl font-black text-white sm:text-5xl">Preguntas frecuentes sobre TrackFlow.</h2>
+            <p class="mt-5 text-lg leading-8 text-[#CBD5E1]">
+              Respuestas directas sobre la operación logística, la cobertura geográfica, la última milla y las devoluciones para marcas e-commerce.
+            </p>
+          </div>
+
+          <div class="mt-14 grid gap-4" data-faqs>
+            <article class="rounded border border-[#10B981]/40 bg-[#0F172A] shadow-lg shadow-[#10B981]/5 transition-colors duration-300" data-faq-item>
+              <h3>
+                <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[#F59E0B] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#10B981]" aria-expanded="true" aria-controls="faq-answer-1" data-faq-trigger>
+                  <span>¿Qué es TrackFlow?</span>
+                  <span class="grid h-9 w-9 shrink-0 rotate-45 place-items-center rounded border border-white/10 bg-white/5 text-[#10B981] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
+                </button>
+              </h3>
+              <div id="faq-answer-1" class="grid grid-rows-[1fr] transition-all duration-300 ease-out" data-faq-panel>
+                <div class="overflow-hidden">
+                  <p class="px-6 pb-6 leading-7 text-[#CBD5E1]">
+                    TrackFlow es una empresa de logística de última milla y gestión de almacenes para marcas e-commerce.
+                    Fue fundada en 2009 en Los Ángeles y opera con equipos y almacenes en Estados Unidos y España.
+                  </p>
+                </div>
+              </div>
+            </article>
+            <article class="rounded border border-[#1E293B] bg-[#0F172A] transition-colors duration-300" data-faq-item>
+              <h3>
+                <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[#F59E0B] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#10B981]" aria-expanded="false" aria-controls="faq-answer-2" data-faq-trigger>
+                  <span>¿Qué servicios logísticos ofrece TrackFlow?</span>
+                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[#10B981] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
+                </button>
+              </h3>
+              <div id="faq-answer-2" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out" data-faq-panel>
+                <div class="overflow-hidden">
+                  <p class="px-6 pb-6 leading-7 text-[#CBD5E1]">
+                    TrackFlow ofrece almacenamiento de inventario, preparación y embalaje de pedidos,
+                    coordinación de última milla, seguimiento de entregas, gestión de incidencias,
+                    logística inversa y soporte operativo para marcas y destinatarios.
+                  </p>
+                </div>
+              </div>
+            </article>
+            <article class="rounded border border-[#1E293B] bg-[#0F172A] transition-colors duration-300" data-faq-item>
+              <h3>
+                <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[#F59E0B] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#10B981]" aria-expanded="false" aria-controls="faq-answer-3" data-faq-trigger>
+                  <span>¿En qué países opera TrackFlow?</span>
+                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[#10B981] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
+                </button>
+              </h3>
+              <div id="faq-answer-3" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out" data-faq-panel>
+                <div class="overflow-hidden">
+                  <p class="px-6 pb-6 leading-7 text-[#CBD5E1]">
+                    TrackFlow opera en Estados Unidos y España, con almacenes en Los Ángeles y Zaragoza
+                    y equipos distribuidos entre ambos mercados.
+                  </p>
+                </div>
+              </div>
+            </article>
+            <article class="rounded border border-[#1E293B] bg-[#0F172A] transition-colors duration-300" data-faq-item>
+              <h3>
+                <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[#F59E0B] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#10B981]" aria-expanded="false" aria-controls="faq-answer-4" data-faq-trigger>
+                  <span>¿Qué tipo de empresas trabajan con TrackFlow?</span>
+                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[#10B981] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
+                </button>
+              </h3>
+              <div id="faq-answer-4" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out" data-faq-panel>
+                <div class="overflow-hidden">
+                  <p class="px-6 pb-6 leading-7 text-[#CBD5E1]">
+                    TrackFlow trabaja con marcas e-commerce que necesitan externalizar o mejorar su operación logística,
+                    desde el almacenamiento del inventario hasta la entrega y gestión de devoluciones.
+                  </p>
+                </div>
+              </div>
+            </article>
+            <article class="rounded border border-[#1E293B] bg-[#0F172A] transition-colors duration-300" data-faq-item>
+              <h3>
+                <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[#F59E0B] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#10B981]" aria-expanded="false" aria-controls="faq-answer-5" data-faq-trigger>
+                  <span>¿Cómo gestiona TrackFlow la última milla y los transportistas?</span>
+                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[#10B981] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
+                </button>
+              </h3>
+              <div id="faq-answer-5" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out" data-faq-panel>
+                <div class="overflow-hidden">
+                  <p class="px-6 pb-6 leading-7 text-[#CBD5E1]">
+                    TrackFlow coordina envíos con una red de 8 transportistas en Estados Unidos y España y gestiona
+                    incidencias como entregas fallidas, paquetes perdidos o direcciones incorrectas.
+                  </p>
+                </div>
+              </div>
+            </article>
+            <article class="rounded border border-[#1E293B] bg-[#0F172A] transition-colors duration-300" data-faq-item>
+              <h3>
+                <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[#F59E0B] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#10B981]" aria-expanded="false" aria-controls="faq-answer-6" data-faq-trigger>
+                  <span>¿Cómo gestiona TrackFlow las devoluciones?</span>
+                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[#10B981] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
+                </button>
+              </h3>
+              <div id="faq-answer-6" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out" data-faq-panel>
+                <div class="overflow-hidden">
+                  <p class="px-6 pb-6 leading-7 text-[#CBD5E1]">
+                    TrackFlow gestiona devoluciones que pueden representar entre el 18% y el 25% del volumen operativo según
+                    cliente y país. El proceso incluye revisión de casos y decisiones sobre recogida, reacondicionamiento o descarte.
+                  </p>
+                </div>
+              </div>
             </article>
           </div>
         </div>
@@ -378,23 +669,23 @@
       <section class="mx-auto max-w-7xl px-5 py-24 lg:px-8">
         <div class="rounded border border-[#10B981]/30 bg-[#10B981] p-8 text-[#0F172A] md:flex md:items-center md:justify-between md:gap-8">
           <div>
-            <h2 class="text-3xl font-black">Hablemos de tu operación</h2>
+            <h2 class="text-3xl font-black">Hablemos de tu operación.</h2>
             <p class="mt-3 max-w-2xl text-[#1E293B]">
-              Cuéntanos qué necesitas resolver y coordinamos una primera conversación.
+              Cuéntanos cómo funciona hoy tu operación logística y qué desafíos necesitas resolver.
             </p>
           </div>
           <a href="application.html" class="mt-6 inline-flex rounded bg-[#0F172A] px-6 py-4 text-sm font-bold text-white md:mt-0">
-            Abrir formulario
+            Contáctanos
           </a>
         </div>
       </section>
     </main>
 
-    <footer id="contacto" class="border-t border-[#1E293B] bg-[#0F172A] px-5 py-12 lg:px-8">
+    <footer id="contacto" class="border-t border-[#1E293B] bg-[#0F172A] px-5 py-10 sm:py-12 lg:px-8">
       <div class="mx-auto grid max-w-7xl gap-8 md:grid-cols-3">
         <div>
           <p class="text-xl font-black text-white">TrackFlow</p>
-          <p class="mt-3 text-sm leading-6 text-[#CBD5E1]">Logística de última milla y gestión de almacenes para e-commerce.</p>
+          <p class="mt-3 text-sm leading-6 text-[#CBD5E1]">Logística de última milla y gestión de almacenes para operaciones e-commerce.</p>
         </div>
         <address class="not-italic text-sm leading-7 text-[#CBD5E1]">
           Los Ángeles, CA, United States<br />
@@ -409,24 +700,98 @@
       </div>
     </footer>
     <script>
+      const header = document.querySelector("header");
       const menuButton = document.querySelector("[data-menu-button]");
       const mobileMenu = document.querySelector("[data-mobile-menu]");
+      const mobileMenuContent = document.querySelector("[data-mobile-menu-content]");
+      const navLinks = document.querySelectorAll("[data-nav-link]");
       const menuLines = {
         top: document.querySelector('[data-menu-line="top"]'),
         middle: document.querySelector('[data-menu-line="middle"]'),
         bottom: document.querySelector('[data-menu-line="bottom"]')
       };
+      const faqItems = document.querySelectorAll("[data-faq-item]");
+      const navSections = Array.from(navLinks)
+        .map((link) => document.querySelector(link.getAttribute("href")))
+        .filter(Boolean);
 
       function setMobileMenu(open) {
         menuButton.setAttribute("aria-expanded", String(open));
         menuButton.setAttribute("aria-label", open ? "Cerrar menu" : "Abrir menu");
-        mobileMenu.classList.toggle("hidden", !open);
+        mobileMenu.setAttribute("aria-hidden", String(!open));
+        mobileMenu.inert = !open;
+        mobileMenu.classList.toggle("pointer-events-none", !open);
+        mobileMenu.classList.toggle("grid-rows-[0fr]", !open);
+        mobileMenu.classList.toggle("grid-rows-[1fr]", open);
+        mobileMenu.classList.toggle("opacity-0", !open);
+        mobileMenu.classList.toggle("opacity-100", open);
+        mobileMenuContent.classList.toggle("-translate-y-3", !open);
+        mobileMenuContent.classList.toggle("translate-y-0", open);
+        mobileMenuContent.classList.toggle("pb-0", !open);
+        mobileMenuContent.classList.toggle("pt-0", !open);
+        mobileMenuContent.classList.toggle("pb-5", open);
+        mobileMenuContent.classList.toggle("pt-2", open);
         menuLines.top.classList.toggle("translate-y-1.5", open);
         menuLines.top.classList.toggle("rotate-45", open);
         menuLines.middle.classList.toggle("opacity-0", open);
         menuLines.bottom.classList.toggle("-translate-y-1.5", open);
         menuLines.bottom.classList.toggle("-rotate-45", open);
       }
+
+      function setFaqOpen(item, open) {
+        const trigger = item.querySelector("[data-faq-trigger]");
+        const panel = item.querySelector("[data-faq-panel]");
+        const icon = item.querySelector("[data-faq-icon]");
+
+        trigger.setAttribute("aria-expanded", String(open));
+        item.classList.toggle("border-[#10B981]/40", open);
+        item.classList.toggle("border-[#1E293B]", !open);
+        item.classList.toggle("shadow-lg", open);
+        item.classList.toggle("shadow-[#10B981]/5", open);
+        panel.classList.toggle("grid-rows-[1fr]", open);
+        panel.classList.toggle("grid-rows-[0fr]", !open);
+        panel.classList.toggle("opacity-0", !open);
+        icon.classList.toggle("rotate-45", open);
+      }
+
+      function setActiveNavLink(sectionId) {
+        navLinks.forEach((link) => {
+          const isActive = link.getAttribute("href") === `#${sectionId}`;
+
+          if (isActive) {
+            link.dataset.active = "true";
+            link.setAttribute("aria-current", "page");
+          } else {
+            delete link.dataset.active;
+            link.removeAttribute("aria-current");
+          }
+        });
+      }
+
+      function updateActiveNavLink() {
+        const headerOffset = getHeaderOffset();
+        const referenceY = window.scrollY + headerOffset + window.innerHeight * 0.25;
+        let activeSection = null;
+
+        navSections.forEach((section) => {
+          if (section.offsetTop <= referenceY) {
+            activeSection = section;
+          }
+        });
+
+        setActiveNavLink(activeSection?.id);
+      }
+
+      faqItems.forEach((item) => {
+        const trigger = item.querySelector("[data-faq-trigger]");
+
+        trigger.addEventListener("click", () => {
+          const isOpen = trigger.getAttribute("aria-expanded") === "true";
+
+          faqItems.forEach((faqItem) => setFaqOpen(faqItem, false));
+          setFaqOpen(item, !isOpen);
+        });
+      });
 
       menuButton.addEventListener("click", () => {
         const isOpen = menuButton.getAttribute("aria-expanded") === "true";
@@ -438,6 +803,41 @@
           setMobileMenu(false);
         }
       });
+
+      const getHeaderOffset = () => header.firstElementChild.getBoundingClientRect().height;
+
+      const scrollToAnchor = (target) => {
+        const targetTop = target.getBoundingClientRect().top + window.scrollY;
+        const offsetTop = Math.max(targetTop - getHeaderOffset(), 0);
+
+        window.scrollTo({
+          top: offsetTop,
+          behavior: "smooth",
+        });
+      };
+
+      document.querySelectorAll('a[href^="#"]').forEach((link) => {
+        link.addEventListener("click", (event) => {
+          const hash = link.getAttribute("href");
+          const target = hash === "#" ? null : document.querySelector(hash);
+
+          if (!target) return;
+
+          event.preventDefault();
+          setMobileMenu(false);
+
+          requestAnimationFrame(() => {
+            scrollToAnchor(target);
+            history.pushState(null, "", hash);
+            setActiveNavLink(target.id);
+          });
+        });
+      });
+
+      window.addEventListener("scroll", updateActiveNavLink, { passive: true });
+      window.addEventListener("resize", updateActiveNavLink);
+      window.addEventListener("load", updateActiveNavLink);
+      updateActiveNavLink();
 
       document.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {

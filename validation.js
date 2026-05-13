@@ -87,7 +87,7 @@ form.addEventListener("submit", (event) => {
 
   showStatus(
     "success",
-    "Gracias. Recibimos tu consulta y el equipo de TrackFlow revisará cómo ayudarte."
+    "Gracias. Recibimos tu consulta y el equipo de TrackFlow revisará tu contexto operativo antes de coordinar una conversación."
   );
   form.scrollIntoView({ behavior: "smooth", block: "start" });
 });
