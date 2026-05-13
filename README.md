@@ -62,6 +62,16 @@ ai-engineering-company-project-monorepo/
 4. **Review** each top-level folder `README.md` to understand intended responsibilities (`uis/`, `services/`, `data/`, `skills/`, etc.).
 5. **Start implementing** milestone deliverables in `uis/` and `services/`, reusing `packages/shared/` and `data/` as needed.
 
+### Quick Landing Preview in Local or Codespaces
+
+If you want to preview the static HTML pages in this repo (`index.html` and `application.html`) from the root, run:
+
+```bash
+npx --yes serve -l 3000 .
+```
+
+Then open `http://localhost:3000`.
+
 ---
 
 ## Milestones (reference)

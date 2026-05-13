@@ -62,6 +62,16 @@ ai-engineering-company-project-monorepo/
 4. **Revisa** los `README.md` de cada carpeta raíz para entender responsabilidades (`uis/`, `services/`, `data/`, `skills/`, etc.).
 5. **Empieza a implementar** entregables por hito en `uis/` y `services/`, reutilizando `packages/shared/` y `data/` según corresponda.
 
+### Vista rápida de la landing en local o Codespaces
+
+Si quieres previsualizar los HTML estáticos de este repo (`index.html` y `application.html`) desde la raíz, puedes usar:
+
+```bash
+npx --yes serve -l 3000 .
+```
+
+Luego abre `http://localhost:3000`.
+
 ---
 
 ## Hitos (referencia)
