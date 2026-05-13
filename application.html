@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Formulario TrackFlow para clasificar necesidades de almacenamiento, preparación de pedidos, última milla, incidencias y devoluciones."
+    />
+    <title>Diagnóstico operativo | TrackFlow</title>
+    <link rel="icon" href="assets/trackflow-logo.svg" type="image/svg+xml" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="validation.js?v=2"></script>
+  </head>
+  <body class="bg-zinc-950 text-zinc-100 antialiased">
+    <header class="border-b border-white/10 bg-zinc-950">
+      <nav class="mx-auto flex max-w-6xl items-center justify-between px-5 py-5" aria-label="Navegación principal">
+        <a href="index.html" class="flex items-center gap-3" aria-label="Volver a TrackFlow">
+          <img src="assets/trackflow-logo.svg" alt="" class="h-10 w-10 rounded" aria-hidden="true" />
+          <span class="font-semibold">TrackFlow</span>
+        </a>
+        <a class="text-sm font-medium text-zinc-300 hover:text-white" href="index.html">Volver a la landing</a>
+      </nav>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-5 py-12">
+      <section class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+        <aside class="lg:sticky lg:top-8 lg:self-start">
+          <p class="text-sm font-bold uppercase tracking-[0.25em] text-emerald-300">Diagnóstico TrackFlow</p>
+          <h1 class="mt-4 text-4xl font-black leading-tight text-white sm:text-5xl">
+            Cuéntanos cómo se mueve tu operación.
+          </h1>
+          <p class="mt-5 text-lg leading-8 text-zinc-400">
+            Usaremos la información para ubicar la prioridad operativa: almacenamiento,
+            preparación de pedidos, última milla, incidencias, devoluciones o atención al cliente.
+          </p>
+          <div class="mt-8 rounded border border-white/10 bg-white/[0.03] p-5">
+            <h2 class="font-bold text-white">Qué validamos</h2>
+            <ul class="mt-4 space-y-3 text-sm text-zinc-400">
+              <li>Datos de contacto B2B completos.</li>
+              <li>Volumen mensual y número de SKUs coherentes.</li>
+              <li>Mercado operativo: Estados Unidos, España o ambos.</li>
+              <li>Dolor logístico principal y reglas de devoluciones.</li>
+            </ul>
+          </div>
+        </aside>
+
+        <section class="rounded border border-white/10 bg-zinc-900 p-5 shadow-2xl shadow-black/30 sm:p-8">
+          <form id="applicationForm" novalidate aria-describedby="formIntro" class="space-y-8">
+            <p id="formIntro" class="text-sm text-zinc-400">
+              Los campos marcados con * son obligatorios.
+            </p>
+
+            <fieldset class="grid gap-5 sm:grid-cols-2">
+              <legend class="mb-4 text-xl font-bold text-white">Empresa y contacto</legend>
+              <div class="sm:col-span-2">
+                <label for="companyName" class="block text-sm font-medium text-zinc-200">Nombre de la empresa *</label>
+                <input id="companyName" name="companyName" type="text" required minlength="2" class="mt-2 w-full rounded border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-emerald-300" />
+                <p class="mt-2 min-h-5 text-sm text-rose-300" data-error-for="companyName" aria-live="polite"></p>
+              </div>
+              <div>
+                <label for="contactName" class="block text-sm font-medium text-zinc-200">Persona responsable *</label>
+                <input id="contactName" name="contactName" type="text" required minlength="3" class="mt-2 w-full rounded border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-emerald-300" />
+                <p class="mt-2 min-h-5 text-sm text-rose-300" data-error-for="contactName" aria-live="polite"></p>
+              </div>
+              <div>
+                <label for="role" class="block text-sm font-medium text-zinc-200">Cargo *</label>
+                <input id="role" name="role" type="text" required minlength="2" placeholder="Operations Manager" class="mt-2 w-full rounded border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-emerald-300" />
+                <p class="mt-2 min-h-5 text-sm text-rose-300" data-error-for="role" aria-live="polite"></p>
+              </div>
+              <div>
+                <label for="email" class="block text-sm font-medium text-zinc-200">Email corporativo *</label>
+                <input id="email" name="email" type="email" required class="mt-2 w-full rounded border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-emerald-300" />
+                <p class="mt-2 min-h-5 text-sm text-rose-300" data-error-for="email" aria-live="polite"></p>
+              </div>
+              <div>
+                <label for="phone" class="block text-sm font-medium text-zinc-200">Teléfono *</label>
+                <input id="phone" name="phone" type="tel" required placeholder="+34 600 000 000" class="mt-2 w-full rounded border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-emerald-300" />
+                <p class="mt-2 min-h-5 text-sm text-rose-300" data-error-for="phone" aria-live="polite"></p>
+              </div>
+            </fieldset>
+
+            <fieldset class="grid gap-5 sm:grid-cols-2">
+              <legend class="mb-4 text-xl font-bold text-white">Operación logística</legend>
+              <div>
+                <label for="market" class="block text-sm font-medium text-zinc-200">Mercado operativo *</label>
+                <select id="market" name="market" required class="mt-2 w-full rounded border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-emerald-300">
+                  <option value="">Selecciona un mercado</option>
+                  <option value="us">Estados Unidos</option>
+                  <option value="es">España</option>
+                  <option value="both">Estados Unidos y España</option>
+                </select>
+                <p class="mt-2 min-h-5 text-sm text-rose-300" data-error-for="market" aria-live="polite"></p>
+              </div>
+              <div>
+                <label for="monthlyOrders" class="block text-sm font-medium text-zinc-200">Pedidos mensuales *</label>
+                <input id="monthlyOrders" name="monthlyOrders" type="number" required min="100" max="250000" step="1" class="mt-2 w-full rounded border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-emerald-300" />
+                <p class="mt-2 min-h-5 text-sm text-rose-300" data-error-for="monthlyOrders" aria-live="polite"></p>
+              </div>
+              <div>
+                <label for="skuCount" class="block text-sm font-medium text-zinc-200">SKUs activos *</label>
+                <input id="skuCount" name="skuCount" type="number" required min="5" max="50000" step="1" class="mt-2 w-full rounded border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-emerald-300" />
+                <p class="mt-2 min-h-5 text-sm text-rose-300" data-error-for="skuCount" aria-live="polite"></p>
+              </div>
+              <div>
+                <label for="returnRate" class="block text-sm font-medium text-zinc-200">Tasa de devoluciones estimada (%) *</label>
+                <input id="returnRate" name="returnRate" type="number" required min="0" max="60" step="0.1" class="mt-2 w-full rounded border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-emerald-300" />
+                <p class="mt-2 min-h-5 text-sm text-rose-300" data-error-for="returnRate" aria-live="polite"></p>
+              </div>
+              <div class="sm:col-span-2">
+                <label for="carrierStack" class="block text-sm font-medium text-zinc-200">Transportistas actuales *</label>
+                <input id="carrierStack" name="carrierStack" type="text" required minlength="3" placeholder="UPS, FedEx, DHL, MRW, SEUR..." class="mt-2 w-full rounded border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-emerald-300" />
+                <p class="mt-2 min-h-5 text-sm text-rose-300" data-error-for="carrierStack" aria-live="polite"></p>
+              </div>
+            </fieldset>
+
+            <fieldset class="grid gap-5">
+              <legend class="mb-4 text-xl font-bold text-white">Prioridad del proyecto</legend>
+              <div>
+                <label for="priority" class="block text-sm font-medium text-zinc-200">Dolor principal *</label>
+                <select id="priority" name="priority" required class="mt-2 w-full rounded border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-emerald-300">
+                  <option value="">Selecciona una prioridad</option>
+                  <option value="storage">Almacenamiento de inventario</option>
+                  <option value="fulfillment">Preparación y embalaje</option>
+                  <option value="last-mile">Última milla</option>
+                  <option value="incidents">Seguimiento e incidencias</option>
+                  <option value="returns">Devoluciones y logística inversa</option>
+                  <option value="support">Atención a marcas y destinatarios</option>
+                </select>
+                <p class="mt-2 min-h-5 text-sm text-rose-300" data-error-for="priority" aria-live="polite"></p>
+              </div>
+              <div>
+                <label for="launchDate" class="block text-sm font-medium text-zinc-200">Fecha objetivo de inicio *</label>
+                <input id="launchDate" name="launchDate" type="date" required class="mt-2 w-full rounded border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-emerald-300" />
+                <p class="mt-2 min-h-5 text-sm text-rose-300" data-error-for="launchDate" aria-live="polite"></p>
+              </div>
+              <div>
+                <label for="notes" class="block text-sm font-medium text-zinc-200">Contexto adicional *</label>
+                <textarea id="notes" name="notes" required minlength="30" rows="5" placeholder="Describe el flujo actual, herramientas usadas, incidencias frecuentes o restricciones del negocio." class="mt-2 w-full rounded border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-emerald-300"></textarea>
+                <p class="mt-2 min-h-5 text-sm text-rose-300" data-error-for="notes" aria-live="polite"></p>
+              </div>
+              <div class="rounded border border-white/10 bg-zinc-950 p-4">
+                <label class="flex gap-3 text-sm text-zinc-300">
+                  <input id="consent" name="consent" type="checkbox" required class="mt-1 h-4 w-4 rounded border-zinc-600 bg-zinc-950 text-emerald-400 focus:ring-emerald-300" />
+                  <span>Acepto que TrackFlow use estos datos para revisar la prioridad operativa indicada. *</span>
+                </label>
+                <p class="mt-2 min-h-5 text-sm text-rose-300" data-error-for="consent" aria-live="polite"></p>
+              </div>
+            </fieldset>
+
+            <div id="formStatus" class="hidden rounded border p-4 text-sm" role="status" aria-live="polite"></div>
+
+            <div class="flex flex-col gap-3 sm:flex-row">
+              <button type="submit" class="rounded bg-emerald-400 px-6 py-4 text-sm font-bold text-zinc-950 transition hover:bg-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-200 focus:ring-offset-2 focus:ring-offset-zinc-900">
+                Enviar formulario
+              </button>
+              <button type="reset" class="rounded border border-white/20 px-6 py-4 text-sm font-bold text-white transition hover:bg-white/10">
+                Limpiar formulario
+              </button>
+            </div>
+          </form>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>
