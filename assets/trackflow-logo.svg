@@ -3,31 +3,33 @@
   <desc id="desc">A package and route mark for TrackFlow logistics operations.</desc>
   <defs>
     <linearGradient id="markFill" x1="22" y1="12" x2="106" y2="116" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#6ee7b7"/>
-      <stop offset="0.58" stop-color="#34d399"/>
-      <stop offset="1" stop-color="#0d9488"/>
+      <stop offset="0" stop-color="#34d399"/>
+      <stop offset="0.55" stop-color="#10b981"/>
+      <stop offset="1" stop-color="#0f766e"/>
     </linearGradient>
     <linearGradient id="routeStroke" x1="34" y1="88" x2="96" y2="37" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#ecfeff"/>
+      <stop offset="0" stop-color="#f59e0b"/>
+      <stop offset="0.72" stop-color="#fbbf24"/>
       <stop offset="1" stop-color="#f8fafc"/>
     </linearGradient>
   </defs>
-  <rect width="128" height="128" rx="28" fill="#09090b"/>
+  <rect width="128" height="128" rx="28" fill="#0f172a"/>
+  <rect x="7" y="7" width="114" height="114" rx="23" fill="none" stroke="#1e293b" stroke-width="2"/>
   <path
     fill="url(#markFill)"
     d="M62.5 18.7a9.5 9.5 0 0 1 8.7 0l33.1 18.5a9.4 9.4 0 0 1 4.9 8.2v37.2a9.4 9.4 0 0 1-4.9 8.2l-33.1 18.5a9.5 9.5 0 0 1-8.7 0L29.4 90.8a9.4 9.4 0 0 1-4.9-8.2V45.4a9.4 9.4 0 0 1 4.9-8.2l33.1-18.5Z"
   />
   <path
-    fill="#042f2e"
+    fill="#064e3b"
     fill-opacity=".38"
     d="m64 61.8 45.2-24.7v45.5a9.4 9.4 0 0 1-4.9 8.2l-33.1 18.5a9.5 9.5 0 0 1-8.7 0L29.4 90.8a9.4 9.4 0 0 1-4.9-8.2V37.1L64 61.8Z"
   />
   <path
     fill="none"
-    stroke="#064e3b"
+    stroke="#0f172a"
     stroke-linecap="round"
     stroke-linejoin="round"
-    stroke-opacity=".58"
+    stroke-opacity=".42"
     stroke-width="5"
     d="m34.5 43.2 29.7 16.7 29.4-16.7M64.2 59.9v36.4"
   />
@@ -41,6 +43,6 @@
   />
   <circle cx="35.6" cy="82.3" r="9.3" fill="#f8fafc"/>
   <circle cx="94.5" cy="42.5" r="9.3" fill="#f8fafc"/>
-  <circle cx="35.6" cy="82.3" r="3.9" fill="#0f766e"/>
-  <circle cx="94.5" cy="42.5" r="3.9" fill="#0f766e"/>
+  <circle cx="35.6" cy="82.3" r="3.9" fill="#f59e0b"/>
+  <circle cx="94.5" cy="42.5" r="3.9" fill="#f59e0b"/>
 </svg>

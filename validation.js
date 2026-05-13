@@ -7,63 +7,20 @@ const fields = {
     message: "Indica el nombre legal o comercial de la empresa."
   },
   contactName: {
-    validate: (value) => value.trim().split(/\s+/).length >= 2,
-    message: "Escribe nombre y apellido de la persona responsable."
-  },
-  role: {
     validate: (value) => value.trim().length >= 2,
-    message: "Indica el cargo para entender tu rol en la operación."
+    message: "Indica el nombre de la persona de contacto."
   },
   email: {
     validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim()),
     message: "Usa un email válido, por ejemplo ops@empresa.com."
   },
-  phone: {
-    validate: (value) => /^\+?[0-9\s().-]{8,20}$/.test(value.trim()),
-    message: "Usa un teléfono válido con 8 a 20 dígitos."
-  },
-  market: {
-    validate: (value) => ["us", "es", "both"].includes(value),
-    message: "Selecciona el mercado donde opera tu logística."
-  },
-  monthlyOrders: {
-    validate: (value) => Number(value) >= 100 && Number(value) <= 250000,
-    message: "Indica un volumen entre 100 y 250.000 pedidos mensuales."
-  },
-  skuCount: {
-    validate: (value) => Number(value) >= 5 && Number(value) <= 50000,
-    message: "Indica entre 5 y 50.000 SKUs activos."
-  },
-  returnRate: {
-    validate: (value) => value.trim() !== "" && Number(value) >= 0 && Number(value) <= 60,
-    message: "La tasa debe estar entre 0% y 60%."
-  },
-  carrierStack: {
-    validate: (value) => value.trim().length >= 3,
-    message: "Nombra al menos un transportista o integración actual."
-  },
-  priority: {
-    validate: (value) =>
-      ["storage", "fulfillment", "last-mile", "incidents", "returns", "support"].includes(value),
-    message: "Selecciona la prioridad que más impacto tendría ahora."
-  },
-  launchDate: {
-    validate: (value) => {
-      if (!value) return false;
-      const selected = new Date(`${value}T00:00:00`);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      return selected >= today;
-    },
-    message: "La fecha objetivo debe ser hoy o una fecha futura."
-  },
   notes: {
-    validate: (value) => value.trim().length >= 30,
-    message: "Describe el contexto con al menos 30 caracteres."
+    validate: (value) => value.trim().length >= 10,
+    message: "Cuéntanos brevemente qué necesitas resolver."
   },
   consent: {
     validate: (_, input) => input.checked,
-    message: "Confirma la autorización para revisar la prioridad operativa indicada."
+    message: "Confirma la autorización para responder tu consulta."
   }
 };
 
@@ -74,8 +31,8 @@ function getErrorElement(name) {
 function setFieldState(input, isValid, message = "") {
   const errorElement = getErrorElement(input.name);
   input.setAttribute("aria-invalid", String(!isValid));
-  input.classList.toggle("border-rose-400", !isValid);
-  input.classList.toggle("border-emerald-300", isValid);
+  input.classList.toggle("border-[#FB7185]", !isValid);
+  input.classList.toggle("border-[#10B981]", isValid);
 
   if (errorElement) {
     errorElement.textContent = message;
@@ -101,8 +58,8 @@ function validateForm() {
 function showStatus(type, message) {
   statusBox.className =
     type === "success"
-      ? "rounded border border-emerald-300/40 bg-emerald-300/10 p-4 text-sm text-emerald-100"
-      : "rounded border border-rose-300/40 bg-rose-300/10 p-4 text-sm text-rose-100";
+      ? "rounded border border-[#10B981]/40 bg-[#10B981]/10 p-4 text-sm text-[#F8FAFC]"
+      : "rounded border border-[#FB7185]/40 bg-[#FB7185]/10 p-4 text-sm text-[#F8FAFC]";
   statusBox.textContent = message;
 }
 
@@ -130,7 +87,7 @@ form.addEventListener("submit", (event) => {
 
   showStatus(
     "success",
-    "Formulario validado. La prioridad se clasifica según volumen, mercado, transportistas y dolor operativo principal."
+    "Gracias. Recibimos tu consulta y el equipo de TrackFlow revisará cómo ayudarte."
   );
   form.scrollIntoView({ behavior: "smooth", block: "start" });
 });
@@ -141,7 +98,7 @@ form.addEventListener("reset", () => {
       const input = form.elements[name];
       if (input) {
         input.removeAttribute("aria-invalid");
-        input.classList.remove("border-rose-400", "border-emerald-300");
+        input.classList.remove("border-[#FB7185]", "border-[#10B981]");
       }
       const errorElement = getErrorElement(name);
       if (errorElement) errorElement.textContent = "";
