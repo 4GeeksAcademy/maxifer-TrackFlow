@@ -268,8 +268,9 @@
       }
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="i18n.js?v=1"></script>
   </head>
-  <body class="bg-[var(--tf-bg)] text-[var(--tf-text)] antialiased">
+  <body data-page="index" class="bg-[var(--tf-bg)] text-[var(--tf-text)] antialiased">
     <header class="fixed inset-x-0 top-0 z-40">
       <div class="border-b border-[color:rgb(var(--tf-text-rgb)/0.12)] bg-[color:rgb(var(--tf-bg-rgb)/0.8)] shadow-[0_10px_26px_-16px_rgb(var(--tf-bg-rgb)/0.95)] backdrop-blur-md">
         <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8" aria-label="Navegación principal">
@@ -281,40 +282,50 @@
           </span>
         </a>
         <div class="hidden items-center gap-8 text-sm text-[color:rgb(var(--tf-text-rgb)/0.74)] md:flex">
+          <a class="relative isolate font-medium text-[var(--tf-text-muted)] transition-[color,text-shadow,background-color,border-color] duration-200 hover:text-white motion-reduce:transition-none md:py-[0.45rem] before:pointer-events-none before:absolute before:opacity-0 before:transition-[opacity,transform] before:duration-200 before:content-[''] motion-reduce:before:transition-none after:pointer-events-none after:absolute after:opacity-0 after:transition-[opacity,transform] after:duration-200 after:content-[''] motion-reduce:after:transition-none md:before:left-1/2 md:before:-top-[0.2rem] md:before:h-[0.35rem] md:before:w-[0.35rem] md:before:-translate-x-1/2 md:before:scale-[0.4] md:before:rounded-full md:before:bg-[var(--tf-accent)] md:before:shadow-[0_0_18px_rgb(var(--tf-accent-rgb)/0.7)] md:after:-inset-x-[0.2rem] md:after:-bottom-[0.35rem] md:after:h-[0.16rem] md:after:scale-x-[0.18] md:after:rounded-full md:after:bg-[linear-gradient(90deg,transparent,var(--tf-brand)_20%,var(--tf-accent)_80%,transparent)] md:after:shadow-[0_0_16px_rgb(var(--tf-brand-rgb)/0.45)] data-[active=true]:text-[var(--tf-text)] data-[active=true]:[text-shadow:0_0_18px_rgb(var(--tf-brand-rgb)/0.35)] md:data-[active=true]:before:opacity-100 md:data-[active=true]:before:scale-100 md:data-[active=true]:after:opacity-100 md:data-[active=true]:after:scale-x-100" href="#inicio" data-nav-link>Inicio</a>
           <a class="relative isolate font-medium text-[var(--tf-text-muted)] transition-[color,text-shadow,background-color,border-color] duration-200 hover:text-white motion-reduce:transition-none md:py-[0.45rem] before:pointer-events-none before:absolute before:opacity-0 before:transition-[opacity,transform] before:duration-200 before:content-[''] motion-reduce:before:transition-none after:pointer-events-none after:absolute after:opacity-0 after:transition-[opacity,transform] after:duration-200 after:content-[''] motion-reduce:after:transition-none md:before:left-1/2 md:before:-top-[0.2rem] md:before:h-[0.35rem] md:before:w-[0.35rem] md:before:-translate-x-1/2 md:before:scale-[0.4] md:before:rounded-full md:before:bg-[var(--tf-accent)] md:before:shadow-[0_0_18px_rgb(var(--tf-accent-rgb)/0.7)] md:after:-inset-x-[0.2rem] md:after:-bottom-[0.35rem] md:after:h-[0.16rem] md:after:scale-x-[0.18] md:after:rounded-full md:after:bg-[linear-gradient(90deg,transparent,var(--tf-brand)_20%,var(--tf-accent)_80%,transparent)] md:after:shadow-[0_0_16px_rgb(var(--tf-brand-rgb)/0.45)] data-[active=true]:text-[var(--tf-text)] data-[active=true]:[text-shadow:0_0_18px_rgb(var(--tf-brand-rgb)/0.35)] md:data-[active=true]:before:opacity-100 md:data-[active=true]:before:scale-100 md:data-[active=true]:after:opacity-100 md:data-[active=true]:after:scale-x-100" href="#plataforma" data-nav-link>Servicios</a>
           <a class="relative isolate font-medium text-[var(--tf-text-muted)] transition-[color,text-shadow,background-color,border-color] duration-200 hover:text-white motion-reduce:transition-none md:py-[0.45rem] before:pointer-events-none before:absolute before:opacity-0 before:transition-[opacity,transform] before:duration-200 before:content-[''] motion-reduce:before:transition-none after:pointer-events-none after:absolute after:opacity-0 after:transition-[opacity,transform] after:duration-200 after:content-[''] motion-reduce:after:transition-none md:before:left-1/2 md:before:-top-[0.2rem] md:before:h-[0.35rem] md:before:w-[0.35rem] md:before:-translate-x-1/2 md:before:scale-[0.4] md:before:rounded-full md:before:bg-[var(--tf-accent)] md:before:shadow-[0_0_18px_rgb(var(--tf-accent-rgb)/0.7)] md:after:-inset-x-[0.2rem] md:after:-bottom-[0.35rem] md:after:h-[0.16rem] md:after:scale-x-[0.18] md:after:rounded-full md:after:bg-[linear-gradient(90deg,transparent,var(--tf-brand)_20%,var(--tf-accent)_80%,transparent)] md:after:shadow-[0_0_16px_rgb(var(--tf-brand-rgb)/0.45)] data-[active=true]:text-[var(--tf-text)] data-[active=true]:[text-shadow:0_0_18px_rgb(var(--tf-brand-rgb)/0.35)] md:data-[active=true]:before:opacity-100 md:data-[active=true]:before:scale-100 md:data-[active=true]:after:opacity-100 md:data-[active=true]:after:scale-x-100" href="#mercados" data-nav-link>Mercados</a>
           <a class="relative isolate font-medium text-[var(--tf-text-muted)] transition-[color,text-shadow,background-color,border-color] duration-200 hover:text-white motion-reduce:transition-none md:py-[0.45rem] before:pointer-events-none before:absolute before:opacity-0 before:transition-[opacity,transform] before:duration-200 before:content-[''] motion-reduce:before:transition-none after:pointer-events-none after:absolute after:opacity-0 after:transition-[opacity,transform] after:duration-200 after:content-[''] motion-reduce:after:transition-none md:before:left-1/2 md:before:-top-[0.2rem] md:before:h-[0.35rem] md:before:w-[0.35rem] md:before:-translate-x-1/2 md:before:scale-[0.4] md:before:rounded-full md:before:bg-[var(--tf-accent)] md:before:shadow-[0_0_18px_rgb(var(--tf-accent-rgb)/0.7)] md:after:-inset-x-[0.2rem] md:after:-bottom-[0.35rem] md:after:h-[0.16rem] md:after:scale-x-[0.18] md:after:rounded-full md:after:bg-[linear-gradient(90deg,transparent,var(--tf-brand)_20%,var(--tf-accent)_80%,transparent)] md:after:shadow-[0_0_16px_rgb(var(--tf-brand-rgb)/0.45)] data-[active=true]:text-[var(--tf-text)] data-[active=true]:[text-shadow:0_0_18px_rgb(var(--tf-brand-rgb)/0.35)] md:data-[active=true]:before:opacity-100 md:data-[active=true]:before:scale-100 md:data-[active=true]:after:opacity-100 md:data-[active=true]:after:scale-x-100" href="#faqs" data-nav-link>FAQs</a>
         </div>
-        <a
-          href="application.html"
-          class="hidden rounded bg-[var(--tf-brand)] px-4 py-2 text-sm font-semibold text-[var(--tf-bg)] transition hover:bg-[var(--tf-brand-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-2 focus:ring-offset-[var(--tf-bg)] md:inline-flex"
-        >
-          Contáctanos
-        </a>
-        <button
-          type="button"
-          class="inline-flex h-11 w-11 items-center justify-center rounded border border-white/15 text-[var(--tf-text)] transition hover:border-white/30 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-2 focus:ring-offset-[var(--tf-bg)] md:hidden"
-          aria-controls="mobile-menu"
-          aria-expanded="false"
-          aria-label="Abrir menu"
-          data-menu-button
-        >
-          <span class="sr-only">Abrir menu</span>
-          <span class="relative block h-5 w-5" aria-hidden="true">
-            <span class="absolute left-0 top-1 block h-0.5 w-5 rounded bg-current transition" data-menu-line="top"></span>
-            <span class="absolute left-0 top-2.5 block h-0.5 w-5 rounded bg-current transition" data-menu-line="middle"></span>
-            <span class="absolute left-0 top-4 block h-0.5 w-5 rounded bg-current transition" data-menu-line="bottom"></span>
-          </span>
-        </button>
+        <div class="flex items-center gap-2 sm:gap-3">
+          <div data-language-switch class="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/5 p-1 shadow-[0_0_0_1px_rgb(var(--tf-text-rgb)/0.08)]" aria-label="Seleccion de idioma">
+            <button type="button" data-lang-option="es" aria-pressed="true" class="rounded-full px-2.5 py-1 text-xs font-semibold text-[var(--tf-text-muted)] hover:text-white">ES</button>
+            <button type="button" data-lang-option="en" aria-pressed="false" class="rounded-full px-2.5 py-1 text-xs font-semibold text-[var(--tf-text-muted)] hover:text-white">EN</button>
+          </div>
+          <a
+            href="application.html"
+            data-contact-link
+            class="hidden rounded bg-[var(--tf-brand)] px-4 py-2 text-sm font-semibold text-[var(--tf-bg)] transition hover:bg-[var(--tf-brand-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-2 focus:ring-offset-[var(--tf-bg)] md:inline-flex"
+          >
+            Contáctanos
+          </a>
+          <button
+            type="button"
+            class="inline-flex h-11 w-11 items-center justify-center rounded border border-white/15 text-[var(--tf-text)] transition hover:border-white/30 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-2 focus:ring-offset-[var(--tf-bg)] md:hidden"
+            aria-controls="mobile-menu"
+            aria-expanded="false"
+            aria-label="Abrir menu"
+            data-menu-button
+          >
+            <span class="sr-only" data-menu-label>Abrir menu</span>
+            <span class="relative block h-5 w-5" aria-hidden="true">
+              <span class="absolute left-0 top-1 block h-0.5 w-5 rounded bg-current transition" data-menu-line="top"></span>
+              <span class="absolute left-0 top-2.5 block h-0.5 w-5 rounded bg-current transition" data-menu-line="middle"></span>
+              <span class="absolute left-0 top-4 block h-0.5 w-5 rounded bg-current transition" data-menu-line="bottom"></span>
+            </span>
+          </button>
+        </div>
         </nav>
       </div>
       <div id="mobile-menu" class="pointer-events-none grid grid-rows-[0fr] border-b border-white/10 bg-[color:rgb(var(--tf-bg-rgb)/0.92)] px-5 opacity-0 shadow-md shadow-[color:rgb(var(--tf-brand-rgb)/0.2)] backdrop-blur-md transition-all duration-300 ease-out motion-reduce:transition-none md:hidden" aria-hidden="true" inert data-mobile-menu>
         <div class="mx-auto flex w-full max-w-7xl -translate-y-3 flex-col gap-1 overflow-hidden pb-0 pt-0 text-sm font-medium text-[var(--tf-text-muted)] transition-all duration-300 ease-out motion-reduce:transition-none" data-mobile-menu-content>
+          <a class="relative block w-full rounded border border-transparent px-3 py-3 text-[var(--tf-text-muted)] transition-[color,text-shadow,background-color,border-color] duration-200 hover:bg-white/10 hover:text-white motion-reduce:transition-none before:pointer-events-none before:absolute before:left-[0.55rem] before:top-1/2 before:h-[1.4rem] before:w-[0.18rem] before:-translate-y-1/2 before:scale-y-[0.4] before:rounded-full before:bg-[linear-gradient(180deg,var(--tf-accent),var(--tf-brand))] before:opacity-0 before:shadow-[0_0_18px_rgb(var(--tf-brand-rgb)/0.45)] before:transition-[opacity,transform] before:duration-200 before:content-[''] motion-reduce:before:transition-none data-[active=true]:border-[color:rgb(var(--tf-brand-rgb)/0.28)] data-[active=true]:bg-[linear-gradient(90deg,rgb(var(--tf-brand-rgb)/0.18),rgb(var(--tf-accent-rgb)/0.08)),rgb(var(--tf-text-rgb)/0.04)] data-[active=true]:pl-8 data-[active=true]:text-[var(--tf-text)] data-[active=true]:[text-shadow:0_0_18px_rgb(var(--tf-brand-rgb)/0.35)] data-[active=true]:before:opacity-100 data-[active=true]:before:scale-y-100" href="#inicio" data-nav-link>Inicio</a>
           <a class="relative block w-full rounded border border-transparent px-3 py-3 text-[var(--tf-text-muted)] transition-[color,text-shadow,background-color,border-color] duration-200 hover:bg-white/10 hover:text-white motion-reduce:transition-none before:pointer-events-none before:absolute before:left-[0.55rem] before:top-1/2 before:h-[1.4rem] before:w-[0.18rem] before:-translate-y-1/2 before:scale-y-[0.4] before:rounded-full before:bg-[linear-gradient(180deg,var(--tf-accent),var(--tf-brand))] before:opacity-0 before:shadow-[0_0_18px_rgb(var(--tf-brand-rgb)/0.45)] before:transition-[opacity,transform] before:duration-200 before:content-[''] motion-reduce:before:transition-none data-[active=true]:border-[color:rgb(var(--tf-brand-rgb)/0.28)] data-[active=true]:bg-[linear-gradient(90deg,rgb(var(--tf-brand-rgb)/0.18),rgb(var(--tf-accent-rgb)/0.08)),rgb(var(--tf-text-rgb)/0.04)] data-[active=true]:pl-8 data-[active=true]:text-[var(--tf-text)] data-[active=true]:[text-shadow:0_0_18px_rgb(var(--tf-brand-rgb)/0.35)] data-[active=true]:before:opacity-100 data-[active=true]:before:scale-y-100" href="#plataforma" data-nav-link>Servicios</a>
           <a class="relative block w-full rounded border border-transparent px-3 py-3 text-[var(--tf-text-muted)] transition-[color,text-shadow,background-color,border-color] duration-200 hover:bg-white/10 hover:text-white motion-reduce:transition-none before:pointer-events-none before:absolute before:left-[0.55rem] before:top-1/2 before:h-[1.4rem] before:w-[0.18rem] before:-translate-y-1/2 before:scale-y-[0.4] before:rounded-full before:bg-[linear-gradient(180deg,var(--tf-accent),var(--tf-brand))] before:opacity-0 before:shadow-[0_0_18px_rgb(var(--tf-brand-rgb)/0.45)] before:transition-[opacity,transform] before:duration-200 before:content-[''] motion-reduce:before:transition-none data-[active=true]:border-[color:rgb(var(--tf-brand-rgb)/0.28)] data-[active=true]:bg-[linear-gradient(90deg,rgb(var(--tf-brand-rgb)/0.18),rgb(var(--tf-accent-rgb)/0.08)),rgb(var(--tf-text-rgb)/0.04)] data-[active=true]:pl-8 data-[active=true]:text-[var(--tf-text)] data-[active=true]:[text-shadow:0_0_18px_rgb(var(--tf-brand-rgb)/0.35)] data-[active=true]:before:opacity-100 data-[active=true]:before:scale-y-100" href="#mercados" data-nav-link>Mercados</a>
           <a class="relative block w-full rounded border border-transparent px-3 py-3 text-[var(--tf-text-muted)] transition-[color,text-shadow,background-color,border-color] duration-200 hover:bg-white/10 hover:text-white motion-reduce:transition-none before:pointer-events-none before:absolute before:left-[0.55rem] before:top-1/2 before:h-[1.4rem] before:w-[0.18rem] before:-translate-y-1/2 before:scale-y-[0.4] before:rounded-full before:bg-[linear-gradient(180deg,var(--tf-accent),var(--tf-brand))] before:opacity-0 before:shadow-[0_0_18px_rgb(var(--tf-brand-rgb)/0.45)] before:transition-[opacity,transform] before:duration-200 before:content-[''] motion-reduce:before:transition-none data-[active=true]:border-[color:rgb(var(--tf-brand-rgb)/0.28)] data-[active=true]:bg-[linear-gradient(90deg,rgb(var(--tf-brand-rgb)/0.18),rgb(var(--tf-accent-rgb)/0.08)),rgb(var(--tf-text-rgb)/0.04)] data-[active=true]:pl-8 data-[active=true]:text-[var(--tf-text)] data-[active=true]:[text-shadow:0_0_18px_rgb(var(--tf-brand-rgb)/0.35)] data-[active=true]:before:opacity-100 data-[active=true]:before:scale-y-100" href="#faqs" data-nav-link>FAQs</a>
           <a
             href="application.html"
+            data-contact-link
             class="mt-3 inline-flex w-full items-center justify-center rounded bg-[var(--tf-brand)] px-4 py-3 text-sm font-semibold text-[var(--tf-bg)] transition hover:bg-[var(--tf-brand-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-2 focus:ring-offset-[var(--tf-bg)]"
           >
             Contáctanos
@@ -335,24 +346,27 @@
 
         <div class="relative mx-auto flex min-h-[calc(100vh-6rem)] max-w-7xl items-center px-5 py-20 lg:px-8">
           <div class="max-w-3xl">
-            <p class="mb-5 inline-flex rounded-full border border-[color:rgb(var(--tf-accent-rgb)/0.3)] bg-[color:rgb(var(--tf-accent-rgb)/0.1)] px-4 py-2 text-sm font-medium text-[var(--tf-accent)]">
+            <p data-hero-badge class="mb-5 inline-flex rounded-full border border-[color:rgb(var(--tf-accent-rgb)/0.3)] bg-[color:rgb(var(--tf-accent-rgb)/0.1)] px-4 py-2 text-sm font-medium text-[var(--tf-accent)]">
               Fundada en 2009 | Los Ángeles + Zaragoza
             </p>
-            <h1 class="text-5xl font-black leading-[0.95] text-white sm:text-6xl lg:text-7xl">
+            <h1 data-hero-title class="text-5xl font-black leading-[0.95] text-white sm:text-6xl lg:text-7xl">
               Logística, última milla y devoluciones para operaciones e-commerce en crecimiento.
             </h1>
-            <p class="mt-6 max-w-2xl text-lg leading-8 text-[var(--tf-text-muted)]">
+            <p data-hero-body class="mt-6 max-w-2xl text-lg leading-8 text-[var(--tf-text-muted)]">
               TrackFlow coordina inventario, preparación de pedidos, transportistas y devoluciones para marcas e-commerce que necesitan operar entre Estados Unidos y España sin perder visibilidad de su logística.
             </p>
             <div class="mt-9 flex flex-col gap-3 sm:flex-row">
               <a
                 href="application.html"
+                data-contact-link
+                data-hero-primary
                 class="inline-flex items-center justify-center rounded bg-[var(--tf-brand)] px-6 py-4 text-sm font-bold text-[var(--tf-bg)] transition hover:bg-[var(--tf-brand-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-2 focus:ring-offset-[var(--tf-bg)]"
               >
                 Contáctanos
               </a>
               <a
                 href="#plataforma"
+                data-hero-secondary
                 class="inline-flex items-center justify-center rounded border border-white/20 px-6 py-4 text-sm font-bold text-white transition hover:border-white/40 hover:bg-white/10"
               >
                 Ver operación
@@ -385,9 +399,9 @@
 
       <section id="plataforma" class="scroll-mt-[var(--header-anchor-offset,4.5rem)] mx-auto max-w-7xl px-5 py-24 lg:px-8">
         <div class="max-w-3xl">
-          <p class="text-sm font-bold uppercase tracking-[0.25em] text-[var(--tf-accent)]">Qué ofrecemos hoy</p>
-          <h2 class="mt-4 text-4xl font-black text-white sm:text-5xl">Operación logística para marcas e-commerce.</h2>
-          <p class="mt-5 text-lg leading-8 text-[var(--tf-text-muted)]">
+          <p data-offer-eyebrow class="text-sm font-bold uppercase tracking-[0.25em] text-[var(--tf-accent)]">Qué ofrecemos hoy</p>
+          <h2 data-offer-title class="mt-4 text-4xl font-black text-white sm:text-5xl">Operación logística para marcas e-commerce.</h2>
+          <p data-offer-body class="mt-5 text-lg leading-8 text-[var(--tf-text-muted)]">
             TrackFlow gestiona la operación desde que entra un pedido hasta que se entrega o vuelve como devolución: inventario, preparación, embalaje, transportistas, incidencias y logística inversa.
           </p>
         </div>
@@ -429,9 +443,9 @@
       <section id="mercados" class="scroll-mt-[var(--header-anchor-offset,4.5rem)] bg-white text-[var(--tf-bg)]">
         <div class="mx-auto grid max-w-7xl gap-12 px-5 py-24 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
           <div>
-            <p class="text-sm font-bold uppercase tracking-[0.25em] text-[var(--tf-accent-strong)]">Dos mercados</p>
-            <h2 class="mt-4 text-4xl font-black sm:text-5xl">Dos países. Una operación logística conectada.</h2>
-            <p class="mt-5 text-lg leading-8 text-[var(--tf-market-muted)]">
+            <p data-markets-eyebrow class="text-sm font-bold uppercase tracking-[0.25em] text-[var(--tf-accent-strong)]">Dos mercados</p>
+            <h2 data-markets-title class="mt-4 text-4xl font-black sm:text-5xl">Dos países. Una operación logística conectada.</h2>
+            <p data-markets-body class="mt-5 text-lg leading-8 text-[var(--tf-market-muted)]">
               Los equipos de TrackFlow operan entre Los Ángeles y Zaragoza coordinando almacenes, transportistas, incidencias y devoluciones para marcas e-commerce en dos mercados distintos.
             </p>
           </div>
@@ -457,9 +471,9 @@
       <section id="faqs" class="scroll-mt-[var(--header-anchor-offset,4.5rem)] border-y border-[var(--tf-border)] bg-[var(--tf-surface)]/70">
         <div class="mx-auto max-w-7xl px-5 py-24 lg:px-8">
           <div class="max-w-3xl">
-            <p class="text-sm font-bold uppercase tracking-[0.25em] text-[var(--tf-accent)]">FAQs</p>
-            <h2 class="mt-4 text-4xl font-black text-white sm:text-5xl">Preguntas frecuentes sobre TrackFlow.</h2>
-            <p class="mt-5 text-lg leading-8 text-[var(--tf-text-muted)]">
+            <p data-faq-eyebrow class="text-sm font-bold uppercase tracking-[0.25em] text-[var(--tf-accent)]">FAQs</p>
+            <h2 data-faq-title class="mt-4 text-4xl font-black text-white sm:text-5xl">Preguntas frecuentes sobre TrackFlow.</h2>
+            <p data-faq-body class="mt-5 text-lg leading-8 text-[var(--tf-text-muted)]">
               Respuestas directas sobre la operación logística, la cobertura geográfica, la última milla y las devoluciones para marcas e-commerce.
             </p>
           </div>
@@ -569,12 +583,12 @@
       <section class="mx-auto max-w-7xl px-5 py-24 lg:px-8">
         <div class="rounded border border-[color:rgb(var(--tf-brand-rgb)/0.3)] bg-[var(--tf-brand)] p-8 text-[var(--tf-bg)] md:flex md:items-center md:justify-between md:gap-8">
           <div>
-            <h2 class="text-3xl font-black">Hablemos de tu operación.</h2>
-            <p class="mt-3 max-w-2xl text-[var(--tf-border)]">
+            <h2 data-final-cta-title class="text-3xl font-black">Hablemos de tu operación.</h2>
+            <p data-final-cta-body class="mt-3 max-w-2xl text-[var(--tf-border)]">
               Cuéntanos cómo funciona hoy tu operación logística y qué desafíos necesitas resolver.
             </p>
           </div>
-          <a href="application.html" class="mt-6 inline-flex rounded bg-[var(--tf-bg)] px-6 py-4 text-sm font-bold text-white md:mt-0">
+          <a href="application.html" data-contact-link class="mt-6 inline-flex rounded bg-[var(--tf-bg)] px-6 py-4 text-sm font-bold text-white md:mt-0">
             Contáctanos
           </a>
         </div>
@@ -585,16 +599,16 @@
       <div class="mx-auto grid max-w-7xl gap-8 md:grid-cols-3">
         <div>
           <p class="text-xl font-black text-white">TrackFlow</p>
-          <p class="mt-3 text-sm leading-6 text-[var(--tf-text-muted)]">Logística de última milla y gestión de almacenes para operaciones e-commerce.</p>
+          <p data-footer-body class="mt-3 text-sm leading-6 text-[var(--tf-text-muted)]">Logística de última milla y gestión de almacenes para operaciones e-commerce.</p>
         </div>
-        <address class="not-italic text-sm leading-7 text-[var(--tf-text-muted)]">
+        <address data-footer-address class="not-italic text-sm leading-7 text-[var(--tf-text-muted)]">
           Los Ángeles, CA, United States<br />
           Zaragoza, España<br />
           Operaciones en Estados Unidos y España
         </address>
         <div class="text-sm leading-7 text-[var(--tf-text-muted)] md:text-right">
-          <a class="block hover:text-white" href="application.html">Formulario operativo</a>
-          <a class="block hover:text-white" href="#plataforma">Servicios</a>
+          <a data-footer-form class="block hover:text-white" href="application.html">Formulario operativo</a>
+          <a data-footer-services class="block hover:text-white" href="#plataforma">Servicios</a>
           <p class="mt-4">© 2026 TrackFlow</p>
         </div>
       </div>
@@ -615,9 +629,23 @@
         .map((link) => document.querySelector(link.getAttribute("href")))
         .filter(Boolean);
 
+      function getMenuLabel(open) {
+        const i18n = window.TrackFlowI18n;
+        if (i18n) {
+          return i18n.t(open ? "common.menuClose" : "common.menuOpen");
+        }
+
+        return open ? "Cerrar menu" : "Abrir menu";
+      }
+
       function setMobileMenu(open) {
         menuButton.setAttribute("aria-expanded", String(open));
-        menuButton.setAttribute("aria-label", open ? "Cerrar menu" : "Abrir menu");
+        const menuLabel = getMenuLabel(open);
+        menuButton.setAttribute("aria-label", menuLabel);
+        const srMenuLabel = menuButton.querySelector("[data-menu-label]");
+        if (srMenuLabel) {
+          srMenuLabel.textContent = menuLabel;
+        }
         mobileMenu.setAttribute("aria-hidden", String(!open));
         mobileMenu.inert = !open;
         mobileMenu.classList.toggle("pointer-events-none", !open);

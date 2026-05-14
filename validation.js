@@ -24,30 +24,44 @@ function isCorporateEmail(value) {
   return !personalEmailDomains.has(domain);
 }
 
+function getValidationTexts() {
+  return window.TrackFlowI18n?.getValidationMessages?.() || {
+    companyName: "Indica el nombre legal o comercial de la empresa.",
+    contactName: "Indica el nombre de la persona de contacto.",
+    email: "Usa un email corporativo valido, por ejemplo ops@empresa.com.",
+    country: "Selecciona el pais de operacion principal.",
+    notes: "Cuentanos brevemente que necesitas resolver.",
+    consent: "Confirma la autorizacion para responder tu consulta.",
+    invalidForm: "Revisa los campos marcados antes de enviar el formulario.",
+    success:
+      "Gracias. Recibimos tu consulta y el equipo de TrackFlow revisara tu contexto operativo antes de coordinar una conversacion."
+  };
+}
+
 const fields = {
   companyName: {
     validate: (value) => value.trim().length >= 2,
-    message: "Indica el nombre legal o comercial de la empresa."
+    message: () => getValidationTexts().companyName
   },
   contactName: {
     validate: (value) => value.trim().length >= 2,
-    message: "Indica el nombre de la persona de contacto."
+    message: () => getValidationTexts().contactName
   },
   email: {
     validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim()) && isCorporateEmail(value),
-    message: "Usa un email corporativo válido, por ejemplo ops@empresa.com."
+    message: () => getValidationTexts().email
   },
   country: {
     validate: (value) => value.trim().length > 0,
-    message: "Selecciona el país de operación principal."
+    message: () => getValidationTexts().country
   },
   notes: {
     validate: (value) => value.trim().length >= 10,
-    message: "Cuéntanos brevemente qué necesitas resolver."
+    message: () => getValidationTexts().notes
   },
   consent: {
     validate: (_, input) => input.checked,
-    message: "Confirma la autorización para responder tu consulta."
+    message: () => getValidationTexts().consent
   }
 };
 
@@ -71,7 +85,7 @@ function validateField(input) {
   if (!rule) return true;
 
   const isValid = rule.validate(input.value, input);
-  setFieldState(input, isValid, isValid ? "" : rule.message);
+  setFieldState(input, isValid, isValid ? "" : rule.message());
   return isValid;
 }
 
@@ -106,16 +120,13 @@ form.addEventListener("submit", (event) => {
   event.preventDefault();
 
   if (!validateForm()) {
-    showStatus("error", "Revisa los campos marcados antes de enviar el formulario.");
+    showStatus("error", getValidationTexts().invalidForm);
     const firstInvalid = form.querySelector('[aria-invalid="true"]');
     firstInvalid?.focus();
     return;
   }
 
-  showStatus(
-    "success",
-    "Gracias. Recibimos tu consulta y el equipo de TrackFlow revisará tu contexto operativo antes de coordinar una conversación."
-  );
+  showStatus("success", getValidationTexts().success);
   form.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
@@ -134,4 +145,17 @@ form.addEventListener("reset", () => {
     statusBox.className = "hidden rounded border p-4 text-sm";
     statusBox.textContent = "";
   });
+});
+
+document.addEventListener("trackflow:languagechange", () => {
+  const invalidFields = Array.from(form.elements).filter((element) => fields[element.name] && element.getAttribute("aria-invalid") === "true");
+
+  invalidFields.forEach((input) => {
+    validateField(input);
+  });
+
+  if (!statusBox.classList.contains("hidden")) {
+    const statusType = statusBox.className.includes("--tf-error-rgb") ? "error" : "success";
+    showStatus(statusType, statusType === "error" ? getValidationTexts().invalidForm : getValidationTexts().success);
+  }
 });

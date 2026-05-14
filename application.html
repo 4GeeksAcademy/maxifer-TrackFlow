@@ -138,9 +138,10 @@
       }
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="validation.js?v=2"></script>
+    <script defer src="i18n.js?v=1"></script>
+    <script defer src="validation.js?v=3"></script>
   </head>
-  <body class="bg-[var(--tf-bg)] text-[var(--tf-text)] antialiased">
+  <body data-page="application" class="bg-[var(--tf-bg)] text-[var(--tf-text)] antialiased">
     <header class="fixed inset-x-0 top-0 z-40">
       <div class="border-b border-[color:rgb(var(--tf-text-rgb)/0.12)] bg-[color:rgb(var(--tf-bg-rgb)/0.96)] shadow-[0_10px_26px_-16px_rgb(var(--tf-bg-rgb)/0.95)] backdrop-blur-md">
         <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8" aria-label="Navegación principal">
@@ -151,19 +152,60 @@
               <span class="block text-xs text-[color:rgb(var(--tf-text-rgb)/0.78)]">Last-mile operations</span>
             </span>
           </a>
-          <a class="text-sm font-medium text-[var(--tf-text-muted)] hover:text-white" href="index.html">Volver a la landing</a>
+          <div class="hidden items-center gap-8 text-sm text-[color:rgb(var(--tf-text-rgb)/0.74)] md:flex">
+            <a class="font-medium text-[var(--tf-text-muted)] transition-colors hover:text-white" href="index.html#inicio" data-nav-link>Inicio</a>
+            <a class="font-medium text-[var(--tf-text-muted)] transition-colors hover:text-white" href="index.html#plataforma" data-nav-link>Servicios</a>
+            <a class="font-medium text-[var(--tf-text-muted)] transition-colors hover:text-white" href="index.html#mercados" data-nav-link>Mercados</a>
+            <a class="font-medium text-[var(--tf-text-muted)] transition-colors hover:text-white" href="index.html#faqs" data-nav-link>FAQs</a>
+          </div>
+          <div class="flex items-center gap-2 sm:gap-3">
+            <div data-language-switch class="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/5 p-1 shadow-[0_0_0_1px_rgb(var(--tf-text-rgb)/0.08)]" aria-label="Seleccion de idioma">
+              <button type="button" data-lang-option="es" aria-pressed="true" class="rounded-full px-2.5 py-1 text-xs font-semibold text-[var(--tf-text-muted)] hover:text-white">ES</button>
+              <button type="button" data-lang-option="en" aria-pressed="false" class="rounded-full px-2.5 py-1 text-xs font-semibold text-[var(--tf-text-muted)] hover:text-white">EN</button>
+            </div>
+            <span
+              data-contact-link
+              aria-hidden="true"
+              class="invisible pointer-events-none hidden select-none rounded px-4 py-2 text-sm font-semibold md:inline-flex"
+            >
+              Contactanos
+            </span>
+            <button
+              type="button"
+              class="inline-flex h-11 w-11 items-center justify-center rounded border border-white/15 text-[var(--tf-text)] transition hover:border-white/30 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-2 focus:ring-offset-[var(--tf-bg)] md:hidden"
+              aria-controls="mobile-menu"
+              aria-expanded="false"
+              aria-label="Abrir menu"
+              data-menu-button
+            >
+              <span class="sr-only" data-menu-label>Abrir menu</span>
+              <span class="relative block h-5 w-5" aria-hidden="true">
+                <span class="absolute left-0 top-1 block h-0.5 w-5 rounded bg-current transition" data-menu-line="top"></span>
+                <span class="absolute left-0 top-2.5 block h-0.5 w-5 rounded bg-current transition" data-menu-line="middle"></span>
+                <span class="absolute left-0 top-4 block h-0.5 w-5 rounded bg-current transition" data-menu-line="bottom"></span>
+              </span>
+            </button>
+          </div>
         </nav>
+      </div>
+      <div id="mobile-menu" class="pointer-events-none grid grid-rows-[0fr] border-b border-white/10 bg-[color:rgb(var(--tf-bg-rgb)/0.92)] px-5 opacity-0 shadow-md shadow-[color:rgb(var(--tf-brand-rgb)/0.2)] backdrop-blur-md transition-all duration-300 ease-out motion-reduce:transition-none md:hidden" aria-hidden="true" inert data-mobile-menu>
+        <div class="mx-auto flex w-full max-w-7xl -translate-y-3 flex-col gap-1 overflow-hidden pb-0 pt-0 text-sm font-medium text-[var(--tf-text-muted)] transition-all duration-300 ease-out motion-reduce:transition-none" data-mobile-menu-content>
+          <a class="block rounded px-3 py-3 transition-colors hover:bg-white/10 hover:text-white" href="index.html#inicio" data-nav-link>Inicio</a>
+          <a class="block rounded px-3 py-3 transition-colors hover:bg-white/10 hover:text-white" href="index.html#plataforma" data-nav-link>Servicios</a>
+          <a class="block rounded px-3 py-3 transition-colors hover:bg-white/10 hover:text-white" href="index.html#mercados" data-nav-link>Mercados</a>
+          <a class="block rounded px-3 py-3 transition-colors hover:bg-white/10 hover:text-white" href="index.html#faqs" data-nav-link>FAQs</a>
+        </div>
       </div>
     </header>
 
     <main class="mx-auto max-w-7xl px-5 pb-8 pt-28 lg:px-8">
       <section class="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
         <aside class="lg:sticky lg:top-28 lg:self-start">
-          <p class="text-sm font-bold uppercase tracking-[0.25em] text-[var(--tf-accent)]">Contacto TrackFlow</p>
-          <h1 class="mt-3 text-4xl font-black leading-tight text-white sm:text-5xl">
+          <p data-application-eyebrow class="text-sm font-bold uppercase tracking-[0.25em] text-[var(--tf-accent)]">Contacto TrackFlow</p>
+          <h1 data-application-title class="mt-3 text-4xl font-black leading-tight text-white sm:text-5xl">
             Cuéntanos cómo funciona hoy tu operación logística.
           </h1>
-          <p class="mt-4 text-base leading-7 text-[var(--tf-text-muted)]">
+          <p data-application-intro class="mt-4 text-base leading-7 text-[var(--tf-text-muted)]">
             Completa el formulario y el equipo de TrackFlow revisará tu contexto operativo antes de coordinar una conversación.
           </p>
         </aside>
@@ -171,7 +213,7 @@
         <section class="rounded border border-[var(--tf-border)] bg-[var(--tf-surface)] p-5 shadow-2xl shadow-black/30 sm:p-6">
           <form id="applicationForm" novalidate class="space-y-5">
             <fieldset class="grid gap-4 sm:grid-cols-2">
-              <legend class="mb-3 text-lg font-bold text-white">Empresa y contacto</legend>
+              <legend data-application-fieldset class="mb-3 text-lg font-bold text-white">Empresa y contacto</legend>
               <div class="sm:col-span-2">
                 <label for="companyName" class="block text-sm font-medium text-[var(--tf-text-muted)]">Nombre de la empresa *</label>
                 <input id="companyName" name="companyName" type="text" required minlength="2" class="mt-1.5 w-full rounded border border-[var(--tf-border)] bg-[var(--tf-bg)] px-4 py-2.5 text-white outline-none transition focus:border-[var(--tf-brand)]" />
@@ -226,5 +268,85 @@
         </section>
       </section>
     </main>
+    <script>
+      const menuButton = document.querySelector("[data-menu-button]");
+      const mobileMenu = document.querySelector("[data-mobile-menu]");
+      const mobileMenuContent = document.querySelector("[data-mobile-menu-content]");
+      const header = document.querySelector("header");
+      const menuLines = {
+        top: document.querySelector('[data-menu-line="top"]'),
+        middle: document.querySelector('[data-menu-line="middle"]'),
+        bottom: document.querySelector('[data-menu-line="bottom"]')
+      };
+
+      function getMenuLabel(open) {
+        const i18n = window.TrackFlowI18n;
+        if (i18n) {
+          return i18n.t(open ? "common.menuClose" : "common.menuOpen");
+        }
+
+        return open ? "Cerrar menu" : "Abrir menu";
+      }
+
+      function setMobileMenu(open) {
+        if (!menuButton || !mobileMenu || !mobileMenuContent) return;
+
+        menuButton.setAttribute("aria-expanded", String(open));
+        const menuLabel = getMenuLabel(open);
+        menuButton.setAttribute("aria-label", menuLabel);
+
+        const srMenuLabel = menuButton.querySelector("[data-menu-label]");
+        if (srMenuLabel) {
+          srMenuLabel.textContent = menuLabel;
+        }
+
+        mobileMenu.setAttribute("aria-hidden", String(!open));
+        mobileMenu.inert = !open;
+        mobileMenu.classList.toggle("pointer-events-none", !open);
+        mobileMenu.classList.toggle("grid-rows-[0fr]", !open);
+        mobileMenu.classList.toggle("grid-rows-[1fr]", open);
+        mobileMenu.classList.toggle("opacity-0", !open);
+        mobileMenu.classList.toggle("opacity-100", open);
+        mobileMenuContent.classList.toggle("-translate-y-3", !open);
+        mobileMenuContent.classList.toggle("translate-y-0", open);
+        mobileMenuContent.classList.toggle("pb-0", !open);
+        mobileMenuContent.classList.toggle("pt-0", !open);
+        mobileMenuContent.classList.toggle("pb-5", open);
+        mobileMenuContent.classList.toggle("pt-2", open);
+
+        if (menuLines.top && menuLines.middle && menuLines.bottom) {
+          menuLines.top.classList.toggle("translate-y-1.5", open);
+          menuLines.top.classList.toggle("rotate-45", open);
+          menuLines.middle.classList.toggle("opacity-0", open);
+          menuLines.bottom.classList.toggle("-translate-y-1.5", open);
+          menuLines.bottom.classList.toggle("-rotate-45", open);
+        }
+      }
+
+      if (menuButton) {
+        menuButton.addEventListener("click", () => {
+          const open = menuButton.getAttribute("aria-expanded") === "true";
+          setMobileMenu(!open);
+        });
+
+        document.querySelectorAll('[data-mobile-menu] [data-nav-link]').forEach((link) => {
+          link.addEventListener("click", () => setMobileMenu(false));
+        });
+
+        document.addEventListener("click", (event) => {
+          const open = menuButton.getAttribute("aria-expanded") === "true";
+          if (!open || !header) return;
+          if (!header.contains(event.target)) {
+            setMobileMenu(false);
+          }
+        });
+
+        window.matchMedia("(min-width: 768px)").addEventListener("change", (event) => {
+          if (event.matches) {
+            setMobileMenu(false);
+          }
+        });
+      }
+    </script>
   </body>
 </html>

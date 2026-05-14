@@ -1,0 +1,609 @@
+(function () {
+  const STORAGE_KEY = "trackflow-lang";
+  const SUPPORTED_LANGS = new Set(["es", "en"]);
+
+  const translations = {
+    es: {
+      common: {
+        navAria: "Navegacion principal",
+        homeAria: "TrackFlow inicio",
+        logoAlt: "Logo de TrackFlow",
+        menuOpen: "Abrir menu",
+        menuClose: "Cerrar menu",
+        contact: "Contactanos",
+        backToLanding: "Volver a la landing",
+        navHome: "Inicio",
+        navServices: "Servicios",
+        navMarkets: "Mercados",
+        navFaqs: "FAQs",
+        switchAria: "Seleccion de idioma",
+        htmlLang: "es"
+      },
+      index: {
+        title: "TrackFlow | Logistica de ultima milla para e-commerce",
+        description:
+          "TrackFlow coordina inventario, preparacion de pedidos, transportistas y devoluciones para marcas e-commerce que operan entre Estados Unidos y Espana.",
+        ogTitle: "TrackFlow | Logistica de ultima milla para e-commerce",
+        ogDescription:
+          "TrackFlow coordina inventario, preparacion de pedidos, transportistas y devoluciones para marcas e-commerce que operan entre Estados Unidos y Espana.",
+        twitterTitle: "TrackFlow | Logistica de ultima milla para e-commerce",
+        twitterDescription:
+          "Inventario, preparacion de pedidos, transportistas y devoluciones para operaciones e-commerce en crecimiento.",
+        navServices: "Servicios",
+        navMarkets: "Mercados",
+        navFaqs: "FAQs",
+        heroAlt: "Centro de operaciones logisticas moderno con paquetes, pantallas de seguimiento y zona de almacen",
+        heroBadge: "Fundada en 2009 | Los Angeles + Zaragoza",
+        heroTitle: "Logistica, ultima milla y devoluciones para operaciones e-commerce en crecimiento.",
+        heroBody:
+          "TrackFlow coordina inventario, preparacion de pedidos, transportistas y devoluciones para marcas e-commerce que necesitan operar entre Estados Unidos y Espana sin perder visibilidad de su logistica.",
+        heroPrimaryCta: "Contactanos",
+        heroSecondaryCta: "Ver operacion",
+        stats: [
+          "personas operando entre Estados Unidos y Espana",
+          "almacenes en Los Angeles y Zaragoza para almacenamiento, picking y preparacion de pedidos",
+          "transportistas coordinados diariamente para operaciones de ultima milla",
+          "del volumen operativo corresponde a devoluciones segun cliente y mercado"
+        ],
+        offerEyebrow: "Que ofrecemos hoy",
+        offerTitle: "Operacion logistica para marcas e-commerce.",
+        offerBody:
+          "TrackFlow gestiona la operacion desde que entra un pedido hasta que se entrega o vuelve como devolucion: inventario, preparacion, embalaje, transportistas, incidencias y logistica inversa.",
+        serviceCards: [
+          {
+            title: "Almacenamiento de inventario",
+            body: "Gestion fisica de inventario para marcas e-commerce desde almacenes ubicados en Los Angeles y Zaragoza."
+          },
+          {
+            title: "Preparacion y embalaje",
+            body: "Recepcion de pedidos, picking, preparacion de paquetes y coordinacion con el transportista asignado."
+          },
+          {
+            title: "Ultima milla",
+            body: "Coordinacion de envios y entregas con una red de transportistas en Estados Unidos y Espana."
+          },
+          {
+            title: "Seguimiento operativo e incidencias",
+            body: "Seguimiento de entregas y resolucion de incidencias entre almacenes, transportistas y clientes finales."
+          },
+          {
+            title: "Logistica inversa",
+            body: "Gestion de devoluciones, revision de casos y decisiones sobre recogida, reacondicionamiento o descarte."
+          },
+          {
+            title: "Atencion operativa para marcas y clientes finales",
+            body: "Gestion de consultas relacionadas con pedidos, entregas, incidencias y devoluciones en ambos mercados."
+          }
+        ],
+        marketsEyebrow: "Dos mercados",
+        marketsTitle: "Dos paises. Una operacion logistica conectada.",
+        marketsBody:
+          "Los equipos de TrackFlow operan entre Los Angeles y Zaragoza coordinando almacenes, transportistas, incidencias y devoluciones para marcas e-commerce en dos mercados distintos.",
+        marketCards: [
+          {
+            title: "Los Angeles",
+            body: "Sede ejecutiva y almacen para la operacion logistica en Estados Unidos."
+          },
+          {
+            title: "Zaragoza",
+            body: "Oficina tecnologica y almacen para la operacion logistica en Espana."
+          },
+          {
+            title: "Cobertura operativa",
+            body: "Equipos de almacen, ultima milla, logistica inversa, atencion al cliente y tecnologia trabajan distribuidos entre ambos paises."
+          }
+        ],
+        faqEyebrow: "FAQs",
+        faqTitle: "Preguntas frecuentes sobre TrackFlow.",
+        faqBody:
+          "Respuestas directas sobre la operacion logistica, la cobertura geografica, la ultima milla y las devoluciones para marcas e-commerce.",
+        faqs: [
+          {
+            q: "Que es TrackFlow?",
+            a: "TrackFlow es una empresa de logistica de ultima milla y gestion de almacenes para marcas e-commerce. Fue fundada en 2009 en Los Angeles y opera con equipos y almacenes en Estados Unidos y Espana."
+          },
+          {
+            q: "Que servicios logisticos ofrece TrackFlow?",
+            a: "TrackFlow ofrece almacenamiento de inventario, preparacion y embalaje de pedidos, coordinacion de ultima milla, seguimiento de entregas, gestion de incidencias, logistica inversa y soporte operativo para marcas y destinatarios."
+          },
+          {
+            q: "En que paises opera TrackFlow?",
+            a: "TrackFlow opera en Estados Unidos y Espana, con almacenes en Los Angeles y Zaragoza y equipos distribuidos entre ambos mercados."
+          },
+          {
+            q: "Que tipo de empresas trabajan con TrackFlow?",
+            a: "TrackFlow trabaja con marcas e-commerce que necesitan externalizar o mejorar su operacion logistica, desde el almacenamiento del inventario hasta la entrega y gestion de devoluciones."
+          },
+          {
+            q: "Como gestiona TrackFlow la ultima milla y los transportistas?",
+            a: "TrackFlow coordina envios con una red de 8 transportistas en Estados Unidos y Espana y gestiona incidencias como entregas fallidas, paquetes perdidos o direcciones incorrectas."
+          },
+          {
+            q: "Como gestiona TrackFlow las devoluciones?",
+            a: "TrackFlow gestiona devoluciones que pueden representar entre el 18% y el 25% del volumen operativo segun cliente y pais. El proceso incluye revision de casos y decisiones sobre recogida, reacondicionamiento o descarte."
+          }
+        ],
+        ctaTitle: "Hablemos de tu operacion.",
+        ctaBody: "Cuentanos como funciona hoy tu operacion logistica y que desafios necesitas resolver.",
+        footerBody: "Logistica de ultima milla y gestion de almacenes para operaciones e-commerce.",
+        footerAddress: "Los Angeles, CA, United States\nZaragoza, Espana\nOperaciones en Estados Unidos y Espana",
+        footerForm: "Formulario operativo",
+        footerServices: "Servicios"
+      },
+      application: {
+        title: "Hablemos de tu operacion | TrackFlow",
+        description:
+          "Formulario de contacto TrackFlow para marcas e-commerce que necesitan revisar su operacion logistica, ultima milla o devoluciones.",
+        ogTitle: "Hablemos de tu operacion | TrackFlow",
+        ogDescription:
+          "Completa el formulario y el equipo de TrackFlow revisara tu contexto operativo antes de coordinar una conversacion.",
+        twitterTitle: "Hablemos de tu operacion | TrackFlow",
+        twitterDescription:
+          "Completa el formulario y el equipo de TrackFlow revisara tu contexto operativo antes de coordinar una conversacion.",
+        eyebrow: "Contacto TrackFlow",
+        heading: "Cuentanos como funciona hoy tu operacion logistica.",
+        intro:
+          "Completa el formulario y el equipo de TrackFlow revisara tu contexto operativo antes de coordinar una conversacion.",
+        fieldset: "Empresa y contacto",
+        labels: {
+          companyName: "Nombre de la empresa *",
+          contactName: "Persona responsable *",
+          email: "Email *",
+          country: "Pais de operacion principal *",
+          notes: "Que necesitas resolver? *",
+          consent: "Acepto que TrackFlow use estos datos para responder mi consulta. *"
+        },
+        notesPlaceholder:
+          "Ej: necesitamos reducir incidencias en ultima milla, mejorar la gestion de devoluciones o centralizar el seguimiento de pedidos.",
+        countryOptions: ["Selecciona un pais", "Estados Unidos", "Espana", "Otro"],
+        submit: "Enviar consulta",
+        reset: "Limpiar formulario"
+      },
+      validation: {
+        companyName: "Indica el nombre legal o comercial de la empresa.",
+        contactName: "Indica el nombre de la persona de contacto.",
+        email: "Usa un email corporativo valido, por ejemplo ops@empresa.com.",
+        country: "Selecciona el pais de operacion principal.",
+        notes: "Cuentanos brevemente que necesitas resolver.",
+        consent: "Confirma la autorizacion para responder tu consulta.",
+        invalidForm: "Revisa los campos marcados antes de enviar el formulario.",
+        success:
+          "Gracias. Recibimos tu consulta y el equipo de TrackFlow revisara tu contexto operativo antes de coordinar una conversacion."
+      }
+    },
+    en: {
+      common: {
+        navAria: "Main navigation",
+        homeAria: "TrackFlow home",
+        logoAlt: "TrackFlow logo",
+        menuOpen: "Open menu",
+        menuClose: "Close menu",
+        contact: "Contact us",
+        backToLanding: "Back to landing",
+        navHome: "Home",
+        navServices: "Services",
+        navMarkets: "Markets",
+        navFaqs: "FAQs",
+        switchAria: "Language selector",
+        htmlLang: "en"
+      },
+      index: {
+        title: "TrackFlow | Last-mile logistics for e-commerce",
+        description:
+          "TrackFlow coordinates inventory, order preparation, carriers, and returns for e-commerce brands operating across the United States and Spain.",
+        ogTitle: "TrackFlow | Last-mile logistics for e-commerce",
+        ogDescription:
+          "TrackFlow coordinates inventory, order preparation, carriers, and returns for e-commerce brands operating across the United States and Spain.",
+        twitterTitle: "TrackFlow | Last-mile logistics for e-commerce",
+        twitterDescription:
+          "Inventory, order prep, carriers, and returns for scaling e-commerce operations.",
+        navServices: "Services",
+        navMarkets: "Markets",
+        navFaqs: "FAQs",
+        heroAlt: "Modern logistics operations center with parcels, tracking screens, and warehouse area",
+        heroBadge: "Founded in 2009 | Los Angeles + Zaragoza",
+        heroTitle: "Logistics, last-mile delivery, and returns for growing e-commerce operations.",
+        heroBody:
+          "TrackFlow coordinates inventory, order prep, carriers, and returns for e-commerce brands that need to operate across the United States and Spain without losing logistics visibility.",
+        heroPrimaryCta: "Contact us",
+        heroSecondaryCta: "See operations",
+        stats: [
+          "people operating across the United States and Spain",
+          "warehouses in Los Angeles and Zaragoza for storage, picking, and order preparation",
+          "carriers coordinated daily for last-mile operations",
+          "of operational volume corresponds to returns, depending on client and market"
+        ],
+        offerEyebrow: "What we deliver today",
+        offerTitle: "Logistics operations for e-commerce brands.",
+        offerBody:
+          "TrackFlow manages the operation from order intake to delivery or return: inventory, picking, packing, carriers, incidents, and reverse logistics.",
+        serviceCards: [
+          {
+            title: "Inventory storage",
+            body: "Physical inventory management for e-commerce brands from warehouses in Los Angeles and Zaragoza."
+          },
+          {
+            title: "Picking and packing",
+            body: "Order intake, picking, parcel preparation, and coordination with the assigned carrier."
+          },
+          {
+            title: "Last-mile delivery",
+            body: "Shipment and delivery coordination with a carrier network in the United States and Spain."
+          },
+          {
+            title: "Operational tracking and incidents",
+            body: "Delivery tracking and incident resolution across warehouses, carriers, and end customers."
+          },
+          {
+            title: "Reverse logistics",
+            body: "Returns management, case review, and decisions on pickup, refurbishing, or disposal."
+          },
+          {
+            title: "Operational support for brands and end customers",
+            body: "Handling order, delivery, incident, and returns inquiries across both markets."
+          }
+        ],
+        marketsEyebrow: "Two markets",
+        marketsTitle: "Two countries. One connected logistics operation.",
+        marketsBody:
+          "TrackFlow teams operate between Los Angeles and Zaragoza, coordinating warehouses, carriers, incidents, and returns for e-commerce brands in two different markets.",
+        marketCards: [
+          {
+            title: "Los Angeles",
+            body: "Executive headquarters and warehouse for U.S. logistics operations."
+          },
+          {
+            title: "Zaragoza",
+            body: "Technology office and warehouse for Spain logistics operations."
+          },
+          {
+            title: "Operational coverage",
+            body: "Warehouse, last-mile, reverse logistics, customer support, and technology teams operate across both countries."
+          }
+        ],
+        faqEyebrow: "FAQs",
+        faqTitle: "Frequently asked questions about TrackFlow.",
+        faqBody:
+          "Straight answers about logistics operations, geographic coverage, last-mile delivery, and returns for e-commerce brands.",
+        faqs: [
+          {
+            q: "What is TrackFlow?",
+            a: "TrackFlow is a last-mile logistics and warehouse management company for e-commerce brands. It was founded in 2009 in Los Angeles and operates teams and warehouses in the United States and Spain."
+          },
+          {
+            q: "What logistics services does TrackFlow provide?",
+            a: "TrackFlow provides inventory storage, order picking and packing, last-mile coordination, delivery tracking, incident management, reverse logistics, and operational support for brands and recipients."
+          },
+          {
+            q: "Which countries does TrackFlow operate in?",
+            a: "TrackFlow operates in the United States and Spain, with warehouses in Los Angeles and Zaragoza and distributed teams across both markets."
+          },
+          {
+            q: "What kind of companies work with TrackFlow?",
+            a: "TrackFlow works with e-commerce brands that need to outsource or improve their logistics operation, from inventory storage to delivery and returns management."
+          },
+          {
+            q: "How does TrackFlow handle last mile and carriers?",
+            a: "TrackFlow coordinates shipments through a network of 8 carriers in the United States and Spain and manages incidents such as failed deliveries, lost parcels, or wrong addresses."
+          },
+          {
+            q: "How does TrackFlow handle returns?",
+            a: "TrackFlow manages returns that can account for 18% to 25% of operational volume depending on the client and country. The process includes case review and decisions on pickup, refurbishing, or disposal."
+          }
+        ],
+        ctaTitle: "Let us talk about your operation.",
+        ctaBody: "Tell us how your logistics operation runs today and which challenges you need to solve.",
+        footerBody: "Last-mile logistics and warehouse management for e-commerce operations.",
+        footerAddress: "Los Angeles, CA, United States\nZaragoza, Spain\nOperations across the United States and Spain",
+        footerForm: "Operational form",
+        footerServices: "Services"
+      },
+      application: {
+        title: "Let us talk about your operation | TrackFlow",
+        description:
+          "TrackFlow contact form for e-commerce brands that need to review logistics operations, last-mile performance, or returns.",
+        ogTitle: "Let us talk about your operation | TrackFlow",
+        ogDescription:
+          "Complete the form and the TrackFlow team will review your operational context before scheduling a conversation.",
+        twitterTitle: "Let us talk about your operation | TrackFlow",
+        twitterDescription:
+          "Complete the form and the TrackFlow team will review your operational context before scheduling a conversation.",
+        eyebrow: "Contact TrackFlow",
+        heading: "Tell us how your logistics operation works today.",
+        intro:
+          "Complete the form and the TrackFlow team will review your operational context before scheduling a conversation.",
+        fieldset: "Company and contact",
+        labels: {
+          companyName: "Company name *",
+          contactName: "Main contact *",
+          email: "Email *",
+          country: "Primary operating country *",
+          notes: "What do you need to solve? *",
+          consent: "I agree that TrackFlow may use this data to answer my inquiry. *"
+        },
+        notesPlaceholder:
+          "Ex: we need to reduce last-mile incidents, improve returns management, or centralize order tracking.",
+        countryOptions: ["Select a country", "United States", "Spain", "Other"],
+        submit: "Send inquiry",
+        reset: "Clear form"
+      },
+      validation: {
+        companyName: "Please enter the company legal or trading name.",
+        contactName: "Please enter the contact person's name.",
+        email: "Use a valid business email, for example ops@company.com.",
+        country: "Select the primary operating country.",
+        notes: "Briefly explain what you need to solve.",
+        consent: "Please confirm authorization so we can reply.",
+        invalidForm: "Please review the highlighted fields before submitting.",
+        success:
+          "Thank you. We received your inquiry and the TrackFlow team will review your operational context before scheduling a conversation."
+      }
+    }
+  };
+
+  const getPath = (obj, path) =>
+    path.split(".").reduce((acc, key) => (acc && Object.prototype.hasOwnProperty.call(acc, key) ? acc[key] : undefined), obj);
+
+  const getStoredLang = () => {
+    try {
+      return localStorage.getItem(STORAGE_KEY);
+    } catch {
+      return null;
+    }
+  };
+
+  const saveLang = (lang) => {
+    try {
+      localStorage.setItem(STORAGE_KEY, lang);
+    } catch {
+      // Ignore storage errors in restricted environments.
+    }
+  };
+
+  const browserLang = (navigator.language || "").toLowerCase().startsWith("en") ? "en" : "es";
+  let currentLang = SUPPORTED_LANGS.has(getStoredLang()) ? getStoredLang() : browserLang;
+
+  const q = (selector, root) => (root || document).querySelector(selector);
+  const qa = (selector, root) => Array.from((root || document).querySelectorAll(selector));
+
+  const setMeta = (selector, value) => {
+    const element = q(selector);
+    if (element) {
+      element.setAttribute("content", value);
+    }
+  };
+
+  const setText = (selector, value) => {
+    qa(selector).forEach((node) => {
+      node.textContent = value;
+    });
+  };
+
+  const applyCommon = (lang) => {
+    const common = translations[lang].common;
+    document.documentElement.lang = common.htmlLang;
+
+    const nav = q("header nav");
+    if (nav) {
+      nav.setAttribute("aria-label", common.navAria);
+    }
+
+    qa('a[href="#inicio"], a[href="index.html#inicio"]').forEach((link) => {
+      link.setAttribute("aria-label", common.homeAria);
+    });
+
+    qa('img[src="assets/trackflow-logo.svg"]').forEach((img) => {
+      img.setAttribute("alt", common.logoAlt);
+    });
+
+    const menuButton = q("[data-menu-button]");
+    if (menuButton) {
+      const isOpen = menuButton.getAttribute("aria-expanded") === "true";
+      const menuLabel = isOpen ? common.menuClose : common.menuOpen;
+      menuButton.setAttribute("aria-label", menuLabel);
+      const srMenuLabel = menuButton.querySelector("[data-menu-label]");
+      if (srMenuLabel) {
+        srMenuLabel.textContent = menuLabel;
+      }
+    }
+
+    setText("[data-contact-link]", common.contact);
+    setText("[data-back-link]", common.backToLanding);
+    setText('[data-nav-link][href="#inicio"], [data-nav-link][href="index.html#inicio"]', common.navHome);
+    setText('[data-nav-link][href="#plataforma"], [data-nav-link][href="index.html#plataforma"]', common.navServices);
+    setText('[data-nav-link][href="#mercados"], [data-nav-link][href="index.html#mercados"]', common.navMarkets);
+    setText('[data-nav-link][href="#faqs"], [data-nav-link][href="index.html#faqs"]', common.navFaqs);
+
+    qa("[data-language-switch]").forEach((node) => {
+      node.setAttribute("aria-label", common.switchAria);
+    });
+
+    qa("[data-lang-option]").forEach((button) => {
+      const buttonLang = button.getAttribute("data-lang-option");
+      const active = buttonLang === lang;
+      button.setAttribute("aria-pressed", String(active));
+      button.classList.toggle("bg-[var(--tf-brand)]", active);
+      button.classList.toggle("text-[var(--tf-bg)]", active);
+      button.classList.toggle("text-[var(--tf-text-muted)]", !active);
+      button.classList.toggle("hover:text-white", !active);
+    });
+  };
+
+  const applyIndex = (lang) => {
+    const content = translations[lang].index;
+
+    document.title = content.title;
+    setMeta('meta[name="description"]', content.description);
+    setMeta('meta[property="og:title"]', content.ogTitle);
+    setMeta('meta[property="og:description"]', content.ogDescription);
+    setMeta('meta[property="og:locale"]', lang === "en" ? "en_US" : "es_ES");
+    setMeta('meta[name="twitter:title"]', content.twitterTitle);
+    setMeta('meta[name="twitter:description"]', content.twitterDescription);
+
+    setText('[data-nav-link][href="#plataforma"]', content.navServices);
+    setText('[data-nav-link][href="#mercados"]', content.navMarkets);
+    setText('[data-nav-link][href="#faqs"]', content.navFaqs);
+
+    const heroImage = q('img[src="assets/trackflow-hero.png"]');
+    if (heroImage) {
+      heroImage.setAttribute("alt", content.heroAlt);
+    }
+
+    setText("[data-hero-badge]", content.heroBadge);
+    setText("[data-hero-title]", content.heroTitle);
+    setText("[data-hero-body]", content.heroBody);
+    setText("[data-hero-primary]", content.heroPrimaryCta);
+    setText("[data-hero-secondary]", content.heroSecondaryCta);
+
+    qa("#operacion article").forEach((article, index) => {
+      const description = article.querySelector("p.mt-2");
+      if (description && content.stats[index]) {
+        description.textContent = content.stats[index];
+      }
+    });
+
+    setText("[data-offer-eyebrow]", content.offerEyebrow);
+    setText("[data-offer-title]", content.offerTitle);
+    setText("[data-offer-body]", content.offerBody);
+
+    qa("#plataforma .mt-14 article").forEach((card, index) => {
+      const title = card.querySelector("h3");
+      const body = card.querySelector("p");
+      const value = content.serviceCards[index];
+      if (!value) return;
+      if (title) title.textContent = value.title;
+      if (body) body.textContent = value.body;
+    });
+
+    setText("[data-markets-eyebrow]", content.marketsEyebrow);
+    setText("[data-markets-title]", content.marketsTitle);
+    setText("[data-markets-body]", content.marketsBody);
+
+    qa("#mercados .grid.gap-4 article").forEach((card, index) => {
+      const title = card.querySelector("h3");
+      const body = card.querySelector("p");
+      const value = content.marketCards[index];
+      if (!value) return;
+      if (title) title.textContent = value.title;
+      if (body) body.textContent = value.body;
+    });
+
+    setText("[data-faq-eyebrow]", content.faqEyebrow);
+    setText("[data-faq-title]", content.faqTitle);
+    setText("[data-faq-body]", content.faqBody);
+
+    qa("[data-faq-item]").forEach((item, index) => {
+      const question = item.querySelector("[data-faq-trigger] span:first-child");
+      const answer = item.querySelector("[data-faq-panel] p");
+      const value = content.faqs[index];
+      if (!value) return;
+      if (question) question.textContent = value.q;
+      if (answer) answer.textContent = value.a;
+    });
+
+    setText("[data-final-cta-title]", content.ctaTitle);
+    setText("[data-final-cta-body]", content.ctaBody);
+
+    setText("[data-footer-body]", content.footerBody);
+
+    const address = q("[data-footer-address]");
+    if (address) {
+      address.innerHTML = content.footerAddress.split("\n").join("<br />");
+    }
+
+    setText("[data-footer-form]", content.footerForm);
+    setText("[data-footer-services]", content.footerServices);
+  };
+
+  const applyApplication = (lang) => {
+    const content = translations[lang].application;
+
+    document.title = content.title;
+    setMeta('meta[name="description"]', content.description);
+    setMeta('meta[property="og:title"]', content.ogTitle);
+    setMeta('meta[property="og:description"]', content.ogDescription);
+    setMeta('meta[property="og:locale"]', lang === "en" ? "en_US" : "es_ES");
+    setMeta('meta[name="twitter:title"]', content.twitterTitle);
+    setMeta('meta[name="twitter:description"]', content.twitterDescription);
+
+    setText("[data-application-eyebrow]", content.eyebrow);
+    setText("[data-application-title]", content.heading);
+    setText("[data-application-intro]", content.intro);
+    setText("[data-application-fieldset]", content.fieldset);
+
+    const labels = content.labels;
+    Object.entries(labels).forEach(([field, value]) => {
+      const label = q(`label[for="${field}"]`);
+      if (label) {
+        label.textContent = value;
+      }
+    });
+
+    const consentInput = q('input[name="consent"]');
+    const consentText = consentInput ? consentInput.closest("label")?.querySelector("span") : null;
+    if (consentText) {
+      consentText.textContent = labels.consent;
+    }
+
+    const notes = q("#notes");
+    if (notes) {
+      notes.setAttribute("placeholder", content.notesPlaceholder);
+    }
+
+    qa("#country option").forEach((option, index) => {
+      const value = content.countryOptions[index];
+      if (value) {
+        option.textContent = value;
+      }
+    });
+
+    setText('button[type="submit"]', content.submit);
+    setText('button[type="reset"]', content.reset);
+  };
+
+  const applyLanguage = (lang, options) => {
+    const selectedLang = SUPPORTED_LANGS.has(lang) ? lang : "es";
+    const persist = !(options && options.persist === false);
+
+    currentLang = selectedLang;
+    if (persist) {
+      saveLang(selectedLang);
+    }
+
+    applyCommon(selectedLang);
+
+    if (document.body.dataset.page === "index") {
+      applyIndex(selectedLang);
+    }
+
+    if (document.body.dataset.page === "application") {
+      applyApplication(selectedLang);
+    }
+
+    document.dispatchEvent(new CustomEvent("trackflow:languagechange", { detail: { lang: selectedLang } }));
+  };
+
+  const initSwitch = () => {
+    qa("[data-lang-option]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const lang = button.getAttribute("data-lang-option");
+        applyLanguage(lang);
+      });
+    });
+  };
+
+  window.TrackFlowI18n = {
+    getCurrentLanguage: () => currentLang,
+    t: (path) => getPath(translations[currentLang], path) || "",
+    getValidationMessages: () => translations[currentLang].validation,
+    setLanguage: (lang) => applyLanguage(lang),
+    init: () => {
+      initSwitch();
+      applyLanguage(currentLang, { persist: false });
+    }
+  };
+
+  document.addEventListener("DOMContentLoaded", () => {
+    window.TrackFlowI18n.init();
+  });
+})();
