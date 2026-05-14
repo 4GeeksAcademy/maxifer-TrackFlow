@@ -1,6 +1,29 @@
 const form = document.querySelector("#applicationForm");
 const statusBox = document.querySelector("#formStatus");
 
+const personalEmailDomains = new Set([
+  "gmail.com",
+  "googlemail.com",
+  "hotmail.com",
+  "outlook.com",
+  "live.com",
+  "yahoo.com",
+  "yahoo.es",
+  "icloud.com",
+  "aol.com",
+  "proton.me",
+  "protonmail.com"
+]);
+
+function isCorporateEmail(value) {
+  const email = value.trim().toLowerCase();
+  const parts = email.split("@");
+  if (parts.length !== 2) return false;
+
+  const domain = parts[1];
+  return !personalEmailDomains.has(domain);
+}
+
 const fields = {
   companyName: {
     validate: (value) => value.trim().length >= 2,
@@ -11,8 +34,12 @@ const fields = {
     message: "Indica el nombre de la persona de contacto."
   },
   email: {
-    validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim()),
-    message: "Usa un email válido, por ejemplo ops@empresa.com."
+    validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim()) && isCorporateEmail(value),
+    message: "Usa un email corporativo válido, por ejemplo ops@empresa.com."
+  },
+  country: {
+    validate: (value) => value.trim().length > 0,
+    message: "Selecciona el país de operación principal."
   },
   notes: {
     validate: (value) => value.trim().length >= 10,
@@ -103,6 +130,7 @@ form.addEventListener("reset", () => {
       const errorElement = getErrorElement(name);
       if (errorElement) errorElement.textContent = "";
     });
+
     statusBox.className = "hidden rounded border p-4 text-sm";
     statusBox.textContent = "";
   });

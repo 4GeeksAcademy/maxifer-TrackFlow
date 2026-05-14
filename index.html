@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" class="scroll-smooth [scroll-padding-top:var(--header-anchor-offset,4.5rem)] motion-reduce:scroll-auto">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,147 +24,27 @@
     <meta name="twitter:title" content="TrackFlow | Logística de última milla para e-commerce" />
     <meta name="twitter:description" content="Inventario, preparación de pedidos, transportistas y devoluciones para operaciones e-commerce en crecimiento." />
     <meta name="twitter:image" content="assets/trackflow-hero.png" />
-    <style>
-      :root {
-        --tf-bg: #0f172a;
-        --tf-surface: #111827;
-        --tf-border: #1e293b;
-        --tf-text: #f8fafc;
-        --tf-text-muted: #cbd5e1;
-        --tf-text-soft: #94a3b8;
-        --tf-brand: #10b981;
-        --tf-brand-hover: #34d399;
-        --tf-accent: #f59e0b;
-        --tf-accent-strong: #b45309;
-        --tf-error: #fb7185;
-        --tf-brand-rgb: 16 185 129;
-        --tf-accent-rgb: 245 158 11;
-        --tf-text-rgb: 248 250 252;
-        --tf-bg-rgb: 15 23 42;
-        --tf-error-rgb: 251 113 133;
-        --tf-market-muted: #475569;
-      }
+    <script>
+      const root = document.documentElement;
 
-      html {
-        scroll-behavior: smooth;
-        scroll-padding-top: var(--header-anchor-offset, 4.5rem);
-      }
-
-      [id] {
-        scroll-margin-top: var(--header-anchor-offset, 4.5rem);
-      }
-
-      [data-nav-link] {
-        position: relative;
-        isolation: isolate;
-        color: var(--tf-text-muted);
-        font-weight: 500;
-        transition:
-          color 180ms ease,
-          text-shadow 180ms ease,
-          background-color 180ms ease,
-          border-color 180ms ease;
-      }
-
-      [data-nav-link]::before,
-      [data-nav-link]::after {
-        content: "";
-        position: absolute;
-        pointer-events: none;
-        opacity: 0;
-        transition:
-          opacity 180ms ease,
-          transform 220ms ease;
-      }
-
-      [data-nav-link][data-active="true"] {
-        color: var(--tf-text);
-        text-shadow: 0 0 18px rgb(var(--tf-brand-rgb) / 0.35);
-      }
-
-      @media (min-width: 768px) {
-        [data-nav-link] {
-          padding-block: 0.45rem;
-        }
-
-        [data-nav-link]::before {
-          left: 50%;
-          top: -0.2rem;
-          height: 0.35rem;
-          width: 0.35rem;
-          border-radius: 999px;
-          background: var(--tf-accent);
-          box-shadow: 0 0 18px rgb(var(--tf-accent-rgb) / 0.7);
-          transform: translateX(-50%) scale(0.4);
-        }
-
-        [data-nav-link]::after {
-          inset-inline: -0.2rem;
-          bottom: -0.35rem;
-          height: 0.16rem;
-          border-radius: 999px;
-          background: linear-gradient(90deg, transparent, var(--tf-brand) 20%, var(--tf-accent) 80%, transparent);
-          box-shadow: 0 0 16px rgb(var(--tf-brand-rgb) / 0.45);
-          transform: scaleX(0.18);
-        }
-
-        [data-nav-link][data-active="true"]::before,
-        [data-nav-link][data-active="true"]::after {
-          opacity: 1;
-          transform: translateX(-50%) scale(1);
-        }
-
-        [data-nav-link][data-active="true"]::after {
-          transform: scaleX(1);
-        }
-      }
-
-      @media (max-width: 767px) {
-        [data-mobile-menu] [data-nav-link] {
-          border: 1px solid transparent;
-        }
-
-        [data-mobile-menu] [data-nav-link]::before {
-          left: 0.55rem;
-          top: 50%;
-          height: 1.4rem;
-          width: 0.18rem;
-          border-radius: 999px;
-          background: linear-gradient(180deg, var(--tf-accent), var(--tf-brand));
-          box-shadow: 0 0 18px rgb(var(--tf-brand-rgb) / 0.45);
-          transform: translateY(-50%) scaleY(0.4);
-        }
-
-        [data-mobile-menu] [data-nav-link][data-active="true"] {
-          border-color: rgb(var(--tf-brand-rgb) / 0.28);
-          background:
-            linear-gradient(90deg, rgb(var(--tf-brand-rgb) / 0.18), rgb(var(--tf-accent-rgb) / 0.08)),
-            rgb(var(--tf-text-rgb) / 0.04);
-          padding-left: 2rem;
-        }
-
-        [data-mobile-menu] [data-nav-link][data-active="true"]::before {
-          opacity: 1;
-          transform: translateY(-50%) scaleY(1);
-        }
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        html {
-          scroll-behavior: auto;
-        }
-
-        [data-mobile-menu],
-        [data-mobile-menu-content],
-        [data-faq-panel],
-        [data-faq-icon],
-        [data-nav-link],
-        [data-nav-link]::before,
-        [data-nav-link]::after {
-          transition-duration: 1ms !important;
-        }
-      }
-    </style>
+      root.style.setProperty("--tf-bg", "#0f172a");
+      root.style.setProperty("--tf-surface", "#111827");
+      root.style.setProperty("--tf-border", "#1e293b");
+      root.style.setProperty("--tf-text", "#f8fafc");
+      root.style.setProperty("--tf-text-muted", "#cbd5e1");
+      root.style.setProperty("--tf-text-soft", "#94a3b8");
+      root.style.setProperty("--tf-brand", "#10b981");
+      root.style.setProperty("--tf-brand-hover", "#34d399");
+      root.style.setProperty("--tf-accent", "#f59e0b");
+      root.style.setProperty("--tf-accent-strong", "#b45309");
+      root.style.setProperty("--tf-error", "#fb7185");
+      root.style.setProperty("--tf-brand-rgb", "16 185 129");
+      root.style.setProperty("--tf-accent-rgb", "245 158 11");
+      root.style.setProperty("--tf-text-rgb", "248 250 252");
+      root.style.setProperty("--tf-bg-rgb", "15 23 42");
+      root.style.setProperty("--tf-error-rgb", "251 113 133");
+      root.style.setProperty("--tf-market-muted", "#475569");
+    </script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -391,7 +271,7 @@
   </head>
   <body class="bg-[var(--tf-bg)] text-[var(--tf-text)] antialiased">
     <header class="fixed inset-x-0 top-0 z-40">
-      <div class="border-b border-[color:rgb(var(--tf-text-rgb)/0.12)] bg-[color:rgb(var(--tf-bg-rgb)/0.96)] shadow-[0_10px_26px_-16px_rgb(var(--tf-bg-rgb)/0.95)] backdrop-blur-md">
+      <div class="border-b border-[color:rgb(var(--tf-text-rgb)/0.12)] bg-[color:rgb(var(--tf-bg-rgb)/0.8)] shadow-[0_10px_26px_-16px_rgb(var(--tf-bg-rgb)/0.95)] backdrop-blur-md">
         <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8" aria-label="Navegación principal">
         <a href="#inicio" class="flex items-center gap-3" aria-label="TrackFlow inicio">
           <img src="assets/trackflow-logo.svg" alt="Logo de TrackFlow" class="h-10 w-10 rounded" />
@@ -401,9 +281,9 @@
           </span>
         </a>
         <div class="hidden items-center gap-8 text-sm text-[color:rgb(var(--tf-text-rgb)/0.74)] md:flex">
-          <a class="transition hover:text-white" href="#plataforma" data-nav-link>Servicios</a>
-          <a class="transition hover:text-white" href="#mercados" data-nav-link>Mercados</a>
-          <a class="transition hover:text-white" href="#faqs" data-nav-link>FAQs</a>
+          <a class="relative isolate font-medium text-[var(--tf-text-muted)] transition-[color,text-shadow,background-color,border-color] duration-200 hover:text-white motion-reduce:transition-none md:py-[0.45rem] before:pointer-events-none before:absolute before:opacity-0 before:transition-[opacity,transform] before:duration-200 before:content-[''] motion-reduce:before:transition-none after:pointer-events-none after:absolute after:opacity-0 after:transition-[opacity,transform] after:duration-200 after:content-[''] motion-reduce:after:transition-none md:before:left-1/2 md:before:-top-[0.2rem] md:before:h-[0.35rem] md:before:w-[0.35rem] md:before:-translate-x-1/2 md:before:scale-[0.4] md:before:rounded-full md:before:bg-[var(--tf-accent)] md:before:shadow-[0_0_18px_rgb(var(--tf-accent-rgb)/0.7)] md:after:-inset-x-[0.2rem] md:after:-bottom-[0.35rem] md:after:h-[0.16rem] md:after:scale-x-[0.18] md:after:rounded-full md:after:bg-[linear-gradient(90deg,transparent,var(--tf-brand)_20%,var(--tf-accent)_80%,transparent)] md:after:shadow-[0_0_16px_rgb(var(--tf-brand-rgb)/0.45)] data-[active=true]:text-[var(--tf-text)] data-[active=true]:[text-shadow:0_0_18px_rgb(var(--tf-brand-rgb)/0.35)] md:data-[active=true]:before:opacity-100 md:data-[active=true]:before:scale-100 md:data-[active=true]:after:opacity-100 md:data-[active=true]:after:scale-x-100" href="#plataforma" data-nav-link>Servicios</a>
+          <a class="relative isolate font-medium text-[var(--tf-text-muted)] transition-[color,text-shadow,background-color,border-color] duration-200 hover:text-white motion-reduce:transition-none md:py-[0.45rem] before:pointer-events-none before:absolute before:opacity-0 before:transition-[opacity,transform] before:duration-200 before:content-[''] motion-reduce:before:transition-none after:pointer-events-none after:absolute after:opacity-0 after:transition-[opacity,transform] after:duration-200 after:content-[''] motion-reduce:after:transition-none md:before:left-1/2 md:before:-top-[0.2rem] md:before:h-[0.35rem] md:before:w-[0.35rem] md:before:-translate-x-1/2 md:before:scale-[0.4] md:before:rounded-full md:before:bg-[var(--tf-accent)] md:before:shadow-[0_0_18px_rgb(var(--tf-accent-rgb)/0.7)] md:after:-inset-x-[0.2rem] md:after:-bottom-[0.35rem] md:after:h-[0.16rem] md:after:scale-x-[0.18] md:after:rounded-full md:after:bg-[linear-gradient(90deg,transparent,var(--tf-brand)_20%,var(--tf-accent)_80%,transparent)] md:after:shadow-[0_0_16px_rgb(var(--tf-brand-rgb)/0.45)] data-[active=true]:text-[var(--tf-text)] data-[active=true]:[text-shadow:0_0_18px_rgb(var(--tf-brand-rgb)/0.35)] md:data-[active=true]:before:opacity-100 md:data-[active=true]:before:scale-100 md:data-[active=true]:after:opacity-100 md:data-[active=true]:after:scale-x-100" href="#mercados" data-nav-link>Mercados</a>
+          <a class="relative isolate font-medium text-[var(--tf-text-muted)] transition-[color,text-shadow,background-color,border-color] duration-200 hover:text-white motion-reduce:transition-none md:py-[0.45rem] before:pointer-events-none before:absolute before:opacity-0 before:transition-[opacity,transform] before:duration-200 before:content-[''] motion-reduce:before:transition-none after:pointer-events-none after:absolute after:opacity-0 after:transition-[opacity,transform] after:duration-200 after:content-[''] motion-reduce:after:transition-none md:before:left-1/2 md:before:-top-[0.2rem] md:before:h-[0.35rem] md:before:w-[0.35rem] md:before:-translate-x-1/2 md:before:scale-[0.4] md:before:rounded-full md:before:bg-[var(--tf-accent)] md:before:shadow-[0_0_18px_rgb(var(--tf-accent-rgb)/0.7)] md:after:-inset-x-[0.2rem] md:after:-bottom-[0.35rem] md:after:h-[0.16rem] md:after:scale-x-[0.18] md:after:rounded-full md:after:bg-[linear-gradient(90deg,transparent,var(--tf-brand)_20%,var(--tf-accent)_80%,transparent)] md:after:shadow-[0_0_16px_rgb(var(--tf-brand-rgb)/0.45)] data-[active=true]:text-[var(--tf-text)] data-[active=true]:[text-shadow:0_0_18px_rgb(var(--tf-brand-rgb)/0.35)] md:data-[active=true]:before:opacity-100 md:data-[active=true]:before:scale-100 md:data-[active=true]:after:opacity-100 md:data-[active=true]:after:scale-x-100" href="#faqs" data-nav-link>FAQs</a>
         </div>
         <a
           href="application.html"
@@ -428,11 +308,11 @@
         </button>
         </nav>
       </div>
-      <div id="mobile-menu" class="pointer-events-none grid grid-rows-[0fr] border-b border-white/10 bg-[color:rgb(var(--tf-bg-rgb)/0.92)] px-5 opacity-0 shadow-md shadow-[color:rgb(var(--tf-brand-rgb)/0.2)] backdrop-blur-md transition-all duration-300 ease-out md:hidden" aria-hidden="true" inert data-mobile-menu>
-        <div class="mx-auto flex w-full max-w-7xl -translate-y-3 flex-col gap-1 overflow-hidden pb-0 pt-0 text-sm font-medium text-[var(--tf-text-muted)] transition-all duration-300 ease-out" data-mobile-menu-content>
-          <a class="block w-full rounded px-3 py-3 transition hover:bg-white/10 hover:text-white" href="#plataforma" data-nav-link>Servicios</a>
-          <a class="block w-full rounded px-3 py-3 transition hover:bg-white/10 hover:text-white" href="#mercados" data-nav-link>Mercados</a>
-          <a class="block w-full rounded px-3 py-3 transition hover:bg-white/10 hover:text-white" href="#faqs" data-nav-link>FAQs</a>
+      <div id="mobile-menu" class="pointer-events-none grid grid-rows-[0fr] border-b border-white/10 bg-[color:rgb(var(--tf-bg-rgb)/0.92)] px-5 opacity-0 shadow-md shadow-[color:rgb(var(--tf-brand-rgb)/0.2)] backdrop-blur-md transition-all duration-300 ease-out motion-reduce:transition-none md:hidden" aria-hidden="true" inert data-mobile-menu>
+        <div class="mx-auto flex w-full max-w-7xl -translate-y-3 flex-col gap-1 overflow-hidden pb-0 pt-0 text-sm font-medium text-[var(--tf-text-muted)] transition-all duration-300 ease-out motion-reduce:transition-none" data-mobile-menu-content>
+          <a class="relative block w-full rounded border border-transparent px-3 py-3 text-[var(--tf-text-muted)] transition-[color,text-shadow,background-color,border-color] duration-200 hover:bg-white/10 hover:text-white motion-reduce:transition-none before:pointer-events-none before:absolute before:left-[0.55rem] before:top-1/2 before:h-[1.4rem] before:w-[0.18rem] before:-translate-y-1/2 before:scale-y-[0.4] before:rounded-full before:bg-[linear-gradient(180deg,var(--tf-accent),var(--tf-brand))] before:opacity-0 before:shadow-[0_0_18px_rgb(var(--tf-brand-rgb)/0.45)] before:transition-[opacity,transform] before:duration-200 before:content-[''] motion-reduce:before:transition-none data-[active=true]:border-[color:rgb(var(--tf-brand-rgb)/0.28)] data-[active=true]:bg-[linear-gradient(90deg,rgb(var(--tf-brand-rgb)/0.18),rgb(var(--tf-accent-rgb)/0.08)),rgb(var(--tf-text-rgb)/0.04)] data-[active=true]:pl-8 data-[active=true]:text-[var(--tf-text)] data-[active=true]:[text-shadow:0_0_18px_rgb(var(--tf-brand-rgb)/0.35)] data-[active=true]:before:opacity-100 data-[active=true]:before:scale-y-100" href="#plataforma" data-nav-link>Servicios</a>
+          <a class="relative block w-full rounded border border-transparent px-3 py-3 text-[var(--tf-text-muted)] transition-[color,text-shadow,background-color,border-color] duration-200 hover:bg-white/10 hover:text-white motion-reduce:transition-none before:pointer-events-none before:absolute before:left-[0.55rem] before:top-1/2 before:h-[1.4rem] before:w-[0.18rem] before:-translate-y-1/2 before:scale-y-[0.4] before:rounded-full before:bg-[linear-gradient(180deg,var(--tf-accent),var(--tf-brand))] before:opacity-0 before:shadow-[0_0_18px_rgb(var(--tf-brand-rgb)/0.45)] before:transition-[opacity,transform] before:duration-200 before:content-[''] motion-reduce:before:transition-none data-[active=true]:border-[color:rgb(var(--tf-brand-rgb)/0.28)] data-[active=true]:bg-[linear-gradient(90deg,rgb(var(--tf-brand-rgb)/0.18),rgb(var(--tf-accent-rgb)/0.08)),rgb(var(--tf-text-rgb)/0.04)] data-[active=true]:pl-8 data-[active=true]:text-[var(--tf-text)] data-[active=true]:[text-shadow:0_0_18px_rgb(var(--tf-brand-rgb)/0.35)] data-[active=true]:before:opacity-100 data-[active=true]:before:scale-y-100" href="#mercados" data-nav-link>Mercados</a>
+          <a class="relative block w-full rounded border border-transparent px-3 py-3 text-[var(--tf-text-muted)] transition-[color,text-shadow,background-color,border-color] duration-200 hover:bg-white/10 hover:text-white motion-reduce:transition-none before:pointer-events-none before:absolute before:left-[0.55rem] before:top-1/2 before:h-[1.4rem] before:w-[0.18rem] before:-translate-y-1/2 before:scale-y-[0.4] before:rounded-full before:bg-[linear-gradient(180deg,var(--tf-accent),var(--tf-brand))] before:opacity-0 before:shadow-[0_0_18px_rgb(var(--tf-brand-rgb)/0.45)] before:transition-[opacity,transform] before:duration-200 before:content-[''] motion-reduce:before:transition-none data-[active=true]:border-[color:rgb(var(--tf-brand-rgb)/0.28)] data-[active=true]:bg-[linear-gradient(90deg,rgb(var(--tf-brand-rgb)/0.18),rgb(var(--tf-accent-rgb)/0.08)),rgb(var(--tf-text-rgb)/0.04)] data-[active=true]:pl-8 data-[active=true]:text-[var(--tf-text)] data-[active=true]:[text-shadow:0_0_18px_rgb(var(--tf-brand-rgb)/0.35)] data-[active=true]:before:opacity-100 data-[active=true]:before:scale-y-100" href="#faqs" data-nav-link>FAQs</a>
           <a
             href="application.html"
             class="mt-3 inline-flex w-full items-center justify-center rounded bg-[var(--tf-brand)] px-4 py-3 text-sm font-semibold text-[var(--tf-bg)] transition hover:bg-[var(--tf-brand-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-2 focus:ring-offset-[var(--tf-bg)]"
@@ -443,17 +323,14 @@
       </div>
     </header>
 
-    <main id="inicio">
+    <main id="inicio" class="scroll-mt-[var(--header-anchor-offset,4.5rem)]">
       <section class="relative min-h-screen overflow-hidden pt-24">
         <img
           src="assets/trackflow-hero.png"
           alt="Centro de operaciones logísticas moderno con paquetes, pantallas de seguimiento y zona de almacén"
           class="absolute inset-0 h-full w-full object-cover"
         />
-        <div
-          class="absolute inset-0"
-          style="background: linear-gradient(90deg, rgb(var(--tf-bg-rgb) / 1), rgb(var(--tf-bg-rgb) / 0.85), rgb(var(--tf-bg-rgb) / 0.25));"
-        ></div>
+        <div class="absolute inset-0 bg-[linear-gradient(90deg,rgb(var(--tf-bg-rgb)/1),rgb(var(--tf-bg-rgb)/0.85),rgb(var(--tf-bg-rgb)/0.25))]"></div>
         <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[var(--tf-bg)] to-transparent"></div>
 
         <div class="relative mx-auto flex min-h-[calc(100vh-6rem)] max-w-7xl items-center px-5 py-20 lg:px-8">
@@ -485,7 +362,7 @@
         </div>
       </section>
 
-      <section id="operacion" class="border-y border-[var(--tf-border)] bg-[var(--tf-surface)]/70">
+      <section id="operacion" class="scroll-mt-[var(--header-anchor-offset,4.5rem)] border-y border-[var(--tf-border)] bg-[var(--tf-surface)]/70">
         <div class="mx-auto grid max-w-7xl gap-6 px-5 py-10 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
           <article class="rounded border border-[var(--tf-border)] bg-white/[0.03] p-5">
             <p class="text-3xl font-black text-[var(--tf-accent)]">130</p>
@@ -506,7 +383,7 @@
         </div>
       </section>
 
-      <section id="plataforma" class="mx-auto max-w-7xl px-5 py-24 lg:px-8">
+      <section id="plataforma" class="scroll-mt-[var(--header-anchor-offset,4.5rem)] mx-auto max-w-7xl px-5 py-24 lg:px-8">
         <div class="max-w-3xl">
           <p class="text-sm font-bold uppercase tracking-[0.25em] text-[var(--tf-accent)]">Qué ofrecemos hoy</p>
           <h2 class="mt-4 text-4xl font-black text-white sm:text-5xl">Operación logística para marcas e-commerce.</h2>
@@ -549,7 +426,7 @@
         </div>
       </section>
 
-      <section id="mercados" class="bg-white text-[var(--tf-bg)]">
+      <section id="mercados" class="scroll-mt-[var(--header-anchor-offset,4.5rem)] bg-white text-[var(--tf-bg)]">
         <div class="mx-auto grid max-w-7xl gap-12 px-5 py-24 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
           <div>
             <p class="text-sm font-bold uppercase tracking-[0.25em] text-[var(--tf-accent-strong)]">Dos mercados</p>
@@ -577,7 +454,7 @@
         </div>
       </section>
 
-      <section id="faqs" class="border-y border-[var(--tf-border)] bg-[var(--tf-surface)]/70">
+      <section id="faqs" class="scroll-mt-[var(--header-anchor-offset,4.5rem)] border-y border-[var(--tf-border)] bg-[var(--tf-surface)]/70">
         <div class="mx-auto max-w-7xl px-5 py-24 lg:px-8">
           <div class="max-w-3xl">
             <p class="text-sm font-bold uppercase tracking-[0.25em] text-[var(--tf-accent)]">FAQs</p>
@@ -595,7 +472,7 @@
                   <span class="grid h-9 w-9 shrink-0 rotate-45 place-items-center rounded border border-white/10 bg-white/5 text-[var(--tf-brand)] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
                 </button>
               </h3>
-              <div id="faq-answer-1" class="grid grid-rows-[1fr] transition-all duration-300 ease-out" data-faq-panel>
+              <div id="faq-answer-1" class="grid grid-rows-[1fr] transition-all duration-300 ease-out motion-reduce:transition-none" data-faq-panel>
                 <div class="overflow-hidden">
                   <p class="px-6 pb-6 leading-7 text-[var(--tf-text-muted)]">
                     TrackFlow es una empresa de logística de última milla y gestión de almacenes para marcas e-commerce.
@@ -608,10 +485,10 @@
               <h3>
                 <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[var(--tf-accent)] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--tf-brand)]" aria-expanded="false" aria-controls="faq-answer-2" data-faq-trigger>
                   <span>¿Qué servicios logísticos ofrece TrackFlow?</span>
-                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[var(--tf-brand)] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
+                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[var(--tf-brand)] transition duration-300 motion-reduce:transition-none" aria-hidden="true" data-faq-icon>+</span>
                 </button>
               </h3>
-              <div id="faq-answer-2" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out" data-faq-panel>
+              <div id="faq-answer-2" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out motion-reduce:transition-none" data-faq-panel>
                 <div class="overflow-hidden">
                   <p class="px-6 pb-6 leading-7 text-[var(--tf-text-muted)]">
                     TrackFlow ofrece almacenamiento de inventario, preparación y embalaje de pedidos,
@@ -625,10 +502,10 @@
               <h3>
                 <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[var(--tf-accent)] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--tf-brand)]" aria-expanded="false" aria-controls="faq-answer-3" data-faq-trigger>
                   <span>¿En qué países opera TrackFlow?</span>
-                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[var(--tf-brand)] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
+                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[var(--tf-brand)] transition duration-300 motion-reduce:transition-none" aria-hidden="true" data-faq-icon>+</span>
                 </button>
               </h3>
-              <div id="faq-answer-3" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out" data-faq-panel>
+              <div id="faq-answer-3" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out motion-reduce:transition-none" data-faq-panel>
                 <div class="overflow-hidden">
                   <p class="px-6 pb-6 leading-7 text-[var(--tf-text-muted)]">
                     TrackFlow opera en Estados Unidos y España, con almacenes en Los Ángeles y Zaragoza
@@ -641,10 +518,10 @@
               <h3>
                 <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[var(--tf-accent)] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--tf-brand)]" aria-expanded="false" aria-controls="faq-answer-4" data-faq-trigger>
                   <span>¿Qué tipo de empresas trabajan con TrackFlow?</span>
-                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[var(--tf-brand)] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
+                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[var(--tf-brand)] transition duration-300 motion-reduce:transition-none" aria-hidden="true" data-faq-icon>+</span>
                 </button>
               </h3>
-              <div id="faq-answer-4" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out" data-faq-panel>
+              <div id="faq-answer-4" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out motion-reduce:transition-none" data-faq-panel>
                 <div class="overflow-hidden">
                   <p class="px-6 pb-6 leading-7 text-[var(--tf-text-muted)]">
                     TrackFlow trabaja con marcas e-commerce que necesitan externalizar o mejorar su operación logística,
@@ -657,10 +534,10 @@
               <h3>
                 <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[var(--tf-accent)] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--tf-brand)]" aria-expanded="false" aria-controls="faq-answer-5" data-faq-trigger>
                   <span>¿Cómo gestiona TrackFlow la última milla y los transportistas?</span>
-                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[var(--tf-brand)] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
+                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[var(--tf-brand)] transition duration-300 motion-reduce:transition-none" aria-hidden="true" data-faq-icon>+</span>
                 </button>
               </h3>
-              <div id="faq-answer-5" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out" data-faq-panel>
+              <div id="faq-answer-5" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out motion-reduce:transition-none" data-faq-panel>
                 <div class="overflow-hidden">
                   <p class="px-6 pb-6 leading-7 text-[var(--tf-text-muted)]">
                     TrackFlow coordina envíos con una red de 8 transportistas en Estados Unidos y España y gestiona
@@ -673,10 +550,10 @@
               <h3>
                 <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[var(--tf-accent)] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--tf-brand)]" aria-expanded="false" aria-controls="faq-answer-6" data-faq-trigger>
                   <span>¿Cómo gestiona TrackFlow las devoluciones?</span>
-                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[var(--tf-brand)] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
+                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[var(--tf-brand)] transition duration-300 motion-reduce:transition-none" aria-hidden="true" data-faq-icon>+</span>
                 </button>
               </h3>
-              <div id="faq-answer-6" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out" data-faq-panel>
+              <div id="faq-answer-6" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out motion-reduce:transition-none" data-faq-panel>
                 <div class="overflow-hidden">
                   <p class="px-6 pb-6 leading-7 text-[var(--tf-text-muted)]">
                     TrackFlow gestiona devoluciones que pueden representar entre el 18% y el 25% del volumen operativo según
@@ -704,7 +581,7 @@
       </section>
     </main>
 
-    <footer id="contacto" class="border-t border-[var(--tf-border)] bg-[var(--tf-bg)] px-5 py-10 sm:py-12 lg:px-8">
+    <footer id="contacto" class="scroll-mt-[var(--header-anchor-offset,4.5rem)] border-t border-[var(--tf-border)] bg-[var(--tf-bg)] px-5 py-10 sm:py-12 lg:px-8">
       <div class="mx-auto grid max-w-7xl gap-8 md:grid-cols-3">
         <div>
           <p class="text-xl font-black text-white">TrackFlow</p>

@@ -24,23 +24,25 @@
     <meta name="twitter:title" content="Hablemos de tu operación | TrackFlow" />
     <meta name="twitter:description" content="Completa el formulario y el equipo de TrackFlow revisará tu contexto operativo antes de coordinar una conversación." />
     <meta name="twitter:image" content="assets/trackflow-hero.png" />
-    <style>
-      :root {
-        --tf-bg: #0f172a;
-        --tf-surface: #111827;
-        --tf-border: #1e293b;
-        --tf-text: #f8fafc;
-        --tf-text-muted: #cbd5e1;
-        --tf-text-soft: #94a3b8;
-        --tf-brand: #10b981;
-        --tf-brand-hover: #34d399;
-        --tf-accent: #f59e0b;
-        --tf-error: #fb7185;
-        --tf-border-soft: #334155;
-        --tf-brand-rgb: 16 185 129;
-        --tf-error-rgb: 251 113 133;
-      }
-    </style>
+    <script>
+      const root = document.documentElement;
+
+      root.style.setProperty("--tf-bg", "#0f172a");
+      root.style.setProperty("--tf-surface", "#111827");
+      root.style.setProperty("--tf-border", "#1e293b");
+      root.style.setProperty("--tf-text", "#f8fafc");
+      root.style.setProperty("--tf-text-muted", "#cbd5e1");
+      root.style.setProperty("--tf-text-soft", "#94a3b8");
+      root.style.setProperty("--tf-brand", "#10b981");
+      root.style.setProperty("--tf-brand-hover", "#34d399");
+      root.style.setProperty("--tf-accent", "#f59e0b");
+      root.style.setProperty("--tf-error", "#fb7185");
+      root.style.setProperty("--tf-border-soft", "#334155");
+      root.style.setProperty("--tf-bg-rgb", "15 23 42");
+      root.style.setProperty("--tf-text-rgb", "248 250 252");
+      root.style.setProperty("--tf-brand-rgb", "16 185 129");
+      root.style.setProperty("--tf-error-rgb", "251 113 133");
+    </script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -139,17 +141,19 @@
     <script defer src="validation.js?v=2"></script>
   </head>
   <body class="bg-[var(--tf-bg)] text-[var(--tf-text)] antialiased">
-    <header class="fixed inset-x-0 top-0 z-40 border-b border-[var(--tf-border)] bg-[var(--tf-bg)]/80 backdrop-blur">
-      <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8" aria-label="Navegación principal">
-        <a href="index.html" class="flex items-center gap-3" aria-label="Volver a TrackFlow">
-          <img src="assets/trackflow-logo.svg" alt="Logo de TrackFlow" class="h-10 w-10 rounded" />
-          <span>
-            <span class="block text-base font-semibold tracking-wide text-[var(--tf-text)]">TrackFlow</span>
-            <span class="block text-xs text-[color:rgb(248_250_252/0.78)]">Last-mile operations</span>
-          </span>
-        </a>
-        <a class="text-sm font-medium text-[var(--tf-text-muted)] hover:text-white" href="index.html">Volver a la landing</a>
-      </nav>
+    <header class="fixed inset-x-0 top-0 z-40">
+      <div class="border-b border-[color:rgb(var(--tf-text-rgb)/0.12)] bg-[color:rgb(var(--tf-bg-rgb)/0.96)] shadow-[0_10px_26px_-16px_rgb(var(--tf-bg-rgb)/0.95)] backdrop-blur-md">
+        <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8" aria-label="Navegación principal">
+          <a href="index.html" class="flex items-center gap-3" aria-label="Volver a TrackFlow">
+            <img src="assets/trackflow-logo.svg" alt="Logo de TrackFlow" class="h-10 w-10 rounded" />
+            <span>
+              <span class="block text-base font-semibold tracking-wide text-[var(--tf-text)]">TrackFlow</span>
+              <span class="block text-xs text-[color:rgb(var(--tf-text-rgb)/0.78)]">Last-mile operations</span>
+            </span>
+          </a>
+          <a class="text-sm font-medium text-[var(--tf-text-muted)] hover:text-white" href="index.html">Volver a la landing</a>
+        </nav>
+      </div>
     </header>
 
     <main class="mx-auto max-w-7xl px-5 pb-8 pt-28 lg:px-8">
@@ -183,6 +187,16 @@
                 <input id="email" name="email" type="email" required class="mt-1.5 w-full rounded border border-[var(--tf-border)] bg-[var(--tf-bg)] px-4 py-2.5 text-white outline-none transition focus:border-[var(--tf-brand)]" />
                 <p class="mt-1 min-h-4 text-xs text-[var(--tf-error)]" data-error-for="email" aria-live="polite"></p>
               </div>
+              <div>
+                <label for="country" class="block text-sm font-medium text-[var(--tf-text-muted)]">País de operación principal *</label>
+                <select id="country" name="country" required class="mt-1.5 w-full rounded border border-[var(--tf-border)] bg-[var(--tf-bg)] px-4 py-2.5 text-white outline-none transition focus:border-[var(--tf-brand)]">
+                  <option value="">Selecciona un país</option>
+                  <option value="US">Estados Unidos</option>
+                  <option value="ES">España</option>
+                  <option value="OTHER">Otro</option>
+                </select>
+                <p class="mt-1 min-h-4 text-xs text-[var(--tf-error)]" data-error-for="country" aria-live="polite"></p>
+              </div>
               <div class="sm:col-span-2">
                 <label for="notes" class="block text-sm font-medium text-[var(--tf-text-muted)]">¿Qué necesitas resolver? *</label>
                 <textarea id="notes" name="notes" required minlength="10" rows="4" placeholder="Ej: necesitamos reducir incidencias en última milla, mejorar la gestión de devoluciones o centralizar el seguimiento de pedidos." class="mt-1.5 w-full rounded border border-[var(--tf-border)] bg-[var(--tf-bg)] px-4 py-2.5 text-white outline-none transition focus:border-[var(--tf-brand)]"></textarea>
@@ -203,14 +217,11 @@
               <button type="submit" class="rounded bg-[var(--tf-brand)] px-6 py-3 text-sm font-bold text-[var(--tf-bg)] transition hover:bg-[var(--tf-brand-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-2 focus:ring-offset-[var(--tf-surface)]">
                 Enviar consulta
               </button>
+              <button type="reset" class="rounded border border-[var(--tf-border-soft)] bg-transparent px-6 py-3 text-sm font-bold text-[var(--tf-text-muted)] transition hover:border-[var(--tf-text-muted)] hover:text-white focus:outline-none focus:ring-2 focus:ring-[var(--tf-text-muted)] focus:ring-offset-2 focus:ring-offset-[var(--tf-surface)]">
+                Limpiar formulario
+              </button>
             </div>
 
-            <p class="text-sm text-[var(--tf-text-soft)]">
-              También puedes revisar
-              <a class="font-medium text-[var(--tf-text-muted)] underline decoration-[var(--tf-border-soft)] underline-offset-4 transition hover:text-white" href="index.html#plataforma">servicios</a>
-              o
-              <a class="font-medium text-[var(--tf-text-muted)] underline decoration-[var(--tf-border-soft)] underline-offset-4 transition hover:text-white" href="index.html">volver a la landing</a>.
-            </p>
           </form>
         </section>
       </section>
