@@ -9,7 +9,7 @@
     </linearGradient>
     <linearGradient id="routeStroke" x1="34" y1="88" x2="96" y2="37" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#f59e0b"/>
-      <stop offset="0.72" stop-color="#fbbf24"/>
+      <stop offset="0.72" stop-color="#f59e0b"/>
       <stop offset="1" stop-color="#f8fafc"/>
     </linearGradient>
   </defs>
@@ -20,7 +20,7 @@
     d="M62.5 18.7a9.5 9.5 0 0 1 8.7 0l33.1 18.5a9.4 9.4 0 0 1 4.9 8.2v37.2a9.4 9.4 0 0 1-4.9 8.2l-33.1 18.5a9.5 9.5 0 0 1-8.7 0L29.4 90.8a9.4 9.4 0 0 1-4.9-8.2V45.4a9.4 9.4 0 0 1 4.9-8.2l33.1-18.5Z"
   />
   <path
-    fill="#064e3b"
+    fill="#0f766e"
     fill-opacity=".38"
     d="m64 61.8 45.2-24.7v45.5a9.4 9.4 0 0 1-4.9 8.2l-33.1 18.5a9.5 9.5 0 0 1-8.7 0L29.4 90.8a9.4 9.4 0 0 1-4.9-8.2V37.1L64 61.8Z"
   />

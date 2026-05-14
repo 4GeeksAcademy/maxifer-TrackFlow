@@ -25,6 +25,26 @@
     <meta name="twitter:description" content="Inventario, preparación de pedidos, transportistas y devoluciones para operaciones e-commerce en crecimiento." />
     <meta name="twitter:image" content="assets/trackflow-hero.png" />
     <style>
+      :root {
+        --tf-bg: #0f172a;
+        --tf-surface: #111827;
+        --tf-border: #1e293b;
+        --tf-text: #f8fafc;
+        --tf-text-muted: #cbd5e1;
+        --tf-text-soft: #94a3b8;
+        --tf-brand: #10b981;
+        --tf-brand-hover: #34d399;
+        --tf-accent: #f59e0b;
+        --tf-accent-strong: #b45309;
+        --tf-error: #fb7185;
+        --tf-brand-rgb: 16 185 129;
+        --tf-accent-rgb: 245 158 11;
+        --tf-text-rgb: 248 250 252;
+        --tf-bg-rgb: 15 23 42;
+        --tf-error-rgb: 251 113 133;
+        --tf-market-muted: #475569;
+      }
+
       html {
         scroll-behavior: smooth;
         scroll-padding-top: var(--header-anchor-offset, 4.5rem);
@@ -37,7 +57,7 @@
       [data-nav-link] {
         position: relative;
         isolation: isolate;
-        color: #cbd5e1;
+        color: var(--tf-text-muted);
         font-weight: 500;
         transition:
           color 180ms ease,
@@ -58,8 +78,8 @@
       }
 
       [data-nav-link][data-active="true"] {
-        color: #f8fafc;
-        text-shadow: 0 0 18px rgb(16 185 129 / 0.35);
+        color: var(--tf-text);
+        text-shadow: 0 0 18px rgb(var(--tf-brand-rgb) / 0.35);
       }
 
       @media (min-width: 768px) {
@@ -73,8 +93,8 @@
           height: 0.35rem;
           width: 0.35rem;
           border-radius: 999px;
-          background: #f59e0b;
-          box-shadow: 0 0 18px rgb(245 158 11 / 0.7);
+          background: var(--tf-accent);
+          box-shadow: 0 0 18px rgb(var(--tf-accent-rgb) / 0.7);
           transform: translateX(-50%) scale(0.4);
         }
 
@@ -83,8 +103,8 @@
           bottom: -0.35rem;
           height: 0.16rem;
           border-radius: 999px;
-          background: linear-gradient(90deg, transparent, #10b981 20%, #f59e0b 80%, transparent);
-          box-shadow: 0 0 16px rgb(16 185 129 / 0.45);
+          background: linear-gradient(90deg, transparent, var(--tf-brand) 20%, var(--tf-accent) 80%, transparent);
+          box-shadow: 0 0 16px rgb(var(--tf-brand-rgb) / 0.45);
           transform: scaleX(0.18);
         }
 
@@ -110,16 +130,16 @@
           height: 1.4rem;
           width: 0.18rem;
           border-radius: 999px;
-          background: linear-gradient(180deg, #f59e0b, #10b981);
-          box-shadow: 0 0 18px rgb(16 185 129 / 0.45);
+          background: linear-gradient(180deg, var(--tf-accent), var(--tf-brand));
+          box-shadow: 0 0 18px rgb(var(--tf-brand-rgb) / 0.45);
           transform: translateY(-50%) scaleY(0.4);
         }
 
         [data-mobile-menu] [data-nav-link][data-active="true"] {
-          border-color: rgb(16 185 129 / 0.28);
+          border-color: rgb(var(--tf-brand-rgb) / 0.28);
           background:
-            linear-gradient(90deg, rgb(16 185 129 / 0.18), rgb(245 158 11 / 0.08)),
-            rgb(255 255 255 / 0.04);
+            linear-gradient(90deg, rgb(var(--tf-brand-rgb) / 0.18), rgb(var(--tf-accent-rgb) / 0.08)),
+            rgb(var(--tf-text-rgb) / 0.04);
           padding-left: 2rem;
         }
 
@@ -369,31 +389,31 @@
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="bg-[#0F172A] text-[#F8FAFC] antialiased">
+  <body class="bg-[var(--tf-bg)] text-[var(--tf-text)] antialiased">
     <header class="fixed inset-x-0 top-0 z-40">
-      <div class="border-b border-[#1E293B] bg-[#0F172A]/80 backdrop-blur">
+      <div class="border-b border-[color:rgb(var(--tf-text-rgb)/0.12)] bg-[color:rgb(var(--tf-bg-rgb)/0.96)] shadow-[0_10px_26px_-16px_rgb(var(--tf-bg-rgb)/0.95)] backdrop-blur-md">
         <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8" aria-label="Navegación principal">
         <a href="#inicio" class="flex items-center gap-3" aria-label="TrackFlow inicio">
           <img src="assets/trackflow-logo.svg" alt="Logo de TrackFlow" class="h-10 w-10 rounded" />
           <span>
-            <span class="block text-base font-semibold tracking-wide">TrackFlow</span>
-            <span class="block text-xs text-[#CBD5E1]">Last-mile operations</span>
+            <span class="block text-base font-semibold tracking-wide text-[var(--tf-text)]">TrackFlow</span>
+            <span class="block text-xs text-[color:rgb(var(--tf-text-rgb)/0.78)]">Last-mile operations</span>
           </span>
         </a>
-        <div class="hidden items-center gap-8 text-sm text-[#CBD5E1] md:flex">
+        <div class="hidden items-center gap-8 text-sm text-[color:rgb(var(--tf-text-rgb)/0.74)] md:flex">
           <a class="transition hover:text-white" href="#plataforma" data-nav-link>Servicios</a>
           <a class="transition hover:text-white" href="#mercados" data-nav-link>Mercados</a>
           <a class="transition hover:text-white" href="#faqs" data-nav-link>FAQs</a>
         </div>
         <a
           href="application.html"
-          class="hidden rounded bg-[#10B981] px-4 py-2 text-sm font-semibold text-[#0F172A] transition hover:bg-[#34D399] focus:outline-none focus:ring-2 focus:ring-[#10B981] focus:ring-offset-2 focus:ring-offset-[#0F172A] md:inline-flex"
+          class="hidden rounded bg-[var(--tf-brand)] px-4 py-2 text-sm font-semibold text-[var(--tf-bg)] transition hover:bg-[var(--tf-brand-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-2 focus:ring-offset-[var(--tf-bg)] md:inline-flex"
         >
           Contáctanos
         </a>
         <button
           type="button"
-          class="inline-flex h-11 w-11 items-center justify-center rounded border border-white/15 text-[#F8FAFC] transition hover:border-white/30 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[#10B981] focus:ring-offset-2 focus:ring-offset-[#0F172A] md:hidden"
+          class="inline-flex h-11 w-11 items-center justify-center rounded border border-white/15 text-[var(--tf-text)] transition hover:border-white/30 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-2 focus:ring-offset-[var(--tf-bg)] md:hidden"
           aria-controls="mobile-menu"
           aria-expanded="false"
           aria-label="Abrir menu"
@@ -408,14 +428,14 @@
         </button>
         </nav>
       </div>
-      <div id="mobile-menu" class="pointer-events-none grid grid-rows-[0fr] border-b border-white/10 bg-[#0F172A]/70 px-5 opacity-0 shadow-md shadow-[#0F172A]/20 backdrop-blur-sm transition-all duration-300 ease-out md:hidden" aria-hidden="true" inert data-mobile-menu>
-        <div class="mx-auto flex w-full max-w-7xl -translate-y-3 flex-col gap-1 overflow-hidden pb-0 pt-0 text-sm font-medium text-[#CBD5E1] transition-all duration-300 ease-out" data-mobile-menu-content>
+      <div id="mobile-menu" class="pointer-events-none grid grid-rows-[0fr] border-b border-white/10 bg-[color:rgb(var(--tf-bg-rgb)/0.92)] px-5 opacity-0 shadow-md shadow-[color:rgb(var(--tf-brand-rgb)/0.2)] backdrop-blur-md transition-all duration-300 ease-out md:hidden" aria-hidden="true" inert data-mobile-menu>
+        <div class="mx-auto flex w-full max-w-7xl -translate-y-3 flex-col gap-1 overflow-hidden pb-0 pt-0 text-sm font-medium text-[var(--tf-text-muted)] transition-all duration-300 ease-out" data-mobile-menu-content>
           <a class="block w-full rounded px-3 py-3 transition hover:bg-white/10 hover:text-white" href="#plataforma" data-nav-link>Servicios</a>
           <a class="block w-full rounded px-3 py-3 transition hover:bg-white/10 hover:text-white" href="#mercados" data-nav-link>Mercados</a>
           <a class="block w-full rounded px-3 py-3 transition hover:bg-white/10 hover:text-white" href="#faqs" data-nav-link>FAQs</a>
           <a
             href="application.html"
-            class="mt-3 inline-flex w-full items-center justify-center rounded bg-[#10B981] px-4 py-3 text-sm font-semibold text-[#0F172A] transition hover:bg-[#34D399] focus:outline-none focus:ring-2 focus:ring-[#10B981] focus:ring-offset-2 focus:ring-offset-[#0F172A]"
+            class="mt-3 inline-flex w-full items-center justify-center rounded bg-[var(--tf-brand)] px-4 py-3 text-sm font-semibold text-[var(--tf-bg)] transition hover:bg-[var(--tf-brand-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-2 focus:ring-offset-[var(--tf-bg)]"
           >
             Contáctanos
           </a>
@@ -430,24 +450,27 @@
           alt="Centro de operaciones logísticas moderno con paquetes, pantallas de seguimiento y zona de almacén"
           class="absolute inset-0 h-full w-full object-cover"
         />
-        <div class="absolute inset-0 bg-gradient-to-r from-[#0F172A] via-[#0F172A]/85 to-[#0F172A]/25"></div>
-        <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#0F172A] to-transparent"></div>
+        <div
+          class="absolute inset-0"
+          style="background: linear-gradient(90deg, rgb(var(--tf-bg-rgb) / 1), rgb(var(--tf-bg-rgb) / 0.85), rgb(var(--tf-bg-rgb) / 0.25));"
+        ></div>
+        <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[var(--tf-bg)] to-transparent"></div>
 
         <div class="relative mx-auto flex min-h-[calc(100vh-6rem)] max-w-7xl items-center px-5 py-20 lg:px-8">
           <div class="max-w-3xl">
-            <p class="mb-5 inline-flex rounded-full border border-[#F59E0B]/30 bg-[#F59E0B]/10 px-4 py-2 text-sm font-medium text-[#F59E0B]">
+            <p class="mb-5 inline-flex rounded-full border border-[color:rgb(var(--tf-accent-rgb)/0.3)] bg-[color:rgb(var(--tf-accent-rgb)/0.1)] px-4 py-2 text-sm font-medium text-[var(--tf-accent)]">
               Fundada en 2009 | Los Ángeles + Zaragoza
             </p>
             <h1 class="text-5xl font-black leading-[0.95] text-white sm:text-6xl lg:text-7xl">
               Logística, última milla y devoluciones para operaciones e-commerce en crecimiento.
             </h1>
-            <p class="mt-6 max-w-2xl text-lg leading-8 text-[#CBD5E1]">
+            <p class="mt-6 max-w-2xl text-lg leading-8 text-[var(--tf-text-muted)]">
               TrackFlow coordina inventario, preparación de pedidos, transportistas y devoluciones para marcas e-commerce que necesitan operar entre Estados Unidos y España sin perder visibilidad de su logística.
             </p>
             <div class="mt-9 flex flex-col gap-3 sm:flex-row">
               <a
                 href="application.html"
-                class="inline-flex items-center justify-center rounded bg-[#10B981] px-6 py-4 text-sm font-bold text-[#0F172A] transition hover:bg-[#34D399] focus:outline-none focus:ring-2 focus:ring-[#10B981] focus:ring-offset-2 focus:ring-offset-[#0F172A]"
+                class="inline-flex items-center justify-center rounded bg-[var(--tf-brand)] px-6 py-4 text-sm font-bold text-[var(--tf-bg)] transition hover:bg-[var(--tf-brand-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-2 focus:ring-offset-[var(--tf-bg)]"
               >
                 Contáctanos
               </a>
@@ -462,91 +485,91 @@
         </div>
       </section>
 
-      <section id="operacion" class="border-y border-[#1E293B] bg-[#111827]/70">
+      <section id="operacion" class="border-y border-[var(--tf-border)] bg-[var(--tf-surface)]/70">
         <div class="mx-auto grid max-w-7xl gap-6 px-5 py-10 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
-          <article class="rounded border border-[#1E293B] bg-white/[0.03] p-5">
-            <p class="text-3xl font-black text-[#F59E0B]">130</p>
-            <p class="mt-2 text-sm text-[#CBD5E1]">personas operando entre Estados Unidos y España</p>
+          <article class="rounded border border-[var(--tf-border)] bg-white/[0.03] p-5">
+            <p class="text-3xl font-black text-[var(--tf-accent)]">130</p>
+            <p class="mt-2 text-sm text-[var(--tf-text-muted)]">personas operando entre Estados Unidos y España</p>
           </article>
-          <article class="rounded border border-[#1E293B] bg-white/[0.03] p-5">
-            <p class="text-3xl font-black text-[#F59E0B]">2</p>
-            <p class="mt-2 text-sm text-[#CBD5E1]">almacenes en Los Ángeles y Zaragoza para almacenamiento, picking y preparación de pedidos</p>
+          <article class="rounded border border-[var(--tf-border)] bg-white/[0.03] p-5">
+            <p class="text-3xl font-black text-[var(--tf-accent)]">2</p>
+            <p class="mt-2 text-sm text-[var(--tf-text-muted)]">almacenes en Los Ángeles y Zaragoza para almacenamiento, picking y preparación de pedidos</p>
           </article>
-          <article class="rounded border border-[#1E293B] bg-white/[0.03] p-5">
-            <p class="text-3xl font-black text-[#F59E0B]">8</p>
-            <p class="mt-2 text-sm text-[#CBD5E1]">transportistas coordinados diariamente para operaciones de última milla</p>
+          <article class="rounded border border-[var(--tf-border)] bg-white/[0.03] p-5">
+            <p class="text-3xl font-black text-[var(--tf-accent)]">8</p>
+            <p class="mt-2 text-sm text-[var(--tf-text-muted)]">transportistas coordinados diariamente para operaciones de última milla</p>
           </article>
-          <article class="rounded border border-[#1E293B] bg-white/[0.03] p-5">
-            <p class="text-3xl font-black text-[#F59E0B]">18–25%</p>
-            <p class="mt-2 text-sm text-[#CBD5E1]">del volumen operativo corresponde a devoluciones según cliente y mercado</p>
+          <article class="rounded border border-[var(--tf-border)] bg-white/[0.03] p-5">
+            <p class="text-3xl font-black text-[var(--tf-accent)]">18–25%</p>
+            <p class="mt-2 text-sm text-[var(--tf-text-muted)]">del volumen operativo corresponde a devoluciones según cliente y mercado</p>
           </article>
         </div>
       </section>
 
       <section id="plataforma" class="mx-auto max-w-7xl px-5 py-24 lg:px-8">
         <div class="max-w-3xl">
-          <p class="text-sm font-bold uppercase tracking-[0.25em] text-[#F59E0B]">Qué ofrecemos hoy</p>
+          <p class="text-sm font-bold uppercase tracking-[0.25em] text-[var(--tf-accent)]">Qué ofrecemos hoy</p>
           <h2 class="mt-4 text-4xl font-black text-white sm:text-5xl">Operación logística para marcas e-commerce.</h2>
-          <p class="mt-5 text-lg leading-8 text-[#CBD5E1]">
+          <p class="mt-5 text-lg leading-8 text-[var(--tf-text-muted)]">
             TrackFlow gestiona la operación desde que entra un pedido hasta que se entrega o vuelve como devolución: inventario, preparación, embalaje, transportistas, incidencias y logística inversa.
           </p>
         </div>
 
         <div class="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          <article class="rounded border border-[#1E293B] bg-[#111827] p-6">
-            <span class="text-2xl font-black text-[#F59E0B]" aria-hidden="true">01</span>
+          <article class="rounded border border-[var(--tf-border)] bg-[var(--tf-surface)] p-6">
+            <span class="text-2xl font-black text-[var(--tf-accent)]" aria-hidden="true">01</span>
             <h3 class="mt-5 text-xl font-bold text-white">Almacenamiento de inventario</h3>
-            <p class="mt-3 text-[#CBD5E1]">Gestión física de inventario para marcas e-commerce desde almacenes ubicados en Los Ángeles y Zaragoza.</p>
+            <p class="mt-3 text-[var(--tf-text-muted)]">Gestión física de inventario para marcas e-commerce desde almacenes ubicados en Los Ángeles y Zaragoza.</p>
           </article>
-          <article class="rounded border border-[#1E293B] bg-[#111827] p-6">
-            <span class="text-2xl font-black text-[#F59E0B]" aria-hidden="true">02</span>
+          <article class="rounded border border-[var(--tf-border)] bg-[var(--tf-surface)] p-6">
+            <span class="text-2xl font-black text-[var(--tf-accent)]" aria-hidden="true">02</span>
             <h3 class="mt-5 text-xl font-bold text-white">Preparación y embalaje</h3>
-            <p class="mt-3 text-[#CBD5E1]">Recepción de pedidos, picking, preparación de paquetes y coordinación con el transportista asignado.</p>
+            <p class="mt-3 text-[var(--tf-text-muted)]">Recepción de pedidos, picking, preparación de paquetes y coordinación con el transportista asignado.</p>
           </article>
-          <article class="rounded border border-[#1E293B] bg-[#111827] p-6">
-            <span class="text-2xl font-black text-[#F59E0B]" aria-hidden="true">03</span>
+          <article class="rounded border border-[var(--tf-border)] bg-[var(--tf-surface)] p-6">
+            <span class="text-2xl font-black text-[var(--tf-accent)]" aria-hidden="true">03</span>
             <h3 class="mt-5 text-xl font-bold text-white">Última milla</h3>
-            <p class="mt-3 text-[#CBD5E1]">Coordinación de envíos y entregas con una red de transportistas en Estados Unidos y España.</p>
+            <p class="mt-3 text-[var(--tf-text-muted)]">Coordinación de envíos y entregas con una red de transportistas en Estados Unidos y España.</p>
           </article>
-          <article class="rounded border border-[#1E293B] bg-[#111827] p-6">
-            <span class="text-2xl font-black text-[#F59E0B]" aria-hidden="true">04</span>
+          <article class="rounded border border-[var(--tf-border)] bg-[var(--tf-surface)] p-6">
+            <span class="text-2xl font-black text-[var(--tf-accent)]" aria-hidden="true">04</span>
             <h3 class="mt-5 text-xl font-bold text-white">Seguimiento operativo e incidencias</h3>
-            <p class="mt-3 text-[#CBD5E1]">Seguimiento de entregas y resolución de incidencias entre almacenes, transportistas y clientes finales.</p>
+            <p class="mt-3 text-[var(--tf-text-muted)]">Seguimiento de entregas y resolución de incidencias entre almacenes, transportistas y clientes finales.</p>
           </article>
-          <article class="rounded border border-[#1E293B] bg-[#111827] p-6">
-            <span class="text-2xl font-black text-[#F59E0B]" aria-hidden="true">05</span>
+          <article class="rounded border border-[var(--tf-border)] bg-[var(--tf-surface)] p-6">
+            <span class="text-2xl font-black text-[var(--tf-accent)]" aria-hidden="true">05</span>
             <h3 class="mt-5 text-xl font-bold text-white">Logística inversa</h3>
-            <p class="mt-3 text-[#CBD5E1]">Gestión de devoluciones, revisión de casos y decisiones sobre recogida, reacondicionamiento o descarte.</p>
+            <p class="mt-3 text-[var(--tf-text-muted)]">Gestión de devoluciones, revisión de casos y decisiones sobre recogida, reacondicionamiento o descarte.</p>
           </article>
-          <article class="rounded border border-[#1E293B] bg-[#111827] p-6">
-            <span class="text-2xl font-black text-[#F59E0B]" aria-hidden="true">06</span>
+          <article class="rounded border border-[var(--tf-border)] bg-[var(--tf-surface)] p-6">
+            <span class="text-2xl font-black text-[var(--tf-accent)]" aria-hidden="true">06</span>
             <h3 class="mt-5 text-xl font-bold text-white">Atención operativa para marcas y clientes finales</h3>
-            <p class="mt-3 text-[#CBD5E1]">Gestión de consultas relacionadas con pedidos, entregas, incidencias y devoluciones en ambos mercados.</p>
+            <p class="mt-3 text-[var(--tf-text-muted)]">Gestión de consultas relacionadas con pedidos, entregas, incidencias y devoluciones en ambos mercados.</p>
           </article>
         </div>
       </section>
 
-      <section id="mercados" class="bg-white text-[#0F172A]">
+      <section id="mercados" class="bg-white text-[var(--tf-bg)]">
         <div class="mx-auto grid max-w-7xl gap-12 px-5 py-24 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
           <div>
-            <p class="text-sm font-bold uppercase tracking-[0.25em] text-[#B45309]">Dos mercados</p>
+            <p class="text-sm font-bold uppercase tracking-[0.25em] text-[var(--tf-accent-strong)]">Dos mercados</p>
             <h2 class="mt-4 text-4xl font-black sm:text-5xl">Dos países. Una operación logística conectada.</h2>
-            <p class="mt-5 text-lg leading-8 text-[#475569]">
+            <p class="mt-5 text-lg leading-8 text-[var(--tf-market-muted)]">
               Los equipos de TrackFlow operan entre Los Ángeles y Zaragoza coordinando almacenes, transportistas, incidencias y devoluciones para marcas e-commerce en dos mercados distintos.
             </p>
           </div>
           <div class="grid gap-4 sm:grid-cols-2">
-            <article class="rounded border border-[#CBD5E1] bg-[#F8FAFC] p-6">
+            <article class="rounded border border-[var(--tf-text-muted)] bg-[var(--tf-text)] p-6">
               <h3 class="text-2xl font-black">Los Ángeles</h3>
-              <p class="mt-3 text-[#475569]">Sede ejecutiva y almacén para la operación logística en Estados Unidos.</p>
+              <p class="mt-3 text-[var(--tf-market-muted)]">Sede ejecutiva y almacén para la operación logística en Estados Unidos.</p>
             </article>
-            <article class="rounded border border-[#CBD5E1] bg-[#F8FAFC] p-6">
+            <article class="rounded border border-[var(--tf-text-muted)] bg-[var(--tf-text)] p-6">
               <h3 class="text-2xl font-black">Zaragoza</h3>
-              <p class="mt-3 text-[#475569]">Oficina tecnológica y almacén para la operación logística en España.</p>
+              <p class="mt-3 text-[var(--tf-market-muted)]">Oficina tecnológica y almacén para la operación logística en España.</p>
             </article>
-            <article class="rounded border border-[#CBD5E1] bg-[#F8FAFC] p-6 sm:col-span-2">
+            <article class="rounded border border-[var(--tf-text-muted)] bg-[var(--tf-text)] p-6 sm:col-span-2">
               <h3 class="text-2xl font-black">Cobertura operativa</h3>
-              <p class="mt-3 text-[#475569]">
+              <p class="mt-3 text-[var(--tf-market-muted)]">
                 Equipos de almacén, última milla, logística inversa, atención al cliente y tecnología trabajan distribuidos entre ambos países.
               </p>
             </article>
@@ -554,43 +577,43 @@
         </div>
       </section>
 
-      <section id="faqs" class="border-y border-[#1E293B] bg-[#111827]/70">
+      <section id="faqs" class="border-y border-[var(--tf-border)] bg-[var(--tf-surface)]/70">
         <div class="mx-auto max-w-7xl px-5 py-24 lg:px-8">
           <div class="max-w-3xl">
-            <p class="text-sm font-bold uppercase tracking-[0.25em] text-[#F59E0B]">FAQs</p>
+            <p class="text-sm font-bold uppercase tracking-[0.25em] text-[var(--tf-accent)]">FAQs</p>
             <h2 class="mt-4 text-4xl font-black text-white sm:text-5xl">Preguntas frecuentes sobre TrackFlow.</h2>
-            <p class="mt-5 text-lg leading-8 text-[#CBD5E1]">
+            <p class="mt-5 text-lg leading-8 text-[var(--tf-text-muted)]">
               Respuestas directas sobre la operación logística, la cobertura geográfica, la última milla y las devoluciones para marcas e-commerce.
             </p>
           </div>
 
           <div class="mt-14 grid gap-4" data-faqs>
-            <article class="rounded border border-[#10B981]/40 bg-[#0F172A] shadow-lg shadow-[#10B981]/5 transition-colors duration-300" data-faq-item>
+            <article class="rounded border border-[color:rgb(var(--tf-brand-rgb)/0.4)] bg-[var(--tf-bg)] shadow-lg shadow-[color:rgb(var(--tf-brand-rgb)/0.05)] transition-colors duration-300" data-faq-item>
               <h3>
-                <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[#F59E0B] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#10B981]" aria-expanded="true" aria-controls="faq-answer-1" data-faq-trigger>
+                <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[var(--tf-accent)] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--tf-brand)]" aria-expanded="true" aria-controls="faq-answer-1" data-faq-trigger>
                   <span>¿Qué es TrackFlow?</span>
-                  <span class="grid h-9 w-9 shrink-0 rotate-45 place-items-center rounded border border-white/10 bg-white/5 text-[#10B981] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
+                  <span class="grid h-9 w-9 shrink-0 rotate-45 place-items-center rounded border border-white/10 bg-white/5 text-[var(--tf-brand)] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
                 </button>
               </h3>
               <div id="faq-answer-1" class="grid grid-rows-[1fr] transition-all duration-300 ease-out" data-faq-panel>
                 <div class="overflow-hidden">
-                  <p class="px-6 pb-6 leading-7 text-[#CBD5E1]">
+                  <p class="px-6 pb-6 leading-7 text-[var(--tf-text-muted)]">
                     TrackFlow es una empresa de logística de última milla y gestión de almacenes para marcas e-commerce.
                     Fue fundada en 2009 en Los Ángeles y opera con equipos y almacenes en Estados Unidos y España.
                   </p>
                 </div>
               </div>
             </article>
-            <article class="rounded border border-[#1E293B] bg-[#0F172A] transition-colors duration-300" data-faq-item>
+            <article class="rounded border border-[var(--tf-border)] bg-[var(--tf-bg)] transition-colors duration-300" data-faq-item>
               <h3>
-                <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[#F59E0B] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#10B981]" aria-expanded="false" aria-controls="faq-answer-2" data-faq-trigger>
+                <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[var(--tf-accent)] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--tf-brand)]" aria-expanded="false" aria-controls="faq-answer-2" data-faq-trigger>
                   <span>¿Qué servicios logísticos ofrece TrackFlow?</span>
-                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[#10B981] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
+                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[var(--tf-brand)] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
                 </button>
               </h3>
               <div id="faq-answer-2" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out" data-faq-panel>
                 <div class="overflow-hidden">
-                  <p class="px-6 pb-6 leading-7 text-[#CBD5E1]">
+                  <p class="px-6 pb-6 leading-7 text-[var(--tf-text-muted)]">
                     TrackFlow ofrece almacenamiento de inventario, preparación y embalaje de pedidos,
                     coordinación de última milla, seguimiento de entregas, gestión de incidencias,
                     logística inversa y soporte operativo para marcas y destinatarios.
@@ -598,64 +621,64 @@
                 </div>
               </div>
             </article>
-            <article class="rounded border border-[#1E293B] bg-[#0F172A] transition-colors duration-300" data-faq-item>
+            <article class="rounded border border-[var(--tf-border)] bg-[var(--tf-bg)] transition-colors duration-300" data-faq-item>
               <h3>
-                <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[#F59E0B] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#10B981]" aria-expanded="false" aria-controls="faq-answer-3" data-faq-trigger>
+                <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[var(--tf-accent)] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--tf-brand)]" aria-expanded="false" aria-controls="faq-answer-3" data-faq-trigger>
                   <span>¿En qué países opera TrackFlow?</span>
-                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[#10B981] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
+                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[var(--tf-brand)] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
                 </button>
               </h3>
               <div id="faq-answer-3" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out" data-faq-panel>
                 <div class="overflow-hidden">
-                  <p class="px-6 pb-6 leading-7 text-[#CBD5E1]">
+                  <p class="px-6 pb-6 leading-7 text-[var(--tf-text-muted)]">
                     TrackFlow opera en Estados Unidos y España, con almacenes en Los Ángeles y Zaragoza
                     y equipos distribuidos entre ambos mercados.
                   </p>
                 </div>
               </div>
             </article>
-            <article class="rounded border border-[#1E293B] bg-[#0F172A] transition-colors duration-300" data-faq-item>
+            <article class="rounded border border-[var(--tf-border)] bg-[var(--tf-bg)] transition-colors duration-300" data-faq-item>
               <h3>
-                <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[#F59E0B] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#10B981]" aria-expanded="false" aria-controls="faq-answer-4" data-faq-trigger>
+                <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[var(--tf-accent)] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--tf-brand)]" aria-expanded="false" aria-controls="faq-answer-4" data-faq-trigger>
                   <span>¿Qué tipo de empresas trabajan con TrackFlow?</span>
-                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[#10B981] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
+                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[var(--tf-brand)] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
                 </button>
               </h3>
               <div id="faq-answer-4" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out" data-faq-panel>
                 <div class="overflow-hidden">
-                  <p class="px-6 pb-6 leading-7 text-[#CBD5E1]">
+                  <p class="px-6 pb-6 leading-7 text-[var(--tf-text-muted)]">
                     TrackFlow trabaja con marcas e-commerce que necesitan externalizar o mejorar su operación logística,
                     desde el almacenamiento del inventario hasta la entrega y gestión de devoluciones.
                   </p>
                 </div>
               </div>
             </article>
-            <article class="rounded border border-[#1E293B] bg-[#0F172A] transition-colors duration-300" data-faq-item>
+            <article class="rounded border border-[var(--tf-border)] bg-[var(--tf-bg)] transition-colors duration-300" data-faq-item>
               <h3>
-                <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[#F59E0B] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#10B981]" aria-expanded="false" aria-controls="faq-answer-5" data-faq-trigger>
+                <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[var(--tf-accent)] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--tf-brand)]" aria-expanded="false" aria-controls="faq-answer-5" data-faq-trigger>
                   <span>¿Cómo gestiona TrackFlow la última milla y los transportistas?</span>
-                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[#10B981] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
+                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[var(--tf-brand)] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
                 </button>
               </h3>
               <div id="faq-answer-5" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out" data-faq-panel>
                 <div class="overflow-hidden">
-                  <p class="px-6 pb-6 leading-7 text-[#CBD5E1]">
+                  <p class="px-6 pb-6 leading-7 text-[var(--tf-text-muted)]">
                     TrackFlow coordina envíos con una red de 8 transportistas en Estados Unidos y España y gestiona
                     incidencias como entregas fallidas, paquetes perdidos o direcciones incorrectas.
                   </p>
                 </div>
               </div>
             </article>
-            <article class="rounded border border-[#1E293B] bg-[#0F172A] transition-colors duration-300" data-faq-item>
+            <article class="rounded border border-[var(--tf-border)] bg-[var(--tf-bg)] transition-colors duration-300" data-faq-item>
               <h3>
-                <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[#F59E0B] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#10B981]" aria-expanded="false" aria-controls="faq-answer-6" data-faq-trigger>
+                <button type="button" class="flex w-full items-center justify-between gap-5 px-6 py-5 text-left text-xl font-bold text-white transition hover:text-[var(--tf-accent)] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--tf-brand)]" aria-expanded="false" aria-controls="faq-answer-6" data-faq-trigger>
                   <span>¿Cómo gestiona TrackFlow las devoluciones?</span>
-                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[#10B981] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
+                  <span class="grid h-9 w-9 shrink-0 place-items-center rounded border border-white/10 bg-white/5 text-[var(--tf-brand)] transition duration-300" aria-hidden="true" data-faq-icon>+</span>
                 </button>
               </h3>
               <div id="faq-answer-6" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out" data-faq-panel>
                 <div class="overflow-hidden">
-                  <p class="px-6 pb-6 leading-7 text-[#CBD5E1]">
+                  <p class="px-6 pb-6 leading-7 text-[var(--tf-text-muted)]">
                     TrackFlow gestiona devoluciones que pueden representar entre el 18% y el 25% del volumen operativo según
                     cliente y país. El proceso incluye revisión de casos y decisiones sobre recogida, reacondicionamiento o descarte.
                   </p>
@@ -667,32 +690,32 @@
       </section>
 
       <section class="mx-auto max-w-7xl px-5 py-24 lg:px-8">
-        <div class="rounded border border-[#10B981]/30 bg-[#10B981] p-8 text-[#0F172A] md:flex md:items-center md:justify-between md:gap-8">
+        <div class="rounded border border-[color:rgb(var(--tf-brand-rgb)/0.3)] bg-[var(--tf-brand)] p-8 text-[var(--tf-bg)] md:flex md:items-center md:justify-between md:gap-8">
           <div>
             <h2 class="text-3xl font-black">Hablemos de tu operación.</h2>
-            <p class="mt-3 max-w-2xl text-[#1E293B]">
+            <p class="mt-3 max-w-2xl text-[var(--tf-border)]">
               Cuéntanos cómo funciona hoy tu operación logística y qué desafíos necesitas resolver.
             </p>
           </div>
-          <a href="application.html" class="mt-6 inline-flex rounded bg-[#0F172A] px-6 py-4 text-sm font-bold text-white md:mt-0">
+          <a href="application.html" class="mt-6 inline-flex rounded bg-[var(--tf-bg)] px-6 py-4 text-sm font-bold text-white md:mt-0">
             Contáctanos
           </a>
         </div>
       </section>
     </main>
 
-    <footer id="contacto" class="border-t border-[#1E293B] bg-[#0F172A] px-5 py-10 sm:py-12 lg:px-8">
+    <footer id="contacto" class="border-t border-[var(--tf-border)] bg-[var(--tf-bg)] px-5 py-10 sm:py-12 lg:px-8">
       <div class="mx-auto grid max-w-7xl gap-8 md:grid-cols-3">
         <div>
           <p class="text-xl font-black text-white">TrackFlow</p>
-          <p class="mt-3 text-sm leading-6 text-[#CBD5E1]">Logística de última milla y gestión de almacenes para operaciones e-commerce.</p>
+          <p class="mt-3 text-sm leading-6 text-[var(--tf-text-muted)]">Logística de última milla y gestión de almacenes para operaciones e-commerce.</p>
         </div>
-        <address class="not-italic text-sm leading-7 text-[#CBD5E1]">
+        <address class="not-italic text-sm leading-7 text-[var(--tf-text-muted)]">
           Los Ángeles, CA, United States<br />
           Zaragoza, España<br />
           Operaciones en Estados Unidos y España
         </address>
-        <div class="text-sm leading-7 text-[#CBD5E1] md:text-right">
+        <div class="text-sm leading-7 text-[var(--tf-text-muted)] md:text-right">
           <a class="block hover:text-white" href="application.html">Formulario operativo</a>
           <a class="block hover:text-white" href="#plataforma">Servicios</a>
           <p class="mt-4">© 2026 TrackFlow</p>
@@ -744,10 +767,10 @@
         const icon = item.querySelector("[data-faq-icon]");
 
         trigger.setAttribute("aria-expanded", String(open));
-        item.classList.toggle("border-[#10B981]/40", open);
-        item.classList.toggle("border-[#1E293B]", !open);
+        item.classList.toggle("border-[color:rgb(var(--tf-brand-rgb)/0.4)]", open);
+        item.classList.toggle("border-[var(--tf-border)]", !open);
         item.classList.toggle("shadow-lg", open);
-        item.classList.toggle("shadow-[#10B981]/5", open);
+        item.classList.toggle("shadow-[color:rgb(var(--tf-brand-rgb)/0.05)]", open);
         panel.classList.toggle("grid-rows-[1fr]", open);
         panel.classList.toggle("grid-rows-[0fr]", !open);
         panel.classList.toggle("opacity-0", !open);

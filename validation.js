@@ -31,8 +31,8 @@ function getErrorElement(name) {
 function setFieldState(input, isValid, message = "") {
   const errorElement = getErrorElement(input.name);
   input.setAttribute("aria-invalid", String(!isValid));
-  input.classList.toggle("border-[#FB7185]", !isValid);
-  input.classList.toggle("border-[#10B981]", isValid);
+  input.classList.toggle("border-[var(--tf-error)]", !isValid);
+  input.classList.toggle("border-[var(--tf-brand)]", isValid);
 
   if (errorElement) {
     errorElement.textContent = message;
@@ -58,8 +58,8 @@ function validateForm() {
 function showStatus(type, message) {
   statusBox.className =
     type === "success"
-      ? "rounded border border-[#10B981]/40 bg-[#10B981]/10 p-4 text-sm text-[#F8FAFC]"
-      : "rounded border border-[#FB7185]/40 bg-[#FB7185]/10 p-4 text-sm text-[#F8FAFC]";
+      ? "rounded border border-[color:rgb(var(--tf-brand-rgb)/0.4)] bg-[color:rgb(var(--tf-brand-rgb)/0.1)] p-4 text-sm text-[var(--tf-text)]"
+      : "rounded border border-[color:rgb(var(--tf-error-rgb)/0.4)] bg-[color:rgb(var(--tf-error-rgb)/0.1)] p-4 text-sm text-[var(--tf-text)]";
   statusBox.textContent = message;
 }
 
@@ -98,7 +98,7 @@ form.addEventListener("reset", () => {
       const input = form.elements[name];
       if (input) {
         input.removeAttribute("aria-invalid");
-        input.classList.remove("border-[#FB7185]", "border-[#10B981]");
+        input.classList.remove("border-[var(--tf-error)]", "border-[var(--tf-brand)]");
       }
       const errorElement = getErrorElement(name);
       if (errorElement) errorElement.textContent = "";
