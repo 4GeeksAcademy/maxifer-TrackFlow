@@ -138,6 +138,78 @@
       }
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      [data-application-panel],
+      [data-summary-box] {
+        scrollbar-width: thin;
+        scrollbar-color: rgb(var(--tf-text-rgb) / 0.18) transparent;
+      }
+
+      [data-application-panel]::-webkit-scrollbar,
+      [data-summary-box]::-webkit-scrollbar {
+        width: 0.35rem;
+      }
+
+      [data-application-panel]::-webkit-scrollbar-track,
+      [data-summary-box]::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      [data-application-panel]::-webkit-scrollbar-thumb,
+      [data-summary-box]::-webkit-scrollbar-thumb {
+        background: rgb(var(--tf-text-rgb) / 0.16);
+        border-radius: 999px;
+      }
+
+      [data-application-panel][data-submitted="true"] {
+        background: transparent;
+        border-color: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
+        max-height: none;
+        min-height: 0;
+        overflow-y: hidden;
+        padding: 0;
+        scrollbar-width: none;
+      }
+
+      [data-application-panel][data-submitted="true"]::-webkit-scrollbar {
+        display: none;
+      }
+
+      [data-application-panel][data-submitted="true"] #applicationForm {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-block: clamp(1rem, 8vh, 5rem);
+      }
+
+      [data-application-panel][data-submitted="true"] [data-post-submit-actions] {
+        justify-content: center;
+      }
+
+      #formStatus[data-status="success"] {
+        opacity: 0;
+        transform: translateY(-0.375rem);
+        transition:
+          opacity 500ms ease,
+          transform 500ms ease;
+      }
+
+      #formStatus[data-status="success"][data-visible="true"] {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        #formStatus[data-status="success"] {
+          transition: none;
+          transform: none;
+        }
+      }
+    </style>
     <script defer src="i18n.js?v=1"></script>
     <script defer src="validation.js?v=4"></script>
   </head>
@@ -210,8 +282,8 @@
           </p>
         </aside>
 
-        <section class="rounded border border-[color:rgb(var(--tf-text-rgb)/0.22)] bg-[linear-gradient(155deg,rgb(var(--tf-text-rgb)/0.08),rgb(var(--tf-text-rgb)/0.03)_40%,rgb(var(--tf-bg-rgb)/0.82)_100%)] p-3.5 shadow-[0_26px_60px_-40px_rgb(0_0_0/0.95),0_0_0_1px_rgb(var(--tf-brand-rgb)/0.18)] backdrop-blur-sm sm:p-4 md:max-h-[min(720px,calc(100svh-7rem))] md:self-start md:overflow-y-auto md:p-3.5">
-          <form id="applicationForm" novalidate class="space-y-3 md:flex md:flex-col md:gap-2 md:space-y-0">
+        <section class="rounded border border-[color:rgb(var(--tf-text-rgb)/0.22)] bg-[linear-gradient(155deg,rgb(var(--tf-text-rgb)/0.08),rgb(var(--tf-text-rgb)/0.03)_40%,rgb(var(--tf-bg-rgb)/0.82)_100%)] p-3.5 shadow-[0_26px_60px_-40px_rgb(0_0_0/0.95),0_0_0_1px_rgb(var(--tf-brand-rgb)/0.18)] backdrop-blur-sm sm:p-4 md:max-h-[min(720px,calc(100svh-7rem))] md:self-start md:overflow-y-auto md:p-3.5" data-application-panel data-submitted="false">
+          <form id="applicationForm" novalidate class="space-y-3 transition-all duration-300 ease-out motion-reduce:transition-none md:flex md:flex-col md:gap-2 md:space-y-0">
             <div class="rounded border border-[color:rgb(var(--tf-text-rgb)/0.16)] bg-[color:rgb(var(--tf-bg-rgb)/0.45)] p-3 md:p-2" aria-live="polite" data-form-progress>
               <p class="text-xs font-bold uppercase tracking-[0.16em] text-[var(--tf-text-soft)]" data-application-progress-label>Paso 1 de 4</p>
               <div class="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[color:rgb(var(--tf-text-rgb)/0.12)]">

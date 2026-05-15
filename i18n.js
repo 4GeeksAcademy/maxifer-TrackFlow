@@ -97,145 +97,145 @@
   const translations = {
     es: {
       common: {
-        navAria: "Navegacion principal",
+        navAria: "Navegación principal",
         homeAria: "TrackFlow inicio",
         logoAlt: "Logo de TrackFlow",
-        menuOpen: "Abrir menu",
-        menuClose: "Cerrar menu",
-        contact: "Contactanos",
+        menuOpen: "Abrir menú",
+        menuClose: "Cerrar menú",
+        contact: "Contáctanos",
         backToLanding: "Volver a la landing",
         navHome: "Inicio",
         navServices: "Servicios",
         navMarkets: "Mercados",
         navFaqs: "FAQs",
-        switchAria: "Seleccion de idioma",
+        switchAria: "Selección de idioma",
         htmlLang: "es"
       },
       index: {
-        title: "TrackFlow | Logistica de ultima milla para e-commerce",
+        title: "TrackFlow | Logística de última milla para e-commerce",
         description:
-          "TrackFlow coordina inventario, preparacion de pedidos, transportistas y devoluciones para marcas e-commerce que operan entre Estados Unidos y Espana.",
-        ogTitle: "TrackFlow | Logistica de ultima milla para e-commerce",
+          "TrackFlow coordina inventario, preparación de pedidos, transportistas y devoluciones para marcas e-commerce que operan entre Estados Unidos y España.",
+        ogTitle: "TrackFlow | Logística de última milla para e-commerce",
         ogDescription:
-          "TrackFlow coordina inventario, preparacion de pedidos, transportistas y devoluciones para marcas e-commerce que operan entre Estados Unidos y Espana.",
-        twitterTitle: "TrackFlow | Logistica de ultima milla para e-commerce",
+          "TrackFlow coordina inventario, preparación de pedidos, transportistas y devoluciones para marcas e-commerce que operan entre Estados Unidos y España.",
+        twitterTitle: "TrackFlow | Logística de última milla para e-commerce",
         twitterDescription:
-          "Inventario, preparacion de pedidos, transportistas y devoluciones para operaciones e-commerce en crecimiento.",
+          "Inventario, preparación de pedidos, transportistas y devoluciones para operaciones e-commerce en crecimiento.",
         navServices: "Servicios",
         navMarkets: "Mercados",
         navFaqs: "FAQs",
-        heroAlt: "Centro de operaciones logisticas moderno con paquetes, pantallas de seguimiento y zona de almacen",
-        heroBadge: "Fundada en 2009 | Los Angeles + Zaragoza",
-        heroTitle: "Logistica, ultima milla y devoluciones para operaciones e-commerce en crecimiento.",
+        heroAlt: "Centro de operaciones logísticas moderno con paquetes, pantallas de seguimiento y zona de almacén",
+        heroBadge: "Fundada en 2009 | Los Ángeles + Zaragoza",
+        heroTitle: "Logística, última milla y devoluciones para operaciones e-commerce en crecimiento.",
         heroBody:
-          "TrackFlow coordina inventario, preparacion de pedidos, transportistas y devoluciones para marcas e-commerce que necesitan operar entre Estados Unidos y Espana sin perder visibilidad de su logistica.",
-        heroPrimaryCta: "Contactanos",
-        heroSecondaryCta: "Ver operacion",
+          "TrackFlow coordina inventario, preparación de pedidos, transportistas y devoluciones para marcas e-commerce que necesitan operar entre Estados Unidos y España sin perder visibilidad de su logística.",
+        heroPrimaryCta: "Contáctanos",
+        heroSecondaryCta: "Ver operación",
         stats: [
-          "personas operando entre Estados Unidos y Espana",
-          "almacenes en Los Angeles y Zaragoza para almacenamiento, picking y preparacion de pedidos",
-          "transportistas coordinados diariamente para operaciones de ultima milla",
-          "del volumen operativo corresponde a devoluciones segun cliente y mercado"
+          "personas operando entre Estados Unidos y España",
+          "almacenes en Los Ángeles y Zaragoza para almacenamiento, picking y preparación de pedidos",
+          "transportistas coordinados diariamente para operaciones de última milla",
+          "del volumen operativo corresponde a devoluciones según cliente y mercado"
         ],
-        offerEyebrow: "Que ofrecemos hoy",
-        offerTitle: "Operacion logistica para marcas e-commerce.",
+        offerEyebrow: "Qué ofrecemos hoy",
+        offerTitle: "Operación logística para marcas e-commerce.",
         offerBody:
-          "TrackFlow gestiona la operacion desde que entra un pedido hasta que se entrega o vuelve como devolucion: inventario, preparacion, embalaje, transportistas, incidencias y logistica inversa.",
+          "TrackFlow gestiona la operación desde que entra un pedido hasta que se entrega o vuelve como devolución: inventario, preparación, embalaje, transportistas, incidencias y logística inversa.",
         serviceCards: [
           {
             title: "Almacenamiento de inventario",
-            body: "Gestion fisica de inventario para marcas e-commerce desde almacenes ubicados en Los Angeles y Zaragoza."
+            body: "Gestión física de inventario para marcas e-commerce desde almacenes ubicados en Los Ángeles y Zaragoza."
           },
           {
-            title: "Preparacion y embalaje",
-            body: "Recepcion de pedidos, picking, preparacion de paquetes y coordinacion con el transportista asignado."
+            title: "Preparación y embalaje",
+            body: "Recepción de pedidos, picking, preparación de paquetes y coordinación con el transportista asignado."
           },
           {
-            title: "Ultima milla",
-            body: "Coordinacion de envios y entregas con una red de transportistas en Estados Unidos y Espana."
+            title: "Última milla",
+            body: "Coordinación de envíos y entregas con una red de transportistas en Estados Unidos y España."
           },
           {
             title: "Seguimiento operativo e incidencias",
-            body: "Seguimiento de entregas y resolucion de incidencias entre almacenes, transportistas y clientes finales."
+            body: "Seguimiento de entregas y resolución de incidencias entre almacenes, transportistas y clientes finales."
           },
           {
-            title: "Logistica inversa",
-            body: "Gestion de devoluciones, revision de casos y decisiones sobre recogida, reacondicionamiento o descarte."
+            title: "Logística inversa",
+            body: "Gestión de devoluciones, revisión de casos y decisiones sobre recogida, reacondicionamiento o descarte."
           },
           {
-            title: "Atencion operativa para marcas y clientes finales",
-            body: "Gestion de consultas relacionadas con pedidos, entregas, incidencias y devoluciones en ambos mercados."
+            title: "Atención operativa para marcas y clientes finales",
+            body: "Gestión de consultas relacionadas con pedidos, entregas, incidencias y devoluciones en ambos mercados."
           }
         ],
         marketsEyebrow: "Dos mercados",
-        marketsTitle: "Dos paises. Una operacion logistica conectada.",
+        marketsTitle: "Dos países. Una operación logística conectada.",
         marketsBody:
-          "Los equipos de TrackFlow operan entre Los Angeles y Zaragoza coordinando almacenes, transportistas, incidencias y devoluciones para marcas e-commerce en dos mercados distintos.",
+          "Los equipos de TrackFlow operan entre Los Ángeles y Zaragoza coordinando almacenes, transportistas, incidencias y devoluciones para marcas e-commerce en dos mercados distintos.",
         marketCards: [
           {
-            title: "Los Angeles",
-            body: "Sede ejecutiva y almacen para la operacion logistica en Estados Unidos."
+            title: "Los Ángeles",
+            body: "Sede ejecutiva y almacén para la operación logística en Estados Unidos."
           },
           {
             title: "Zaragoza",
-            body: "Oficina tecnologica y almacen para la operacion logistica en Espana."
+            body: "Oficina tecnológica y almacén para la operación logística en España."
           },
           {
             title: "Cobertura operativa",
-            body: "Equipos de almacen, ultima milla, logistica inversa, atencion al cliente y tecnologia trabajan distribuidos entre ambos paises."
+            body: "Equipos de almacén, última milla, logística inversa, atención al cliente y tecnología trabajan distribuidos entre ambos países."
           }
         ],
         faqEyebrow: "FAQs",
         faqTitle: "Preguntas frecuentes sobre TrackFlow.",
         faqBody:
-          "Respuestas directas sobre la operacion logistica, la cobertura geografica, la ultima milla y las devoluciones para marcas e-commerce.",
+          "Respuestas directas sobre la operación logística, la cobertura geográfica, la última milla y las devoluciones para marcas e-commerce.",
         faqs: [
           {
-            q: "Que es TrackFlow?",
-            a: "TrackFlow es una empresa de logistica de ultima milla y gestion de almacenes para marcas e-commerce. Fue fundada en 2009 en Los Angeles y opera con equipos y almacenes en Estados Unidos y Espana."
+            q: "¿Qué es TrackFlow?",
+            a: "TrackFlow es una empresa de logística de última milla y gestión de almacenes para marcas e-commerce. Fue fundada en 2009 en Los Ángeles y opera con equipos y almacenes en Estados Unidos y España."
           },
           {
-            q: "Que servicios logisticos ofrece TrackFlow?",
-            a: "TrackFlow ofrece almacenamiento de inventario, preparacion y embalaje de pedidos, coordinacion de ultima milla, seguimiento de entregas, gestion de incidencias, logistica inversa y soporte operativo para marcas y destinatarios."
+            q: "¿Qué servicios logísticos ofrece TrackFlow?",
+            a: "TrackFlow ofrece almacenamiento de inventario, preparación y embalaje de pedidos, coordinación de última milla, seguimiento de entregas, gestión de incidencias, logística inversa y soporte operativo para marcas y destinatarios."
           },
           {
-            q: "En que paises opera TrackFlow?",
-            a: "TrackFlow opera en Estados Unidos y Espana, con almacenes en Los Angeles y Zaragoza y equipos distribuidos entre ambos mercados."
+            q: "¿En qué países opera TrackFlow?",
+            a: "TrackFlow opera en Estados Unidos y España, con almacenes en Los Ángeles y Zaragoza y equipos distribuidos entre ambos mercados."
           },
           {
-            q: "Que tipo de empresas trabajan con TrackFlow?",
-            a: "TrackFlow trabaja con marcas e-commerce que necesitan externalizar o mejorar su operacion logistica, desde el almacenamiento del inventario hasta la entrega y gestion de devoluciones."
+            q: "¿Qué tipo de empresas trabajan con TrackFlow?",
+            a: "TrackFlow trabaja con marcas e-commerce que necesitan externalizar o mejorar su operación logística, desde el almacenamiento del inventario hasta la entrega y gestión de devoluciones."
           },
           {
-            q: "Como gestiona TrackFlow la ultima milla y los transportistas?",
-            a: "TrackFlow coordina envios con una red de 8 transportistas en Estados Unidos y Espana y gestiona incidencias como entregas fallidas, paquetes perdidos o direcciones incorrectas."
+            q: "¿Cómo gestiona TrackFlow la última milla y los transportistas?",
+            a: "TrackFlow coordina envíos con una red de 8 transportistas en Estados Unidos y España y gestiona incidencias como entregas fallidas, paquetes perdidos o direcciones incorrectas."
           },
           {
-            q: "Como gestiona TrackFlow las devoluciones?",
-            a: "TrackFlow gestiona devoluciones que pueden representar entre el 18% y el 25% del volumen operativo segun cliente y pais. El proceso incluye revision de casos y decisiones sobre recogida, reacondicionamiento o descarte."
+            q: "¿Cómo gestiona TrackFlow las devoluciones?",
+            a: "TrackFlow gestiona devoluciones que pueden representar entre el 18% y el 25% del volumen operativo según cliente y país. El proceso incluye revisión de casos y decisiones sobre recogida, reacondicionamiento o descarte."
           }
         ],
-        ctaTitle: "Hablemos de tu operacion.",
-        ctaBody: "Cuentanos como funciona hoy tu operacion logistica y que desafios necesitas resolver.",
-        footerBody: "Logistica de ultima milla y gestion de almacenes para operaciones e-commerce.",
-        footerAddress: "Los Angeles, CA, United States\nZaragoza, Espana\nOperaciones en Estados Unidos y Espana",
+        ctaTitle: "Hablemos de tu operación.",
+        ctaBody: "Cuéntanos cómo funciona hoy tu operación logística y qué desafíos necesitas resolver.",
+        footerBody: "Logística de última milla y gestión de almacenes para operaciones e-commerce.",
+        footerAddress: "Los Ángeles, CA, United States\nZaragoza, España\nOperaciones en Estados Unidos y España",
         footerForm: "Formulario operativo",
         footerServices: "Servicios"
       },
       application: {
-        title: "Hablemos de tu operacion | TrackFlow",
+        title: "Hablemos de tu operación | TrackFlow",
         description:
-          "Formulario de contacto TrackFlow para marcas e-commerce que necesitan revisar su operacion logistica, ultima milla o devoluciones.",
-        ogTitle: "Hablemos de tu operacion | TrackFlow",
+          "Formulario de contacto TrackFlow para marcas e-commerce que necesitan revisar su operación logística, última milla o devoluciones.",
+        ogTitle: "Hablemos de tu operación | TrackFlow",
         ogDescription:
-          "Completa el formulario y el equipo de TrackFlow revisara tu contexto operativo antes de coordinar una conversacion.",
-        twitterTitle: "Hablemos de tu operacion | TrackFlow",
+          "Completa el formulario y el equipo de TrackFlow revisará tu contexto operativo antes de coordinar una conversación.",
+        twitterTitle: "Hablemos de tu operación | TrackFlow",
         twitterDescription:
-          "Completa el formulario y el equipo de TrackFlow revisara tu contexto operativo antes de coordinar una conversacion.",
+          "Completa el formulario y el equipo de TrackFlow revisará tu contexto operativo antes de coordinar una conversación.",
         eyebrow: "Contacto TrackFlow",
-        heading: "Cuentanos como funciona hoy tu operacion logistica.",
+        heading: "Cuéntanos cómo funciona hoy tu operación logística.",
         intro:
-          "Completa el formulario y el equipo de TrackFlow revisara tu contexto operativo antes de coordinar una conversacion.",
+          "Completa el formulario y el equipo de TrackFlow revisará tu contexto operativo antes de coordinar una conversación.",
         stepTitles: ["Empresa y contacto", "Operación principal", "Contexto y desafíos", "Confirmación"],
         progress: "Paso {current} de {total}",
         indicatorLabels: ["Empresa", "Operación", "Contexto", "Confirmación"],
@@ -244,11 +244,11 @@
           companyName: "Nombre de la empresa *",
           contactName: "Persona responsable *",
           email: "Email *",
-          country: "Pais de operacion principal *",
+          country: "País de operación principal *",
           operationType: "Tipo de operación *",
           monthlyOrders: "Volumen mensual estimado *",
           urgency: "Urgencia del proyecto *",
-          notes: "Que necesitas resolver? *",
+          notes: "¿Qué necesitas resolver? *",
           currentTools: "Stack actual (opcional)",
           consent: "Acepto que TrackFlow use estos datos para responder mi consulta. *"
         },
@@ -274,10 +274,10 @@
           "Solo exploración"
         ],
         notesPlaceholder:
-          "Ej: necesitamos reducir incidencias en ultima milla, mejorar la gestion de devoluciones o centralizar el seguimiento de pedidos.",
+          "Ej: necesitamos reducir incidencias en última milla, mejorar la gestión de devoluciones o centralizar el seguimiento de pedidos.",
         currentToolsPlaceholder:
           "Ej: ERP legacy + hojas de cálculo + portal transportista",
-        countryOptions: ["Selecciona un pais", "Estados Unidos", "Espana", "Otro"],
+        countryOptions: ["Selecciona un país", "Estados Unidos", "España", "Otro"],
         next: "Siguiente",
         previous: "Anterior",
         submit: "Enviar consulta",
@@ -288,17 +288,17 @@
       validation: {
         companyName: "Indica el nombre legal o comercial de la empresa.",
         contactName: "Indica el nombre de la persona de contacto.",
-        email: "Usa un email corporativo valido, por ejemplo ops@empresa.com.",
-        country: "Selecciona el pais de operacion principal.",
-        operationType: "Selecciona el tipo de operacion que quieres optimizar.",
+        email: "Usa un email corporativo válido, por ejemplo ops@empresa.com.",
+        country: "Selecciona el país de operación principal.",
+        operationType: "Selecciona el tipo de operación que quieres optimizar.",
         monthlyOrders: "Selecciona el volumen mensual estimado.",
         urgency: "Selecciona la urgencia de tu proyecto.",
-        notes: "Cuentanos brevemente que necesitas resolver.",
-        consent: "Confirma la autorizacion para responder tu consulta.",
+        notes: "Cuéntanos brevemente qué necesitas resolver.",
+        consent: "Confirma la autorización para responder tu consulta.",
         invalidForm: "Revisa los campos marcados antes de avanzar o enviar el formulario.",
         progress: "Paso {current} de {total}",
         success:
-          "Gracias. Recibimos tu consulta y el equipo de TrackFlow revisara tu contexto operativo antes de coordinar una conversacion."
+          "Gracias. Recibimos tu consulta y el equipo de TrackFlow revisará tu contexto operativo antes de coordinar una conversación."
       }
     },
     en: {

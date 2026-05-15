@@ -1,5 +1,6 @@
 const form = document.querySelector("#applicationForm");
 const statusBox = document.querySelector("#formStatus");
+const applicationPanel = document.querySelector("[data-application-panel]");
 
 if (!form || !statusBox) {
   console.warn("TrackFlow form could not be initialized.");
@@ -9,6 +10,7 @@ const stepNodes = Array.from(form.querySelectorAll("[data-form-step]"));
 const progressBar = form.querySelector("[data-progress-bar]");
 const progressLabel = form.querySelector("[data-application-progress-label]");
 const progressSection = form.querySelector("[data-form-progress]");
+const formSteps = form.querySelector("[data-form-steps]");
 const stepIndicators = Array.from(form.querySelectorAll("[data-step-indicator]"));
 const summaryBox = form.querySelector("[data-summary-box]");
 const summaryList = form.querySelector("[data-summary-list]");
@@ -277,21 +279,38 @@ function updateSummary() {
 function showStatus(type, message) {
   statusBox.className =
     type === "success"
-      ? "rounded border border-[color:rgb(var(--tf-brand-rgb)/0.4)] bg-[color:rgb(var(--tf-brand-rgb)/0.1)] p-4 text-sm text-[var(--tf-text)]"
+      ? "w-full max-w-3xl rounded border border-[color:rgb(var(--tf-brand-rgb)/0.4)] bg-[color:rgb(var(--tf-brand-rgb)/0.1)] p-5 text-center text-sm leading-6 text-[var(--tf-text)] sm:text-base sm:leading-7"
       : "rounded border border-[color:rgb(var(--tf-error-rgb)/0.4)] bg-[color:rgb(var(--tf-error-rgb)/0.1)] p-4 text-sm text-[var(--tf-text)]";
+  statusBox.dataset.status = type;
+  statusBox.dataset.visible = "false";
   statusBox.textContent = message;
+
+  if (type === "success") {
+    requestAnimationFrame(() => {
+      statusBox.dataset.visible = "true";
+    });
+  } else {
+    statusBox.dataset.visible = "true";
+  }
 }
 
 function clearStatus() {
   statusBox.className = "hidden rounded border p-4 text-sm";
+  delete statusBox.dataset.status;
+  delete statusBox.dataset.visible;
   statusBox.textContent = "";
 }
 
 function setSubmissionState(submitted) {
   hasSubmitted = submitted;
+  applicationPanel?.setAttribute("data-submitted", String(submitted));
 
   if (progressSection) {
     progressSection.classList.toggle("hidden", submitted);
+  }
+
+  if (formSteps) {
+    formSteps.classList.toggle("hidden", submitted);
   }
 
   if (summaryBox) {
@@ -303,6 +322,7 @@ function setSubmissionState(submitted) {
     formActions?.classList.add("hidden");
     postSubmitActions?.classList.remove("hidden");
     postSubmitActions?.classList.add("flex");
+    postSubmitActions?.classList.add("justify-center");
     prevButton?.classList.add("hidden");
     resetButton?.classList.add("hidden");
 
@@ -323,6 +343,7 @@ function setSubmissionState(submitted) {
   formActions?.classList.remove("hidden");
   postSubmitActions?.classList.add("hidden");
   postSubmitActions?.classList.remove("flex");
+  postSubmitActions?.classList.remove("justify-center");
 
   if (nextButton) {
     nextButton.disabled = false;
@@ -508,6 +529,21 @@ form.addEventListener(
   },
   true
 );
+
+form.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter" || event.isComposing || hasSubmitted) return;
+  if (event.target instanceof HTMLTextAreaElement) return;
+  if (event.target.closest("button, a, [role='button']")) return;
+
+  event.preventDefault();
+
+  if (typeof form.requestSubmit === "function") {
+    form.requestSubmit();
+    return;
+  }
+
+  form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+});
 
 nextButton?.addEventListener("click", () => {
   if (!validateStep(currentStep)) {

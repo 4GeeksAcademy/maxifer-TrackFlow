@@ -5,7 +5,8 @@
   "scripts": {
     "build:css": "tailwindcss -i ./tailwind.input.css -o ./assets/tailwind.min.css --minify",
     "optimize:images": "node ./scripts/optimize-hero.mjs",
-    "build:landing": "npm run build:css && npm run optimize:images"
+    "build:landing": "npm run test:spanish-copy && npm run build:css && npm run optimize:images",
+    "test:spanish-copy": "node ./scripts/check-spanish-copy.mjs"
   },
   "devDependencies": {
     "sharp": "^0.33.5",
