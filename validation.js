@@ -81,7 +81,8 @@ function getValidationTexts() {
     success:
       "Gracias. Recibimos tu consulta y el equipo de TrackFlow revisará tu contexto operativo antes de coordinar una conversación.",
     progress: "Paso {current} de {total}",
-    summaryTitle: "Resumen de tu solicitud"
+    summaryTitle: "Resumen de tu solicitud",
+    resetConfirm: "¿Seguro que quieres borrar los datos cargados?"
   };
 }
 
@@ -303,6 +304,7 @@ function clearStatus() {
 
 function setSubmissionState(submitted) {
   hasSubmitted = submitted;
+  document.body?.setAttribute("data-application-submitted", String(submitted));
   applicationPanel?.setAttribute("data-submitted", String(submitted));
 
   if (progressSection) {
@@ -559,6 +561,13 @@ nextButton?.addEventListener("click", () => {
 prevButton?.addEventListener("click", () => {
   clearStatus();
   goToStep(currentStep - 1);
+});
+
+resetButton?.addEventListener("click", (event) => {
+  const confirmed = window.confirm(getValidationTexts().resetConfirm);
+  if (!confirmed) {
+    event.preventDefault();
+  }
 });
 
 stepIndicators.forEach((indicator) => {

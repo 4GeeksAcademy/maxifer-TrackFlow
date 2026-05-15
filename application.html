@@ -25,6 +25,8 @@
     <meta name="twitter:description" content="Completa el formulario y el equipo de TrackFlow revisará tu contexto operativo antes de coordinar una conversación." />
     <meta name="twitter:image" content="assets/trackflow-hero.png" />
     <script>
+      document.documentElement.classList.add("tf-application-motion-ready");
+
       const root = document.documentElement;
 
       root.style.setProperty("--tf-bg", "#0f172a");
@@ -190,21 +192,70 @@
         justify-content: center;
       }
 
+      @keyframes tfApplicationRiseIn {
+        from {
+          opacity: 0;
+          transform: translateY(1.25rem);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .tf-application-motion-ready body:not([data-application-submitted="true"]) [data-app-entry] {
+        opacity: 0;
+        transform: translateY(1.25rem);
+      }
+
+      body:not([data-application-submitted="true"]) [data-app-entry] {
+        animation: tfApplicationRiseIn 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      body:not([data-application-submitted="true"]) [data-app-entry="eyebrow"] {
+        animation-delay: 50ms;
+      }
+
+      body:not([data-application-submitted="true"]) [data-app-entry="title"] {
+        animation-delay: 95ms;
+      }
+
+      body:not([data-application-submitted="true"]) [data-app-entry="intro"] {
+        animation-delay: 140ms;
+      }
+
+      body:not([data-application-submitted="true"]) [data-app-entry="panel"] {
+        animation-delay: 195ms;
+      }
+
+      body[data-application-submitted="true"] [data-app-submit-entry] {
+        opacity: 0;
+        transform: translateY(1.25rem);
+        animation: tfApplicationRiseIn 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+        animation-delay: var(--app-submit-delay, 0ms);
+      }
+
       #formStatus[data-status="success"] {
         opacity: 0;
-        transform: translateY(-0.375rem);
+        transform: translateY(1.15rem);
         transition:
-          opacity 500ms ease,
-          transform 500ms ease;
+          opacity 360ms ease,
+          transform 360ms ease;
       }
 
       #formStatus[data-status="success"][data-visible="true"] {
         opacity: 1;
         transform: translateY(0);
+        animation: tfApplicationRiseIn 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+        animation-delay: var(--app-submit-delay, 0ms);
       }
 
       @media (prefers-reduced-motion: reduce) {
-        #formStatus[data-status="success"] {
+        #formStatus[data-status="success"],
+        #formStatus[data-status="success"][data-visible="true"],
+        body[data-application-submitted="true"] [data-app-submit-entry] {
+          animation: none;
           transition: none;
           transform: none;
         }
@@ -247,7 +298,7 @@
     <script defer src="validation.js?v=4"></script>
   </head>
   <body data-page="application" class="bg-[var(--tf-bg)] text-[var(--tf-text)] antialiased md:overflow-x-hidden">
-    <header class="fixed inset-x-0 top-0 z-40">
+    <header class="fixed inset-x-0 top-0 z-40" data-app-submit-entry style="--app-submit-delay: 20ms">
       <div class="border-b border-[color:rgb(var(--tf-text-rgb)/0.12)] bg-[color:rgb(var(--tf-bg-rgb)/0.96)] shadow-[0_10px_26px_-16px_rgb(var(--tf-bg-rgb)/0.95)] backdrop-blur-md">
         <nav class="mx-auto flex max-w-[1024px] items-center justify-between px-4 py-4 sm:px-5 xl:px-8" aria-label="Navegación principal">
           <a href="index.html" class="flex items-center gap-2 sm:gap-3" aria-label="Volver a TrackFlow">
@@ -303,22 +354,27 @@
       </div>
     </header>
 
-    <main class="mx-auto min-h-[92svh] max-w-[1024px] px-4 pb-10 pt-28 sm:px-5 sm:pb-12 sm:pt-32 md:min-h-[96svh] md:overflow-x-hidden md:px-5 md:pt-36 xl:px-8 xl:pb-14 xl:pt-40 [@media(max-height:900px)]:pt-24 [@media(max-height:900px)]:pb-6">
+    <main class="mx-auto min-h-[92svh] max-w-[1024px] px-4 pb-10 pt-28 sm:px-5 sm:pb-12 sm:pt-32 md:min-h-[96svh] md:overflow-x-hidden md:px-5 md:pt-36 xl:px-8 xl:pb-14 xl:pt-40 [@media(max-height:900px)]:pt-24 [@media(max-height:900px)]:pb-6" data-app-submit-entry style="--app-submit-delay: 70ms">
       <section class="grid gap-4 sm:gap-5 md:grid-cols-[minmax(18rem,0.92fr)_minmax(0,1.08fr)] md:items-start md:gap-6 lg:grid-cols-[0.58fr_1.42fr] lg:gap-3 xl:grid-cols-[0.56fr_1.44fr]">
         <aside class="md:max-w-[21rem] md:pt-1 lg:max-w-none">
-          <p data-application-eyebrow class="text-sm font-bold uppercase tracking-[0.25em] text-[var(--tf-accent)]">Contacto TrackFlow</p>
-          <h1 data-application-title class="mt-2 text-[clamp(1.8rem,4.2vw,2.8rem)] font-black leading-[1.02] text-white md:text-[2.35rem] 2xl:text-[2.55rem]">
+          <p data-application-eyebrow data-app-entry="eyebrow" data-app-submit-entry style="--app-submit-delay: 120ms" class="text-sm font-bold uppercase tracking-[0.25em] text-[var(--tf-accent)]">Contacto TrackFlow</p>
+          <h1 data-application-title data-app-entry="title" data-app-submit-entry style="--app-submit-delay: 165ms" class="mt-2 text-[clamp(1.8rem,4.2vw,2.8rem)] font-black leading-[1.02] text-white md:text-[2.35rem] 2xl:text-[2.55rem]">
             Cuéntanos cómo funciona hoy tu operación logística.
           </h1>
-          <p data-application-intro class="mt-4 max-w-[32ch] text-sm leading-6 text-[var(--tf-text-muted)] sm:text-base sm:leading-7 md:text-[1.04rem] md:leading-7">
+          <p data-application-intro data-app-entry="intro" data-app-submit-entry style="--app-submit-delay: 210ms" class="mt-4 max-w-[32ch] text-sm leading-6 text-[var(--tf-text-muted)] sm:text-base sm:leading-7 md:text-[1.04rem] md:leading-7">
             Completa el formulario y el equipo de TrackFlow revisará tu contexto operativo antes de coordinar una conversación.
           </p>
         </aside>
 
-        <section class="rounded border border-[color:rgb(var(--tf-text-rgb)/0.22)] bg-[linear-gradient(155deg,rgb(var(--tf-text-rgb)/0.08),rgb(var(--tf-text-rgb)/0.03)_40%,rgb(var(--tf-bg-rgb)/0.82)_100%)] p-3.5 shadow-[0_26px_60px_-40px_rgb(0_0_0/0.95),0_0_0_1px_rgb(var(--tf-brand-rgb)/0.18)] backdrop-blur-sm sm:p-4 md:max-h-[min(720px,calc(100svh-7rem))] md:self-start md:overflow-y-auto md:p-3.5 lg:max-w-none" data-application-panel data-submitted="false">
+        <section class="rounded border border-[color:rgb(var(--tf-text-rgb)/0.22)] bg-[linear-gradient(155deg,rgb(var(--tf-text-rgb)/0.08),rgb(var(--tf-text-rgb)/0.03)_40%,rgb(var(--tf-bg-rgb)/0.82)_100%)] p-3.5 shadow-[0_26px_60px_-40px_rgb(0_0_0/0.95),0_0_0_1px_rgb(var(--tf-brand-rgb)/0.18)] backdrop-blur-sm sm:p-4 md:max-h-[min(720px,calc(100svh-7rem))] md:self-start md:overflow-y-auto md:p-3.5 lg:max-w-none" data-application-panel data-submitted="false" data-app-entry="panel" data-app-submit-entry style="--app-submit-delay: 255ms">
           <form id="applicationForm" novalidate class="space-y-3 transition-all duration-300 ease-out motion-reduce:transition-none md:flex md:flex-col md:gap-2 md:space-y-0">
             <div class="rounded border border-[color:rgb(var(--tf-text-rgb)/0.16)] bg-[color:rgb(var(--tf-bg-rgb)/0.45)] p-3 md:p-2" aria-live="polite" data-form-progress>
-              <p class="text-xs font-bold uppercase tracking-[0.16em] text-[var(--tf-text-soft)]" data-application-progress-label>Paso 1 de 4</p>
+              <div class="flex items-start justify-between gap-3">
+                <p class="text-xs font-bold uppercase tracking-[0.16em] text-[var(--tf-text-soft)]" data-application-progress-label>Paso 1 de 4</p>
+                <button type="reset" data-step-reset class="shrink-0 rounded px-1.5 py-0.5 text-right text-xs font-medium text-[var(--tf-text-soft)] transition hover:text-[var(--tf-error)] focus:outline-none focus:ring-2 focus:ring-[var(--tf-text-muted)] focus:ring-offset-2 focus:ring-offset-[var(--tf-bg)]">
+                  Borrar formulario
+                </button>
+              </div>
               <div class="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[color:rgb(var(--tf-text-rgb)/0.12)]">
                 <div class="h-full rounded-full bg-[linear-gradient(90deg,var(--tf-brand),var(--tf-accent))] transition-all duration-300" data-progress-bar style="width: 25%"></div>
               </div>
@@ -428,22 +484,19 @@
             </fieldset>
             </div>
 
-            <div id="formStatus" class="hidden rounded border p-2.5 text-sm" role="status" aria-live="polite"></div>
+            <div id="formStatus" class="hidden rounded border p-2.5 text-sm" role="status" aria-live="polite" data-app-submit-entry style="--app-submit-delay: 300ms"></div>
 
-            <div class="hidden flex-col gap-2.5 sm:flex-row" data-post-submit-actions>
-              <button type="button" data-post-submit-new class="w-full rounded bg-[var(--tf-brand)] px-5 py-3 text-sm font-bold text-[var(--tf-bg)] transition hover:bg-[var(--tf-brand-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-2 focus:ring-offset-[var(--tf-surface)] sm:w-auto sm:py-2">
+            <div class="hidden flex-col gap-2.5 sm:flex-row" data-post-submit-actions data-app-submit-entry style="--app-submit-delay: 345ms">
+              <button type="button" data-post-submit-new data-app-submit-entry style="--app-submit-delay: 390ms" class="w-full rounded bg-[var(--tf-brand)] px-5 py-3 text-sm font-bold text-[var(--tf-bg)] transition hover:bg-[var(--tf-brand-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-2 focus:ring-offset-[var(--tf-surface)] sm:w-auto sm:py-2">
                 Enviar otra consulta
               </button>
-              <a href="index.html#inicio" data-post-submit-back class="inline-flex w-full justify-center rounded border border-[var(--tf-border-soft)] bg-transparent px-5 py-3 text-sm font-bold text-[var(--tf-text-muted)] transition hover:border-[var(--tf-text-muted)] hover:text-white focus:outline-none focus:ring-2 focus:ring-[var(--tf-text-muted)] focus:ring-offset-2 focus:ring-offset-[var(--tf-surface)] sm:w-auto sm:py-2">
+              <a href="index.html#inicio" data-post-submit-back data-app-submit-entry style="--app-submit-delay: 435ms" class="inline-flex w-full justify-center rounded border border-[var(--tf-border-soft)] bg-transparent px-5 py-3 text-sm font-bold text-[var(--tf-text-muted)] transition hover:border-[var(--tf-text-muted)] hover:text-white focus:outline-none focus:ring-2 focus:ring-[var(--tf-text-muted)] focus:ring-offset-2 focus:ring-offset-[var(--tf-surface)] sm:w-auto sm:py-2">
                 Volver al inicio
               </a>
             </div>
 
-            <div class="sticky bottom-0 z-10 -mx-1 flex flex-col flex-wrap justify-between gap-2.5 border-t border-[color:rgb(var(--tf-text-rgb)/0.12)] bg-[linear-gradient(180deg,rgb(var(--tf-bg-rgb)/0.12),rgb(var(--tf-bg-rgb)/0.94)_38%)] px-1 pb-1 pt-2.5 backdrop-blur-sm sm:flex-row md:static md:z-auto md:-mx-0 md:border-t-0 md:bg-transparent md:px-0 md:pb-0 md:pt-0 md:backdrop-blur-none" data-form-actions>
+            <div class="flex flex-col flex-wrap justify-between gap-2.5 border-t border-[color:rgb(var(--tf-text-rgb)/0.12)] pt-2.5 sm:flex-row md:border-t-0 md:pt-0" data-form-actions>
               <div class="flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row">
-                <button type="reset" data-step-reset class="w-full rounded border border-[var(--tf-border-soft)] bg-transparent px-4 py-3 text-sm font-semibold text-[var(--tf-text-soft)] transition hover:border-[var(--tf-text-muted)] hover:text-[var(--tf-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--tf-text-muted)] focus:ring-offset-2 focus:ring-offset-[var(--tf-surface)] sm:w-auto sm:py-2">
-                  Reiniciar
-                </button>
                 <button type="button" data-step-prev class="hidden w-full rounded border border-[var(--tf-border-soft)] bg-transparent px-5 py-3 text-sm font-bold text-[var(--tf-text-muted)] transition hover:border-[var(--tf-text-muted)] hover:text-white focus:outline-none focus:ring-2 focus:ring-[var(--tf-text-muted)] focus:ring-offset-2 focus:ring-offset-[var(--tf-surface)] sm:w-auto sm:py-2">
                   Anterior
                 </button>

@@ -281,7 +281,7 @@
         next: "Siguiente",
         previous: "Anterior",
         submit: "Enviar consulta",
-        reset: "Reiniciar",
+        reset: "Borrar formulario",
         sendAnother: "Enviar otra consulta",
         backToHome: "Volver al inicio"
       },
@@ -297,6 +297,7 @@
         consent: "Confirma la autorización para responder tu consulta.",
         invalidForm: "Revisa los campos marcados antes de avanzar o enviar el formulario.",
         progress: "Paso {current} de {total}",
+        resetConfirm: "¿Seguro que quieres borrar los datos cargados?",
         success:
           "Gracias. Recibimos tu consulta y el equipo de TrackFlow revisará tu contexto operativo antes de coordinar una conversación."
       }
@@ -487,7 +488,7 @@
         next: "Next",
         previous: "Previous",
         submit: "Send inquiry",
-        reset: "Start over",
+        reset: "Clear form",
         sendAnother: "Send another inquiry",
         backToHome: "Back to home"
       },
@@ -503,6 +504,7 @@
         consent: "Please confirm authorization so we can reply.",
         invalidForm: "Please review highlighted fields before moving forward or submitting.",
         progress: "Step {current} of {total}",
+        resetConfirm: "Are you sure you want to clear the entered data?",
         success:
           "Thank you. We received your inquiry and the TrackFlow team will review your operational context before scheduling a conversation."
       }
