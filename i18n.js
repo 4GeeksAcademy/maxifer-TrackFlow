@@ -2,6 +2,98 @@
   const STORAGE_KEY = "trackflow-lang";
   const SUPPORTED_LANGS = new Set(["es", "en"]);
 
+  const SPANISH_PHRASE_FIXES = [
+    ["Que ofrecemos hoy", "Qué ofrecemos hoy"],
+    ["Que es TrackFlow?", "Qué es TrackFlow?"],
+    ["Que servicios logisticos ofrece TrackFlow?", "Qué servicios logísticos ofrece TrackFlow?"],
+    ["En que paises opera TrackFlow?", "En qué países opera TrackFlow?"],
+    ["Que tipo de empresas trabajan con TrackFlow?", "Qué tipo de empresas trabajan con TrackFlow?"],
+    ["Como gestiona TrackFlow la ultima milla y los transportistas?", "Cómo gestiona TrackFlow la última milla y los transportistas?"],
+    ["Como gestiona TrackFlow las devoluciones?", "Cómo gestiona TrackFlow las devoluciones?"],
+    ["Que necesitas resolver?", "Qué necesitas resolver?"]
+  ];
+
+  const SPANISH_WORD_FIXES = [
+    ["navegacion", "navegación"],
+    ["menu", "menú"],
+    ["contactanos", "contáctanos"],
+    ["seleccion", "selección"],
+    ["logistica", "logística"],
+    ["ultima", "última"],
+    ["ultma", "última"],
+    ["preparacion", "preparación"],
+    ["espana", "españa"],
+    ["almacen", "almacén"],
+    ["operacion", "operación"],
+    ["devolucion", "devolución"],
+    ["fisica", "física"],
+    ["coordinacion", "coordinación"],
+    ["envios", "envíos"],
+    ["resolucion", "resolución"],
+    ["atencion", "atención"],
+    ["paises", "países"],
+    ["pais", "país"],
+    ["geografica", "geográfica"],
+    ["tecnologica", "tecnológica"],
+    ["tecnologia", "tecnología"],
+    ["segun", "según"],
+    ["revision", "revisión"],
+    ["gestion", "gestión"],
+    ["conversacion", "conversación"],
+    ["desafios", "desafíos"],
+    ["autorizacion", "autorización"],
+    ["valido", "válido"],
+    ["revisara", "revisará"],
+    ["angeles", "ángeles"],
+    ["compania", "compañía"]
+  ];
+
+  const applySpanishCasing = (original, replacement) => {
+    if (original === original.toUpperCase()) {
+      return replacement.toUpperCase();
+    }
+    if (original[0] === original[0].toUpperCase()) {
+      return replacement.charAt(0).toUpperCase() + replacement.slice(1);
+    }
+    return replacement;
+  };
+
+  const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  const normalizeSpanishText = (value) => {
+    let next = value;
+
+    SPANISH_PHRASE_FIXES.forEach(([plain, fixed]) => {
+      const re = new RegExp(escapeRegex(plain), "g");
+      next = next.replace(re, fixed);
+    });
+
+    SPANISH_WORD_FIXES.forEach(([plain, fixed]) => {
+      const re = new RegExp(`\\b${escapeRegex(plain)}\\b`, "gi");
+      next = next.replace(re, (match) => applySpanishCasing(match, fixed));
+    });
+
+    return next;
+  };
+
+  const normalizeSpanishObject = (value) => {
+    if (typeof value === "string") {
+      return normalizeSpanishText(value);
+    }
+
+    if (Array.isArray(value)) {
+      return value.map(normalizeSpanishObject);
+    }
+
+    if (value && typeof value === "object") {
+      return Object.fromEntries(
+        Object.entries(value).map(([key, nestedValue]) => [key, normalizeSpanishObject(nestedValue)])
+      );
+    }
+
+    return value;
+  };
+
   const translations = {
     es: {
       common: {
@@ -144,29 +236,67 @@
         heading: "Cuentanos como funciona hoy tu operacion logistica.",
         intro:
           "Completa el formulario y el equipo de TrackFlow revisara tu contexto operativo antes de coordinar una conversacion.",
-        fieldset: "Empresa y contacto",
+        stepTitles: ["Empresa y contacto", "Operación principal", "Contexto y desafíos", "Confirmación"],
+        progress: "Paso {current} de {total}",
+        indicatorLabels: ["Empresa", "Operación", "Contexto", "Confirmación"],
+        summaryTitle: "Resumen de tu solicitud",
         labels: {
           companyName: "Nombre de la empresa *",
           contactName: "Persona responsable *",
           email: "Email *",
           country: "Pais de operacion principal *",
+          operationType: "Tipo de operación *",
+          monthlyOrders: "Volumen mensual estimado *",
+          urgency: "Urgencia del proyecto *",
           notes: "Que necesitas resolver? *",
+          currentTools: "Stack actual (opcional)",
           consent: "Acepto que TrackFlow use estos datos para responder mi consulta. *"
         },
+        operationTypeOptions: [
+          "Selecciona el foco principal",
+          "Fulfillment y almacén",
+          "Última milla y transportistas",
+          "Devoluciones y logística inversa",
+          "Operación end-to-end"
+        ],
+        monthlyOrdersOptions: [
+          "Selecciona un rango",
+          "Menos de 500 pedidos",
+          "500 - 2.000 pedidos",
+          "2.000 - 10.000 pedidos",
+          "Más de 10.000 pedidos"
+        ],
+        urgencyOptions: [
+          "Selecciona urgencia",
+          "Inmediata (0-30 días)",
+          "Este trimestre",
+          "Este semestre",
+          "Solo exploración"
+        ],
         notesPlaceholder:
           "Ej: necesitamos reducir incidencias en ultima milla, mejorar la gestion de devoluciones o centralizar el seguimiento de pedidos.",
+        currentToolsPlaceholder:
+          "Ej: ERP legacy + hojas de cálculo + portal transportista",
         countryOptions: ["Selecciona un pais", "Estados Unidos", "Espana", "Otro"],
+        next: "Siguiente",
+        previous: "Anterior",
         submit: "Enviar consulta",
-        reset: "Limpiar formulario"
+        reset: "Reiniciar",
+        sendAnother: "Enviar otra consulta",
+        backToHome: "Volver al inicio"
       },
       validation: {
         companyName: "Indica el nombre legal o comercial de la empresa.",
         contactName: "Indica el nombre de la persona de contacto.",
         email: "Usa un email corporativo valido, por ejemplo ops@empresa.com.",
         country: "Selecciona el pais de operacion principal.",
+        operationType: "Selecciona el tipo de operacion que quieres optimizar.",
+        monthlyOrders: "Selecciona el volumen mensual estimado.",
+        urgency: "Selecciona la urgencia de tu proyecto.",
         notes: "Cuentanos brevemente que necesitas resolver.",
         consent: "Confirma la autorizacion para responder tu consulta.",
-        invalidForm: "Revisa los campos marcados antes de enviar el formulario.",
+        invalidForm: "Revisa los campos marcados antes de avanzar o enviar el formulario.",
+        progress: "Paso {current} de {total}",
         success:
           "Gracias. Recibimos tu consulta y el equipo de TrackFlow revisara tu contexto operativo antes de coordinar una conversacion."
       }
@@ -312,34 +442,74 @@
         heading: "Tell us how your logistics operation works today.",
         intro:
           "Complete the form and the TrackFlow team will review your operational context before scheduling a conversation.",
-        fieldset: "Company and contact",
+        stepTitles: ["Company and contact", "Core operation", "Context and challenges", "Confirmation"],
+        progress: "Step {current} of {total}",
+        indicatorLabels: ["Company", "Operation", "Context", "Confirmation"],
+        summaryTitle: "Request summary",
         labels: {
           companyName: "Company name *",
           contactName: "Main contact *",
           email: "Email *",
           country: "Primary operating country *",
+          operationType: "Operation type *",
+          monthlyOrders: "Estimated monthly volume *",
+          urgency: "Project urgency *",
           notes: "What do you need to solve? *",
+          currentTools: "Current stack (optional)",
           consent: "I agree that TrackFlow may use this data to answer my inquiry. *"
         },
+        operationTypeOptions: [
+          "Select the primary focus",
+          "Fulfillment and warehouse",
+          "Last mile and carriers",
+          "Returns and reverse logistics",
+          "End-to-end operation"
+        ],
+        monthlyOrdersOptions: [
+          "Select a range",
+          "Under 500 orders",
+          "500 - 2,000 orders",
+          "2,000 - 10,000 orders",
+          "More than 10,000 orders"
+        ],
+        urgencyOptions: [
+          "Select urgency",
+          "Immediate (0-30 days)",
+          "This quarter",
+          "This semester",
+          "Just exploring"
+        ],
         notesPlaceholder:
           "Ex: we need to reduce last-mile incidents, improve returns management, or centralize order tracking.",
+        currentToolsPlaceholder:
+          "Ex: legacy ERP + spreadsheets + carrier portals",
         countryOptions: ["Select a country", "United States", "Spain", "Other"],
+        next: "Next",
+        previous: "Previous",
         submit: "Send inquiry",
-        reset: "Clear form"
+        reset: "Start over",
+        sendAnother: "Send another inquiry",
+        backToHome: "Back to home"
       },
       validation: {
         companyName: "Please enter the company legal or trading name.",
         contactName: "Please enter the contact person's name.",
         email: "Use a valid business email, for example ops@company.com.",
         country: "Select the primary operating country.",
+        operationType: "Select the operation type you want to optimize.",
+        monthlyOrders: "Select the estimated monthly order volume.",
+        urgency: "Select the urgency of your project.",
         notes: "Briefly explain what you need to solve.",
         consent: "Please confirm authorization so we can reply.",
-        invalidForm: "Please review the highlighted fields before submitting.",
+        invalidForm: "Please review highlighted fields before moving forward or submitting.",
+        progress: "Step {current} of {total}",
         success:
           "Thank you. We received your inquiry and the TrackFlow team will review your operational context before scheduling a conversation."
       }
     }
   };
+
+  translations.es = normalizeSpanishObject(translations.es);
 
   const getPath = (obj, path) =>
     path.split(".").reduce((acc, key) => (acc && Object.prototype.hasOwnProperty.call(acc, key) ? acc[key] : undefined), obj);
@@ -529,7 +699,16 @@
     setText("[data-application-eyebrow]", content.eyebrow);
     setText("[data-application-title]", content.heading);
     setText("[data-application-intro]", content.intro);
-    setText("[data-application-fieldset]", content.fieldset);
+    setText("[data-application-fieldset-step1]", content.stepTitles[0]);
+    setText("[data-application-fieldset-step2]", content.stepTitles[1]);
+    setText("[data-application-fieldset-step3]", content.stepTitles[2]);
+    setText("[data-application-fieldset-step4]", content.stepTitles[3]);
+    setText("[data-application-progress-label]", content.progress.replace("{current}", "1").replace("{total}", "4"));
+    setText('[data-step-label="1"]', content.indicatorLabels[0]);
+    setText('[data-step-label="2"]', content.indicatorLabels[1]);
+    setText('[data-step-label="3"]', content.indicatorLabels[2]);
+    setText('[data-step-label="4"]', content.indicatorLabels[3]);
+    setText("[data-summary-title]", content.summaryTitle);
 
     const labels = content.labels;
     Object.entries(labels).forEach(([field, value]) => {
@@ -550,6 +729,11 @@
       notes.setAttribute("placeholder", content.notesPlaceholder);
     }
 
+    const currentTools = q("#currentTools");
+    if (currentTools) {
+      currentTools.setAttribute("placeholder", content.currentToolsPlaceholder);
+    }
+
     qa("#country option").forEach((option, index) => {
       const value = content.countryOptions[index];
       if (value) {
@@ -557,8 +741,33 @@
       }
     });
 
-    setText('button[type="submit"]', content.submit);
-    setText('button[type="reset"]', content.reset);
+    qa("#operationType option").forEach((option, index) => {
+      const value = content.operationTypeOptions[index];
+      if (value) {
+        option.textContent = value;
+      }
+    });
+
+    qa("#monthlyOrders option").forEach((option, index) => {
+      const value = content.monthlyOrdersOptions[index];
+      if (value) {
+        option.textContent = value;
+      }
+    });
+
+    qa("#urgency option").forEach((option, index) => {
+      const value = content.urgencyOptions[index];
+      if (value) {
+        option.textContent = value;
+      }
+    });
+
+    setText("[data-step-next]", content.next);
+    setText("[data-step-prev]", content.previous);
+    setText("[data-step-submit]", content.submit);
+    setText("[data-step-reset]", content.reset);
+    setText("[data-post-submit-new]", content.sendAnother);
+    setText("[data-post-submit-back]", content.backToHome);
   };
 
   const applyLanguage = (lang, options) => {
