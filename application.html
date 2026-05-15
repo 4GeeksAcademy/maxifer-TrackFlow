@@ -198,58 +198,59 @@
       </div>
     </header>
 
-    <main class="mx-auto max-w-[1024px] px-4 pb-6 pt-20 sm:px-5 sm:pt-24 md:fixed md:inset-x-0 md:bottom-0 md:top-[4.75rem] md:overflow-x-hidden md:overflow-y-auto md:px-5 md:pb-2 md:pt-2 xl:px-8">
-      <section class="grid gap-4 sm:gap-5 md:h-full md:grid-cols-[0.58fr_1.42fr] md:items-start md:gap-3 xl:grid-cols-[0.56fr_1.44fr]">
+    <main class="mx-auto min-h-[92svh] max-w-[1024px] px-4 pb-10 pt-28 sm:px-5 sm:pb-12 sm:pt-32 md:min-h-[96svh] md:overflow-x-hidden md:px-5 md:pt-36 xl:px-8 xl:pb-14 xl:pt-40 [@media(max-height:900px)]:pt-24 [@media(max-height:900px)]:pb-6">
+      <section class="grid gap-4 sm:gap-5 md:grid-cols-[0.58fr_1.42fr] md:items-start md:gap-3 xl:grid-cols-[0.56fr_1.44fr]">
         <aside class="md:pt-1">
           <p data-application-eyebrow class="text-sm font-bold uppercase tracking-[0.25em] text-[var(--tf-accent)]">Contacto TrackFlow</p>
-          <h1 data-application-title class="mt-2 text-[clamp(1.6rem,3.2vw,2.15rem)] font-black leading-[1.05] text-white md:text-[1.9rem] 2xl:text-[2.1rem]">
+          <h1 data-application-title class="mt-2 text-[clamp(1.8rem,4.2vw,2.8rem)] font-black leading-[1.02] text-white md:text-[2.35rem] 2xl:text-[2.55rem]">
             Cuéntanos cómo funciona hoy tu operación logística.
           </h1>
-          <p data-application-intro class="mt-2 max-w-[32ch] text-sm leading-[1.35rem] text-[var(--tf-text-muted)] md:text-[0.84rem] md:leading-[1.2rem]">
+          <p data-application-intro class="mt-4 max-w-[32ch] text-sm leading-6 text-[var(--tf-text-muted)] sm:text-base sm:leading-7 md:text-[1.04rem] md:leading-7">
             Completa el formulario y el equipo de TrackFlow revisará tu contexto operativo antes de coordinar una conversación.
           </p>
         </aside>
 
-        <section class="rounded border border-[color:rgb(var(--tf-text-rgb)/0.22)] bg-[linear-gradient(155deg,rgb(var(--tf-text-rgb)/0.08),rgb(var(--tf-text-rgb)/0.03)_40%,rgb(var(--tf-bg-rgb)/0.82)_100%)] p-3.5 shadow-[0_26px_60px_-40px_rgb(0_0_0/0.95),0_0_0_1px_rgb(var(--tf-brand-rgb)/0.18)] backdrop-blur-sm sm:p-4 md:h-full md:p-[1.125rem]">
-          <form id="applicationForm" novalidate class="space-y-3 md:space-y-2">
-            <div class="rounded border border-[color:rgb(var(--tf-text-rgb)/0.16)] bg-[color:rgb(var(--tf-bg-rgb)/0.45)] p-3 md:p-2.5" aria-live="polite" data-form-progress>
+        <section class="rounded border border-[color:rgb(var(--tf-text-rgb)/0.22)] bg-[linear-gradient(155deg,rgb(var(--tf-text-rgb)/0.08),rgb(var(--tf-text-rgb)/0.03)_40%,rgb(var(--tf-bg-rgb)/0.82)_100%)] p-3.5 shadow-[0_26px_60px_-40px_rgb(0_0_0/0.95),0_0_0_1px_rgb(var(--tf-brand-rgb)/0.18)] backdrop-blur-sm sm:p-4 md:max-h-[min(720px,calc(100svh-7rem))] md:self-start md:overflow-y-auto md:p-3.5">
+          <form id="applicationForm" novalidate class="space-y-3 md:flex md:flex-col md:gap-2 md:space-y-0">
+            <div class="rounded border border-[color:rgb(var(--tf-text-rgb)/0.16)] bg-[color:rgb(var(--tf-bg-rgb)/0.45)] p-3 md:p-2" aria-live="polite" data-form-progress>
               <p class="text-xs font-bold uppercase tracking-[0.16em] text-[var(--tf-text-soft)]" data-application-progress-label>Paso 1 de 4</p>
               <div class="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[color:rgb(var(--tf-text-rgb)/0.12)]">
                 <div class="h-full rounded-full bg-[linear-gradient(90deg,var(--tf-brand),var(--tf-accent))] transition-all duration-300" data-progress-bar style="width: 25%"></div>
               </div>
-              <ol class="mt-2 grid grid-cols-4 gap-1 text-[0.66rem] text-[var(--tf-text-soft)] sm:text-xs" data-step-indicators>
+              <ol class="mt-2 grid grid-cols-4 gap-1 text-[0.66rem] text-[var(--tf-text-soft)] sm:text-xs md:mt-1.5" data-step-indicators>
                 <li class="rounded border border-[color:rgb(var(--tf-brand-rgb)/0.45)] bg-[color:rgb(var(--tf-brand-rgb)/0.14)] px-1.5 py-1 text-center font-semibold text-[var(--tf-text)] transition-colors hover:border-[color:rgb(var(--tf-brand-rgb)/0.6)] hover:text-white focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-1 focus:ring-offset-[var(--tf-bg)] cursor-pointer" role="button" tabindex="0" aria-current="step" aria-label="Ir al paso 1: Empresa" data-step-indicator="1" data-step-label="1">Empresa</li>
                 <li class="rounded border border-[color:rgb(var(--tf-text-rgb)/0.18)] px-1.5 py-1 text-center transition-colors hover:border-[color:rgb(var(--tf-text-rgb)/0.4)] hover:text-white focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-1 focus:ring-offset-[var(--tf-bg)] cursor-pointer" role="button" tabindex="0" aria-current="false" aria-label="Ir al paso 2: Operación" data-step-indicator="2" data-step-label="2">Operación</li>
                 <li class="rounded border border-[color:rgb(var(--tf-text-rgb)/0.18)] px-1.5 py-1 text-center transition-colors hover:border-[color:rgb(var(--tf-text-rgb)/0.4)] hover:text-white focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-1 focus:ring-offset-[var(--tf-bg)] cursor-pointer" role="button" tabindex="0" aria-current="false" aria-label="Ir al paso 3: Contexto" data-step-indicator="3" data-step-label="3">Contexto</li>
                 <li class="rounded border border-[color:rgb(var(--tf-text-rgb)/0.18)] px-1.5 py-1 text-center transition-colors hover:border-[color:rgb(var(--tf-text-rgb)/0.4)] hover:text-white focus:outline-none focus:ring-2 focus:ring-[var(--tf-brand)] focus:ring-offset-1 focus:ring-offset-[var(--tf-bg)] cursor-pointer" role="button" tabindex="0" aria-current="false" aria-label="Ir al paso 4: Confirmación" data-step-indicator="4" data-step-label="4">Confirmación</li>
               </ol>
-              <p class="mt-2 text-[0.7rem] text-[color:rgb(var(--tf-text-rgb)/0.7)]">Puedes avanzar al siguiente paso o volver a los anteriores en cualquier momento.</p>
+              <p class="mt-2 text-[0.7rem] text-[color:rgb(var(--tf-text-rgb)/0.7)] md:mt-1.5">Puedes avanzar al siguiente paso o volver a los anteriores en cualquier momento.</p>
             </div>
 
-            <fieldset class="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-6" data-form-step="1">
-              <legend data-application-fieldset-step1 class="mb-1.5 text-base font-bold text-white lg:col-span-6">Empresa y contacto</legend>
+            <div class="md:min-h-[13rem] 2xl:min-h-[15.5rem]" data-form-steps>
+            <fieldset class="grid gap-2.5 sm:grid-cols-2 md:gap-2 lg:grid-cols-6" data-form-step="1">
+              <legend data-application-fieldset-step1 class="mb-1.5 text-base font-bold text-white md:mb-1 lg:col-span-6">Empresa y contacto</legend>
               <div class="sm:col-span-2 lg:col-span-6">
                 <label for="companyName" class="block text-sm font-medium text-[var(--tf-text-muted)]">Nombre de la empresa *</label>
-                <input id="companyName" name="companyName" type="text" required minlength="2" class="mt-1 w-full rounded border border-[color:rgb(var(--tf-text-rgb)/0.2)] bg-[color:rgb(var(--tf-bg-rgb)/0.52)] px-3 py-1.5 text-white outline-none transition placeholder:text-[color:rgb(var(--tf-text-rgb)/0.45)] focus:border-[var(--tf-brand)]" />
+                <input id="companyName" name="companyName" type="text" required minlength="2" class="mt-1 w-full rounded border border-[color:rgb(var(--tf-text-rgb)/0.2)] bg-[color:rgb(var(--tf-bg-rgb)/0.52)] px-3 py-1.5 text-white outline-none transition placeholder:text-[color:rgb(var(--tf-text-rgb)/0.45)] focus:border-[var(--tf-brand)] md:px-2.5 md:py-1" />
                 <p class="mt-0.5 min-h-3 text-xs text-[var(--tf-error)]" data-error-for="companyName" aria-live="polite"></p>
               </div>
               <div class="lg:col-span-3">
                 <label for="contactName" class="block text-sm font-medium text-[var(--tf-text-muted)]">Persona responsable *</label>
-                <input id="contactName" name="contactName" type="text" required minlength="2" class="mt-1 w-full rounded border border-[color:rgb(var(--tf-text-rgb)/0.2)] bg-[color:rgb(var(--tf-bg-rgb)/0.52)] px-3 py-1.5 text-white outline-none transition placeholder:text-[color:rgb(var(--tf-text-rgb)/0.45)] focus:border-[var(--tf-brand)]" />
+                <input id="contactName" name="contactName" type="text" required minlength="2" class="mt-1 w-full rounded border border-[color:rgb(var(--tf-text-rgb)/0.2)] bg-[color:rgb(var(--tf-bg-rgb)/0.52)] px-3 py-1.5 text-white outline-none transition placeholder:text-[color:rgb(var(--tf-text-rgb)/0.45)] focus:border-[var(--tf-brand)] md:px-2.5 md:py-1" />
                 <p class="mt-0.5 min-h-3 text-xs text-[var(--tf-error)]" data-error-for="contactName" aria-live="polite"></p>
               </div>
               <div class="lg:col-span-3">
                 <label for="email" class="block text-sm font-medium text-[var(--tf-text-muted)]">Email *</label>
-                <input id="email" name="email" type="email" required class="mt-1 w-full rounded border border-[color:rgb(var(--tf-text-rgb)/0.2)] bg-[color:rgb(var(--tf-bg-rgb)/0.52)] px-3 py-1.5 text-white outline-none transition placeholder:text-[color:rgb(var(--tf-text-rgb)/0.45)] focus:border-[var(--tf-brand)]" />
+                <input id="email" name="email" type="email" required class="mt-1 w-full rounded border border-[color:rgb(var(--tf-text-rgb)/0.2)] bg-[color:rgb(var(--tf-bg-rgb)/0.52)] px-3 py-1.5 text-white outline-none transition placeholder:text-[color:rgb(var(--tf-text-rgb)/0.45)] focus:border-[var(--tf-brand)] md:px-2.5 md:py-1" />
                 <p class="mt-0.5 min-h-3 text-xs text-[var(--tf-error)]" data-error-for="email" aria-live="polite"></p>
               </div>
             </fieldset>
 
-            <fieldset class="hidden grid gap-2.5 sm:grid-cols-2 lg:grid-cols-6" data-form-step="2">
-              <legend data-application-fieldset-step2 class="mb-1.5 text-base font-bold text-white lg:col-span-6">Operación principal</legend>
+            <fieldset class="hidden grid gap-2.5 sm:grid-cols-2 md:gap-2 lg:grid-cols-6" data-form-step="2">
+              <legend data-application-fieldset-step2 class="mb-1.5 text-base font-bold text-white md:mb-1 lg:col-span-6">Operación principal</legend>
               <div class="lg:col-span-3">
                 <label for="country" class="block text-sm font-medium text-[var(--tf-text-muted)]">País de operación principal *</label>
-                <select id="country" name="country" required class="mt-1 w-full rounded border border-[color:rgb(var(--tf-text-rgb)/0.2)] bg-[color:rgb(var(--tf-bg-rgb)/0.52)] px-3 py-1.5 text-white outline-none transition focus:border-[var(--tf-brand)]">
+                <select id="country" name="country" required class="mt-1 w-full rounded border border-[color:rgb(var(--tf-text-rgb)/0.2)] bg-[color:rgb(var(--tf-bg-rgb)/0.52)] px-3 py-1.5 text-white outline-none transition focus:border-[var(--tf-brand)] md:px-2.5 md:py-1">
                   <option value="">Selecciona un país</option>
                   <option value="US">Estados Unidos</option>
                   <option value="ES">España</option>
@@ -259,7 +260,7 @@
               </div>
               <div class="lg:col-span-3">
                 <label for="operationType" class="block text-sm font-medium text-[var(--tf-text-muted)]">Tipo de operación *</label>
-                <select id="operationType" name="operationType" required class="mt-1 w-full rounded border border-[color:rgb(var(--tf-text-rgb)/0.2)] bg-[color:rgb(var(--tf-bg-rgb)/0.52)] px-3 py-1.5 text-white outline-none transition focus:border-[var(--tf-brand)]">
+                <select id="operationType" name="operationType" required class="mt-1 w-full rounded border border-[color:rgb(var(--tf-text-rgb)/0.2)] bg-[color:rgb(var(--tf-bg-rgb)/0.52)] px-3 py-1.5 text-white outline-none transition focus:border-[var(--tf-brand)] md:px-2.5 md:py-1">
                   <option value="">Selecciona el foco principal</option>
                   <option value="fulfillment">Fulfillment y almacén</option>
                   <option value="lastmile">Última milla y transportistas</option>
@@ -270,7 +271,7 @@
               </div>
               <div class="lg:col-span-3">
                 <label for="monthlyOrders" class="block text-sm font-medium text-[var(--tf-text-muted)]">Volumen mensual estimado *</label>
-                <select id="monthlyOrders" name="monthlyOrders" required class="mt-1 w-full rounded border border-[color:rgb(var(--tf-text-rgb)/0.2)] bg-[color:rgb(var(--tf-bg-rgb)/0.52)] px-3 py-1.5 text-white outline-none transition focus:border-[var(--tf-brand)]">
+                <select id="monthlyOrders" name="monthlyOrders" required class="mt-1 w-full rounded border border-[color:rgb(var(--tf-text-rgb)/0.2)] bg-[color:rgb(var(--tf-bg-rgb)/0.52)] px-3 py-1.5 text-white outline-none transition focus:border-[var(--tf-brand)] md:px-2.5 md:py-1">
                   <option value="">Selecciona un rango</option>
                   <option value="lt500">Menos de 500 pedidos</option>
                   <option value="500-2000">500 - 2.000 pedidos</option>
@@ -281,7 +282,7 @@
               </div>
               <div class="lg:col-span-3">
                 <label for="urgency" class="block text-sm font-medium text-[var(--tf-text-muted)]">Urgencia del proyecto *</label>
-                <select id="urgency" name="urgency" required class="mt-1 w-full rounded border border-[color:rgb(var(--tf-text-rgb)/0.2)] bg-[color:rgb(var(--tf-bg-rgb)/0.52)] px-3 py-1.5 text-white outline-none transition focus:border-[var(--tf-brand)]">
+                <select id="urgency" name="urgency" required class="mt-1 w-full rounded border border-[color:rgb(var(--tf-text-rgb)/0.2)] bg-[color:rgb(var(--tf-bg-rgb)/0.52)] px-3 py-1.5 text-white outline-none transition focus:border-[var(--tf-brand)] md:px-2.5 md:py-1">
                   <option value="">Selecciona urgencia</option>
                   <option value="now">Inmediata (0-30 días)</option>
                   <option value="quarter">Este trimestre</option>
@@ -292,25 +293,25 @@
               </div>
             </fieldset>
 
-            <fieldset class="hidden grid gap-2.5 sm:grid-cols-2 lg:grid-cols-6" data-form-step="3">
-              <legend data-application-fieldset-step3 class="mb-1.5 text-base font-bold text-white lg:col-span-6">Contexto y desafíos</legend>
+            <fieldset class="hidden grid gap-2.5 sm:grid-cols-2 md:gap-2 lg:grid-cols-6" data-form-step="3">
+              <legend data-application-fieldset-step3 class="mb-1.5 text-base font-bold text-white md:mb-1 lg:col-span-6">Contexto y desafíos</legend>
               <div class="sm:col-span-2 lg:col-span-4">
                 <label for="notes" class="block text-sm font-medium text-[var(--tf-text-muted)]">¿Qué necesitas resolver? *</label>
-                <textarea id="notes" name="notes" required minlength="10" rows="3" placeholder="Ej: necesitamos reducir incidencias en última milla, mejorar la gestión de devoluciones o centralizar el seguimiento de pedidos." class="mt-1 w-full resize-none overflow-hidden rounded border border-[color:rgb(var(--tf-text-rgb)/0.2)] bg-[color:rgb(var(--tf-bg-rgb)/0.52)] px-3 py-1.5 text-white outline-none transition placeholder:text-[color:rgb(var(--tf-text-rgb)/0.45)] focus:border-[var(--tf-brand)]"></textarea>
+                <textarea id="notes" name="notes" required minlength="10" rows="3" placeholder="Ej: necesitamos reducir incidencias en última milla, mejorar la gestión de devoluciones o centralizar el seguimiento de pedidos." class="mt-1 w-full resize-none overflow-hidden rounded border border-[color:rgb(var(--tf-text-rgb)/0.2)] bg-[color:rgb(var(--tf-bg-rgb)/0.52)] px-3 py-1.5 text-white outline-none transition placeholder:text-[color:rgb(var(--tf-text-rgb)/0.45)] focus:border-[var(--tf-brand)] md:px-2.5 md:py-1"></textarea>
                 <p class="mt-0.5 min-h-3 text-xs text-[var(--tf-error)]" data-error-for="notes" aria-live="polite"></p>
               </div>
               <div class="sm:col-span-2 lg:col-span-2">
                 <label for="currentTools" class="block text-sm font-medium text-[var(--tf-text-muted)]">Stack actual (opcional)</label>
-                <textarea id="currentTools" name="currentTools" rows="3" placeholder="Ej: ERP legacy + hojas de cálculo + portal transportista" class="mt-1 w-full resize-none overflow-hidden rounded border border-[color:rgb(var(--tf-text-rgb)/0.2)] bg-[color:rgb(var(--tf-bg-rgb)/0.52)] px-3 py-1.5 text-white outline-none transition placeholder:text-[color:rgb(var(--tf-text-rgb)/0.45)] focus:border-[var(--tf-brand)]"></textarea>
+                <textarea id="currentTools" name="currentTools" rows="3" placeholder="Ej: ERP legacy + hojas de cálculo + portal transportista" class="mt-1 w-full resize-none overflow-hidden rounded border border-[color:rgb(var(--tf-text-rgb)/0.2)] bg-[color:rgb(var(--tf-bg-rgb)/0.52)] px-3 py-1.5 text-white outline-none transition placeholder:text-[color:rgb(var(--tf-text-rgb)/0.45)] focus:border-[var(--tf-brand)] md:px-2.5 md:py-1"></textarea>
                 <p class="mt-0.5 min-h-3 text-xs text-[var(--tf-error)]" data-error-for="currentTools" aria-live="polite"></p>
               </div>
             </fieldset>
 
-            <fieldset class="hidden grid gap-2.5 sm:grid-cols-2 lg:grid-cols-6" data-form-step="4">
-              <legend data-application-fieldset-step4 class="mb-1.5 text-base font-bold text-white lg:col-span-6">Confirmación</legend>
-              <div class="rounded border border-[color:rgb(var(--tf-text-rgb)/0.18)] bg-[color:rgb(var(--tf-bg-rgb)/0.45)] p-2 sm:col-span-2 lg:col-span-6" data-summary-box>
+            <fieldset class="hidden grid gap-2.5 sm:grid-cols-2 md:gap-2 lg:grid-cols-6" data-form-step="4">
+              <legend data-application-fieldset-step4 class="mb-1.5 text-base font-bold text-white md:mb-1 lg:col-span-6">Confirmación</legend>
+              <div class="rounded border border-[color:rgb(var(--tf-text-rgb)/0.18)] bg-[color:rgb(var(--tf-bg-rgb)/0.45)] p-2 sm:col-span-2 md:max-h-[8.75rem] md:overflow-y-auto lg:col-span-6" data-summary-box>
                 <p class="text-xs font-bold uppercase tracking-[0.14em] text-[var(--tf-text-soft)]" data-summary-title>Resumen de tu solicitud</p>
-                <dl class="mt-1.5 grid gap-x-3 gap-y-1.5 text-[0.83rem] sm:grid-cols-2 md:grid-cols-4" data-summary-list></dl>
+                <dl class="mt-1.5 grid gap-x-3 gap-y-1.5 text-[0.83rem] sm:grid-cols-2 md:grid-cols-4 md:gap-y-1" data-summary-list></dl>
               </div>
               <div class="rounded border border-[color:rgb(var(--tf-text-rgb)/0.18)] bg-[color:rgb(var(--tf-bg-rgb)/0.45)] p-1.5 sm:col-span-2 lg:col-span-6">
                 <label class="flex gap-2.5 text-sm text-[var(--tf-text-muted)]">
@@ -320,6 +321,7 @@
                 <p class="mt-0.5 min-h-3 text-xs text-[var(--tf-error)]" data-error-for="consent" aria-live="polite"></p>
               </div>
             </fieldset>
+            </div>
 
             <div id="formStatus" class="hidden rounded border p-2.5 text-sm" role="status" aria-live="polite"></div>
 
