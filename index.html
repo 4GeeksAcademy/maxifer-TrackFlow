@@ -267,7 +267,7 @@
         ]
       }
     </script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/tailwind.min.css" />
     <script defer src="i18n.js?v=1"></script>
   </head>
   <body data-page="index" class="bg-[var(--tf-bg)] text-[var(--tf-text)] antialiased">
@@ -336,11 +336,19 @@
 
     <main id="inicio" class="scroll-mt-[var(--header-anchor-offset,4.5rem)]">
       <section class="relative min-h-[92svh] overflow-hidden md:min-h-[96svh]">
-        <img
-          src="assets/trackflow-hero.png"
-          alt="Centro de operaciones logísticas moderno con paquetes, pantallas de seguimiento y zona de almacén"
-          class="absolute inset-0 h-full w-full object-cover"
-        />
+        <picture>
+          <source srcset="assets/trackflow-hero.avif" type="image/avif" />
+          <source srcset="assets/trackflow-hero.webp" type="image/webp" />
+          <img
+            src="assets/trackflow-hero.png"
+            alt="Centro de operaciones logísticas moderno con paquetes, pantallas de seguimiento y zona de almacén"
+            width="1672"
+            height="941"
+            class="absolute inset-0 h-full w-full object-cover"
+            fetchpriority="high"
+            decoding="async"
+          />
+        </picture>
         <div class="absolute inset-0 bg-[linear-gradient(90deg,rgb(var(--tf-bg-rgb)/1),rgb(var(--tf-bg-rgb)/0.85),rgb(var(--tf-bg-rgb)/0.25))]"></div>
         <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[var(--tf-bg)] to-transparent"></div>
 
