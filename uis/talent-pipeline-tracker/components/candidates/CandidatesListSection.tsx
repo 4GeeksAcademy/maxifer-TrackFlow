@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { CandidatesFiltersBar } from "@/components/candidates/CandidatesFiltersBar";
+import { CandidateCreateForm } from "@/components/candidates/CandidateCreateForm";
 import { CandidatesPageHeader } from "@/components/candidates/CandidatesPageHeader";
 import { CandidatesTable } from "@/components/candidates/CandidatesTable";
 import {
@@ -59,6 +60,7 @@ export function CandidatesListSection({ candidates }: CandidatesListSectionProps
   return (
     <section className="flex flex-col gap-5">
       <CandidatesPageHeader total={candidates.length} visible={filteredCandidates.length} />
+      <CandidateCreateForm />
       <CandidatesFiltersBar
         status={status}
         stage={stage}

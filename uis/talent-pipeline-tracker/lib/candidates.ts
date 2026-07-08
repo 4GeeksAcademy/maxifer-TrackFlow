@@ -25,6 +25,20 @@ export type CandidateRecord = {
   updated_at: string;
 };
 
+export type CandidateRecordUpsertPayload = Pick<
+  CandidateRecord,
+  | "full_name"
+  | "email"
+  | "phone"
+  | "position"
+  | "cv_url"
+  | "status"
+  | "stage"
+  | "experience_years"
+> & {
+  linkedin_url: string | null;
+};
+
 export type CandidateNote = {
   id: string;
   content: string;
@@ -154,6 +168,41 @@ export async function updateCandidateRecord(
   const baseUrl = ensureApiBaseUrl();
   const response = await fetch(`${baseUrl}/records/${id}`, {
     method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error al actualizar la candidatura (${response.status}).`);
+  }
+
+  return (await response.json()) as CandidateRecord;
+}
+
+export async function createCandidateRecord(
+  payload: CandidateRecordUpsertPayload,
+): Promise<CandidateRecord> {
+  const baseUrl = ensureApiBaseUrl();
+  const response = await fetch(`${baseUrl}/records`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error al crear la candidatura (${response.status}).`);
+  }
+
+  return (await response.json()) as CandidateRecord;
+}
+
+export async function replaceCandidateRecord(
+  id: string,
+  payload: CandidateRecordUpsertPayload,
+): Promise<CandidateRecord> {
+  const baseUrl = ensureApiBaseUrl();
+  const response = await fetch(`${baseUrl}/records/${id}`, {
+    method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });

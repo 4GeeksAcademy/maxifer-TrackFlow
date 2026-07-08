@@ -2,6 +2,7 @@ import { CandidateNote, CandidateRecord } from "@/lib/candidates";
 import { CandidateDetailsHeader } from "@/components/candidates/CandidateDetailsHeader";
 import { CandidateMainDetailsGrid } from "@/components/candidates/CandidateMainDetailsGrid";
 import { CandidateSecondaryDetails } from "@/components/candidates/CandidateSecondaryDetails";
+import { CandidateEditForm } from "@/components/candidates/CandidateEditForm";
 import { CandidateStatusStageControls } from "@/components/candidates/CandidateStatusStageControls";
 import { CandidateNotesSection } from "@/components/candidates/CandidateNotesSection";
 
@@ -16,6 +17,9 @@ export function CandidateDetailsCard({ candidate, notes }: CandidateDetailsCardP
       <CandidateDetailsHeader fullName={candidate.full_name} position={candidate.position} />
       <CandidateMainDetailsGrid candidate={candidate} />
       <CandidateSecondaryDetails candidate={candidate} />
+      <div className="mt-6">
+        <CandidateEditForm candidate={candidate} />
+      </div>
       <CandidateStatusStageControls
         candidateId={candidate.id}
         status={candidate.status}
