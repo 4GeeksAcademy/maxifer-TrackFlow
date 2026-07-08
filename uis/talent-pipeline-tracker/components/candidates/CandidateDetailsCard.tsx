@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { CandidateNote, CandidateRecord } from "@/lib/candidates";
 import { CandidateDetailsHeader } from "@/components/candidates/CandidateDetailsHeader";
 import { CandidateMainDetailsGrid } from "@/components/candidates/CandidateMainDetailsGrid";
@@ -12,20 +15,31 @@ type CandidateDetailsCardProps = {
 };
 
 export function CandidateDetailsCard({ candidate, notes }: CandidateDetailsCardProps) {
+  const [candidateState, setCandidateState] = useState(candidate);
+
+  function handleNotesCountChange(count: number) {
+    setCandidateState((current) => ({ ...current, notes_count: count }));
+  }
+
   return (
     <section className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-8">
-      <CandidateDetailsHeader fullName={candidate.full_name} position={candidate.position} />
-      <CandidateMainDetailsGrid candidate={candidate} />
-      <CandidateSecondaryDetails candidate={candidate} />
+      <CandidateDetailsHeader fullName={candidateState.full_name} position={candidateState.position} />
+      <CandidateMainDetailsGrid candidate={candidateState} />
+      <CandidateSecondaryDetails candidate={candidateState} />
       <div className="mt-6">
-        <CandidateEditForm candidate={candidate} />
+        <CandidateEditForm candidate={candidateState} onUpdated={setCandidateState} />
       </div>
       <CandidateStatusStageControls
-        candidateId={candidate.id}
-        status={candidate.status}
-        stage={candidate.stage}
+        candidateId={candidateState.id}
+        status={candidateState.status}
+        stage={candidateState.stage}
+        onUpdated={setCandidateState}
       />
-      <CandidateNotesSection candidateId={candidate.id} notes={notes} />
+      <CandidateNotesSection
+        candidateId={candidateState.id}
+        notes={notes}
+        onNotesCountChange={handleNotesCountChange}
+      />
     </section>
   );
 }

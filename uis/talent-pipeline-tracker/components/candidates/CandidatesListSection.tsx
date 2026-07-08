@@ -27,6 +27,7 @@ export function CandidatesListSection({ candidates }: CandidatesListSectionProps
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [candidatesState, setCandidatesState] = useState(candidates);
   const [query, setQuery] = useState("");
 
   const statusParam = searchParams.get("status");
@@ -37,7 +38,7 @@ export function CandidatesListSection({ candidates }: CandidatesListSectionProps
   const filteredCandidates = useMemo(() => {
     const term = query.trim().toLowerCase();
 
-    return candidates.filter((candidate) => {
+    return candidatesState.filter((candidate) => {
       const matchesStatus = status === "all" || candidate.status === status;
       const matchesStage = stage === "all" || candidate.stage === stage;
       const matchesQuery =
@@ -47,7 +48,11 @@ export function CandidatesListSection({ candidates }: CandidatesListSectionProps
 
       return matchesStatus && matchesStage && matchesQuery;
     });
-  }, [candidates, query, stage, status]);
+  }, [candidatesState, query, stage, status]);
+
+  function handleCandidateCreated(candidate: CandidateRecord) {
+    setCandidatesState((current) => [candidate, ...current.filter((item) => item.id !== candidate.id)]);
+  }
 
   function updateQueryParam(key: "status" | "stage", value: string) {
     const params = new URLSearchParams(searchParams.toString());
@@ -59,8 +64,8 @@ export function CandidatesListSection({ candidates }: CandidatesListSectionProps
 
   return (
     <section className="flex flex-col gap-5">
-      <CandidatesPageHeader total={candidates.length} visible={filteredCandidates.length} />
-      <CandidateCreateForm />
+      <CandidatesPageHeader total={candidatesState.length} visible={filteredCandidates.length} />
+      <CandidateCreateForm onCreated={handleCandidateCreated} />
       <CandidatesFiltersBar
         status={status}
         stage={stage}

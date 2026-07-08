@@ -66,6 +66,7 @@ export function CandidateRecordForm({
           {submitLabel}
         </button>
       </form>
+      {isPending ? <p className="mt-3 text-sm text-zinc-600">Guardando cambios...</p> : null}
       {success ? <p className="mt-3 text-sm text-emerald-700">{success}</p> : null}
       {error ? <p className="mt-3 text-sm text-red-600">{error}</p> : null}
     </section>

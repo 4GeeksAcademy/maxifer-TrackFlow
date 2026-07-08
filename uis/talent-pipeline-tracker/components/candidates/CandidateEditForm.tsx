@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo } from "react";
-import { useRouter } from "next/navigation";
 import { candidateToFormValues } from "@/lib/candidate-record-form";
 import {
   CandidateRecord,
@@ -12,15 +11,15 @@ import { CandidateRecordForm } from "@/components/candidates/CandidateRecordForm
 
 type CandidateEditFormProps = {
   candidate: CandidateRecord;
+  onUpdated?: (candidate: CandidateRecord) => void;
 };
 
-export function CandidateEditForm({ candidate }: CandidateEditFormProps) {
-  const router = useRouter();
+export function CandidateEditForm({ candidate, onUpdated }: CandidateEditFormProps) {
   const initialValues = useMemo(() => candidateToFormValues(candidate), [candidate]);
 
   async function onSubmitRecord(payload: CandidateRecordUpsertPayload) {
-    await replaceCandidateRecord(candidate.id, payload);
-    router.refresh();
+    const updatedCandidate = await replaceCandidateRecord(candidate.id, payload);
+    onUpdated?.(updatedCandidate);
   }
 
   return (

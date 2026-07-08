@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
 import {
   CandidateRecord,
   STAGE_LABELS,
@@ -14,31 +13,32 @@ type CandidateStatusStageControlsProps = {
   candidateId: string;
   status: CandidateRecord["status"];
   stage: CandidateRecord["stage"];
+  onUpdated?: (candidate: CandidateRecord) => void;
 };
 
 export function CandidateStatusStageControls({
   candidateId,
   status,
   stage,
+  onUpdated,
 }: CandidateStatusStageControlsProps) {
-  const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [statusValue, setStatusValue] = useState(status);
-  const [stageValue, setStageValue] = useState(stage);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   function updateField(field: "status" | "stage", value: string) {
     setError(null);
+    setSuccess(null);
     startTransition(async () => {
       try {
-        if (field === "status") {
-          await updateCandidateRecord(candidateId, { status: value as CandidateRecord["status"] });
-          setStatusValue(value as CandidateRecord["status"]);
-        } else {
-          await updateCandidateRecord(candidateId, { stage: value as CandidateRecord["stage"] });
-          setStageValue(value as CandidateRecord["stage"]);
-        }
-        router.refresh();
+        const payload =
+          field === "status"
+            ? { status: value as CandidateRecord["status"] }
+            : { stage: value as CandidateRecord["stage"] };
+        const updatedCandidate = await updateCandidateRecord(candidateId, payload);
+
+        onUpdated?.(updatedCandidate);
+        setSuccess("Campo actualizado correctamente.");
       } catch {
         setError("No se pudo actualizar el campo. Intenta de nuevo.");
       }
@@ -51,19 +51,21 @@ export function CandidateStatusStageControls({
       <div className="mt-3 grid gap-4 sm:grid-cols-2">
         <CandidateProcessSelect
           label="Estado"
-          value={statusValue}
+          value={status}
           options={Object.entries(STATUS_LABELS)}
           onChange={(value) => updateField("status", value)}
           disabled={isPending}
         />
         <CandidateProcessSelect
           label="Etapa"
-          value={stageValue}
+          value={stage}
           options={Object.entries(STAGE_LABELS)}
           onChange={(value) => updateField("stage", value)}
           disabled={isPending}
         />
       </div>
+      {isPending ? <p className="mt-3 text-sm text-zinc-600">Actualizando...</p> : null}
+      {success ? <p className="mt-3 text-sm text-emerald-700">{success}</p> : null}
       {error ? <p className="mt-3 text-sm text-red-600">{error}</p> : null}
     </section>
   );
