@@ -13,8 +13,10 @@ type CandidateMainDetailsGridProps = {
 export function CandidateMainDetailsGrid({ candidate }: CandidateMainDetailsGridProps) {
   return (
     <dl className="grid gap-5 text-sm sm:grid-cols-2">
+      <CandidateDetailItem label="Nombre">{candidate.full_name}</CandidateDetailItem>
       <CandidateDetailItem label="Email">{candidate.email}</CandidateDetailItem>
       <CandidateDetailItem label="Teléfono">{candidate.phone}</CandidateDetailItem>
+      <CandidateDetailItem label="Puesto">{candidate.position}</CandidateDetailItem>
       <CandidateDetailItem label="Estado">{STATUS_LABELS[candidate.status]}</CandidateDetailItem>
       <CandidateDetailItem label="Etapa">{STAGE_LABELS[candidate.stage]}</CandidateDetailItem>
       <CandidateDetailItem label="Años de experiencia">{candidate.experience_years}</CandidateDetailItem>

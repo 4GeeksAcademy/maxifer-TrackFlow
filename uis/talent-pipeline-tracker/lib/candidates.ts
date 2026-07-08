@@ -25,12 +25,47 @@ export type CandidateRecord = {
   updated_at: string;
 };
 
+export type CandidateNote = {
+  id: string;
+  content: string;
+  created_at: string;
+};
+
 type RecordsResponse = {
   total: number;
   page: number;
   limit: number;
   data: CandidateRecord[];
 };
+
+type CandidateNotesResponse = {
+  data: unknown[];
+};
+
+function normalizeNote(payload: unknown): CandidateNote | null {
+  if (!payload || typeof payload !== "object") {
+    return null;
+  }
+
+  const candidate = payload as Record<string, unknown>;
+  const rawId = candidate.id ?? candidate.note_id;
+  const rawContent = candidate.content ?? candidate.note ?? candidate.text;
+  const rawCreatedAt = candidate.created_at ?? candidate.createdAt;
+
+  if (
+    (typeof rawId !== "string" && typeof rawId !== "number") ||
+    typeof rawContent !== "string" ||
+    typeof rawCreatedAt !== "string"
+  ) {
+    return null;
+  }
+
+  return {
+    id: String(rawId),
+    content: rawContent,
+    created_at: rawCreatedAt,
+  };
+}
 
 export const STATUS_LABELS: Record<CandidateStatus, string> = {
   received: "Recibida",
@@ -110,6 +145,77 @@ export async function fetchCandidateById(id: string): Promise<CandidateRecord | 
   }
 
   return (await response.json()) as CandidateRecord;
+}
+
+export async function updateCandidateRecord(
+  id: string,
+  payload: Partial<Pick<CandidateRecord, "status" | "stage">>,
+): Promise<CandidateRecord> {
+  const baseUrl = ensureApiBaseUrl();
+  const response = await fetch(`${baseUrl}/records/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error al actualizar la candidatura (${response.status}).`);
+  }
+
+  return (await response.json()) as CandidateRecord;
+}
+
+export async function fetchCandidateNotes(id: string): Promise<CandidateNote[]> {
+  const baseUrl = ensureApiBaseUrl();
+  const response = await fetch(`${baseUrl}/records/${id}/notes`, { cache: "no-store" });
+
+  if (response.status === 404) {
+    return [];
+  }
+
+  if (!response.ok) {
+    throw new Error(`Error al obtener notas (${response.status}).`);
+  }
+
+  const payload = (await response.json()) as CandidateNotesResponse | unknown[];
+  const notesList = Array.isArray(payload) ? payload : payload.data;
+
+  return notesList
+    .map((note) => normalizeNote(note))
+    .filter((note): note is CandidateNote => note !== null);
+}
+
+export async function createCandidateNote(id: string, content: string): Promise<CandidateNote> {
+  const baseUrl = ensureApiBaseUrl();
+  const response = await fetch(`${baseUrl}/records/${id}/notes`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ content, note: content, text: content }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error al crear nota (${response.status}).`);
+  }
+
+  const payload = (await response.json()) as unknown;
+  const parsed = normalizeNote(payload);
+
+  if (!parsed) {
+    throw new Error("La API devolvio una nota con formato invalido.");
+  }
+
+  return parsed;
+}
+
+export async function deleteCandidateNote(id: string, noteId: string): Promise<void> {
+  const baseUrl = ensureApiBaseUrl();
+  const response = await fetch(`${baseUrl}/records/${id}/notes/${noteId}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error al eliminar nota (${response.status}).`);
+  }
 }
 
 export function formatDate(value: string): string {
