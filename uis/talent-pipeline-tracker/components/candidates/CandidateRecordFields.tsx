@@ -10,27 +10,32 @@ type CandidateRecordFieldsProps = {
   ) => void;
 };
 
+const fieldClass =
+  "mt-1 w-full rounded-lg border border-[#c6c6cd] bg-[#fcf8fa] px-3 py-2.5 text-sm text-[#1b1b1d] disabled:opacity-60";
+const labelClass = "text-xs font-bold uppercase tracking-[0.08em] text-[#45464d]";
+
 export function CandidateRecordFields({
   values,
   disabled,
   onFieldChange,
 }: CandidateRecordFieldsProps) {
   return (
-    <div className="mt-3 grid gap-3 sm:grid-cols-2">
-      <label className="text-xs font-medium text-zinc-600">
+    <div className="grid gap-3 sm:grid-cols-2">
+      <label className={labelClass}>
         Nombre completo
         <input
-          className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
+          className={fieldClass}
           value={values.full_name}
           onChange={(event) => onFieldChange("full_name", event.target.value)}
           disabled={disabled}
+          autoFocus
           required
         />
       </label>
-      <label className="text-xs font-medium text-zinc-600">
+      <label className={labelClass}>
         Email
         <input
-          className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
+          className={fieldClass}
           type="email"
           value={values.email}
           onChange={(event) => onFieldChange("email", event.target.value)}
@@ -38,30 +43,30 @@ export function CandidateRecordFields({
           required
         />
       </label>
-      <label className="text-xs font-medium text-zinc-600">
+      <label className={labelClass}>
         Teléfono
         <input
-          className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
+          className={fieldClass}
           value={values.phone}
           onChange={(event) => onFieldChange("phone", event.target.value)}
           disabled={disabled}
           required
         />
       </label>
-      <label className="text-xs font-medium text-zinc-600">
+      <label className={labelClass}>
         Puesto
         <input
-          className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
+          className={fieldClass}
           value={values.position}
           onChange={(event) => onFieldChange("position", event.target.value)}
           disabled={disabled}
           required
         />
       </label>
-      <label className="text-xs font-medium text-zinc-600">
+      <label className={labelClass}>
         URL de CV
         <input
-          className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
+          className={fieldClass}
           type="url"
           value={values.cv_url}
           onChange={(event) => onFieldChange("cv_url", event.target.value)}
@@ -69,10 +74,10 @@ export function CandidateRecordFields({
           required
         />
       </label>
-      <label className="text-xs font-medium text-zinc-600">
+      <label className={labelClass}>
         URL de LinkedIn
         <input
-          className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
+          className={fieldClass}
           type="url"
           value={values.linkedin_url}
           onChange={(event) => onFieldChange("linkedin_url", event.target.value)}
@@ -80,10 +85,10 @@ export function CandidateRecordFields({
           placeholder="Opcional"
         />
       </label>
-      <label className="text-xs font-medium text-zinc-600">
+      <label className={labelClass}>
         Años de experiencia
         <input
-          className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
+          className={fieldClass}
           type="number"
           min={0}
           value={values.experience_years}
@@ -92,10 +97,10 @@ export function CandidateRecordFields({
           required
         />
       </label>
-      <label className="text-xs font-medium text-zinc-600">
+      <label className={labelClass}>
         Estado
         <select
-          className="mt-1 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900"
+          className={fieldClass}
           value={values.status}
           onChange={(event) =>
             onFieldChange("status", event.target.value as CandidateFormValues["status"])
@@ -110,10 +115,10 @@ export function CandidateRecordFields({
           ))}
         </select>
       </label>
-      <label className="text-xs font-medium text-zinc-600 sm:col-span-2">
+      <label className={`${labelClass} sm:col-span-2`}>
         Etapa
         <select
-          className="mt-1 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900"
+          className={fieldClass}
           value={values.stage}
           onChange={(event) =>
             onFieldChange("stage", event.target.value as CandidateFormValues["stage"])

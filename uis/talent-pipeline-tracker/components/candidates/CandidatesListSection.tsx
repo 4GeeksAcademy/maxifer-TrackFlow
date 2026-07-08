@@ -6,6 +6,7 @@ import { CandidatesFiltersBar } from "@/components/candidates/CandidatesFiltersB
 import { CandidateCreateForm } from "@/components/candidates/CandidateCreateForm";
 import { CandidatesPageHeader } from "@/components/candidates/CandidatesPageHeader";
 import { CandidatesTable } from "@/components/candidates/CandidatesTable";
+import { Modal } from "@/components/ui/Modal";
 import {
   CANDIDATE_STAGE_VALUES,
   CANDIDATE_STATUS_VALUES,
@@ -34,6 +35,7 @@ export function CandidatesListSection({ candidates }: CandidatesListSectionProps
   const searchParams = useSearchParams();
   const [candidatesState, setCandidatesState] = useState(candidates);
   const [query, setQuery] = useState("");
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const statusParam = searchParams.get("status");
   const stageParam = searchParams.get("stage");
@@ -57,6 +59,13 @@ export function CandidatesListSection({ candidates }: CandidatesListSectionProps
 
   function handleCandidateCreated(candidate: CandidateRecord) {
     setCandidatesState((current) => [candidate, ...current.filter((item) => item.id !== candidate.id)]);
+    setIsCreateModalOpen(false);
+  }
+
+  function handleCandidateUpdated(candidate: CandidateRecord) {
+    setCandidatesState((current) =>
+      current.map((item) => (item.id === candidate.id ? candidate : item)),
+    );
   }
 
   function updateQueryParam(key: "status" | "stage", value: string) {
@@ -67,10 +76,26 @@ export function CandidatesListSection({ candidates }: CandidatesListSectionProps
     router.replace(next ? `${pathname}?${next}` : pathname, { scroll: false });
   }
 
+  function clearFilters() {
+    setQuery("");
+    router.replace(pathname, { scroll: false });
+  }
+
+  const metrics = {
+    total: candidatesState.length,
+    pending: candidatesState.filter((candidate) => candidate.stage === "pending").length,
+    inProgress: candidatesState.filter((candidate) => candidate.status === "in_progress").length,
+    selected: candidatesState.filter((candidate) => candidate.status === "selected").length,
+  };
+
   return (
-    <section className="flex flex-col gap-5">
-      <CandidatesPageHeader total={candidatesState.length} visible={filteredCandidates.length} />
-      <CandidateCreateForm onCreated={handleCandidateCreated} />
+    <section className="flex flex-col gap-6">
+      <CandidatesPageHeader
+        total={candidatesState.length}
+        visible={filteredCandidates.length}
+        metrics={metrics}
+        onCreateClick={() => setIsCreateModalOpen(true)}
+      />
       <CandidatesFiltersBar
         status={status}
         stage={stage}
@@ -78,8 +103,17 @@ export function CandidatesListSection({ candidates }: CandidatesListSectionProps
         onStatusChange={(value) => updateQueryParam("status", value)}
         onStageChange={(value) => updateQueryParam("stage", value)}
         onQueryChange={setQuery}
+        onClear={clearFilters}
       />
-      <CandidatesTable candidates={filteredCandidates} />
+      <CandidatesTable candidates={filteredCandidates} onCandidateUpdated={handleCandidateUpdated} />
+      <Modal
+        title="Registrar candidatura"
+        description="Alta para el proceso de Asistente de Dirección."
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+      >
+        <CandidateCreateForm onCreated={handleCandidateCreated} />
+      </Modal>
     </section>
   );
 }

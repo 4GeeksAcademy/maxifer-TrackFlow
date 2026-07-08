@@ -25,7 +25,6 @@ export function CandidateCreateForm({ onCreated }: CandidateCreateFormProps) {
 
   return (
     <CandidateRecordForm
-      title="Registrar candidatura para Asistente de Dirección"
       submitLabel="Crear candidatura"
       successMessage="Candidatura creada correctamente."
       initialValues={EMPTY_CREATE_FORM}

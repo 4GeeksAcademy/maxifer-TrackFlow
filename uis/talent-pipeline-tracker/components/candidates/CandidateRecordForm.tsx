@@ -10,7 +10,7 @@ import { CandidateRecordFields } from "@/components/candidates/CandidateRecordFi
 import type { CandidateRecordUpsertPayload } from "@/types/candidates";
 
 type CandidateRecordFormProps = {
-  title: string;
+  title?: string;
   submitLabel: string;
   successMessage: string;
   initialValues: CandidateFormValues;
@@ -58,17 +58,22 @@ export function CandidateRecordForm({
   }
 
   return (
-    <section className="rounded-lg border border-zinc-200 p-4">
-      <h2 className="text-sm font-semibold text-zinc-900">{title}</h2>
-      <form className="mt-3" onSubmit={onSubmit}>
+    <section>
+      {title ? <h3 className="mb-4 text-base font-bold text-black">{title}</h3> : null}
+      <form onSubmit={onSubmit}>
         <CandidateRecordFields values={values} disabled={isPending} onFieldChange={onFieldChange} />
-        <button type="submit" className="mt-3 rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50" disabled={isPending}>
-          {submitLabel}
-        </button>
+        <div className="mt-4 flex justify-end border-t border-[#c6c6cd] pt-4">
+          <button
+            type="submit"
+            className="rounded-lg bg-[#0058be] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#004395] disabled:opacity-50"
+            disabled={isPending}
+          >
+            {isPending ? "Guardando..." : submitLabel}
+          </button>
+        </div>
       </form>
-      {isPending ? <p className="mt-3 text-sm text-zinc-600">Guardando cambios...</p> : null}
-      {success ? <p className="mt-3 text-sm text-emerald-700">{success}</p> : null}
-      {error ? <p className="mt-3 text-sm text-red-600">{error}</p> : null}
+      {success ? <p className="mt-3 text-sm font-medium text-emerald-700">{success}</p> : null}
+      {error ? <p className="mt-3 text-sm font-medium text-red-600">{error}</p> : null}
     </section>
   );
 }

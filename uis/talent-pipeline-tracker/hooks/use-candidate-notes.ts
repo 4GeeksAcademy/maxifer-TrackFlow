@@ -22,11 +22,7 @@ export function useCandidateNotes({
   const [success, setSuccess] = useState<string | null>(null);
 
   function updateNotes(updater: (current: CandidateNote[]) => CandidateNote[]) {
-    setNotes((current) => {
-      const nextNotes = updater(current);
-      onNotesCountChange?.(nextNotes.length);
-      return nextNotes;
-    });
+    setNotes((current) => updater(current));
   }
 
   function handleCreateNote(event: FormEvent<HTMLFormElement>) {
@@ -43,6 +39,7 @@ export function useCandidateNotes({
       try {
         const createdNote = await createCandidateNote(candidateId, trimmed);
         updateNotes((current) => [createdNote, ...current]);
+        onNotesCountChange?.(notes.length + 1);
         setContent("");
         setSuccess("Nota guardada correctamente.");
       } catch {
@@ -58,6 +55,7 @@ export function useCandidateNotes({
       try {
         await deleteCandidateNote(candidateId, noteId);
         updateNotes((current) => current.filter((note) => note.id !== noteId));
+        onNotesCountChange?.(notes.filter((note) => note.id !== noteId).length);
         setSuccess("Nota eliminada correctamente.");
       } catch {
         setError("No se pudo eliminar la nota. Intenta de nuevo.");

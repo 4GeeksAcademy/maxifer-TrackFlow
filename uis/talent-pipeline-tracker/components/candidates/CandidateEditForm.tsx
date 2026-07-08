@@ -25,7 +25,6 @@ export function CandidateEditForm({ candidate, onUpdated }: CandidateEditFormPro
   return (
     <CandidateRecordForm
       key={`${candidate.id}:${candidate.updated_at}`}
-      title="Editar datos de la candidatura"
       submitLabel="Guardar cambios"
       successMessage="Candidatura actualizada correctamente."
       initialValues={initialValues}

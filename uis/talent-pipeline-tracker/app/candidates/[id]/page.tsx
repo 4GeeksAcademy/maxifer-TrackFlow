@@ -5,10 +5,12 @@ import { fetchCandidateById, fetchCandidateNotes } from "@/lib/candidates";
 
 type CandidateDetailsPageProps = {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ edit?: string }>;
 };
 
-export default async function CandidateDetailsPage({ params }: CandidateDetailsPageProps) {
+export default async function CandidateDetailsPage({ params, searchParams }: CandidateDetailsPageProps) {
   const { id } = await params;
+  const { edit } = await searchParams;
   const [candidate, notes] = await Promise.all([fetchCandidateById(id), fetchCandidateNotes(id)]);
 
   if (!candidate) {
@@ -16,9 +18,9 @@ export default async function CandidateDetailsPage({ params }: CandidateDetailsP
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 py-10 sm:px-6 lg:px-8">
+    <main className="mx-auto flex w-full max-w-[1280px] flex-col px-4 py-5 sm:px-5 lg:px-6">
       <BackToCandidatesLink />
-      <CandidateDetailsCard candidate={candidate} notes={notes} />
+      <CandidateDetailsCard candidate={candidate} notes={notes} initialEditMode={edit === "1"} />
     </main>
   );
 }

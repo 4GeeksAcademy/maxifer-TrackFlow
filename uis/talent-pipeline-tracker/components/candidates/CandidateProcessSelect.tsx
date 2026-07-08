@@ -4,6 +4,7 @@ type CandidateProcessSelectProps = {
   options: Array<[string, string]>;
   onChange: (value: string) => void;
   disabled?: boolean;
+  compact?: boolean;
 };
 
 export function CandidateProcessSelect({
@@ -12,12 +13,13 @@ export function CandidateProcessSelect({
   options,
   onChange,
   disabled,
+  compact,
 }: CandidateProcessSelectProps) {
   return (
-    <label className="text-sm text-zinc-700">
+    <label className="block text-sm font-bold text-[#1b1b1d]">
       {label}
       <select
-        className="mt-1 w-full rounded-md border border-zinc-300 bg-white px-3 py-2"
+        className={`mt-1.5 w-full rounded-lg border border-[#c6c6cd] bg-[#fcf8fa] px-3 text-sm font-medium text-[#1b1b1d] disabled:opacity-60 ${compact ? "py-2" : "py-2.5"}`}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         disabled={disabled}

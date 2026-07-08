@@ -1,13 +1,9 @@
 export default function Loading() {
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-10 sm:px-6 lg:px-8">
-      <section className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm">
-        <h1 className="text-2xl font-semibold text-zinc-900">
-          Pipeline de candidaturas
-        </h1>
-        <p className="mt-2 text-sm text-zinc-600">
-          Cargando candidaturas de TrackFlow People & Talent...
-        </p>
+    <main className="mx-auto flex w-full max-w-[1280px] flex-col px-4 py-5 sm:px-5 lg:px-6">
+      <section className="rounded-lg border border-[#c6c6cd] bg-white p-4 shadow-sm">
+        <div className="h-5 w-56 animate-pulse rounded bg-[#e4e2e4]" />
+        <div className="mt-3 h-4 w-80 max-w-full animate-pulse rounded bg-[#f0edef]" />
       </section>
     </main>
   );
