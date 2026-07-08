@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { CandidateRecord, STAGE_LABELS, STATUS_LABELS } from "@/lib/candidates";
+import { STAGE_LABELS, STATUS_LABELS } from "@/lib/candidates";
+import type { CandidateRecord } from "@/types/candidates";
 
 type CandidateTableRowProps = {
   candidate: CandidateRecord;

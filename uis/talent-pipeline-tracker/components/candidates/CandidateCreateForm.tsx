@@ -4,12 +4,12 @@ import {
   EMPTY_CANDIDATE_FORM,
   CandidateFormValues,
 } from "@/lib/candidate-record-form";
-import {
+import { createCandidateRecord } from "@/lib/candidates";
+import { CandidateRecordForm } from "@/components/candidates/CandidateRecordForm";
+import type {
   CandidateRecord,
   CandidateRecordUpsertPayload,
-  createCandidateRecord,
-} from "@/lib/candidates";
-import { CandidateRecordForm } from "@/components/candidates/CandidateRecordForm";
+} from "@/types/candidates";
 
 const EMPTY_CREATE_FORM: CandidateFormValues = { ...EMPTY_CANDIDATE_FORM };
 
@@ -25,7 +25,7 @@ export function CandidateCreateForm({ onCreated }: CandidateCreateFormProps) {
 
   return (
     <CandidateRecordForm
-      title="Registrar candidatura"
+      title="Registrar candidatura para Asistente de Dirección"
       submitLabel="Crear candidatura"
       successMessage="Candidatura creada correctamente."
       initialValues={EMPTY_CREATE_FORM}

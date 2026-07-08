@@ -1,5 +1,5 @@
-import { CandidateRecord } from "@/lib/candidates";
 import { CandidateTableRow } from "@/components/candidates/CandidateTableRow";
+import type { CandidateRecord } from "@/types/candidates";
 
 type CandidatesTableProps = {
   candidates: CandidateRecord[];

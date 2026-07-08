@@ -1,59 +1,51 @@
+import {
+  CandidateNote,
+  CandidateNotesResponse,
+  CandidateRecord,
+  CandidateRecordsResponse,
+  CandidateRecordUpsertPayload,
+  CandidateStage,
+  CandidateStatus,
+} from "@/types/candidates";
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export type CandidateStatus = "received" | "in_progress" | "selected" | "discarded";
-
-export type CandidateStage =
-  | "pending"
-  | "review"
-  | "personal_interview"
-  | "technical_interview"
-  | "offer_presented";
-
-export type CandidateRecord = {
-  id: string;
-  full_name: string;
-  email: string;
-  phone: string;
-  position: string;
-  linkedin_url: string | null;
-  cv_url: string;
-  status: CandidateStatus;
-  stage: CandidateStage;
-  experience_years: number;
-  notes_count: number;
-  applied_at: string;
-  updated_at: string;
-};
-
-export type CandidateRecordUpsertPayload = Pick<
+export type {
+  CandidateNote,
   CandidateRecord,
-  | "full_name"
-  | "email"
-  | "phone"
-  | "position"
-  | "cv_url"
-  | "status"
-  | "stage"
-  | "experience_years"
-> & {
-  linkedin_url: string | null;
+  CandidateRecordUpsertPayload,
+  CandidateStage,
+  CandidateStatus,
 };
 
-export type CandidateNote = {
-  id: string;
-  content: string;
-  created_at: string;
+export const CANDIDATE_STATUS_VALUES: CandidateStatus[] = [
+  "received",
+  "in_progress",
+  "selected",
+  "discarded",
+];
+
+export const CANDIDATE_STAGE_VALUES: CandidateStage[] = [
+  "pending",
+  "review",
+  "personal_interview",
+  "technical_interview",
+  "offer_presented",
+];
+
+export const STATUS_LABELS: Record<CandidateStatus, string> = {
+  received: "Recibida",
+  in_progress: "En proceso",
+  selected: "Seleccionada",
+  discarded: "Descartada",
 };
 
-type RecordsResponse = {
-  total: number;
-  page: number;
-  limit: number;
-  data: CandidateRecord[];
-};
-
-type CandidateNotesResponse = {
-  data: unknown[];
+export const STAGE_LABELS: Record<CandidateStage, string> = {
+  pending: "Pendiente de revisión",
+  review: "En revisión",
+  personal_interview: "Entrevista personal",
+  technical_interview: "Entrevista técnica",
+  offer_presented: "Oferta presentada",
 };
 
 function normalizeNote(payload: unknown): CandidateNote | null {
@@ -81,21 +73,6 @@ function normalizeNote(payload: unknown): CandidateNote | null {
   };
 }
 
-export const STATUS_LABELS: Record<CandidateStatus, string> = {
-  received: "Recibida",
-  in_progress: "En proceso",
-  selected: "Seleccionada",
-  discarded: "Descartada",
-};
-
-export const STAGE_LABELS: Record<CandidateStage, string> = {
-  pending: "Pendiente de revisión",
-  review: "En revisión",
-  personal_interview: "Entrevista personal",
-  technical_interview: "Entrevista técnica",
-  offer_presented: "Oferta presentada",
-};
-
 function ensureApiBaseUrl(): string {
   if (!API_BASE_URL) {
     throw new Error("Falta NEXT_PUBLIC_API_URL en el entorno.");
@@ -104,7 +81,10 @@ function ensureApiBaseUrl(): string {
   return API_BASE_URL;
 }
 
-async function fetchRecordsPage(page: number, limit: number): Promise<RecordsResponse> {
+async function fetchRecordsPage(
+  page: number,
+  limit: number,
+): Promise<CandidateRecordsResponse> {
   const baseUrl = ensureApiBaseUrl();
   const url = new URL(`${baseUrl}/records`);
 
@@ -117,7 +97,7 @@ async function fetchRecordsPage(page: number, limit: number): Promise<RecordsRes
     throw new Error(`Error al obtener candidaturas (${response.status}).`);
   }
 
-  return (await response.json()) as RecordsResponse;
+  return (await response.json()) as CandidateRecordsResponse;
 }
 
 export async function fetchAllCandidates(): Promise<CandidateRecord[]> {
@@ -128,7 +108,7 @@ export async function fetchAllCandidates(): Promise<CandidateRecord[]> {
     return firstPage.data;
   }
 
-  const pendingPages: Promise<RecordsResponse>[] = [];
+  const pendingPages: Promise<CandidateRecordsResponse>[] = [];
 
   for (let page = 2; page <= totalPages; page += 1) {
     pendingPages.push(fetchRecordsPage(page, firstPage.limit));
@@ -140,8 +120,9 @@ export async function fetchAllCandidates(): Promise<CandidateRecord[]> {
     ...remainingPages.flatMap((payload) => payload.data),
   ];
 
-  // Avoid duplicated records if backend pagination behavior changes.
-  const dedupedById = new Map(allCandidates.map((candidate) => [candidate.id, candidate]));
+  const dedupedById = new Map(
+    allCandidates.map((candidate) => [candidate.id, candidate]),
+  );
 
   return [...dedupedById.values()];
 }
@@ -216,7 +197,9 @@ export async function replaceCandidateRecord(
 
 export async function fetchCandidateNotes(id: string): Promise<CandidateNote[]> {
   const baseUrl = ensureApiBaseUrl();
-  const response = await fetch(`${baseUrl}/records/${id}/notes`, { cache: "no-store" });
+  const response = await fetch(`${baseUrl}/records/${id}/notes`, {
+    cache: "no-store",
+  });
 
   if (response.status === 404) {
     return [];
@@ -234,7 +217,10 @@ export async function fetchCandidateNotes(id: string): Promise<CandidateNote[]> 
     .filter((note): note is CandidateNote => note !== null);
 }
 
-export async function createCandidateNote(id: string, content: string): Promise<CandidateNote> {
+export async function createCandidateNote(
+  id: string,
+  content: string,
+): Promise<CandidateNote> {
   const baseUrl = ensureApiBaseUrl();
   const response = await fetch(`${baseUrl}/records/${id}/notes`, {
     method: "POST",
@@ -250,7 +236,7 @@ export async function createCandidateNote(id: string, content: string): Promise<
   const parsed = normalizeNote(payload);
 
   if (!parsed) {
-    throw new Error("La API devolvio una nota con formato invalido.");
+    throw new Error("La API devolvió una nota con formato inválido.");
   }
 
   return parsed;

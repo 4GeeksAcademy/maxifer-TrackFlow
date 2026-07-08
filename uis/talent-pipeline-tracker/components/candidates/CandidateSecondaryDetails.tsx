@@ -1,5 +1,5 @@
-import { CandidateRecord } from "@/lib/candidates";
 import { CandidateDetailItem } from "@/components/candidates/CandidateDetailItem";
+import type { CandidateRecord } from "@/types/candidates";
 
 type CandidateSecondaryDetailsProps = {
   candidate: CandidateRecord;

@@ -1,7 +1,8 @@
 "use client";
 
 import { FormEvent, useState, useTransition } from "react";
-import { CandidateNote, createCandidateNote, deleteCandidateNote } from "@/lib/candidates";
+import { createCandidateNote, deleteCandidateNote } from "@/lib/candidates";
+import { CandidateNote } from "@/types/candidates";
 
 type UseCandidateNotesParams = {
   candidateId: string;

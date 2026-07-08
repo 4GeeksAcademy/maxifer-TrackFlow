@@ -6,8 +6,8 @@ import {
   formValuesToPayload,
   validateCandidateFormValues,
 } from "@/lib/candidate-record-form";
-import { CandidateRecordUpsertPayload } from "@/lib/candidates";
 import { CandidateRecordFields } from "@/components/candidates/CandidateRecordFields";
+import type { CandidateRecordUpsertPayload } from "@/types/candidates";
 
 type CandidateRecordFormProps = {
   title: string;
@@ -52,7 +52,7 @@ export function CandidateRecordForm({
         if (resetOnSuccess) setValues(initialValues);
         setSuccess(successMessage);
       } catch {
-        setError("No se pudo completar el envio. Intenta de nuevo.");
+        setError("No se pudo completar el envío. Intenta de nuevo.");
       }
     });
   }

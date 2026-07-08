@@ -1,7 +1,9 @@
-import { CandidateStage, CandidateStatus, STAGE_LABELS, STATUS_LABELS } from "@/lib/candidates";
-
-const STATUS_VALUES = Object.keys(STATUS_LABELS) as CandidateStatus[];
-const STAGE_VALUES = Object.keys(STAGE_LABELS) as CandidateStage[];
+import {
+  CANDIDATE_STAGE_VALUES,
+  CANDIDATE_STATUS_VALUES,
+  STAGE_LABELS,
+  STATUS_LABELS,
+} from "@/lib/candidates";
 
 type CandidatesFiltersBarProps = {
   status: string;
@@ -30,8 +32,10 @@ export function CandidatesFiltersBar({
           className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-800"
         >
           <option value="all">Todos</option>
-          {STATUS_VALUES.map((value) => (
-            <option key={value} value={value}>{STATUS_LABELS[value]}</option>
+          {CANDIDATE_STATUS_VALUES.map((value) => (
+            <option key={value} value={value}>
+              {STATUS_LABELS[value]}
+            </option>
           ))}
         </select>
       </label>
@@ -43,8 +47,10 @@ export function CandidatesFiltersBar({
           className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-800"
         >
           <option value="all">Todas</option>
-          {STAGE_VALUES.map((value) => (
-            <option key={value} value={value}>{STAGE_LABELS[value]}</option>
+          {CANDIDATE_STAGE_VALUES.map((value) => (
+            <option key={value} value={value}>
+              {STAGE_LABELS[value]}
+            </option>
           ))}
         </select>
       </label>

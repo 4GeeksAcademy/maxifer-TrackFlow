@@ -2,12 +2,12 @@
 
 import { useMemo } from "react";
 import { candidateToFormValues } from "@/lib/candidate-record-form";
-import {
+import { replaceCandidateRecord } from "@/lib/candidates";
+import { CandidateRecordForm } from "@/components/candidates/CandidateRecordForm";
+import type {
   CandidateRecord,
   CandidateRecordUpsertPayload,
-  replaceCandidateRecord,
-} from "@/lib/candidates";
-import { CandidateRecordForm } from "@/components/candidates/CandidateRecordForm";
+} from "@/types/candidates";
 
 type CandidateEditFormProps = {
   candidate: CandidateRecord;
@@ -25,7 +25,7 @@ export function CandidateEditForm({ candidate, onUpdated }: CandidateEditFormPro
   return (
     <CandidateRecordForm
       key={`${candidate.id}:${candidate.updated_at}`}
-      title="Editar candidatura"
+      title="Editar datos de la candidatura"
       submitLabel="Guardar cambios"
       successMessage="Candidatura actualizada correctamente."
       initialValues={initialValues}

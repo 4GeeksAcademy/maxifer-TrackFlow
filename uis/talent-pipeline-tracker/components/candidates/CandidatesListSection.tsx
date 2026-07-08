@@ -7,21 +7,26 @@ import { CandidateCreateForm } from "@/components/candidates/CandidateCreateForm
 import { CandidatesPageHeader } from "@/components/candidates/CandidatesPageHeader";
 import { CandidatesTable } from "@/components/candidates/CandidatesTable";
 import {
+  CANDIDATE_STAGE_VALUES,
+  CANDIDATE_STATUS_VALUES,
+} from "@/lib/candidates";
+import type {
   CandidateRecord,
   CandidateStage,
   CandidateStatus,
-} from "@/lib/candidates";
-
-const STATUS_VALUES: CandidateStatus[] = ["received", "in_progress", "selected", "discarded"];
-const STAGE_VALUES: CandidateStage[] = [
-  "pending",
-  "review",
-  "personal_interview",
-  "technical_interview",
-  "offer_presented",
-];
+} from "@/types/candidates";
 
 type CandidatesListSectionProps = { candidates: CandidateRecord[] };
+type StatusFilter = CandidateStatus | "all";
+type StageFilter = CandidateStage | "all";
+
+function isCandidateStatus(value: string | null): value is CandidateStatus {
+  return CANDIDATE_STATUS_VALUES.includes(value as CandidateStatus);
+}
+
+function isCandidateStage(value: string | null): value is CandidateStage {
+  return CANDIDATE_STAGE_VALUES.includes(value as CandidateStage);
+}
 
 export function CandidatesListSection({ candidates }: CandidatesListSectionProps) {
   const router = useRouter();
@@ -32,8 +37,8 @@ export function CandidatesListSection({ candidates }: CandidatesListSectionProps
 
   const statusParam = searchParams.get("status");
   const stageParam = searchParams.get("stage");
-  const status = STATUS_VALUES.includes(statusParam as CandidateStatus) ? statusParam : "all";
-  const stage = STAGE_VALUES.includes(stageParam as CandidateStage) ? stageParam : "all";
+  const status: StatusFilter = isCandidateStatus(statusParam) ? statusParam : "all";
+  const stage: StageFilter = isCandidateStage(stageParam) ? stageParam : "all";
 
   const filteredCandidates = useMemo(() => {
     const term = query.trim().toLowerCase();

@@ -1,4 +1,4 @@
-import { CandidateRecord, CandidateRecordUpsertPayload } from "@/lib/candidates";
+import { CandidateRecord, CandidateRecordUpsertPayload } from "@/types/candidates";
 
 export type CandidateFormValues = {
   full_name: string;
@@ -69,12 +69,12 @@ export function validateCandidateFormValues(values: CandidateFormValues): string
   }
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
-    return "El email no tiene un formato valido.";
+    return "El email no tiene un formato válido.";
   }
 
   const years = Number(values.experience_years);
   if (!Number.isFinite(years) || years < 0) {
-    return "Los anos de experiencia deben ser un numero igual o mayor a 0.";
+    return "Los años de experiencia deben ser un número igual o mayor a 0.";
   }
 
   return null;

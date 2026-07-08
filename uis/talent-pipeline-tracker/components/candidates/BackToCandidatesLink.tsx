@@ -7,7 +7,7 @@ export function BackToCandidatesLink() {
         href="/"
         className="text-sm font-medium text-zinc-700 underline-offset-2 hover:underline"
       >
-        Volver al listado
+        Volver al pipeline de TrackFlow
       </Link>
     </div>
   );

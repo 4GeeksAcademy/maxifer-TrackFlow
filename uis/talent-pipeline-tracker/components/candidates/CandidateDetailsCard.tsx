@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { CandidateNote, CandidateRecord } from "@/lib/candidates";
 import { CandidateDetailsHeader } from "@/components/candidates/CandidateDetailsHeader";
 import { CandidateMainDetailsGrid } from "@/components/candidates/CandidateMainDetailsGrid";
 import { CandidateSecondaryDetails } from "@/components/candidates/CandidateSecondaryDetails";
 import { CandidateEditForm } from "@/components/candidates/CandidateEditForm";
 import { CandidateStatusStageControls } from "@/components/candidates/CandidateStatusStageControls";
 import { CandidateNotesSection } from "@/components/candidates/CandidateNotesSection";
+import type { CandidateNote, CandidateRecord } from "@/types/candidates";
 
 type CandidateDetailsCardProps = {
   candidate: CandidateRecord;

@@ -1,10 +1,10 @@
 import {
-  CandidateRecord,
   STAGE_LABELS,
   STATUS_LABELS,
   formatDate,
 } from "@/lib/candidates";
 import { CandidateDetailItem } from "@/components/candidates/CandidateDetailItem";
+import type { CandidateRecord } from "@/types/candidates";
 
 type CandidateMainDetailsGridProps = {
   candidate: CandidateRecord;
@@ -19,7 +19,9 @@ export function CandidateMainDetailsGrid({ candidate }: CandidateMainDetailsGrid
       <CandidateDetailItem label="Puesto">{candidate.position}</CandidateDetailItem>
       <CandidateDetailItem label="Estado">{STATUS_LABELS[candidate.status]}</CandidateDetailItem>
       <CandidateDetailItem label="Etapa">{STAGE_LABELS[candidate.stage]}</CandidateDetailItem>
-      <CandidateDetailItem label="Años de experiencia">{candidate.experience_years}</CandidateDetailItem>
+      <CandidateDetailItem label="Años de experiencia">
+        {candidate.experience_years}
+      </CandidateDetailItem>
       <CandidateDetailItem label="Notas internas">{candidate.notes_count}</CandidateDetailItem>
       <CandidateDetailItem label="Fecha de aplicación">
         {formatDate(candidate.applied_at)}

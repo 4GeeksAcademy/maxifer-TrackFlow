@@ -1,8 +1,8 @@
 "use client";
 
-import { CandidateNote } from "@/lib/candidates";
 import { CandidateNoteItem } from "@/components/candidates/CandidateNoteItem";
-import { useCandidateNotes } from "@/lib/use-candidate-notes";
+import { useCandidateNotes } from "@/hooks/use-candidate-notes";
+import type { CandidateNote } from "@/types/candidates";
 
 type CandidateNotesSectionProps = {
   candidateId: string;
@@ -15,12 +15,20 @@ export function CandidateNotesSection({
   notes,
   onNotesCountChange,
 }: CandidateNotesSectionProps) {
-  const { isPending, notes: notesState, content, error, success, setContent, handleCreateNote, handleDeleteNote } =
-    useCandidateNotes({
-      candidateId,
-      initialNotes: notes,
-      onNotesCountChange,
-    });
+  const {
+    isPending,
+    notes: notesState,
+    content,
+    error,
+    success,
+    setContent,
+    handleCreateNote,
+    handleDeleteNote,
+  } = useCandidateNotes({
+    candidateId,
+    initialNotes: notes,
+    onNotesCountChange,
+  });
 
   return (
     <section className="mt-6 rounded-lg border border-zinc-200 p-4">
@@ -28,7 +36,7 @@ export function CandidateNotesSection({
       <form onSubmit={handleCreateNote} className="mt-3 flex flex-col gap-3">
         <textarea
           className="min-h-24 rounded-md border border-zinc-300 px-3 py-2 text-sm"
-          placeholder="Escribe una nota sobre la candidatura"
+          placeholder="Escribe una nota sobre la llamada o entrevista"
           value={content}
           onChange={(event) => setContent(event.target.value)}
           disabled={isPending}
@@ -53,7 +61,9 @@ export function CandidateNotesSection({
           />
         ))}
       </ul>
-      {!notesState.length ? <p className="mt-4 text-sm text-zinc-500">Aun no hay notas.</p> : null}
+      {!notesState.length ? (
+        <p className="mt-4 text-sm text-zinc-500">Aún no hay notas.</p>
+      ) : null}
       {isPending ? <p className="mt-3 text-sm text-zinc-600">Procesando cambios...</p> : null}
       {success ? <p className="mt-3 text-sm text-emerald-700">{success}</p> : null}
       {error ? <p className="mt-3 text-sm text-red-600">{error}</p> : null}

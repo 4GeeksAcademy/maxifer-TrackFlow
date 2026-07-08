@@ -7,9 +7,15 @@ export function CandidatesPageHeader({ total, visible }: CandidatesPageHeaderPro
   return (
     <header className="flex items-end justify-between gap-6">
       <div>
-        <h1 className="text-3xl font-semibold tracking-tight text-zinc-900">Candidaturas</h1>
+        <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+          TrackFlow People & Talent · Sede Zaragoza
+        </p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">
+          Pipeline de candidaturas
+        </h1>
         <p className="mt-2 text-sm text-zinc-600">
-          Mostrando {visible} de {total} candidaturas
+          Proceso de selección para Asistente de Dirección. Mostrando {visible} de{" "}
+          {total} candidaturas.
         </p>
       </div>
     </header>

@@ -2,12 +2,12 @@
 
 import { useState, useTransition } from "react";
 import {
-  CandidateRecord,
   STAGE_LABELS,
   STATUS_LABELS,
   updateCandidateRecord,
 } from "@/lib/candidates";
 import { CandidateProcessSelect } from "@/components/candidates/CandidateProcessSelect";
+import type { CandidateRecord } from "@/types/candidates";
 
 type CandidateStatusStageControlsProps = {
   candidateId: string;
@@ -47,7 +47,9 @@ export function CandidateStatusStageControls({
 
   return (
     <section className="mt-6 rounded-lg border border-zinc-200 p-4">
-      <h2 className="text-sm font-semibold text-zinc-900">Actualizar proceso</h2>
+      <h2 className="text-sm font-semibold text-zinc-900">
+        Actualizar proceso de selección
+      </h2>
       <div className="mt-3 grid gap-4 sm:grid-cols-2">
         <CandidateProcessSelect
           label="Estado"
