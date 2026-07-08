@@ -20,6 +20,7 @@ import type {
 type CandidatesListSectionProps = { candidates: CandidateRecord[] };
 type StatusFilter = CandidateStatus | "all";
 type StageFilter = CandidateStage | "all";
+const CANDIDATES_PER_PAGE = 10;
 
 function isCandidateStatus(value: string | null): value is CandidateStatus {
   return CANDIDATE_STATUS_VALUES.includes(value as CandidateStatus);
@@ -36,6 +37,7 @@ export function CandidatesListSection({ candidates }: CandidatesListSectionProps
   const [candidatesState, setCandidatesState] = useState(candidates);
   const [query, setQuery] = useState("");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const statusParam = searchParams.get("status");
   const stageParam = searchParams.get("stage");
@@ -57,6 +59,13 @@ export function CandidatesListSection({ candidates }: CandidatesListSectionProps
     });
   }, [candidatesState, query, stage, status]);
 
+  const totalPages = Math.max(1, Math.ceil(filteredCandidates.length / CANDIDATES_PER_PAGE));
+  const effectiveCurrentPage = Math.min(currentPage, totalPages);
+  const paginatedCandidates = useMemo(() => {
+    const startIndex = (effectiveCurrentPage - 1) * CANDIDATES_PER_PAGE;
+    return filteredCandidates.slice(startIndex, startIndex + CANDIDATES_PER_PAGE);
+  }, [effectiveCurrentPage, filteredCandidates]);
+
   function handleCandidateCreated(candidate: CandidateRecord) {
     setCandidatesState((current) => [candidate, ...current.filter((item) => item.id !== candidate.id)]);
     setIsCreateModalOpen(false);
@@ -72,12 +81,19 @@ export function CandidatesListSection({ candidates }: CandidatesListSectionProps
     const params = new URLSearchParams(searchParams.toString());
     if (value === "all") params.delete(key);
     else params.set(key, value);
+    setCurrentPage(1);
     const next = params.toString();
     router.replace(next ? `${pathname}?${next}` : pathname, { scroll: false });
   }
 
+  function handleQueryChange(value: string) {
+    setQuery(value);
+    setCurrentPage(1);
+  }
+
   function clearFilters() {
     setQuery("");
+    setCurrentPage(1);
     router.replace(pathname, { scroll: false });
   }
 
@@ -102,10 +118,18 @@ export function CandidatesListSection({ candidates }: CandidatesListSectionProps
         query={query}
         onStatusChange={(value) => updateQueryParam("status", value)}
         onStageChange={(value) => updateQueryParam("stage", value)}
-        onQueryChange={setQuery}
+        onQueryChange={handleQueryChange}
         onClear={clearFilters}
       />
-      <CandidatesTable candidates={filteredCandidates} onCandidateUpdated={handleCandidateUpdated} />
+      <CandidatesTable
+        candidates={paginatedCandidates}
+        currentPage={effectiveCurrentPage}
+        pageSize={CANDIDATES_PER_PAGE}
+        totalCandidates={filteredCandidates.length}
+        totalPages={totalPages}
+        onCandidateUpdated={handleCandidateUpdated}
+        onPageChange={setCurrentPage}
+      />
       <Modal
         title="Registrar candidatura"
         description="Alta para el proceso de Asistente de Dirección."

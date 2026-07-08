@@ -28,6 +28,7 @@ export function CandidateCreateForm({ onCreated }: CandidateCreateFormProps) {
       submitLabel="Crear candidatura"
       successMessage="Candidatura creada correctamente."
       initialValues={EMPTY_CREATE_FORM}
+      showProcessFields={false}
       resetOnSuccess
       onSubmitRecord={onSubmitRecord}
     />

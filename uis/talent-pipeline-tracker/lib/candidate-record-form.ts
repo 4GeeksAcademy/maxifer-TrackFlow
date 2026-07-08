@@ -38,13 +38,13 @@ const REQUIRED_FIELDS: Array<keyof CandidateFormValues> = [
 const REQUIRED_MESSAGES: Record<keyof CandidateFormValues, string> = {
   full_name: "El nombre es obligatorio.",
   email: "El email es obligatorio.",
-  phone: "El telefono es obligatorio.",
+  phone: "El teléfono es obligatorio.",
   position: "El puesto es obligatorio.",
   linkedin_url: "",
   cv_url: "La URL del CV es obligatoria.",
   status: "El estado es obligatorio.",
   stage: "La etapa es obligatoria.",
-  experience_years: "Los anos de experiencia son obligatorios.",
+  experience_years: "Los años de experiencia son obligatorios.",
 };
 
 export function candidateToFormValues(candidate: CandidateRecord): CandidateFormValues {

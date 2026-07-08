@@ -22,8 +22,8 @@ type CandidateDetailsCardProps = {
 };
 
 const steps: Array<{ stage: CandidateStage; label: string; shortLabel: string }> = [
-  { stage: "pending", label: "Pendiente de revision", shortLabel: "Recibida" },
-  { stage: "review", label: "En revision", shortLabel: "Revision" },
+  { stage: "pending", label: "Pendiente de revisión", shortLabel: "Recibida" },
+  { stage: "review", label: "En revisión", shortLabel: "Revisión" },
   { stage: "personal_interview", label: "Entrevista personal", shortLabel: "Entrevista" },
   { stage: "offer_presented", label: "Oferta presentada", shortLabel: "Oferta" },
 ];
@@ -115,7 +115,7 @@ export function CandidateDetailsCard({
               <div className="mt-3 flex flex-wrap gap-2">
                 <span className="inline-flex items-center gap-1 rounded-full bg-[#e4e2e4] px-2.5 py-0.5 text-xs font-medium text-[#45464d]">
                   <MapPin className="h-3.5 w-3.5" />
-                  Sin ubicacion registrada
+                  Sin ubicación registrada
                 </span>
                 <StageBadge stage={candidateState.stage} />
               </div>
@@ -208,7 +208,7 @@ export function CandidateDetailsCard({
                           required
                         />
                       </Detail>
-                      <Detail label="Telefono">
+                      <Detail label="Teléfono">
                         <InlineInput
                           value={detailsValues.phone}
                           onChange={(value) => handleDetailFieldChange("phone", value)}
@@ -250,7 +250,7 @@ export function CandidateDetailsCard({
                       <Detail label="Etapa">
                         <StageBadge stage={candidateState.stage} />
                       </Detail>
-                      <Detail label="Anos de experiencia">
+                      <Detail label="Años de experiencia">
                         <InlineInput
                           type="number"
                           min={0}
@@ -260,8 +260,8 @@ export function CandidateDetailsCard({
                           required
                         />
                       </Detail>
-                      <Detail label="Fecha de aplicacion">{formatDate(candidateState.applied_at)}</Detail>
-                      <Detail label="Ultima actualizacion">{formatDate(candidateState.updated_at)}</Detail>
+                      <Detail label="Fecha de aplicación">{formatDate(candidateState.applied_at)}</Detail>
+                      <Detail label="Última actualización">{formatDate(candidateState.updated_at)}</Detail>
                     </div>
                   </div>
                   <div className="flex items-center justify-end gap-2 border-t border-[#c6c6cd] px-5 py-3">
@@ -296,7 +296,7 @@ export function CandidateDetailsCard({
                         {candidateState.email}
                       </a>
                     </Detail>
-                    <Detail label="Telefono">{candidateState.phone}</Detail>
+                    <Detail label="Teléfono">{candidateState.phone}</Detail>
                     <Detail label="LinkedIn">
                       {candidateState.linkedin_url ? (
                         <a className="break-all text-[#0058be] underline" href={candidateState.linkedin_url} target="_blank" rel="noreferrer">
@@ -321,9 +321,9 @@ export function CandidateDetailsCard({
                     <Detail label="Etapa">
                       <StageBadge stage={candidateState.stage} />
                     </Detail>
-                    <Detail label="Anos de experiencia">{candidateState.experience_years}</Detail>
-                    <Detail label="Fecha de aplicacion">{formatDate(candidateState.applied_at)}</Detail>
-                    <Detail label="Ultima actualizacion">{formatDate(candidateState.updated_at)}</Detail>
+                    <Detail label="Años de experiencia">{candidateState.experience_years}</Detail>
+                    <Detail label="Fecha de aplicación">{formatDate(candidateState.applied_at)}</Detail>
+                    <Detail label="Última actualización">{formatDate(candidateState.updated_at)}</Detail>
                   </div>
                 </div>
               )}
@@ -332,7 +332,7 @@ export function CandidateDetailsCard({
             <section className="rounded-lg border border-[#c6c6cd] bg-white p-5 shadow-sm">
               <h2 className="text-lg font-bold text-black">Habilidades clave</h2>
               <div className="mt-3 flex flex-wrap gap-2">
-                {[candidateState.position, `${candidateState.experience_years} anos exp.`, STAGE_LABELS[candidateState.stage]].map((item) => (
+                {[candidateState.position, `${candidateState.experience_years} años exp.`, STAGE_LABELS[candidateState.stage]].map((item) => (
                   <span key={item} className="rounded-md bg-[#d8e2ff] px-3 py-1.5 text-xs font-bold text-[#001a42]">
                     {item}
                   </span>

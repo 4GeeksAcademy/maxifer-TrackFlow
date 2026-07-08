@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -9,7 +10,6 @@ import {
   CalendarDays,
   CircleHelp,
   GitBranch,
-  Goal,
   Settings,
   Users,
 } from "lucide-react";
@@ -47,9 +47,7 @@ export function AppShell({ children }: AppShellProps) {
     <div className="min-h-screen bg-[#fcf8fa] text-[#1b1b1d] lg:flex">
       <aside className="hidden w-[248px] shrink-0 border-r border-[#c6c6cd] bg-[#f6f3f5] px-3 py-5 lg:fixed lg:inset-y-0 lg:flex lg:flex-col">
         <Link href="/" className="mb-6 flex items-center gap-3 px-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-black text-white">
-            <Goal className="h-4 w-4" />
-          </span>
+          <Image src="/trackflow-logo.svg" alt="" width={36} height={36} className="h-9 w-9 shrink-0 rounded-lg" />
           <span>
             <span className="block text-lg font-bold leading-5 text-black">TrackFlow</span>
             <span className="text-xs font-semibold text-[#45464d]/70">People & Talent</span>
@@ -97,9 +95,7 @@ export function AppShell({ children }: AppShellProps) {
         <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-[#c6c6cd] bg-[#fcf8fa]/95 px-4 backdrop-blur sm:px-5">
           <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center gap-3 lg:hidden">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-black text-white">
-                <Goal className="h-5 w-5" />
-              </span>
+              <Image src="/trackflow-logo.svg" alt="" width={36} height={36} className="h-9 w-9 shrink-0 rounded-lg" />
               <span className="font-bold text-black">TrackFlow</span>
             </Link>
             <nav className="hidden items-center gap-6 md:flex">

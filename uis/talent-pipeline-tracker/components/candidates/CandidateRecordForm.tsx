@@ -14,6 +14,7 @@ type CandidateRecordFormProps = {
   submitLabel: string;
   successMessage: string;
   initialValues: CandidateFormValues;
+  showProcessFields?: boolean;
   resetOnSuccess?: boolean;
   onSubmitRecord: (payload: CandidateRecordUpsertPayload) => Promise<void>;
 };
@@ -23,6 +24,7 @@ export function CandidateRecordForm({
   submitLabel,
   successMessage,
   initialValues,
+  showProcessFields,
   resetOnSuccess,
   onSubmitRecord,
 }: CandidateRecordFormProps) {
@@ -61,7 +63,12 @@ export function CandidateRecordForm({
     <section>
       {title ? <h3 className="mb-4 text-base font-bold text-black">{title}</h3> : null}
       <form onSubmit={onSubmit}>
-        <CandidateRecordFields values={values} disabled={isPending} onFieldChange={onFieldChange} />
+        <CandidateRecordFields
+          values={values}
+          disabled={isPending}
+          showProcessFields={showProcessFields}
+          onFieldChange={onFieldChange}
+        />
         <div className="mt-4 flex justify-end border-t border-[#c6c6cd] pt-4">
           <button
             type="submit"

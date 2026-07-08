@@ -4,6 +4,7 @@ import { STAGE_LABELS, STATUS_LABELS } from "@/lib/candidates";
 type CandidateRecordFieldsProps = {
   values: CandidateFormValues;
   disabled?: boolean;
+  showProcessFields?: boolean;
   onFieldChange: <T extends keyof CandidateFormValues>(
     field: T,
     value: CandidateFormValues[T],
@@ -17,6 +18,7 @@ const labelClass = "text-xs font-bold uppercase tracking-[0.08em] text-[#45464d]
 export function CandidateRecordFields({
   values,
   disabled,
+  showProcessFields = true,
   onFieldChange,
 }: CandidateRecordFieldsProps) {
   return (
@@ -97,42 +99,46 @@ export function CandidateRecordFields({
           required
         />
       </label>
-      <label className={labelClass}>
-        Estado
-        <select
-          className={fieldClass}
-          value={values.status}
-          onChange={(event) =>
-            onFieldChange("status", event.target.value as CandidateFormValues["status"])
-          }
-          disabled={disabled}
-          required
-        >
-          {Object.entries(STATUS_LABELS).map(([value, label]) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label className={`${labelClass} sm:col-span-2`}>
-        Etapa
-        <select
-          className={fieldClass}
-          value={values.stage}
-          onChange={(event) =>
-            onFieldChange("stage", event.target.value as CandidateFormValues["stage"])
-          }
-          disabled={disabled}
-          required
-        >
-          {Object.entries(STAGE_LABELS).map(([value, label]) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
-      </label>
+      {showProcessFields ? (
+        <>
+          <label className={labelClass}>
+            Estado
+            <select
+              className={fieldClass}
+              value={values.status}
+              onChange={(event) =>
+                onFieldChange("status", event.target.value as CandidateFormValues["status"])
+              }
+              disabled={disabled}
+              required
+            >
+              {Object.entries(STATUS_LABELS).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className={`${labelClass} sm:col-span-2`}>
+            Etapa
+            <select
+              className={fieldClass}
+              value={values.stage}
+              onChange={(event) =>
+                onFieldChange("stage", event.target.value as CandidateFormValues["stage"])
+              }
+              disabled={disabled}
+              required
+            >
+              {Object.entries(STAGE_LABELS).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </>
+      ) : null}
     </div>
   );
 }

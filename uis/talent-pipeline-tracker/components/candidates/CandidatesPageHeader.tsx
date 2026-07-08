@@ -34,7 +34,7 @@ export function CandidatesPageHeader({
           </h1>
           <p className="mt-1.5 flex flex-wrap items-center gap-1 text-sm text-[#45464d]">
             <MapPin className="h-4 w-4" />
-            Asistente de Direccion - Sede Zaragoza
+            Asistente de Dirección - Sede Zaragoza
             <span>•</span>
             <span className="font-bold text-[#0058be]">
               {visible} de {total} candidaturas
