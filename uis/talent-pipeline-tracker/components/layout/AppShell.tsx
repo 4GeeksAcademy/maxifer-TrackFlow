@@ -45,7 +45,7 @@ export function AppShell({ children }: AppShellProps) {
 
   return (
     <div className="min-h-screen bg-[#fcf8fa] text-[#1b1b1d] lg:flex">
-      <aside className="hidden w-[248px] shrink-0 border-r border-[#c6c6cd] bg-[#f6f3f5] px-3 py-5 lg:fixed lg:inset-y-0 lg:flex lg:flex-col">
+      <aside className="hidden w-62 shrink-0 border-r border-[#c6c6cd] bg-[#f6f3f5] px-3 py-5 lg:fixed lg:inset-y-0 lg:flex lg:flex-col">
         <Link href="/" className="mb-6 flex items-center gap-3 px-2">
           <Image src="/trackflow-logo.svg" alt="" width={36} height={36} className="h-9 w-9 shrink-0 rounded-lg" />
           <span>
@@ -91,7 +91,7 @@ export function AppShell({ children }: AppShellProps) {
         </div>
       </aside>
 
-      <div className="min-h-screen flex-1 lg:ml-[248px]">
+      <div className="min-h-screen flex-1 lg:ml-62">
         <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-[#c6c6cd] bg-[#fcf8fa]/95 px-4 backdrop-blur sm:px-5">
           <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center gap-3 lg:hidden">

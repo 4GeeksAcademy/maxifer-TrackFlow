@@ -18,7 +18,7 @@ export default async function CandidateDetailsPage({ params, searchParams }: Can
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-[1280px] flex-col px-4 py-5 sm:px-5 lg:px-6">
+    <main className="mx-auto flex w-full max-w-7xl flex-col px-4 py-5 sm:px-5 lg:px-6">
       <BackToCandidatesLink />
       <CandidateDetailsCard candidate={candidate} notes={notes} initialEditMode={edit === "1"} />
     </main>
