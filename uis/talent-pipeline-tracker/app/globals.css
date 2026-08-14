@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fcf8fa;
+  --foreground: #1b1b1d;
+  --trackflow-primary: #000000;
+  --trackflow-secondary: #0058be;
+  --trackflow-secondary-container: #2170e4;
+  --trackflow-surface: #fcf8fa;
+  --trackflow-card: #ffffff;
+  --trackflow-muted: #f6f3f5;
+  --trackflow-border: #c6c6cd;
+  --trackflow-text-muted: #45464d;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+  transition-duration: 150ms;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--trackflow-secondary);
+  box-shadow: 0 0 0 3px rgb(0 88 190 / 14%);
+}

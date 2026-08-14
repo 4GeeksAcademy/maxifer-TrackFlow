@@ -1,0 +1,143 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { CandidatesFiltersBar } from "@/components/candidates/CandidatesFiltersBar";
+import { CandidateCreateForm } from "@/components/candidates/CandidateCreateForm";
+import { CandidatesPageHeader } from "@/components/candidates/CandidatesPageHeader";
+import { CandidatesTable } from "@/components/candidates/CandidatesTable";
+import { Modal } from "@/components/ui/Modal";
+import {
+  CANDIDATE_STAGE_VALUES,
+  CANDIDATE_STATUS_VALUES,
+} from "@/lib/candidates";
+import type {
+  CandidateRecord,
+  CandidateStage,
+  CandidateStatus,
+} from "@/types/candidates";
+
+type CandidatesListSectionProps = { candidates: CandidateRecord[] };
+type StatusFilter = CandidateStatus | "all";
+type StageFilter = CandidateStage | "all";
+const CANDIDATES_PER_PAGE = 10;
+
+function isCandidateStatus(value: string | null): value is CandidateStatus {
+  return CANDIDATE_STATUS_VALUES.includes(value as CandidateStatus);
+}
+
+function isCandidateStage(value: string | null): value is CandidateStage {
+  return CANDIDATE_STAGE_VALUES.includes(value as CandidateStage);
+}
+
+export function CandidatesListSection({ candidates }: CandidatesListSectionProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [candidatesState, setCandidatesState] = useState(candidates);
+  const [query, setQuery] = useState("");
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const statusParam = searchParams.get("status");
+  const stageParam = searchParams.get("stage");
+  const status: StatusFilter = isCandidateStatus(statusParam) ? statusParam : "all";
+  const stage: StageFilter = isCandidateStage(stageParam) ? stageParam : "all";
+
+  const filteredCandidates = useMemo(() => {
+    const term = query.trim().toLowerCase();
+
+    return candidatesState.filter((candidate) => {
+      const matchesStatus = status === "all" || candidate.status === status;
+      const matchesStage = stage === "all" || candidate.stage === stage;
+      const matchesQuery =
+        term.length === 0 ||
+        candidate.full_name.toLowerCase().includes(term) ||
+        candidate.email.toLowerCase().includes(term);
+
+      return matchesStatus && matchesStage && matchesQuery;
+    });
+  }, [candidatesState, query, stage, status]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredCandidates.length / CANDIDATES_PER_PAGE));
+  const effectiveCurrentPage = Math.min(currentPage, totalPages);
+  const paginatedCandidates = useMemo(() => {
+    const startIndex = (effectiveCurrentPage - 1) * CANDIDATES_PER_PAGE;
+    return filteredCandidates.slice(startIndex, startIndex + CANDIDATES_PER_PAGE);
+  }, [effectiveCurrentPage, filteredCandidates]);
+
+  function handleCandidateCreated(candidate: CandidateRecord) {
+    setCandidatesState((current) => [candidate, ...current.filter((item) => item.id !== candidate.id)]);
+    setIsCreateModalOpen(false);
+  }
+
+  function handleCandidateUpdated(candidate: CandidateRecord) {
+    setCandidatesState((current) =>
+      current.map((item) => (item.id === candidate.id ? candidate : item)),
+    );
+  }
+
+  function updateQueryParam(key: "status" | "stage", value: string) {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value === "all") params.delete(key);
+    else params.set(key, value);
+    setCurrentPage(1);
+    const next = params.toString();
+    router.replace(next ? `${pathname}?${next}` : pathname, { scroll: false });
+  }
+
+  function handleQueryChange(value: string) {
+    setQuery(value);
+    setCurrentPage(1);
+  }
+
+  function clearFilters() {
+    setQuery("");
+    setCurrentPage(1);
+    router.replace(pathname, { scroll: false });
+  }
+
+  const metrics = {
+    total: candidatesState.length,
+    pending: candidatesState.filter((candidate) => candidate.stage === "pending").length,
+    inProgress: candidatesState.filter((candidate) => candidate.status === "in_progress").length,
+    selected: candidatesState.filter((candidate) => candidate.status === "selected").length,
+  };
+
+  return (
+    <section className="flex flex-col gap-6">
+      <CandidatesPageHeader
+        total={candidatesState.length}
+        visible={filteredCandidates.length}
+        metrics={metrics}
+        onCreateClick={() => setIsCreateModalOpen(true)}
+      />
+      <CandidatesFiltersBar
+        status={status}
+        stage={stage}
+        query={query}
+        onStatusChange={(value) => updateQueryParam("status", value)}
+        onStageChange={(value) => updateQueryParam("stage", value)}
+        onQueryChange={handleQueryChange}
+        onClear={clearFilters}
+      />
+      <CandidatesTable
+        candidates={paginatedCandidates}
+        currentPage={effectiveCurrentPage}
+        pageSize={CANDIDATES_PER_PAGE}
+        totalCandidates={filteredCandidates.length}
+        totalPages={totalPages}
+        onCandidateUpdated={handleCandidateUpdated}
+        onPageChange={setCurrentPage}
+      />
+      <Modal
+        title="Registrar candidatura"
+        description="Alta para el proceso de Asistente de Dirección."
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+      >
+        <CandidateCreateForm onCreated={handleCandidateCreated} />
+      </Modal>
+    </section>
+  );
+}
