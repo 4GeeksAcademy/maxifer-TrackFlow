@@ -187,6 +187,15 @@ button {
 }
 
 
+.secondaryButton {
+  margin-left:
+    12px;
+
+  background:
+    #374151;
+}
+
+
 button:disabled {
   opacity:
     0.55;
@@ -445,6 +454,219 @@ button:disabled {
 }
 
 
+.supplierForm {
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap:
+    14px;
+}
+
+
+.supplierForm label,
+.supplierFilters label {
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  gap:
+    8px;
+
+  font-weight:
+    700;
+}
+
+
+.supplierForm input,
+.supplierForm select,
+.supplierForm textarea,
+.supplierFilters select,
+.rateEditor input {
+  border:
+    1px solid #d1d5db;
+
+  border-radius:
+    8px;
+
+  padding:
+    10px 11px;
+
+  background:
+    white;
+}
+
+
+.supplierForm textarea {
+  min-height:
+    84px;
+
+  resize:
+    vertical;
+}
+
+
+.supplierFormWide {
+  grid-column:
+    1 / -1;
+}
+
+
+.supplierFilters {
+  display:
+    grid;
+
+  grid-template-columns:
+    220px 260px;
+
+  gap:
+    16px;
+
+  margin-bottom:
+    20px;
+}
+
+
+.tableWrap {
+  width:
+    100%;
+
+  overflow-x:
+    auto;
+}
+
+
+.supplierTable {
+  width:
+    100%;
+
+  border-collapse:
+    collapse;
+
+  min-width:
+    980px;
+}
+
+
+.supplierTable th,
+.supplierTable td {
+  padding:
+    12px;
+
+  border-bottom:
+    1px solid #e5e7eb;
+
+  text-align:
+    left;
+
+  vertical-align:
+    top;
+}
+
+
+.supplierTable th {
+  font-size:
+    13px;
+
+  color:
+    #4b5563;
+
+  letter-spacing:
+    0.3px;
+}
+
+
+.rowActive {
+  background:
+    #f8fffb;
+}
+
+
+.rowSuspended {
+  background:
+    #fff8f8;
+}
+
+
+.statusBadge {
+  display:
+    inline-block;
+
+  padding:
+    4px 10px;
+
+  border-radius:
+    999px;
+
+  font-size:
+    12px;
+
+  font-weight:
+    700;
+}
+
+
+.statusActive {
+  color:
+    #0f5132;
+
+  background:
+    #d1fae5;
+}
+
+
+.statusSuspended {
+  color:
+    #991b1b;
+
+  background:
+    #fee2e2;
+}
+
+
+.rateEditor {
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    8px;
+}
+
+
+.rateEditor input {
+  width:
+    120px;
+}
+
+
+.rowActions {
+  display:
+    flex;
+
+  gap:
+    8px;
+
+  flex-wrap:
+    wrap;
+}
+
+
+.mutedButton {
+  background:
+    #4b5563;
+}
+
+
 @media (
   max-width: 750px
 ) {
@@ -486,6 +708,27 @@ button:disabled {
   .pageHeader h1 {
     font-size:
       34px;
+  }
+
+
+  .secondaryButton {
+    margin-left:
+      0;
+
+    display:
+      block;
+  }
+
+
+  .supplierForm {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .supplierFilters {
+    grid-template-columns:
+      1fr;
   }
 
 }
