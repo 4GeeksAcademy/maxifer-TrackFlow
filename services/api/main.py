@@ -1,3 +1,6 @@
+import sys
+from pathlib import Path
+
 from fastapi import (
     FastAPI,
     File,
@@ -10,9 +13,19 @@ from fastapi.responses import (
 )
 
 
+# Permite ejecutar la app desde distintos cwd (raíz o services/api).
+ROOT_DIR = Path(__file__).resolve().parents[2]
+if str(ROOT_DIR) not in sys.path:
+    sys.path.append(str(ROOT_DIR))
+
+
 from packages.incidents_analysis import (
     analyze_csv_text,
     summary_to_csv,
+)
+
+from services.api.routers.suppliers import (
+    router as suppliers_router,
 )
 
 
@@ -21,6 +34,11 @@ app = FastAPI(
         "TrackFlow Incidents API"
     ),
     version="1.0.0",
+)
+
+
+app.include_router(
+    suppliers_router
 )
 
 
