@@ -3,3 +3,6 @@ node_modules/
 __pycache__/
 *.py[cod]
 results.csv
+.env
+services/api/.env
+services/api/data/auth.json

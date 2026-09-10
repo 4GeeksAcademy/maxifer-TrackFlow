@@ -2,3 +2,7 @@ fastapi
 uvicorn[standard]
 python-multipart
 tinydb
+python-jose[cryptography]
+libpass[bcrypt]
+python-dotenv
+email-validator
