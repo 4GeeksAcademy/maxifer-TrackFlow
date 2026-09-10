@@ -1,8 +1,18 @@
-# Carpeta `services`
+# Servicios
 
-Esta carpeta contiene **todos los servicios backend** (APIs y workers en segundo plano) relacionados con la compañía para el proyecto transversal de AI Engineering.
+Esta carpeta contiene los servicios backend de TrackFlow.
 
-Cada subcarpeta dentro de `services/` debe corresponder a **un servicio concreto** (por ejemplo `admin-api`, `data-processor-worker`) e incluir su propia documentación técnica y funcional.
+## Servicios disponibles
 
-- **Propósito principal**: centralizar toda la lógica backend, APIs y consumidores de colas que dan soporte a los casos de uso de la compañía.
-- **Recomendación**: documenta en este archivo (o en sub-READMEs) los servicios que vayas añadiendo, su objetivo, tecnología usada y cómo ejecutarlos.
+| Servicio | Ruta | Propósito | Stack |
+| --- | --- | --- | --- |
+| TrackFlow API | `services/api` | Endpoints de auth, proveedores y análisis de incidencias usados por el backoffice interno | FastAPI, TinyDB |
+
+## Convenciones
+
+- Cada servicio debe incluir un README con setup, comandos de ejecución, configuración, endpoints y notas de almacenamiento.
+- Mantener el código importable desde la raíz del repositorio siempre que sea posible.
+- La lógica de negocio compartida debe vivir en `packages/` cuando también la usan scripts, jobs u otros servicios.
+- No commitear secretos de producción ni datos operativos reales.
+
+English version: [README.md](./README.md).

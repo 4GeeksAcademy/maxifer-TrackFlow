@@ -1,8 +1,19 @@
-# Carpeta `uis`
+# Interfaces de usuario
 
-Esta carpeta contiene **todas las interfaces de usuario** relacionadas con la compañía para el proyecto transversal de AI Engineering (por ejemplo: aplicaciones web, dashboards internos, portales de clientes, apps de Streamlit/Gradio, etc.).
+Esta carpeta contiene las aplicaciones frontend construidas para TrackFlow.
 
-Cada subcarpeta dentro de `uis/` debe corresponder a **una interfaz de usuario concreta** (por ejemplo `website`, `backoffice`) e incluir su propia documentación técnica y funcional.
+## Aplicaciones
 
-- **Propósito principal**: centralizar en un único lugar todas las aplicaciones frontend que dan soporte a los casos de uso de la compañía.
-- **Recomendación**: documenta en este archivo (o en sub-READMEs) las aplicaciones que vayas añadiendo, su objetivo, tecnología usada y cómo ejecutarlas.
+| App | Ruta | Propósito | Stack |
+| --- | --- | --- | --- |
+| Backoffice | `uis/backoffice` | Dashboard interno para cargar y analizar CSV de incidencias | Next.js, React, TypeScript, Tailwind CSS |
+| Talent Pipeline Tracker | `uis/talent-pipeline-tracker` | Dashboard de pipeline de candidaturas para procesos de selección de TrackFlow | Next.js, React, TypeScript, Tailwind CSS |
+
+## Convenciones
+
+- Cada app mantiene sus propias dependencias, scripts y README.
+- Mantener el copy de dominio en español salvo que una feature requiera inglés.
+- Documentar URLs de APIs externas, variables de entorno y pasos de ejecución local en el README de cada app.
+- El código frontend reutilizable debe moverse a `packages/` solo cuando dos o más apps lo necesiten.
+
+English version: [README.md](./README.md).
