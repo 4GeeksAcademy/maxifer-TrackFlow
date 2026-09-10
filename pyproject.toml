@@ -1,0 +1,10 @@
+[project]
+name = "trackflow-seeders"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+  "tinydb>=4.8.0",
+]
+
+[project.scripts]
+seed = "services.api.seed:main"
