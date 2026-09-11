@@ -1,108 +1,116 @@
-# AI Engineering Company Project — Student Template
+# TrackFlow
 
-[![4Geeks Academy](https://img.shields.io/badge/4Geeks-Academy-blue)](https://4geeksacademy.com)
-[![AI Engineering](https://img.shields.io/badge/track-AI%20Engineering-green)](https://4geeksacademy.com/es/programas-de-carrera/ingenieria-ia)
+TrackFlow is an AI Engineering project for a last-mile logistics and warehouse operations company with teams in Los Angeles and Zaragoza.
 
-_Base template for transversal projects in the AI Engineering Career Program — 4Geeks Academy._
+The repository combines several deliverables for the 4Geeks Academy AI Engineering Track: a public landing page, internal dashboards, a FastAPI backend, shared analysis logic, data areas, and placeholders for future agents, workflows, MCP servers, and infrastructure.
 
-> _Instrucciones disponibles en español en [README.es.md](./README.es.md)._
+Spanish documentation is available in [README.es.md](./README.es.md).
 
----
+## What Is Included
 
-## Purpose
+| Area | Path | Status |
+| --- | --- | --- |
+| Static landing | `index.html`, `application.html` | Available |
+| Incidents backoffice | `uis/backoffice` | Available |
+| Talent pipeline tracker | `uis/talent-pipeline-tracker` | Available |
+| FastAPI service | `services/api` | Available |
+| Shared incidents logic | `packages/incidents_analysis` | Available |
+| Data, agents, workflows, infra | `data/`, `agents/`, `workflows/`, `infra/` | Project structure |
 
-This repository is the **starter template** for transversal projects. You will work on real company scenarios (Brasaland, TrackFlow, Nexova), building deliverables that map to course milestones (Web, Programming, Backend, Telemetry, RAG, Agents, Workflows, Real-time).
-
-- Create a template from this repository.
-- Replace the placeholder `CONTEXT.md` with your assigned company context.
-- Use `skills/` and the directory-level `README.md` files as working guidance.
-
----
-
-## Current status of the template
-
-The repository currently provides a **base folder structure and documentation skeleton**. It does not include runnable apps or global scripts yet.
-
-- `CONTEXT.md` is a placeholder and must be replaced with your assigned company context.
-- There is no root `AGENTS.md` yet.
-- Shared package metadata exists in `packages/shared/package.json` (`@repo/shared-types`), but no workspace runner is configured at root.
-
----
-
-## Repository structure
+## Repository Map
 
 ```text
-ai-engineering-company-project-monorepo/
+TrackFlow/
 ├── README.md
 ├── README.es.md
-├── CONTEXT.md                # Placeholder to be replaced with assigned context
-├── agents/                   # Agent patterns/templates and tools docs
-├── data/                     # raw, process, pipelines, eval
-├── docs/                     # Project and architecture documentation
-├── infra/                    # Docker, Terraform, deployment configs
-├── internal/                 # CLIs, packaged migration scripts, internal utilities
-├── mcps/                     # Model Context Protocol (MCP) Servers
-├── packages/
-│   └── shared/               # Shared package (@repo/shared-types)
-├── scripts/                  # Script conventions/documentation
-├── services/                 # APIs and background workers
-├── shared/                   # Shared assets/conventions at repo level
-├── skills/                   # Reusable agent skills
-├── uis/                      # User interfaces (React, Next.js, Streamlit, HTML)
-└── workflows/                # Automation/orchestration documentation
+├── CONTEXT.md                 # TrackFlow company brief
+├── TrackFlow.md               # Company choice and selected automation challenge
+├── index.html                 # Static public landing page
+├── application.html           # Static application/demo page
+├── assets/                    # Landing assets
+├── agents/                    # Agent prototypes, templates and tools
+├── data/                      # Raw, processed, pipeline and evaluation data
+├── docs/                      # Architecture and project documentation
+├── infra/                     # Deployment and infrastructure definitions
+├── internal/                  # Internal developer utilities
+├── mcps/                      # Model Context Protocol servers
+├── packages/                  # Shared packages and domain logic
+├── scripts/                   # Automation and utility scripts
+├── services/                  # Backend services
+├── shared/                    # Shared resources that are not packages
+├── skills/                    # Reusable agent skills
+├── uis/                       # Frontend applications
+└── workflows/                 # Automation and orchestration flows
 ```
 
----
+## Requirements
 
-## How to start
+- Node.js 18 or newer
+- npm 9 or newer
+- Python 3.11 or newer
+- A Python virtual environment for the FastAPI service
 
-1. **Use this repository as a template** and create your own project repo.
-2. **Clone** your repository (or open it in Codespaces).
-3. **Replace** `CONTEXT.md` with the full context for your assigned company.
-4. **Review** each top-level folder `README.md` to understand intended responsibilities (`uis/`, `services/`, `data/`, `skills/`, etc.).
-5. **Start implementing** milestone deliverables in `uis/` and `services/`, reusing `packages/shared/` and `data/` as needed.
+## Landing Page
 
-### Quick Landing Preview in Local or Codespaces
-
-If you want to preview the static HTML pages in this repo (`index.html` and `application.html`) from the root, run:
+From the repository root:
 
 ```bash
+npm install
+npm run build:landing
 npx --yes serve -l 3000 .
 ```
 
-Then open `http://localhost:3000`.
+Open `http://localhost:3000`.
 
----
+Useful root scripts:
 
-## Milestones (reference)
+| Command | Purpose |
+| --- | --- |
+| `npm run build:css` | Builds the Tailwind CSS file used by the static landing |
+| `npm run optimize:images` | Optimizes landing images |
+| `npm run test:spanish-copy` | Checks Spanish copy conventions |
+| `npm run build:landing` | Runs the landing validation/build pipeline |
 
-| Milestone | Focus        | Typical deliverables                        |
-| --------- | ------------ | ------------------------------------------- |
-| 0         | Prework      | Environment setup, first prompts            |
-| 1         | Web          | Corporate website, forms, SEO               |
-| 2         | Programming  | Business logic, scoring, calculations       |
-| 3         | AI-driven UI | AI-generated interfaces                     |
-| 4         | Next.js      | Portals, loyalty app, operations UI         |
-| 5         | Backend      | Central API (locations, menus, sales, etc.) |
-| 6         | Telemetry    | Data pipeline, dashboards                   |
-| 7         | RAG & Memory | Semantic knowledge base, search             |
-| 8         | Agents       | Support, onboarding, training agents        |
-| 9         | Workflows    | n8n automations                             |
-| 10        | Real-time    | Live dashboards, alerts, streaming          |
+## Incidents Backoffice
 
----
+This flow has two parts:
 
-## Links
+- Backend: [services/api](./services/api/README.md)
+- Frontend: [uis/backoffice](./uis/backoffice/README.md)
 
-- [4Geeks Academy — AI Engineering](https://4geeksacademy.com/es/programas-de-carrera/ingenieria-ia)
-- [How to start a coding project](https://4geeks.com/lesson/how-to-start-a-project)
+Start the API first:
 
----
+```bash
+python -m uvicorn services.api.main:app --host 0.0.0.0 --port 8000 --reload
+```
 
-## Contributors
+Then start the UI:
 
-This template was built as part of the 4Geeks Academy AI Engineering Career Program by [@marcogonzalo](https://www.linkedin.com/in/marcogonzalo) and [@alezanchezr](https://x.com/alesanchezr) and many other contributors. Find out more about our [AI Engineering Course](https://4geeksacademy.com/en/career-programs/ai-engineering), and [other courses](https://4geeksacademy.com/en/program-comparison).
+```bash
+cd uis/backoffice
+npm install
+npm run dev
+```
 
-You can find other templates and resources like this at the [4Geeks Academy GitHub page](https://github.com/4geeksacademy).
+## Talent Pipeline Tracker
 
-_This template is maintained by 4Geeks Academy for the AI Engineering track. For exclusive use in the programme._
+The recruiting dashboard lives in [uis/talent-pipeline-tracker](./uis/talent-pipeline-tracker/README.md).
+
+```bash
+cd uis/talent-pipeline-tracker
+npm install
+npm run dev
+```
+
+## Documentation Conventions
+
+- Keep each folder-level README focused on responsibility, contents, and how to run or extend that area.
+- Add project-specific details as features become real; avoid leaving generic template text behind.
+- Link from the root README to the component README instead of duplicating long instructions.
+- Do not commit secrets or real personal/customer data. Use synthetic or anonymized examples for data and demos.
+
+## Context
+
+TrackFlow's core challenge is to modernize fragmented logistics operations: carrier tracking, incident analysis, returns, customer support, warehouse visibility, and executive reporting.
+
+The current selected automation challenge is documented in [TrackFlow.md](./TrackFlow.md).

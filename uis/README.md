@@ -1,10 +1,19 @@
-# `uis` folder
+# User Interfaces
 
-This folder contains **all the user interfaces** related to the company for the cross-functional AI Engineering project (for example: web applications, internal dashboards, customer portals, Streamlit/Gradio apps, etc.).
+This folder contains the frontend applications built for TrackFlow.
 
-Each subfolder inside `uis/` must correspond to **one specific user interface** (for example: `website`, `backoffice`) and include its own technical and functional documentation.
+## Applications
 
-- **Main purpose**: to centralize in a single place all the frontend applications that support the company's use cases.
-- **Recommendation**: document in this file (or in sub-READMEs) the applications you add, their objective, the technology used, and how to run them.
+| App | Path | Purpose | Stack |
+| --- | --- | --- | --- |
+| Backoffice | `uis/backoffice` | Internal dashboard for uploading and analyzing incidents CSV files | Next.js, React, TypeScript, Tailwind CSS |
+| Talent Pipeline Tracker | `uis/talent-pipeline-tracker` | Recruiting pipeline dashboard for TrackFlow hiring processes | Next.js, React, TypeScript, Tailwind CSS |
 
-> _Spanish version: [README.es.md](./README.es.md)._
+## Conventions
+
+- Each app owns its dependencies, scripts and README.
+- Keep domain copy in Spanish unless a specific feature requires English.
+- Document external API URLs, required environment variables and local startup steps in the app README.
+- Reusable frontend code should move to `packages/` only when two or more apps need it.
+
+Spanish version: [README.es.md](./README.es.md).

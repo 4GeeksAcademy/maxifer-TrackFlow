@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from tinydb import Query as TinyQuery
 
 from services.api.database import (
@@ -15,6 +15,7 @@ from services.api.models import (
 	SupplierResponse,
 	SupplierStatusUpdate,
 )
+from services.api.security import get_current_user
 
 
 router = APIRouter(
@@ -38,7 +39,10 @@ def _get_supplier_or_404(supplier_id: int):
 	response_model=SupplierResponse,
 	status_code=status.HTTP_201_CREATED,
 )
-def create_supplier(payload: SupplierCreate):
+def create_supplier(
+	payload: SupplierCreate,
+	current_user: dict = Depends(get_current_user),
+):
 	table = get_suppliers_table()
 	record = payload.model_dump(mode="json")
 	record["updated_at"] = datetime.now(timezone.utc).isoformat()
@@ -62,6 +66,7 @@ def create_supplier(payload: SupplierCreate):
 def list_suppliers(
 	country: SupplierCountry | None = Query(default=None),
 	category: SupplierCategory | None = Query(default=None),
+	current_user: dict = Depends(get_current_user),
 ):
 	table = get_suppliers_table()
 	query = TinyQuery()
@@ -88,7 +93,10 @@ def list_suppliers(
 	"/{supplier_id}",
 	response_model=SupplierResponse,
 )
-def get_supplier_by_id(supplier_id: int):
+def get_supplier_by_id(
+	supplier_id: int,
+	current_user: dict = Depends(get_current_user),
+):
 	supplier = _get_supplier_or_404(supplier_id)
 	return SupplierResponse(**document_to_record(supplier))
 
@@ -100,6 +108,7 @@ def get_supplier_by_id(supplier_id: int):
 def update_supplier_rate(
 	supplier_id: int,
 	payload: SupplierRateUpdate,
+	current_user: dict = Depends(get_current_user),
 ):
 	_get_supplier_or_404(supplier_id)
 	now = datetime.now(timezone.utc).isoformat()
@@ -130,6 +139,7 @@ def update_supplier_rate(
 def update_supplier_status(
 	supplier_id: int,
 	payload: SupplierStatusUpdate,
+	current_user: dict = Depends(get_current_user),
 ):
 	_get_supplier_or_404(supplier_id)
 	table = get_suppliers_table()
@@ -154,7 +164,10 @@ def update_supplier_status(
 @router.delete(
 	"/{supplier_id}",
 )
-def delete_supplier(supplier_id: int):
+def delete_supplier(
+	supplier_id: int,
+	current_user: dict = Depends(get_current_user),
+):
 	_get_supplier_or_404(supplier_id)
 	get_suppliers_table().remove(doc_ids=[supplier_id])
 

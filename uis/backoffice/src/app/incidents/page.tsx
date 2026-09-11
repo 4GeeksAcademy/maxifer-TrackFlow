@@ -10,6 +10,8 @@ import type {
   FormEvent
 } from "react";
 
+import { apiFetch } from "@/lib/auth";
+
 
 type BreakdownValue = {
 
@@ -146,7 +148,7 @@ export default function IncidentsPage() {
     try {
 
       const response =
-        await fetch(
+        await apiFetch(
 
           (
             "/backend"
@@ -232,7 +234,7 @@ export default function IncidentsPage() {
     try {
 
       const response =
-        await fetch(
+        await apiFetch(
           (
             "/backend"
             + "/api/incidents/"

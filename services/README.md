@@ -1,10 +1,18 @@
-# `services` folder
+# Services
 
-This folder contains **all the backend services** (APIs and background workers) related to the company for the cross-functional AI Engineering project.
+This folder contains backend services for TrackFlow.
 
-Each subfolder inside `services/` must correspond to **one specific service** (for example: `admin-api`, `data-processor-worker`) and include its own technical and functional documentation.
+## Available Services
 
-- **Main purpose**: to centralize all the backend logic, APIs, and queue consumers that support the company's use cases.
-- **Recommendation**: document in this file (or in sub-READMEs) the services you add, their objective, the technology used, and how to run them.
+| Service | Path | Purpose | Stack |
+| --- | --- | --- | --- |
+| TrackFlow API | `services/api` | Auth, suppliers and incidents analysis endpoints used by the internal backoffice | FastAPI, TinyDB |
 
-> _Spanish version: [README.es.md](./README.es.md)._
+## Conventions
+
+- Each service must include a README with setup, run commands, configuration, endpoints and data storage notes.
+- Keep service code importable from the repository root when possible.
+- Shared business logic should live in `packages/` when it is also used by scripts, jobs or other services.
+- Do not commit production secrets or real operational data.
+
+Spanish version: [README.es.md](./README.es.md).

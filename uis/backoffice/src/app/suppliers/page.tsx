@@ -13,6 +13,8 @@ import type {
   FormEvent,
 } from "react";
 
+import { apiFetch } from "@/lib/auth";
+
 
 type SupplierCountry =
   | "USA"
@@ -302,7 +304,7 @@ export default function SuppliersPage() {
           : "/backend/suppliers";
 
       const response =
-        await fetch(endpoint);
+        await apiFetch(endpoint);
 
       const data =
         await response
@@ -382,7 +384,7 @@ export default function SuppliersPage() {
 
     try {
       const response =
-        await fetch(
+        await apiFetch(
           "/backend/suppliers",
           {
             method: "POST",
@@ -483,7 +485,7 @@ export default function SuppliersPage() {
 
     try {
       const response =
-        await fetch(
+        await apiFetch(
           (
             "/backend/suppliers/"
             + supplierId
@@ -589,7 +591,7 @@ export default function SuppliersPage() {
 
     try {
       const response =
-        await fetch(
+        await apiFetch(
           (
             "/backend/suppliers/"
             + supplier.id
