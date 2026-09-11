@@ -5,6 +5,8 @@ import type {
 
 import Link from "next/link";
 
+import { AuthGuard } from "@/components/AuthGuard";
+import { AuthHeaderActions } from "@/components/AuthHeaderActions";
 import "./globals.css";
 
 
@@ -61,14 +63,25 @@ export default function RootLayout({
                 Incidencias
               </Link>
 
+              <Link href="/suppliers">
+                Proveedores
+              </Link>
+
+              <Link href="/account/profile">
+                Mi perfil
+              </Link>
+
+              <AuthHeaderActions />
+
             </div>
 
           </div>
 
         </nav>
 
-
-        {children}
+        <AuthGuard>
+          {children}
+        </AuthGuard>
 
       </body>
 
