@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { apiFetch, getAuthToken, logoutAndRedirect } from "@/lib/auth";
@@ -110,6 +111,9 @@ export default function AccountProfilePage() {
         <span className="eyebrow">CUENTA</span>
         <h1>Perfil</h1>
         <p>Consulta y actualiza tus datos personales del backoffice.</p>
+        <p>
+          <Link href="/account/change-password">Cambiar contrasena</Link>
+        </p>
       </header>
 
       <section className="card" style={{ padding: "2rem" }}>

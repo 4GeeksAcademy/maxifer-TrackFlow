@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 import { useAuthToken } from "@/lib/auth";
 
-const PUBLIC_PATHS = new Set(["/login", "/register"]);
+const PUBLIC_PATHS = new Set(["/login", "/register", "/forgot-password", "/reset-password"]);
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
