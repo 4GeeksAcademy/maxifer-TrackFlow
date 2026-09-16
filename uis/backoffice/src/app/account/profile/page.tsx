@@ -105,7 +105,7 @@ export default function AccountProfilePage() {
   }
 
   return (
-    <main className="container" style={{ maxWidth: 760 }}>
+    <main className="container profilePage" style={{ maxWidth: 760 }}>
       <header className="pageHeader">
         <span className="eyebrow">CUENTA</span>
         <h1>Perfil</h1>

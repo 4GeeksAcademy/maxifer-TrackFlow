@@ -52,8 +52,8 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="container" style={{ maxWidth: 560 }}>
-      <section className="card" style={{ padding: "2rem" }}>
+    <main className="container authPage" style={{ maxWidth: 560 }}>
+      <section className="card authCard" style={{ padding: "2rem" }}>
         <span className="eyebrow">TRACKFLOW</span>
         <h1 style={{ marginTop: "0.75rem" }}>Iniciar sesión</h1>
         <p>Accede al backoffice interno de operaciones.</p>

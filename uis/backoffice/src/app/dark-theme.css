@@ -1,0 +1,39 @@
+.themeSwitch{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--muted);font-size:15px;line-height:1}
+.themeSwitch:hover:not(:disabled){background:#f1f5f9;border-color:var(--line)}
+.themeSwitchTrack{display:flex;align-items:center;width:34px;height:20px;padding:2px;border-radius:999px;background:#cbd5e1;transition:background .16s}
+.themeSwitchThumb{width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0003;transition:transform .16s}
+.themeSwitch[aria-checked="true"] .themeSwitchTrack{background:#047857}
+.themeSwitch[aria-checked="true"] .themeSwitchThumb{transform:translateX(14px)}
+
+html[data-theme="dark"]{color-scheme:dark;--canvas:#0f172a;--surface:#111827;--ink:#f8fafc;--muted:#94a3b8;--line:#334155;--green:#047857;--green-dark:#065f46;--blue:#38bdf8;--amber:#fbbf24;--red:#fb7185}
+html[data-theme="dark"] body{background:var(--canvas);color:var(--ink);font-family:Inter,"Hanken Grotesk",Arial,sans-serif}
+html[data-theme="dark"] .navbar{background:#111827f5;color:var(--ink);box-shadow:none}
+html[data-theme="dark"] .brandTag,html[data-theme="dark"] .navLinks a:hover,html[data-theme="dark"] .profileLink,html[data-theme="dark"] .headerAction,html[data-theme="dark"] .themeSwitch{background:#1e293b;color:var(--ink);border-color:var(--line)}
+html[data-theme="dark"] .navLinks a{color:#cbd5e1}
+html[data-theme="dark"] .navLinks a[aria-current="page"]{background:var(--green);color:#fff}
+html[data-theme="dark"] .themeSwitch:hover:not(:disabled),html[data-theme="dark"] .profileLink:hover,html[data-theme="dark"] .headerAction:hover{background:#334155}
+html[data-theme="dark"] .card,html[data-theme="dark"] .metric,html[data-theme="dark"] .featureCard,html[data-theme="dark"] .featureMetrics div,html[data-theme="dark"] .supplierStat,html[data-theme="dark"] .incidentStat,html[data-theme="dark"] .incidentCategoryStrip,html[data-theme="dark"] .incidentFiltersPanel,html[data-theme="dark"] .supplierModal,html[data-theme="dark"] .incidentModal{background:#111827;color:var(--ink);border-color:#334155;box-shadow:none}
+html[data-theme="dark"] .supplierFilters,html[data-theme="dark"] .incidentPanelHeading,html[data-theme="dark"] .incidentPager,html[data-theme="dark"] .supplierModalHeader,html[data-theme="dark"] .incidentModal .incidentPanelHeading,html[data-theme="dark"] .incidentDetailsRow td,html[data-theme="dark"] .incidentDetailsRow td>div{background:#111827;color:var(--ink);border-color:#334155}
+html[data-theme="dark"] .summaryGrid>div,html[data-theme="dark"] .quickLinks>a,html[data-theme="dark"] .supplierSplit b,html[data-theme="dark"] .incidentStateBox,html[data-theme="dark"] .incidentCategoryItems>div,html[data-theme="dark"] .satisfactionGrid div{background:#1e293b;color:var(--ink);border-color:#334155}
+html[data-theme="dark"] .incidentFilters,html[data-theme="dark"] .supplierFilters,html[data-theme="dark"] .incidentTable th,html[data-theme="dark"] .supplierTable th{background:#0f172a;color:#94a3b8;border-color:#334155}
+html[data-theme="dark"] .incidentTable td,html[data-theme="dark"] .supplierTable td,html[data-theme="dark"] .dataList li,html[data-theme="dark"] .incidentMiniList>div{border-color:#334155}
+html[data-theme="dark"] .incidentTable tbody tr:hover,html[data-theme="dark"] .supplierTable tbody tr:hover,html[data-theme="dark"] .supplierTable tbody tr.rowActive:hover,html[data-theme="dark"] .supplierTable tbody tr.rowSuspended:hover{background:#1e293b}
+html[data-theme="dark"] .rowActive,html[data-theme="dark"] .rowSuspended,html[data-theme="dark"] .supplierTable tbody tr.rowActive,html[data-theme="dark"] .supplierTable tbody tr.rowSuspended{background:#111827}
+html[data-theme="dark"] input,html[data-theme="dark"] select,html[data-theme="dark"] textarea,html[data-theme="dark"] .authCard input,html[data-theme="dark"] .profilePage input,html[data-theme="dark"] .supplierFilters input,html[data-theme="dark"] .supplierFilters select,html[data-theme="dark"] .incidentSearch input{background:#0f172a;color:#f8fafc;border-color:#475569}
+html[data-theme="dark"] input::placeholder,html[data-theme="dark"] textarea::placeholder{color:#94a3b8}
+html[data-theme="dark"] .incidentForm label,html[data-theme="dark"] .supplierForm label,html[data-theme="dark"] .incidentFilters label,html[data-theme="dark"] .supplierFilters label,html[data-theme="dark"] .incidentSearch label,html[data-theme="dark"] .authCard label,html[data-theme="dark"] .profilePage label{color:#cbd5e1}
+html[data-theme="dark"] .secondaryButton,html[data-theme="dark"] .mutedButton,html[data-theme="dark"] .outlineButton,html[data-theme="dark"] .rowActions button,html[data-theme="dark"] .incidentToggle,html[data-theme="dark"] .incidentRefresh,html[data-theme="dark"] .supplierModalClose,html[data-theme="dark"] .incidentModalClose{background:#1e293b;color:#f8fafc;border-color:#475569}
+html[data-theme="dark"] .secondaryButton:hover,html[data-theme="dark"] .mutedButton:hover,html[data-theme="dark"] .outlineButton:hover,html[data-theme="dark"] .rowActions button:hover:not(:disabled),html[data-theme="dark"] .incidentToggle:hover,html[data-theme="dark"] .incidentRefresh:hover,html[data-theme="dark"] .supplierModalClose:hover,html[data-theme="dark"] .incidentModalClose:hover{background:#334155!important;color:#fff;border-color:#64748b}
+html[data-theme="dark"] .metric span,html[data-theme="dark"] .dataList li,html[data-theme="dark"] .featureCard>p,html[data-theme="dark"] .supplierStat>span,html[data-theme="dark"] .incidentStat>span,html[data-theme="dark"] .incidentStripHeading>span,html[data-theme="dark"] .incidentStateBox span,html[data-theme="dark"] .incidentMiniList span,html[data-theme="dark"] .supplierIdentity small,html[data-theme="dark"] .supplierStat small,html[data-theme="dark"] .incidentStat p,html[data-theme="dark"] .incidentFinal,html[data-theme="dark"] .incidentListHeading span,html[data-theme="dark"] .incidentPanelHeading p,html[data-theme="dark"] .supplierModalHeader p,html[data-theme="dark"] .incidentDetailsRow p,html[data-theme="dark"] .incidentDetailsRow small{color:#94a3b8}
+html[data-theme="dark"] .incidentStateBox.open{background:#fb71851f;border-color:#fb718566}
+html[data-theme="dark"] .incidentStateBox.open span,html[data-theme="dark"] .incidentStateBox.open strong{color:#fb7185}
+html[data-theme="dark"] .incidentStateBox.in_progress{background:#f59e0b1f;border-color:#f59e0b66}
+html[data-theme="dark"] .incidentStateBox.in_progress span,html[data-theme="dark"] .incidentStateBox.in_progress strong{color:#fbbf24}
+html[data-theme="dark"] .incidentStateBox.resolved{background:#10b9811f;border-color:#10b98166}
+html[data-theme="dark"] .incidentStateBox.resolved span,html[data-theme="dark"] .incidentStateBox.resolved strong{color:#34d399}
+html[data-theme="dark"] .statusActive,html[data-theme="dark"] .incidentStatus.resolved,html[data-theme="dark"] .successMessage{background:#10b9811f;color:#34d399;border-color:#10b9814d}
+html[data-theme="dark"] .statusSuspended,html[data-theme="dark"] .incidentStatus.open,html[data-theme="dark"] .error{background:#fb71851f;color:#fb7185;border-color:#fb71854d}
+html[data-theme="dark"] .incidentStatus.in_progress,html[data-theme="dark"] .branchRequired{background:#f59e0b1f;color:#fbbf24;border-color:#f59e0b4d}
+html[data-theme="dark"] .incidentStatus,html[data-theme="dark"] .incidentCategoryBadge,html[data-theme="dark"] .categoryBadge{background:#2563eb29;color:#93c5fd;border-color:#2563eb66}
+html[data-theme="dark"] .currencyTag,html[data-theme="dark"] .incidentOrigin,html[data-theme="dark"] .incidentStatus.discarded{background:#334155;color:#cbd5e1;border-color:#475569}
+html[data-theme="dark"] button:focus-visible,html[data-theme="dark"] a:focus-visible,html[data-theme="dark"] input:focus-visible,html[data-theme="dark"] select:focus-visible,html[data-theme="dark"] textarea:focus-visible{outline-color:#38bdf8}
