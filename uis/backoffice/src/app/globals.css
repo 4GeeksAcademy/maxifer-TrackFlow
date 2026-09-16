@@ -36,6 +36,21 @@ input {
   font: inherit;
 }
 
+select, textarea { font: inherit; }
+.incidentForm, .incidentFilters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 20px; }
+.incidentForm label, .incidentFilters label { display: flex; flex-direction: column; gap: 8px; font-weight: 700; }
+.incidentForm input, .incidentForm select, .incidentForm textarea, .incidentFilters select, .incidentTable select { min-height: 44px; padding: 10px; border: 1px solid #b9c2cc; border-radius: 8px; background: white; color: #1c2128; }
+.incidentForm textarea { min-height: 100px; resize: vertical; }
+.incidentWide { grid-column: 1 / -1; }
+.branchRequired { padding: 10px; border: 2px solid #bd6c00; border-radius: 8px; background: #fff7e8; }
+.fieldError { color: #a12020; font-weight: 500; }
+.successMessage { padding: 14px; border-radius: 8px; background: #e4f7e9; color: #176a35; }
+.summaryTotal { font-size: 20px; }
+.summaryGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.incidentTable { width: 100%; min-width: 900px; border-collapse: collapse; }
+.incidentTable th, .incidentTable td { padding: 12px; border-bottom: 1px solid #e5e7eb; text-align: left; vertical-align: top; }
+@media (max-width: 750px) { .incidentForm, .incidentFilters, .summaryGrid { grid-template-columns: 1fr; } }
+
 
 .navbar {
   background:

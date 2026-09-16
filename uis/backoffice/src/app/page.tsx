@@ -30,7 +30,7 @@ export default function Home() {
           href="/incidents"
           className="button"
         >
-          Analizar incidencias
+          Gestionar incidencias
         </Link>
 
         <Link
