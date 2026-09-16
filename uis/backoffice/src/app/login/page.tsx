@@ -81,6 +81,10 @@ export default function LoginPage() {
             />
           </label>
 
+          <p style={{ margin: 0, textAlign: "right" }}>
+            <Link href="/forgot-password">Olvidaste tu contrasena?</Link>
+          </p>
+
           {error ? (
             <p className="error" style={{ margin: 0 }}>
               {error}
