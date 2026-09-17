@@ -128,39 +128,37 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="container" style={{ maxWidth: 720 }}>
-      <section className="card" style={{ padding: "2rem" }}>
-        <span className="eyebrow">TRACKFLOW</span>
-        <h1 style={{ marginTop: "0.75rem" }}>Crear cuenta</h1>
+    <main className="container">
+      <section className="auth-panel !max-w-2xl">
+        <span className="eyebrow">TRACKFLOW / ACCESO</span>
+        <h1>Crear cuenta</h1>
         <p>Registra al usuario del backoffice interno.</p>
 
-        <form onSubmit={handleSubmit} style={{ display: "grid", gap: "1rem", marginTop: "1.5rem" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem" }}>
-            <label style={{ display: "grid", gap: "0.4rem" }}>
+        <form onSubmit={handleSubmit}>
+          <div className="form-grid">
+            <label className="form-field">
               <span>Nombre</span>
               <input
                 value={form.name}
                 onChange={(event) => handleChange("name", event.target.value)}
-                style={{ padding: "0.8rem 0.9rem", borderRadius: 8, border: "1px solid #d1d5db" }}
               />
               {fieldErrors.name ? <small className="error">{fieldErrors.name}</small> : null}
             </label>
 
-            <label style={{ display: "grid", gap: "0.4rem" }}>
+            <label className="form-field">
               <span>Email</span>
               <input
                 type="email"
                 value={form.email}
                 onChange={(event) => handleChange("email", event.target.value)}
                 required
-                style={{ padding: "0.8rem 0.9rem", borderRadius: 8, border: "1px solid #d1d5db" }}
               />
               {fieldErrors.email ? <small className="error">{fieldErrors.email}</small> : null}
             </label>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem" }}>
-            <label style={{ display: "grid", gap: "0.4rem" }}>
+          <div className="form-grid">
+            <label className="form-field">
               <span>Contraseña</span>
               <input
                 type="password"
@@ -168,40 +166,37 @@ export default function RegisterPage() {
                 onChange={(event) => handleChange("password", event.target.value)}
                 required
                 minLength={8}
-                style={{ padding: "0.8rem 0.9rem", borderRadius: 8, border: "1px solid #d1d5db" }}
               />
               {fieldErrors.password ? <small className="error">{fieldErrors.password}</small> : null}
             </label>
 
-            <label style={{ display: "grid", gap: "0.4rem" }}>
+            <label className="form-field">
               <span>Teléfono</span>
               <input
                 value={form.phone}
                 onChange={(event) => handleChange("phone", event.target.value)}
-                style={{ padding: "0.8rem 0.9rem", borderRadius: 8, border: "1px solid #d1d5db" }}
               />
               {fieldErrors.phone ? <small className="error">{fieldErrors.phone}</small> : null}
             </label>
           </div>
 
-          <label style={{ display: "grid", gap: "0.4rem" }}>
+          <label className="form-field">
             <span>Dirección</span>
             <input
               value={form.address}
               onChange={(event) => handleChange("address", event.target.value)}
-              style={{ padding: "0.8rem 0.9rem", borderRadius: 8, border: "1px solid #d1d5db" }}
             />
             {fieldErrors.address ? <small className="error">{fieldErrors.address}</small> : null}
           </label>
 
           {submitError ? <p className="error">{submitError}</p> : null}
 
-          <button type="submit" disabled={loading} style={{ width: "100%" }}>
+          <button type="submit" disabled={loading}>
             {loading ? "Creando cuenta…" : "Crear cuenta"}
           </button>
         </form>
 
-        <p style={{ marginTop: "1.5rem", textAlign: "center" }}>
+        <p className="mt-6 text-center">
           ¿Ya tienes cuenta? <Link href="/login">Inicia sesión</Link>
         </p>
       </section>

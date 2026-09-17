@@ -105,53 +105,52 @@ export default function AccountProfilePage() {
   }
 
   return (
-    <main className="container" style={{ maxWidth: 760 }}>
+    <main className="container">
       <header className="pageHeader">
         <span className="eyebrow">CUENTA</span>
-        <h1>Perfil</h1>
+        <h1>Mi perfil</h1>
         <p>Consulta y actualiza tus datos personales del backoffice.</p>
       </header>
 
-      <section className="card" style={{ padding: "2rem" }}>
-        <form onSubmit={handleSubmit} style={{ display: "grid", gap: "1rem" }}>
-          <label style={{ display: "grid", gap: "0.4rem" }}>
-            <span>Email</span>
-            <input value={userEmail} readOnly disabled style={{ padding: "0.8rem 0.9rem", borderRadius: 8, border: "1px solid #d1d5db", background: "#f3f4f6" }} />
+      <section className="card max-w-4xl">
+        <h2>Datos generales y ubicación</h2>
+        <form onSubmit={handleSubmit} className="grid gap-5">
+          <label className="form-field">
+            <span>Correo electrónico · solo lectura</span>
+            <input value={userEmail} readOnly aria-label="Correo electrónico" />
           </label>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem" }}>
-            <label style={{ display: "grid", gap: "0.4rem" }}>
+          <div className="form-grid">
+            <label className="form-field">
               <span>Nombre</span>
               <input
                 value={profile.name ?? ""}
                 onChange={(event) => setProfile((current) => ({ ...current, name: event.target.value }))}
-                style={{ padding: "0.8rem 0.9rem", borderRadius: 8, border: "1px solid #d1d5db" }}
               />
             </label>
 
-            <label style={{ display: "grid", gap: "0.4rem" }}>
+            <label className="form-field">
               <span>Teléfono</span>
               <input
                 value={profile.phone ?? ""}
                 onChange={(event) => setProfile((current) => ({ ...current, phone: event.target.value }))}
-                style={{ padding: "0.8rem 0.9rem", borderRadius: 8, border: "1px solid #d1d5db" }}
               />
             </label>
           </div>
 
-          <label style={{ display: "grid", gap: "0.4rem" }}>
+          <label className="form-field">
             <span>Dirección</span>
-            <input
+            <textarea
               value={profile.address ?? ""}
               onChange={(event) => setProfile((current) => ({ ...current, address: event.target.value }))}
-              style={{ padding: "0.8rem 0.9rem", borderRadius: 8, border: "1px solid #d1d5db" }}
+              rows={3}
             />
           </label>
 
           {error ? <p className="error">{error}</p> : null}
-          {success ? <p style={{ color: "#166534", margin: 0 }}>{success}</p> : null}
+          {success ? <p role="status" className="successMessage">{success}</p> : null}
 
-          <button type="submit" disabled={isSaving} style={{ width: "fit-content" }}>
+          <button type="submit" disabled={isSaving} className="w-fit">
             {isSaving ? "Guardando…" : "Guardar cambios"}
           </button>
         </form>

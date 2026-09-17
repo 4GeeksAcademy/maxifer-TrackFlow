@@ -3,10 +3,7 @@ import type {
 } from "next";
 
 
-import Link from "next/link";
-
-import { AuthGuard } from "@/components/AuthGuard";
-import { AuthHeaderActions } from "@/components/AuthHeaderActions";
+import { AppShell } from "@/components/AppShell";
 import "./globals.css";
 
 
@@ -39,51 +36,7 @@ export default function RootLayout({
 
     <html lang="es">
 
-      <body>
-
-        <nav className="navbar">
-
-          <div className="navContent">
-
-            <Link
-              href="/"
-              className="logo"
-            >
-              TRACKFLOW
-            </Link>
-
-
-            <div className="navLinks">
-
-              <Link href="/">
-                Inicio
-              </Link>
-
-              <Link href="/incidents">
-                Incidencias
-              </Link>
-
-              <Link href="/suppliers">
-                Proveedores
-              </Link>
-
-              <Link href="/account/profile">
-                Mi perfil
-              </Link>
-
-              <AuthHeaderActions />
-
-            </div>
-
-          </div>
-
-        </nav>
-
-        <AuthGuard>
-          {children}
-        </AuthGuard>
-
-      </body>
+      <body><AppShell>{children}</AppShell></body>
 
     </html>
 
