@@ -34,27 +34,43 @@ def transform(row):
 
 
 def seed(path=CSV_PATH):
+    if not Path(path).exists():
+        print(f"Error: No se pudo abrir {path}.", file=sys.stderr)
+        raise SystemExit(1)
+
     inserted = skipped = 0
     invalid = []
-    with open(path, newline="", encoding="utf-8-sig") as source:
-        for line, row in enumerate(csv.DictReader(source), start=2):
-            try:
-                problems = validate_row(row)
-                if problems:
-                    invalid.append((line, ", ".join(problems)))
-                    continue
-                values = transform(row)
-                if insert_seed_incident(values):
-                    inserted += 1
-                else:
-                    skipped += 1
-            except (ValueError, TypeError) as error:
-                invalid.append((line, str(error)))
+
+    try:
+        with open(path, newline="", encoding="utf-8-sig") as source:
+            for line, row in enumerate(csv.DictReader(source), start=2):
+                try:
+                    problems = validate_row(row)
+                    if problems:
+                        invalid.append((line, ", ".join(problems)))
+                        continue
+                    values = transform(row)
+                    if insert_seed_incident(values):
+                        inserted += 1
+                    else:
+                        skipped += 1
+                except (ValueError, TypeError) as error:
+                    invalid.append((line, str(error)))
+    except OSError as error:
+        print(f"Error: No se pudo abrir {path}.", file=sys.stderr)
+        raise SystemExit(1) from error
+
     print(f"Seed terminado\nInsertadas: {inserted}\nOmitidas por existir: {skipped}\nInválidas: {len(invalid)}")
     for line, reason in invalid:
-        print(f"Fila {line}: {reason}")
+        print(f"Fila {line}: {reason}", file=sys.stderr)
     return inserted, skipped, invalid
 
 
 if __name__ == "__main__":
-    seed()
+    try:
+        seed()
+    except SystemExit:
+        raise
+    except Exception as error:
+        print(f"Error crítico: {type(error).__name__}: {error}", file=sys.stderr)
+        raise SystemExit(1) from error

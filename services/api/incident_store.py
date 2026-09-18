@@ -43,7 +43,7 @@ def _connection():
     try:
         yield connection
         connection.commit()
-    except Exception:
+    except sqlite3.Error:
         connection.rollback()
         raise
     finally:
@@ -62,9 +62,15 @@ def _initialize():
             connection.execute("CREATE INDEX IF NOT EXISTS idx_incidents_status_category ON incidents(status, category)")
             connection.execute("CREATE INDEX IF NOT EXISTS idx_incidents_branch ON incidents(branch)")
             if LEGACY_FILE_PATH.exists() and connection.execute("SELECT COUNT(*) FROM incidents").fetchone()[0] == 0:
-                legacy = json.loads(LEGACY_FILE_PATH.read_text(encoding="utf-8"))
+                try:
+                    legacy = json.loads(LEGACY_FILE_PATH.read_text(encoding="utf-8"))
+                except (OSError, json.JSONDecodeError):
+                    return
                 for legacy_id, payload in legacy.get("incidents", {}).items():
-                    incident = Incident(id=int(legacy_id), **payload)
+                    try:
+                        incident = Incident(id=int(legacy_id), **payload)
+                    except (TypeError, ValueError):
+                        continue
                     values = incident.model_dump(mode="json")
                     connection.execute(
                         f"INSERT OR IGNORE INTO incidents (id, {', '.join(FIELDS)}) VALUES ({', '.join('?' for _ in range(len(FIELDS) + 1))})",

@@ -22,7 +22,9 @@ from services.api.routers.suppliers import (
 )
 from services.api.routers.users import router as users_router
 from services.api.routers.incidents import router as incidents_router
-from services.api.security import get_current_user
+from services.api.security import get_current_user, validate_jwt_secret
+
+validate_jwt_secret()
 
 app = FastAPI(
     title="TrackFlow Incidents API",
@@ -38,12 +40,15 @@ app.include_router(incidents_router)
 
 @app.exception_handler(RequestValidationError)
 async def request_validation_error(request: Request, exc: RequestValidationError):
-    first = exc.errors()[0]
+    errors = exc.errors()
+    first = errors[0] if errors else {"loc": (), "type": "unknown", "msg": "El payload no es válido."}
     location = first.get("loc", ())
     field = str(location[-1]) if location else "unknown"
+    message = first.get("msg", "El payload no es válido.")
     return JSONResponse(status_code=400, content={
-        "error": "validation_error", "field": field,
-        "message": f"El campo {field} es obligatorio" if first.get("type") == "missing" else f"El campo {field} no es válido",
+        "error": "validation_error",
+        "field": field,
+        "message": "El campo es obligatorio." if first.get("type") == "missing" else message,
     })
 
 

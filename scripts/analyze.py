@@ -24,127 +24,53 @@ from packages.incidents_analysis import (
 )
 
 
-def main():
-
+def main(argv=None):
     parser = argparse.ArgumentParser(
         description=(
-            "Analiza el CSV de "
-            "incidencias de TrackFlow."
+            "Analiza el CSV de incidencias de TrackFlow."
         )
     )
-
 
     parser.add_argument(
         "csv_file",
         help=(
-            "Ruta al fichero CSV "
-            "que se quiere analizar."
+            "Ruta al fichero CSV que se quiere analizar."
         ),
     )
 
-
-    args = parser.parse_args()
-
-    csv_path = Path(
-        args.csv_file
-    )
-
+    args = parser.parse_args(argv)
+    csv_path = Path(args.csv_file)
 
     if not csv_path.exists():
-
-        print(
-            "Error: no existe "
-            f"el fichero {csv_path}"
-        )
-
-        sys.exit(1)
-
+        print(f"Error: No se pudo leer el fichero {csv_path}.", file=sys.stderr)
+        raise SystemExit(1)
 
     try:
-
-        text = (
-            csv_path.read_text(
-                encoding="utf-8-sig"
-            )
+        text = csv_path.read_text(encoding="utf-8-sig")
+        summary = analyze_csv_text(
+            text=text,
+            source_file=csv_path.name,
         )
-
-
-        summary = (
-            analyze_csv_text(
-                text=text,
-                source_file=(
-                    csv_path.name
-                ),
-            )
-        )
-
-
-    except (
-        OSError,
-        UnicodeDecodeError,
-        ValueError,
-    ) as error:
-
-        print(
-            f"Error: {error}"
-        )
-
-        sys.exit(1)
-
+    except (OSError, UnicodeDecodeError, ValueError) as error:
+        print(f"Error: No se pudo leer o procesar el fichero {csv_path}.", file=sys.stderr)
+        raise SystemExit(1) from error
 
     print()
-
-    print(
-        format_summary(
-            summary
-        )
-    )
-
+    print(format_summary(summary))
     print()
 
+    answer = input("¿Deseas exportar los resultados a CSV? [s / n]: ").strip().lower()
+    if answer in {"s", "si", "sí", "y", "yes"}:
+        result_path = Path("results.csv")
+        try:
+            result_path.write_text(summary_to_csv(summary), encoding="utf-8")
+        except OSError as error:
+            print(f"Error: No se pudo guardar el CSV en {result_path}.", file=sys.stderr)
+            raise SystemExit(1) from error
 
-    answer = input(
-        "¿Deseas exportar "
-        "los resultados a CSV? "
-        "[s / n]: "
-    ).strip().lower()
-
-
-    if answer in {
-        "s",
-        "si",
-        "sí",
-        "y",
-        "yes",
-    }:
-
-        result_path = Path(
-            "results.csv"
-        )
-
-
-        result_path.write_text(
-
-            summary_to_csv(
-                summary
-            ),
-
-            encoding="utf-8",
-
-        )
-
-
-        print(
-            "Resultados guardados en "
-            f"{result_path.resolve()}"
-        )
-
-
+        print(f"Resultados guardados en {result_path.resolve()}")
     else:
-
-        print(
-            "Resultados no exportados."
-        )
+        print("Resultados no exportados.")
 
 
 if __name__ == "__main__":

@@ -19,6 +19,13 @@ JWT_SECRET = os.getenv("JWT_SECRET")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
 
+
+def validate_jwt_secret() -> str:
+    if not JWT_SECRET:
+        raise RuntimeError("JWT_SECRET no esta configurado.")
+    return JWT_SECRET
+
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
@@ -47,32 +54,28 @@ def hash_reset_token(token: str) -> str:
 
 
 def create_access_token(user_id: str) -> str:
-    if not JWT_SECRET:
-        raise RuntimeError("JWT_SECRET no esta configurado.")
+    secret = validate_jwt_secret()
 
     expires_at = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     payload = {"sub": user_id, "exp": expires_at}
 
-    return jwt.encode(payload, JWT_SECRET, algorithm=ALGORITHM)
+    return jwt.encode(payload, secret, algorithm=ALGORITHM)
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
-    if not JWT_SECRET:
-        raise RuntimeError("JWT_SECRET no esta configurado.")
+    secret = validate_jwt_secret()
 
     try:
-        payload = jwt.decode(token, JWT_SECRET, algorithms=[ALGORITHM])
-        user_id = payload.get("sub")
-
-        if not user_id:
-            raise _credentials_exception()
-
-        user = get_user_by_id(user_id)
-
-        if not user or not user.get("is_active", True):
-            raise _credentials_exception()
-
-        return user
-
+        payload = jwt.decode(token, secret, algorithms=[ALGORITHM])
     except JWTError as error:
         raise _credentials_exception() from error
+
+    user_id = payload.get("sub")
+    if not user_id:
+        raise _credentials_exception()
+
+    user = get_user_by_id(user_id)
+    if not user or not user.get("is_active", True):
+        raise _credentials_exception()
+
+    return user

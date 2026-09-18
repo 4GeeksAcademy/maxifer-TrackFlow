@@ -8,7 +8,4 @@ services/api/.env
 services/api/data/auth.json
 services/api/data/incidents.json
 services/api/data/incidents.sqlite3*
-stitch_trackflow_operations_backoffice
-Guia sobre monorepo.md
-guia-definitiva.md
 RETO.md

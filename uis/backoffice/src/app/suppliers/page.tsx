@@ -131,48 +131,23 @@ function parseErrorDetail(
     typeof detail
     === "string"
   ) {
-    return detail;
+    if (
+      detail.toLowerCase().includes("required")
+      || detail.toLowerCase().includes("validation")
+    ) {
+      return "Revisá los datos del formulario e intentá nuevamente.";
+    }
+
+    return "No se pudo completar la operación. Intentá nuevamente.";
   }
 
   if (
-    Array.isArray(
-      detail
-    )
+    Array.isArray(detail)
   ) {
-    return detail
-      .map(
-        (item) => {
-          if (
-            typeof item
-            === "string"
-          ) {
-            return item;
-          }
-
-          if (
-            item
-            && typeof item
-              === "object"
-            && "msg"
-              in item
-          ) {
-            return String(
-              item.msg
-            );
-          }
-
-          return JSON.stringify(
-            item
-          );
-        }
-      )
-      .join(" | ");
+    return "Revisá los datos del formulario e intentá nuevamente.";
   }
 
-  return (
-    "La API devolvió "
-    + "un error no esperado."
-  );
+  return "No se pudo completar la operación. Intentá nuevamente.";
 }
 
 

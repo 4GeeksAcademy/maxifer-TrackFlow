@@ -50,13 +50,17 @@ def consume_password_reset_token(raw_token: str) -> str | None:
     if reset_token.get("used") is True:
         return None
 
-    expires_at = datetime.fromisoformat(reset_token["expires_at"])
+    try:
+        expires_at = datetime.fromisoformat(reset_token["expires_at"])
+    except (KeyError, TypeError, ValueError):
+        return None
+
     if expires_at < datetime.now(timezone.utc):
         table.update({"used": True}, doc_ids=[reset_token.doc_id])
         return None
 
     table.update({"used": True}, doc_ids=[reset_token.doc_id])
-    return reset_token["user_id"]
+    return reset_token.get("user_id")
 
 
 def invalidate_user_reset_tokens(user_id: str) -> None:
