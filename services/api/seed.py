@@ -1,3 +1,4 @@
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -172,30 +173,40 @@ def _build_db_path() -> Path:
 
 
 def main() -> None:
-	db_path = _build_db_path()
-	db = TinyDB(db_path)
-	table = db.table("suppliers")
+	try:
+		db_path = _build_db_path()
+		db = TinyDB(db_path)
+		table = db.table("suppliers")
 
-	supplier_query = Query()
-	inserted = 0
+		supplier_query = Query()
+		inserted = 0
 
-	for supplier in SUPPLIERS_SEED:
-		exists = table.contains(
-			(supplier_query.name == supplier["name"])
-			& (supplier_query.country == supplier["country"])
-		)
+		for supplier in SUPPLIERS_SEED:
+			exists = table.contains(
+				(supplier_query.name == supplier["name"])
+				& (supplier_query.country == supplier["country"])
+			)
 
-		if exists:
-			continue
+			if exists:
+				continue
 
-		row = dict(supplier)
-		row["updated_at"] = datetime.now(timezone.utc).isoformat()
-		table.insert(row)
-		inserted += 1
+			row = dict(supplier)
+			row["updated_at"] = datetime.now(timezone.utc).isoformat()
+			table.insert(row)
+			inserted += 1
 
-	total = len(table)
-	print(f"Seeder completado. Insertados: {inserted}. Total actual: {total}.")
+		total = len(table)
+		print(f"Seeder completado. Insertados: {inserted}. Total actual: {total}.")
+	except OSError as error:
+		print("Error: No se pudo completar la carga inicial de proveedores.", file=sys.stderr)
+		raise SystemExit(1) from error
 
 
 if __name__ == "__main__":
-	main()
+	try:
+		main()
+	except SystemExit:
+		raise
+	except Exception as error:
+		print(f"Error crítico: {type(error).__name__}.", file=sys.stderr)
+		raise SystemExit(1) from error
