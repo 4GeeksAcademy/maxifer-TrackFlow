@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-tertiary": "#ffffff",
+          "tertiary": "#7d4200",
+          "on-primary-fixed-variant": "#00513a",
+          "surface-container-highest": "#dae2fd",
+          "surface-variant": "#dae2fd",
+          "on-surface-variant": "#3e4943",
+          "surface-container-low": "#f2f3ff",
+          "on-tertiary-fixed-variant": "#6e3900",
+          "background": "#faf8ff",
+          "error": "#ba1a1a",
+          "primary-fixed-dim": "#7bd8b1",
+          "surface-dim": "#d2d9f4",
+          "tertiary-container": "#a05600",
+          "inverse-primary": "#7bd8b1",
+          "on-secondary-container": "#00476e",
+          "on-error-container": "#93000a",
+          "tertiary-fixed-dim": "#ffb77d",
+          "inverse-surface": "#283044",
+          "primary-fixed": "#97f5cc",
+          "outline-variant": "#bdc9c1",
+          "on-tertiary-fixed": "#2f1500",
+          "on-secondary-fixed": "#001d31",
+          "primary-container": "#047857",
+          "on-primary": "#ffffff",
+          "secondary-fixed-dim": "#93ccff",
+          "on-tertiary-container": "#ffe5d3",
+          "on-secondary": "#ffffff",
+          "on-secondary-fixed-variant": "#004b73",
+          "on-error": "#ffffff",
+          "error-container": "#ffdad6",
+          "surface-container-high": "#e2e7ff",
+          "outline": "#6e7a73",
+          "secondary": "#006398",
+          "inverse-on-surface": "#eef0ff",
+          "on-primary-fixed": "#002115",
+          "on-surface": "#131b2e",
+          "secondary-fixed": "#cce5ff",
+          "on-background": "#131b2e",
+          "surface-bright": "#faf8ff",
+          "tertiary-fixed": "#ffdcc3",
+          "surface-tint": "#006c4e",
+          "surface": "#faf8ff",
+          "surface-container-lowest": "#ffffff",
+          "on-primary-container": "#9ffdd3",
+          "primary": "#005d42",
+          "surface-container": "#eaedff",
+          "secondary-container": "#5bb8fe"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-xs": "0.25rem",
+          "margin-lg": "2rem",
+          "space-md": "0.75rem",
+          "space-xl": "1.75rem",
+          "margin": "1rem",
+          "space-sm": "0.5rem",
+          "gutter-md": "1.5rem",
+          "gutter": "1rem",
+          "margin-md": "1.5rem",
+          "gutter-lg": "1.5rem",
+          "space-lg": "1.25rem"
+        },
+        "fontFamily": {
+          "body-sm": ["Hanken Grotesk", "sans-serif"],
+          "headline-lg": ["Manrope", "sans-serif"],
+          "headline-xl": ["Manrope", "sans-serif"],
+          "label-sm": ["Hanken Grotesk", "sans-serif"],
+          "label-md": ["Hanken Grotesk", "sans-serif"],
+          "display-lg-mobile": ["Manrope", "sans-serif"],
+          "label-xs": ["Hanken Grotesk", "sans-serif"],
+          "body-md": ["Hanken Grotesk", "sans-serif"],
+          "display-lg": ["Manrope", "sans-serif"],
+          "headline-sm": ["Manrope", "sans-serif"],
+          "body-lg": ["Hanken Grotesk", "sans-serif"],
+          "code-dense": ["Inter", "monospace"]
+        },
+        "fontSize": {
+          "body-sm": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.01em", "fontWeight": "400" }],
+          "headline-lg": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+          "headline-xl": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+          "label-sm": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.02em", "fontWeight": "600" }],
+          "label-md": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0.005em", "fontWeight": "600" }],
+          "display-lg-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+          "label-xs": ["0.6875rem", { "lineHeight": "0.875rem", "letterSpacing": "0.04em", "fontWeight": "700" }],
+          "body-md": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0em", "fontWeight": "400" }],
+          "display-lg": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+          "headline-sm": ["1.125rem", { "lineHeight": "1.5rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+          "body-lg": ["1rem", { "lineHeight": "1.5rem", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+          "code-dense": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0.02em", "fontWeight": "500" }]
+        }
+      }
+    }
+  };
+</script></head><body class="bg-[#faf8ff] font-body-md text-slate-900 antialiased min-h-screen"><header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm"><div class="h-16 w-full px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><img alt="TrackFlow Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UJUcdrUNCa3iA-zp_oUEGh9R2MuBWXD8b32ST8H9Cjx3BdgCnLBbr1tKTGJnugEE-xCc2P6s7CreW2BaNhnnf3ofYw42eSIsPvqk32S4myaTeYoDRV2rbAZhZScLSUykmSWLBpek2kAVMWtHWWSef59xS9JNa0kcu-Wtu4fIFwtBdvMytpqFoABgHG3o6ihzHxgHqj3ffqnmdzqp_IHICQBKxlX8Z10nDiV_PbEKcbIVLoroX6bOSV2AQ"/><span class="font-headline-sm text-headline-sm text-slate-900 tracking-tight font-bold hidden sm:inline-block">TrackFlow</span><span class="px-space-xs py-space-2xs bg-slate-100 text-slate-600 font-label-sm text-label-sm rounded uppercase border border-slate-200">Backoffice Ops v2.4</span></div><nav class="hidden md:flex items-center gap-space-xs" data-active-classes="bg-emerald-700 text-white font-semibold rounded-lg"><a class="px-space-md py-space-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors rounded-lg font-label-md text-label-md" data-path="inicio" href="#">Inicio</a><a aria-current="page" class="px-space-md py-space-sm transition-colors bg-emerald-700 text-white font-semibold rounded-lg shadow-sm" data-path="incidencias" href="#">Incidencias</a><a class="px-space-md py-space-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors rounded-lg font-label-md text-label-md" data-path="proveedores" href="#">Proveedores</a></nav><div class="flex items-center gap-space-md"><div class="hidden xl:flex items-center gap-space-xs px-space-sm py-space-2xs bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-full"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span></span><span class="font-label-sm text-label-sm font-medium text-emerald-800">Red Operativa: Normal</span></div><button class="text-slate-500 hover:text-slate-800 p-space-xs rounded-lg hover:bg-slate-100 transition-colors relative border border-transparent hover:border-slate-200"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1 right-1 w-1.5 h-1.5 bg-emerald-600 rounded-full"></span></button><div class="relative group"><button class="flex items-center gap-space-sm p-space-xs rounded-lg hover:bg-slate-100 transition-colors border border-transparent hover:border-slate-200"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-slate-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtuOtKcRM5JddMbdu1J6PQs9UekZAU_Xqp4z_DwwXkMev8isnfBdyLRm3D-P9396sID7D2togc-Ym-cnY8e7wzxoj81vIza3oAjAcFshqh-8_a9L-lDygIwxVdRtYGCaXeyHaSPxfJna75ABoKFF1kYcy-lqhIQzoUFiYenIc6O3eaPogBQe_vNk5CRfkKAwUWvskJXSJnvWsO16_AWzBaOu_obHdeeCiUXPr1ORm-k6_zsFC0h00K"/><div class="text-left hidden lg:block leading-tight"><p class="font-label-md text-label-md text-slate-900 font-semibold">Carlos M.</p><span class="font-label-sm text-label-sm text-emerald-700 font-bold uppercase">ADMIN / OPS</span></div><span class="material-symbols-outlined text-slate-500 text-[18px]">expand_more</span></button><div class="absolute right-0 top-full mt-space-2xs w-60 bg-white rounded-lg shadow-lg border border-slate-200 py-space-xs hidden group-hover:block transition-all z-50"><div class="px-space-md py-space-sm bg-slate-50 border-b border-slate-100"><p class="font-label-md text-label-md text-slate-900 font-semibold">Carlos M. (Ops Manager)</p><p class="font-body-sm text-body-sm text-slate-500 truncate">carlos.m@trackflow.internal</p></div><nav class="py-space-xs"><a class="flex items-center gap-space-sm px-space-md py-space-sm text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors font-label-md text-label-md" data-path="mi-perfil" href="#">Mi perfil</a><a class="flex items-center gap-space-sm px-space-md py-space-sm text-slate-700 hover:text-red-600 hover:bg-red-50 transition-colors font-label-md text-label-md" data-path="cerrar-sesion" href="#">Cerrar sesión</a></nav></div></div></div></div></header><main class="w-full pt-16 bg-[#faf8ff] min-h-[calc(100vh-4rem)]"><div class="flex flex-col w-full">
+<!-- Toast Notification (Demo Active) -->
+<div class="fixed top-20 right-6 z-50 flex items-center gap-space-md px-space-md py-space-sm rounded-xl bg-white border border-emerald-200 shadow-xl transition-all duration-300 transform translate-y-0 opacity-100" id="toastNotification">
+<div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-700">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+</div>
+<div class="flex flex-col min-w-0 pr-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-slate-900 font-semibold">Incidencia registrada con éxito</span>
+<span class="font-code-dense text-code-dense text-emerald-700 font-bold">#INC-8492</span>
+</div>
+<p class="font-body-sm text-body-sm text-slate-500">Sincronizada con el nodo logístico de Zaragoza.</p>
+</div>
+<button class="p-space-xs text-slate-400 hover:text-slate-700 rounded transition-colors ml-auto" onclick="document.getElementById('toastNotification').style.display='none'">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="px-space-lg py-space-lg flex flex-col gap-space-lg w-full max-w-[1720px] mx-auto">
+<!-- Sync & Telemetry Bar -->
+<div class="w-full bg-white border border-slate-200 rounded-xl px-space-md py-space-xs flex flex-wrap items-center justify-between gap-space-md shadow-sm">
+<div class="flex items-center gap-space-md">
+<span class="flex items-center gap-space-xs font-label-sm text-label-sm text-emerald-700 font-semibold">
+<span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          STREAM TELEMETRÍA: ACTIVO
+        </span>
+<span class="font-body-sm text-body-sm text-slate-500 hidden sm:inline">Última captura de eventos: hace 12s</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center bg-slate-100 px-space-xs py-space-2xs rounded-lg font-code-dense text-code-dense text-slate-700 border border-slate-200">
+<span class="text-slate-500 mr-1">CLUSTER:</span> ZAZ-EXP-02
+        </div>
+<button class="flex items-center gap-space-xs px-space-sm py-space-2xs rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-label-sm text-label-sm transition-colors border border-slate-200" id="btnSyncMock" onclick="triggerSyncDemo()">
+<span class="material-symbols-outlined text-[16px] text-emerald-700" id="syncIcon">sync</span>
+<span>Reintentar sincronización</span>
+</button>
+</div>
+</div>
+<!-- 1. Cabecera y Resumen Operativo -->
+<section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 gap-space-md">
+<!-- KPI Principal Total -->
+<div class="xl:col-span-3 bg-white border border-slate-200 rounded-xl p-space-md flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="absolute -right-4 -bottom-4 w-28 h-28 bg-emerald-50 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs text-slate-500 font-label-sm text-label-sm uppercase tracking-wider font-semibold">
+<span class="material-symbols-outlined text-[18px] text-slate-500">report_problem</span>
+            Total Incidencias Activas
+          </div>
+<span class="px-space-xs py-space-2xs rounded-full bg-emerald-100 text-emerald-800 font-label-sm text-label-sm flex items-center gap-0.5 font-semibold">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +4% sem.
+          </span>
+</div>
+<div class="my-space-md flex items-baseline gap-space-sm">
+<span class="font-headline-lg text-headline-lg font-bold text-slate-900 text-3xl">142</span>
+<span class="font-body-sm text-body-sm text-slate-500">en red de distribución</span>
+</div>
+<!-- Progress breakdown spark -->
+<div class="space-y-1.5">
+<div class="flex justify-between font-label-sm text-label-sm text-slate-500">
+<span>Resolución Global</span>
+<span class="text-emerald-700 font-semibold">47.8% completado</span>
+</div>
+<div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden flex">
+<div class="bg-red-500 h-full" style="width: 19.7%"></div>
+<div class="bg-amber-500 h-full" style="width: 28.8%"></div>
+<div class="bg-emerald-600 h-full" style="width: 47.9%"></div>
+<div class="bg-slate-300 h-full" style="width: 3.6%"></div>
+</div>
+</div>
+</div>
+<!-- Desglose por Estado -->
+<div class="xl:col-span-4 bg-white border border-slate-200 rounded-xl p-space-md shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="text-slate-500 font-label-sm text-label-sm uppercase tracking-wider font-semibold">Desglose por Estado</span>
+<span class="font-code-dense text-code-dense text-slate-500">CICLO VIVO</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-xs py-space-xs">
+<!-- Abiertas -->
+<div class="p-space-xs bg-red-50/60 border border-red-100 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-red-700 flex items-center gap-1 font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-red-600"></span> Abiertas
+            </span>
+<span class="font-headline-sm text-headline-sm text-slate-900 font-bold mt-1">28</span>
+<span class="font-body-sm text-body-sm text-slate-500">19.7%</span>
+</div>
+<!-- En curso -->
+<div class="p-space-xs bg-amber-50/60 border border-amber-100 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-amber-700 flex items-center gap-1 font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span> En curso
+            </span>
+<span class="font-headline-sm text-headline-sm text-slate-900 font-bold mt-1">41</span>
+<span class="font-body-sm text-body-sm text-slate-500">28.9%</span>
+</div>
+<!-- Resueltas -->
+<div class="p-space-xs bg-emerald-50/60 border border-emerald-100 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-emerald-700 flex items-center gap-1 font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Resueltas
+            </span>
+<span class="font-headline-sm text-headline-sm text-slate-900 font-bold mt-1">68</span>
+<span class="font-body-sm text-body-sm text-slate-500">47.9%</span>
+</div>
+<!-- Descartadas -->
+<div class="p-space-xs bg-slate-50 border border-slate-200 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-slate-600 flex items-center gap-1 font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Descartadas
+            </span>
+<span class="font-headline-sm text-headline-sm text-slate-900 font-bold mt-1">5</span>
+<span class="font-body-sm text-body-sm text-slate-500">3.5%</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-xs text-slate-500 font-body-sm text-body-sm">
+<span>Tiempo medio de resolución: <strong class="text-slate-900 font-semibold">3h 45m</strong></span>
+<span class="text-emerald-700 font-label-sm text-label-sm font-semibold">SLA Objetivo: &lt; 6h</span>
+</div>
+</div>
+<!-- Desglose por Origen -->
+<div class="xl:col-span-2 bg-white border border-slate-200 rounded-xl p-space-md shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-slate-500 font-label-sm text-label-sm uppercase tracking-wider font-semibold">Por Origen</span>
+<span class="material-symbols-outlined text-slate-500 text-[18px]">alt_route</span>
+</div>
+<div class="space-y-space-xs my-space-xs">
+<div>
+<div class="flex justify-between font-label-sm text-label-sm text-slate-800 mb-0.5">
+<span>Sede (Hubs)</span>
+<span class="font-semibold text-emerald-700">62 (43.6%)</span>
+</div>
+<div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+<div class="bg-emerald-600 h-full rounded-full" style="width: 43.6%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-sm text-label-sm text-slate-800 mb-0.5">
+<span>Cliente Final</span>
+<span class="font-semibold text-amber-700">54 (38.0%)</span>
+</div>
+<div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+<div class="bg-amber-600 h-full rounded-full" style="width: 38.0%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-sm text-label-sm text-slate-800 mb-0.5">
+<span>Interno / Calidad</span>
+<span class="font-semibold text-sky-700">26 (18.4%)</span>
+</div>
+<div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+<div class="bg-sky-600 h-full rounded-full" style="width: 18.4%"></div>
+</div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-slate-500">Mayor presión en incidencias de sede.</span>
+</div>
+<!-- Desglose por Sede -->
+<div class="xl:col-span-3 bg-white border border-slate-200 rounded-xl p-space-md shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-slate-500 font-label-sm text-label-sm uppercase tracking-wider font-semibold">Desglose por Sede</span>
+<span class="material-symbols-outlined text-slate-500 text-[18px]">apartment</span>
+</div>
+<div class="grid grid-cols-2 gap-x-space-md gap-y-space-xs my-space-xs">
+<div class="flex items-center justify-between font-body-sm text-body-sm">
+<span class="text-slate-500 truncate">Central:</span>
+<span class="font-code-dense text-code-dense text-slate-900 font-semibold">42</span>
+</div>
+<div class="flex items-center justify-between font-body-sm text-body-sm">
+<span class="text-slate-500 truncate">ZAZ Almacén:</span>
+<span class="font-code-dense text-code-dense text-slate-900 font-semibold">38</span>
+</div>
+<div class="flex items-center justify-between font-body-sm text-body-sm">
+<span class="text-slate-500 truncate">LA Almacén:</span>
+<span class="font-code-dense text-code-dense text-slate-900 font-semibold">31</span>
+</div>
+<div class="flex items-center justify-between font-body-sm text-body-sm">
+<span class="text-slate-500 truncate">ZAZ Oficina:</span>
+<span class="font-code-dense text-code-dense text-slate-900 font-semibold">16</span>
+</div>
+<div class="flex items-center justify-between font-body-sm text-body-sm col-span-2">
+<span class="text-slate-500 truncate">Los Ángeles Oficina:</span>
+<span class="font-code-dense text-code-dense text-slate-900 font-semibold">15</span>
+</div>
+</div>
+<div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden flex">
+<span class="bg-emerald-600" style="width: 29.5%" title="Central: 42"></span>
+<span class="bg-teal-500" style="width: 26.7%" title="Zaragoza Almacén: 38"></span>
+<span class="bg-amber-500" style="width: 21.8%" title="Los Ángeles Almacén: 31"></span>
+<span class="bg-slate-400" style="width: 11.2%" title="Zaragoza Oficina: 16"></span>
+<span class="bg-indigo-400" style="width: 10.8%" title="LA Oficina: 15"></span>
+</div>
+</div>
+</section>
+<!-- Barra compacta de Desglose por Categoría Principal -->
+<div class="w-full bg-white border border-slate-200 rounded-xl p-space-md shadow-sm">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="text-slate-500 font-label-sm text-label-sm uppercase tracking-wider font-semibold">Distribución por Categorías Críticas</span>
+<span class="font-body-sm text-body-sm text-slate-500">Top 5 de 9 categorías activas</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-space-sm pt-space-2xs">
+<div class="p-space-xs bg-slate-50 border border-slate-200/80 rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-amber-700 text-[18px]">package_2</span>
+<span class="font-label-sm text-label-sm text-slate-800">Paquete perdido</span>
+</div>
+<span class="font-code-dense text-code-dense text-amber-700 font-bold">34</span>
+</div>
+<div class="p-space-xs bg-slate-50 border border-slate-200/80 rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-red-600 text-[18px]">schedule</span>
+<span class="font-label-sm text-label-sm text-slate-800">Fallo de entrega</span>
+</div>
+<span class="font-code-dense text-code-dense text-red-600 font-bold">29</span>
+</div>
+<div class="p-space-xs bg-slate-50 border border-slate-200/80 rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-emerald-700 text-[18px]">inventory</span>
+<span class="font-label-sm text-label-sm text-slate-800">Dif. inventario</span>
+</div>
+<span class="font-code-dense text-code-dense text-emerald-700 font-bold">24</span>
+</div>
+<div class="p-space-xs bg-slate-50 border border-slate-200/80 rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-sky-700 text-[18px]">local_shipping</span>
+<span class="font-label-sm text-label-sm text-slate-800">Transportista</span>
+</div>
+<span class="font-code-dense text-code-dense text-sky-700 font-bold">21</span>
+</div>
+<div class="p-space-xs bg-slate-50 border border-slate-200/80 rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-slate-600 text-[18px]">assignment_return</span>
+<span class="font-label-sm text-label-sm text-slate-800">Devolución / Otros</span>
+</div>
+<span class="font-code-dense text-code-dense text-slate-800 font-bold">34</span>
+</div>
+</div>
+</div>
+<!-- 2. Formulario Desplegable / Card Destacada para 'Nueva Incidencia' -->
+<section class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden transition-all duration-300">
+<div class="p-space-md bg-slate-50/80 border-b border-slate-200 flex items-center justify-between cursor-pointer select-none" onclick="toggleNewIncidentForm()">
+<div class="flex items-center gap-space-md">
+<div class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">add_task</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-slate-900 font-semibold">Registro Rápido de Incidencia</h2>
+<p class="font-body-sm text-body-sm text-slate-500">Apertura de tickets de operación para enrutamiento inmediato</p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="font-label-sm text-label-sm text-slate-500 hidden sm:inline" id="formToggleLabel">Ocultar panel</span>
+<button class="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-100 transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px] transition-transform duration-200" id="formToggleIcon">expand_less</span>
+</button>
+</div>
+</div>
+<form class="p-space-md flex flex-col gap-space-md bg-white" id="newIncidentForm" onsubmit="handleFormSubmit(event)">
+<!-- Grid de campos superiores -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-space-md">
+<!-- Título -->
+<div class="lg:col-span-7 flex flex-col gap-space-2xs">
+<div class="flex justify-between items-center">
+<label class="font-label-sm text-label-sm text-slate-900 font-semibold flex items-center gap-1" for="inputTitle">
+                Título de la Incidencia <span class="text-red-600">*</span>
+</label>
+<span class="font-code-dense text-code-dense text-slate-500" id="titleCounter">0 / 120 caracteres máx.</span>
+</div>
+<input class="h-9 px-space-sm bg-white text-slate-900 placeholder:text-slate-400 rounded-lg border border-slate-300 outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 font-body-md text-body-md transition-all shadow-sm" id="inputTitle" maxlength="120" oninput="updateTitleCounter(this)" placeholder="Ej. Retraso en entrega transfronteriza lote A4 por revisión de aduana" required="" type="text"/>
+</div>
+<!-- Categoría -->
+<div class="lg:col-span-5 flex flex-col gap-space-2xs">
+<label class="font-label-sm text-label-sm text-slate-900 font-semibold flex items-center gap-1" for="selectCategory">
+              Categoría Operativa <span class="text-red-600">*</span>
+</label>
+<select class="h-9 px-space-sm bg-white text-slate-900 rounded-lg border border-slate-300 outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 font-body-md text-body-md cursor-pointer shadow-sm" id="selectCategory" required="">
+<option disabled="" selected="" value="">Selecciona categoría...</option>
+<option value="Paquete perdido">Paquete perdido</option>
+<option value="Fallo de entrega">Fallo de entrega</option>
+<option value="Diferencia de inventario">Diferencia de inventario</option>
+<option value="Problema con transportista">Problema con transportista</option>
+<option value="Devolución">Devolución</option>
+<option value="Incidente de almacén">Incidente de almacén</option>
+<option value="Fallo del sistema">Fallo del sistema</option>
+<option value="Queja de cliente">Queja de cliente</option>
+<option value="Otros">Otros</option>
+</select>
+</div>
+<!-- Origen con Tabs / Radio buttons -->
+<div class="lg:col-span-5 flex flex-col gap-space-2xs">
+<label class="font-label-sm text-label-sm text-slate-900 font-semibold flex items-center gap-1">
+              Origen del Reporte <span class="text-red-600">*</span>
+</label>
+<div class="grid grid-cols-3 gap-space-xs p-1 bg-slate-100 rounded-lg h-9 border border-slate-200">
+<button class="origin-btn rounded py-1 font-label-sm text-label-sm text-slate-600 hover:text-slate-900 transition-all text-center" onclick="setOrigin('Cliente', this)" type="button">Cliente</button>
+<button class="origin-btn rounded py-1 font-label-sm text-label-sm bg-emerald-700 text-white font-semibold shadow-xs transition-all text-center" onclick="setOrigin('Sede', this)" type="button">Sede</button>
+<button class="origin-btn rounded py-1 font-label-sm text-label-sm text-slate-600 hover:text-slate-900 transition-all text-center" onclick="setOrigin('Interno', this)" type="button">Interno</button>
+</div>
+<input id="selectedOrigin" type="hidden" value="Sede"/>
+</div>
+<!-- Sede (Resaltada dinámicamente si Origen == Sede) -->
+<div class="lg:col-span-4 flex flex-col gap-space-2xs p-1.5 rounded-lg bg-emerald-50/80 border-2 border-emerald-500 transition-all" id="sedeContainer">
+<label class="font-label-sm text-label-sm text-slate-900 font-semibold flex items-center justify-between" for="selectSede">
+<span>Sede de Origen / Afectada</span>
+<span class="font-label-sm text-label-sm text-emerald-700 uppercase font-bold" id="sedeBadgeNotice">Foco Sede</span>
+</label>
+<select class="h-8 px-space-sm bg-white text-slate-900 rounded-lg border border-slate-300 outline-none focus:ring-2 focus:ring-emerald-600 font-body-md text-body-md cursor-pointer shadow-sm" id="selectSede" required="">
+<option value="Central">Central (HUB Principal)</option>
+<option value="Los Ángeles - Almacén">Los Ángeles - Almacén</option>
+<option value="Los Ángeles - Oficina">Los Ángeles - Oficina</option>
+<option selected="" value="Zaragoza - Almacén">Zaragoza - Almacén</option>
+<option value="Zaragoza - Oficina">Zaragoza - Oficina</option>
+</select>
+</div>
+<!-- Estado inicial -->
+<div class="lg:col-span-3 flex flex-col gap-space-2xs">
+<label class="font-label-sm text-label-sm text-slate-900 font-semibold" for="selectInitialState">
+              Estado Inicial
+            </label>
+<div class="h-9 px-space-sm bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between">
+<span class="flex items-center gap-space-xs font-label-sm text-label-sm text-red-700 font-semibold">
+<span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span> Abierta
+              </span>
+<span class="font-code-dense text-code-dense text-slate-500 uppercase text-[10px] bg-slate-200 px-1 rounded">DEFAULT</span>
+</div>
+</div>
+<!-- Descripción detallada -->
+<div class="lg:col-span-12 flex flex-col gap-space-2xs">
+<label class="font-label-sm text-label-sm text-slate-900 font-semibold flex items-center gap-1" for="inputDescription">
+              Descripción Detallada e Historial Preliminar <span class="text-red-600">*</span>
+</label>
+<textarea class="p-space-sm bg-white text-slate-900 placeholder:text-slate-400 rounded-lg border border-slate-300 outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 font-body-md text-body-md resize-y shadow-sm" id="inputDescription" placeholder="Describa el incidente, lote afectado, transportista involucrado, número de seguimiento y medidas provisionales tomadas..." required="" rows="3"></textarea>
+</div>
+</div>
+<!-- Acciones del Formulario -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-xs">
+<span class="font-body-sm text-body-sm text-slate-500 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-emerald-600">verified_user</span>
+            El caso generará una alerta push al equipo de supervisión de la sede elegida.
+          </span>
+<div class="flex items-center gap-space-sm">
+<button class="px-space-md py-space-xs rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-label-md text-label-md font-semibold transition-colors border border-slate-200" onclick="resetIncidentForm()" type="button">
+              Limpiar Formulario
+            </button>
+<button class="px-space-md py-space-xs rounded-lg bg-[#10b981] hover:bg-emerald-600 text-white font-label-md text-label-md font-semibold transition-colors flex items-center gap-space-xs shadow-sm" type="submit">
+<span class="material-symbols-outlined text-[18px]">save</span>
+<span>Registrar Incidencia</span>
+</button>
+</div>
+</div>
+</form>
+</section>
+<!-- 3. Filtros y Búsqueda Avanzada -->
+<section class="w-full bg-white border border-slate-200 rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex flex-col lg:flex-row gap-space-sm items-stretch lg:items-center justify-between">
+<!-- Buscador de texto -->
+<div class="relative flex-1 max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">search</span>
+<input class="w-full h-9 pl-9 pr-12 bg-[#f8fafc] text-slate-900 placeholder:text-slate-400 rounded-lg border border-slate-300 outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 font-body-md text-body-md shadow-sm" id="tableSearchInput" onkeyup="filterTableRows()" placeholder="Buscar por ID (#INC-...), título, lote o transportista..." type="text"/>
+<span class="absolute right-2.5 top-1/2 -translate-y-1/2 font-code-dense text-code-dense text-slate-500 bg-slate-200/80 px-1.5 py-0.5 rounded text-[10px]">⌘K</span>
+</div>
+<!-- Filtros desplegables combinados -->
+<div class="flex flex-wrap items-center gap-space-xs">
+<!-- Filtro Estado -->
+<div class="flex items-center gap-1 bg-[#f8fafc] border border-slate-300 px-space-xs py-1 rounded-lg shadow-sm">
+<span class="font-label-sm text-label-sm text-slate-500 pl-1 font-semibold">Estado:</span>
+<select class="bg-transparent text-slate-800 font-label-sm text-label-sm outline-none cursor-pointer pr-1" id="filterStatus" onchange="filterTableRows()">
+<option value="ALL">Todos los Estados</option>
+<option value="Abierta">Abierta</option>
+<option value="En curso">En curso</option>
+<option value="Resuelta">Resuelta</option>
+<option value="Descartada">Descartada</option>
+</select>
+</div>
+<!-- Filtro Origen -->
+<div class="flex items-center gap-1 bg-[#f8fafc] border border-slate-300 px-space-xs py-1 rounded-lg shadow-sm">
+<span class="font-label-sm text-label-sm text-slate-500 pl-1 font-semibold">Origen:</span>
+<select class="bg-transparent text-slate-800 font-label-sm text-label-sm outline-none cursor-pointer pr-1" id="filterOrigin" onchange="filterTableRows()">
+<option value="ALL">Todos los Orígenes</option>
+<option value="Cliente">Cliente</option>
+<option value="Sede">Sede</option>
+<option value="Interno">Interno</option>
+</select>
+</div>
+<!-- Filtro Sede -->
+<div class="flex items-center gap-1 bg-[#f8fafc] border border-slate-300 px-space-xs py-1 rounded-lg shadow-sm">
+<span class="font-label-sm text-label-sm text-slate-500 pl-1 font-semibold">Sede:</span>
+<select class="bg-transparent text-slate-800 font-label-sm text-label-sm outline-none cursor-pointer pr-1" id="filterSede" onchange="filterTableRows()">
+<option value="ALL">Todas las Sedes</option>
+<option value="Central">Central</option>
+<option value="Los Ángeles - Almacén">LA - Almacén</option>
+<option value="Los Ángeles - Oficina">LA - Oficina</option>
+<option value="Zaragoza - Almacén">ZAZ - Almacén</option>
+<option value="Zaragoza - Oficina">ZAZ - Oficina</option>
+</select>
+</div>
+<!-- Filtro Categoría -->
+<div class="flex items-center gap-1 bg-[#f8fafc] border border-slate-300 px-space-xs py-1 rounded-lg shadow-sm">
+<span class="font-label-sm text-label-sm text-slate-500 pl-1 font-semibold">Categoría:</span>
+<select class="bg-transparent text-slate-800 font-label-sm text-label-sm outline-none cursor-pointer pr-1" id="filterCategory" onchange="filterTableRows()">
+<option value="ALL">Todas las Categorías</option>
+<option value="Fallo de entrega">Fallo de entrega</option>
+<option value="Paquete perdido">Paquete perdido</option>
+<option value="Diferencia de inventario">Diferencia de inventario</option>
+<option value="Problema con transportista">Problema transportista</option>
+<option value="Incidente de almacén">Incidente almacén</option>
+<option value="Devolución">Devolución</option>
+<option value="Queja de cliente">Queja cliente</option>
+</select>
+</div>
+<!-- Botón Limpiar Filtros -->
+<button class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 border border-slate-200 transition-colors" onclick="clearAllFilters()" title="Restablecer filtros">
+<span class="material-symbols-outlined text-[18px]">restart_alt</span>
+</button>
+</div>
+</div>
+<!-- Toggles de estado de vista (Testing & Auditoría) -->
+<div class="flex flex-wrap items-center justify-between pt-space-2xs text-slate-500 font-label-sm text-label-sm">
+<div class="flex items-center gap-space-xs">
+<span>Vista de inspección técnica:</span>
+<button class="px-2 py-0.5 rounded bg-emerald-700 text-white font-bold" id="btnViewNormal" onclick="setViewScenario('normal')">Datos en vivo (5)</button>
+<button class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200" id="btnViewLoading" onclick="setViewScenario('loading')">Simular Carga</button>
+<button class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200" id="btnViewEmpty" onclick="setViewScenario('empty')">Sin Resultados</button>
+<button class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200" id="btnViewError" onclick="setViewScenario('error')">Error de Red</button>
+</div>
+<div class="font-code-dense text-code-dense text-slate-700 font-semibold" id="filterResultsCount">
+          Mostrando 5 de 142 casos
+        </div>
+</div>
+</section>
+<!-- 4. Tabla de Casos e Incidencias (Alta densidad & Operatividad) -->
+<section class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- Contenedor scroll horizontal para tabla densa -->
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[1100px]" id="incidentsTable">
+<!-- Cabecera de Tabla -->
+<thead>
+<tr class="bg-slate-100/90 text-slate-600 font-label-sm text-label-sm uppercase tracking-wider h-10 border-b border-slate-200">
+<th class="px-space-md w-12 text-center font-semibold">Exp.</th>
+<th class="px-space-md py-space-xs font-semibold">ID &amp; Título del Caso</th>
+<th class="px-space-md py-space-xs font-semibold">Categoría</th>
+<th class="px-space-md py-space-xs font-semibold">Estado Actual</th>
+<th class="px-space-md py-space-xs font-semibold">Origen</th>
+<th class="px-space-md py-space-xs font-semibold">Sede</th>
+<th class="px-space-md py-space-xs font-semibold">Fecha &amp; Hora</th>
+<th class="px-space-md py-space-xs text-right pr-space-lg font-semibold">Transición Permitida</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200" id="incidentsTableBody">
+<!-- FILA 1: CASO EXPANDIDO POR DEFECTO (#INC-8492) -->
+<tr class="bg-slate-50/60 hover:bg-slate-100/70 transition-colors group" data-category="Fallo de entrega" data-id="INC-8492" data-origin="Sede" data-sede="Zaragoza - Almacén" data-status="Abierta">
+<td class="px-space-md py-space-sm text-center">
+<button class="text-slate-500 hover:text-slate-800 p-1 rounded hover:bg-slate-200 transition-colors" onclick="toggleRowExpand('expand-8492', this)">
+<span class="material-symbols-outlined text-[18px] transition-transform duration-150 rotate-90">chevron_right</span>
+</button>
+</td>
+<td class="px-space-md py-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="font-code-dense text-code-dense text-emerald-700 font-bold">#INC-8492</span>
+<span class="w-1 h-1 rounded-full bg-slate-400"></span>
+<span class="font-body-md text-body-md text-slate-900 font-semibold truncate max-w-sm" title="Retraso en entrega transfronteriza lote A4">Retraso en entrega transfronteriza lote A4</span>
+</div>
+<span class="font-body-sm text-body-sm text-slate-500 block mt-0.5">Ruta Ebro-Pirineos retenida en aduana por albarán desajustado</span>
+</td>
+<td class="px-space-md py-space-sm">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-red-50 text-red-700 border border-red-200 font-label-sm text-label-sm font-medium">
+<span class="material-symbols-outlined text-[14px]">local_shipping</span> Fallo de entrega
+                </span>
+</td>
+<td class="px-space-md py-space-sm">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-red-100 text-red-800 font-label-sm text-label-sm font-semibold border border-red-200">
+<span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span> Abierta
+                </span>
+</td>
+<td class="px-space-md py-space-sm">
+<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 font-label-sm text-label-sm font-medium">Sede</span>
+</td>
+<td class="px-space-md py-space-sm font-body-sm text-body-sm text-slate-800">
+                Zaragoza - Almacén
+              </td>
+<td class="px-space-md py-space-sm font-code-dense text-code-dense text-slate-500 whitespace-nowrap">
+                24 Oct 2023, 14:32
+              </td>
+<td class="px-space-md py-space-sm text-right pr-space-lg">
+<!-- Reglas para 'Abierta': Pasar a En curso o Descartar -->
+<div class="flex items-center justify-end gap-space-xs">
+<button class="px-space-sm py-1 rounded bg-amber-600 hover:bg-amber-700 text-white font-label-sm text-label-sm font-semibold transition-colors flex items-center gap-1 shadow-xs" onclick="transitionCase('INC-8492', 'En curso', this)">
+<span class="material-symbols-outlined text-[14px]">play_arrow</span> Pasar a En curso
+                  </button>
+<button class="px-space-xs py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-600 border border-slate-200 font-label-sm text-label-sm transition-colors" onclick="transitionCase('INC-8492', 'Descartada', this)" title="Descartar caso">
+<span class="material-symbols-outlined text-[14px]">close</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- DETALLE INLINE EXPANDIDO DEL CASO 8492 -->
+<tr class="bg-slate-50/90 border-b border-slate-200" data-parent="INC-8492" id="expand-8492">
+<td class="p-space-md" colspan="8">
+<div class="bg-[#f8fafc] rounded-xl p-space-md flex flex-col md:flex-row gap-space-md justify-between border border-slate-300 shadow-xs">
+<div class="space-y-space-xs flex-1">
+<div class="flex items-center gap-space-sm">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-emerald-700 font-bold">Informe Completo de Incidencia</span>
+<span class="font-code-dense text-code-dense text-slate-500">Operador: Carlos M. (ID: 9021)</span>
+</div>
+<p class="font-body-md text-body-md text-slate-800 leading-relaxed">
+                      El camión cisterna / furgón express no pudo validar el código de despacho en la aduana de Hendaya. El contenedor #CT-409 contiene 42 bultos prioritarios. Se contactó al proveedor DHL Freight para emitir el albarán complementario T1. Pendiente de resolución por agente de aduanas de turno.
+                    </p>
+<div class="flex flex-wrap items-center gap-space-md pt-space-xs font-body-sm text-body-sm text-slate-600">
+<span class="flex items-center gap-1"><strong class="text-slate-900 font-semibold">Responsable Asignado:</strong> Elena Santos (Logística Int.)</span>
+<span class="flex items-center gap-1"><strong class="text-slate-900 font-semibold">Nivel de Impacto:</strong> Alto (Tier 1)</span>
+<span class="flex items-center gap-1"><strong class="text-slate-900 font-semibold">Tracking Carrier:</strong> ES-ZAZ-994821</span>
+</div>
+</div>
+<div class="flex flex-col justify-center items-start md:items-end gap-space-xs min-w-[200px] border-t md:border-t-0 pt-space-xs md:pt-0 border-slate-200">
+<span class="font-label-sm text-label-sm text-slate-500 font-semibold">ACCIONES TÉCNICAS</span>
+<button class="w-full md:w-auto px-space-sm py-1 rounded bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-label-sm text-label-sm text-left md:text-right transition-colors flex items-center gap-1 shadow-xs">
+<span class="material-symbols-outlined text-[16px] text-slate-600">print</span> Exportar Hoja de Ruta
+                    </button>
+<button class="w-full md:w-auto px-space-sm py-1 rounded bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-label-sm text-label-sm text-left md:text-right transition-colors flex items-center gap-1 shadow-xs">
+<span class="material-symbols-outlined text-[16px] text-slate-600">history</span> Registro de Auditoría
+                    </button>
+</div>
+</div>
+</td>
+</tr>
+<!-- FILA 2: CASO EN CURSO CON TRANSICIÓN 'GUARDANDO ESTADO...' INTERACTIVO (#INC-8491) -->
+<tr class="bg-white hover:bg-slate-50 transition-colors group" data-category="Paquete perdido" data-id="INC-8491" data-origin="Cliente" data-sede="Central" data-status="En curso">
+<td class="px-space-md py-space-sm text-center">
+<button class="text-slate-500 hover:text-slate-800 p-1 rounded hover:bg-slate-200 transition-colors" onclick="toggleRowExpand('expand-8491', this)">
+<span class="material-symbols-outlined text-[18px] transition-transform duration-150">chevron_right</span>
+</button>
+</td>
+<td class="px-space-md py-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="font-code-dense text-code-dense text-emerald-700 font-bold">#INC-8491</span>
+<span class="w-1 h-1 rounded-full bg-slate-400"></span>
+<span class="font-body-md text-body-md text-slate-900 font-semibold truncate max-w-sm" title="Paquete de cliente preferente extraviado en terminal">Extravío en cross-docking terminal Central</span>
+</div>
+<span class="font-body-sm text-body-sm text-slate-500 block mt-0.5">Reportado por Customer Success tras escaneo nulo en cinta B</span>
+</td>
+<td class="px-space-md py-space-sm">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 font-label-sm text-label-sm font-medium">
+<span class="material-symbols-outlined text-[14px]">package_2</span> Paquete perdido
+                </span>
+</td>
+<td class="px-space-md py-space-sm">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200 font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[13px] animate-spin">progress_activity</span> En curso
+                </span>
+</td>
+<td class="px-space-md py-space-sm">
+<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 font-label-sm text-label-sm font-medium">Cliente</span>
+</td>
+<td class="px-space-md py-space-sm font-body-sm text-body-sm text-slate-800">
+                Central
+              </td>
+<td class="px-space-md py-space-sm font-code-dense text-code-dense text-slate-500 whitespace-nowrap">
+                24 Oct 2023, 13:10
+              </td>
+<td class="px-space-md py-space-sm text-right pr-space-lg">
+<!-- Reglas para 'En curso': Marcar como Resuelta o Descartar -->
+<div class="flex items-center justify-end gap-space-xs action-container">
+<button class="px-space-sm py-1 rounded bg-[#10b981] hover:bg-emerald-600 text-white font-label-sm text-label-sm font-semibold transition-colors flex items-center gap-1 shadow-xs" onclick="transitionCase('INC-8491', 'Resuelta', this)">
+<span class="material-symbols-outlined text-[14px]">check</span> Resuelta
+                  </button>
+<button class="px-space-xs py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-600 border border-slate-200 font-label-sm text-label-sm transition-colors" onclick="transitionCase('INC-8491', 'Descartada', this)" title="Descartar">
+<span class="material-symbols-outlined text-[14px]">close</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hidden bg-slate-50/90 border-b border-slate-200" data-parent="INC-8491" id="expand-8491">
+<td class="p-space-md" colspan="8">
+<div class="bg-[#f8fafc] rounded-xl p-space-md flex flex-col gap-space-xs border border-slate-300 shadow-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-emerald-700 font-bold">Notas Operativas &amp; Rastro RFID</span>
+<p class="font-body-md text-body-md text-slate-800">
+                    La antena 04 registró la entrada a las 11:04, pero no hubo confirmación en la bandeja de pesaje volumétrico. Las cámaras de vigilancia del sector B muestran manipulación de bulto irregular. El equipo de seguridad física está revisando el pasillo 14.
+                  </p>
+<span class="font-body-sm text-body-sm text-slate-500">Asignado: Martín Albiol (Seguridad Operativa Hub Central)</span>
+</div>
+</td>
+</tr>
+<!-- FILA 3: FILA CON DEMO 'GUARDANDO ESTADO...' ACTIVO (#INC-8490) -->
+<tr class="bg-white hover:bg-slate-50 transition-colors" data-category="Diferencia de inventario" data-id="INC-8490" data-origin="Interno" data-sede="Los Ángeles - Almacén" data-status="En curso" id="rowSavingDemo">
+<td class="px-space-md py-space-sm text-center">
+<button class="text-slate-500 hover:text-slate-800 p-1 rounded hover:bg-slate-200 transition-colors" onclick="toggleRowExpand('expand-8490', this)">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</td>
+<td class="px-space-md py-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="font-code-dense text-code-dense text-emerald-700 font-bold">#INC-8490</span>
+<span class="w-1 h-1 rounded-full bg-slate-400"></span>
+<span class="font-body-md text-body-md text-slate-900 font-semibold truncate max-w-sm">Descuadre en stock microprocesadores R-50</span>
+</div>
+<span class="font-body-sm text-body-sm text-slate-500 block mt-0.5">Diferencia de 18 unidades entre SAP WMS y conteo físico</span>
+</td>
+<td class="px-space-md py-space-sm">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-label-sm text-label-sm font-medium">
+<span class="material-symbols-outlined text-[14px]">inventory</span> Dif. inventario
+                </span>
+</td>
+<td class="px-space-md py-space-sm">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 border border-slate-200 font-label-sm text-label-sm font-medium">
+<span class="material-symbols-outlined text-[14px] animate-spin text-emerald-700">sync</span> Guardando estado...
+                </span>
+</td>
+<td class="px-space-md py-space-sm">
+<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 font-label-sm text-label-sm font-medium">Interno</span>
+</td>
+<td class="px-space-md py-space-sm font-body-sm text-body-sm text-slate-800">
+                Los Ángeles - Almacén
+              </td>
+<td class="px-space-md py-space-sm font-code-dense text-code-dense text-slate-500 whitespace-nowrap">
+                24 Oct 2023, 11:15
+              </td>
+<td class="px-space-md py-space-sm text-right pr-space-lg">
+<div class="flex items-center justify-end gap-space-xs opacity-60 pointer-events-none">
+<span class="font-body-sm text-body-sm text-slate-500 italic">Persistiendo en BD...</span>
+</div>
+</td>
+</tr>
+<tr class="hidden bg-slate-50/90 border-b border-slate-200" data-parent="INC-8490" id="expand-8490">
+<td class="p-space-md" colspan="8">
+<div class="bg-[#f8fafc] rounded-xl p-space-md border border-slate-300 shadow-xs">
+<p class="font-body-md text-body-md text-slate-800">Reconteo cíclico nocturno en estantería C-09. Esperando firma digital del auditor de inventario.</p>
+</div>
+</td>
+</tr>
+<!-- FILA 4: ESTADO FINAL RESUELTA (#INC-8488) -->
+<tr class="bg-white hover:bg-slate-50 transition-colors group" data-category="Problema con transportista" data-id="INC-8488" data-origin="Sede" data-sede="Zaragoza - Oficina" data-status="Resuelta">
+<td class="px-space-md py-space-sm text-center">
+<button class="text-slate-500 hover:text-slate-800 p-1 rounded hover:bg-slate-200 transition-colors" onclick="toggleRowExpand('expand-8488', this)">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</td>
+<td class="px-space-md py-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="font-code-dense text-code-dense text-emerald-700 font-bold">#INC-8488</span>
+<span class="w-1 h-1 rounded-full bg-slate-400"></span>
+<span class="font-body-md text-body-md text-slate-900 font-semibold truncate max-w-sm">Fallo de API telemática con flota de reparto</span>
+</div>
+<span class="font-body-sm text-body-sm text-slate-500 block mt-0.5">Webhook de Seur falló durante 38 minutos</span>
+</td>
+<td class="px-space-md py-space-sm">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-800 border border-sky-200 font-label-sm text-label-sm font-medium">
+<span class="material-symbols-outlined text-[14px]">cell_tower</span> Transportista
+                </span>
+</td>
+<td class="px-space-md py-space-sm">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[13px]">check_circle</span> Resuelta
+                </span>
+</td>
+<td class="px-space-md py-space-sm">
+<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 font-label-sm text-label-sm font-medium">Sede</span>
+</td>
+<td class="px-space-md py-space-sm font-body-sm text-body-sm text-slate-800">
+                Zaragoza - Oficina
+              </td>
+<td class="px-space-md py-space-sm font-code-dense text-code-dense text-slate-500 whitespace-nowrap">
+                24 Oct 2023, 09:20
+              </td>
+<td class="px-space-md py-space-sm text-right pr-space-lg">
+<!-- Estado Final Bloqueado -->
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200 font-label-sm text-label-sm select-none">
+<span class="material-symbols-outlined text-[13px]">lock</span> Estado Final
+                </span>
+</td>
+</tr>
+<tr class="hidden bg-slate-50/90 border-b border-slate-200" data-parent="INC-8488" id="expand-8488">
+<td class="p-space-md" colspan="8">
+<div class="bg-[#f8fafc] rounded-xl p-space-md border border-slate-300 shadow-xs">
+<p class="font-body-md text-body-md text-slate-800">Servicio restablecido por DevOps. Cola de eventos reprocesada sin pérdida de transacciones.</p>
+</div>
+</td>
+</tr>
+<!-- FILA 5: ESTADO FINAL DESCARTADA (#INC-8485) -->
+<tr class="bg-white hover:bg-slate-50 transition-colors group opacity-85" data-category="Queja de cliente" data-id="INC-8485" data-origin="Cliente" data-sede="Los Ángeles - Oficina" data-status="Descartada">
+<td class="px-space-md py-space-sm text-center">
+<button class="text-slate-500 hover:text-slate-800 p-1 rounded hover:bg-slate-200 transition-colors" onclick="toggleRowExpand('expand-8485', this)">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</td>
+<td class="px-space-md py-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="font-code-dense text-code-dense text-slate-400 font-bold line-through">#INC-8485</span>
+<span class="w-1 h-1 rounded-full bg-slate-400"></span>
+<span class="font-body-md text-body-md text-slate-500 font-semibold truncate max-w-sm">Reclamación duplicada por pedido #9910</span>
+</div>
+<span class="font-body-sm text-body-sm text-slate-400 block mt-0.5">El cliente abrió dos tickets en paralelo en portal web</span>
+</td>
+<td class="px-space-md py-space-sm">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 font-label-sm text-label-sm font-medium">
+<span class="material-symbols-outlined text-[14px]">support_agent</span> Queja de cliente
+                </span>
+</td>
+<td class="px-space-md py-space-sm">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-700 border border-slate-300 font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[13px]">block</span> Descartada
+                </span>
+</td>
+<td class="px-space-md py-space-sm">
+<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200 font-label-sm text-label-sm font-medium">Cliente</span>
+</td>
+<td class="px-space-md py-space-sm font-body-sm text-body-sm text-slate-500">
+                Los Ángeles - Oficina
+              </td>
+<td class="px-space-md py-space-sm font-code-dense text-code-dense text-slate-500 whitespace-nowrap">
+                23 Oct 2023, 18:45
+              </td>
+<td class="px-space-md py-space-sm text-right pr-space-lg">
+<!-- Estado Final Bloqueado -->
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200 font-label-sm text-label-sm select-none">
+<span class="material-symbols-outlined text-[13px]">lock</span> Estado Final
+                </span>
+</td>
+</tr>
+<tr class="hidden bg-slate-50/90 border-b border-slate-200" data-parent="INC-8485" id="expand-8485">
+<td class="p-space-md" colspan="8">
+<div class="bg-[#f8fafc] rounded-xl p-space-md border border-slate-300 shadow-xs">
+<p class="font-body-md text-body-md text-slate-800">Ticket unificado con el expediente principal #INC-8482. No requiere intervención técnica adicional.</p>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ESTADOS DE INTERFAZ SIMULADOS (EMPTY, ERROR, LOADING) -->
+<!-- Estado de Carga -->
+<div class="hidden p-space-xl flex flex-col items-center justify-center gap-space-md text-center bg-white" id="uiLoadingState">
+<div class="w-10 h-10 rounded-full border-4 border-emerald-600 border-t-transparent animate-spin"></div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-slate-900 font-semibold">Cargando telemetría de incidencias...</h3>
+<p class="font-body-sm text-body-sm text-slate-500 mt-1">Sincronizando con los clústeres de Zaragoza, Central y Los Ángeles.</p>
+</div>
+</div>
+<!-- Estado Sin Resultados (Empty State) -->
+<div class="hidden p-space-xl flex flex-col items-center justify-center gap-space-md text-center bg-white" id="uiEmptyState">
+<div class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400">
+<span class="material-symbols-outlined text-[32px]">filter_list_off</span>
+</div>
+<div class="max-w-md">
+<h3 class="font-headline-sm text-headline-sm text-slate-900 font-semibold">No se encontraron incidencias</h3>
+<p class="font-body-sm text-body-sm text-slate-500 mt-1">
+            Ningún registro coincide con los filtros aplicados. Intenta restablecer los parámetros o buscar con otro criterio.
+          </p>
+</div>
+<button class="px-space-md py-space-xs rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-label-md text-label-md font-semibold transition-colors shadow-sm" onclick="clearAllFilters()">
+          Restablecer Filtros
+        </button>
+</div>
+<!-- Estado de Error de Red -->
+<div class="hidden p-space-xl flex flex-col items-center justify-center gap-space-md text-center bg-white" id="uiErrorState">
+<div class="w-14 h-14 rounded-2xl bg-red-100 flex items-center justify-center text-red-600">
+<span class="material-symbols-outlined text-[32px]">cloud_off</span>
+</div>
+<div class="max-w-md">
+<h3 class="font-headline-sm text-headline-sm text-slate-900 font-semibold">Fallo en la comunicación con el nodo central</h3>
+<p class="font-body-sm text-body-sm text-slate-500 mt-1">
+            No se pudo recibir la réplica del journal de incidentes. Los cambios locales se mantienen en cola offline.
+          </p>
+</div>
+<div class="flex items-center gap-space-sm">
+<button class="px-space-md py-space-xs rounded-lg bg-[#10b981] hover:bg-emerald-600 text-white font-label-md text-label-md font-semibold flex items-center gap-1 transition-colors shadow-sm" onclick="setViewScenario('normal')">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+<span>Reintentar sincronización</span>
+</button>
+<button class="px-space-md py-space-xs rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-label-md text-label-md transition-colors" onclick="setViewScenario('normal')">
+            Ver caché local
+          </button>
+</div>
+</div>
+<!-- Pie de Tabla: Paginador y Resumen -->
+<div class="bg-slate-50 border-t border-slate-200 px-space-md py-space-sm flex flex-col sm:flex-row items-center justify-between gap-space-sm font-body-sm text-body-sm text-slate-500">
+<div class="flex items-center gap-space-md">
+<span>Filas por página: <strong class="text-slate-900">5</strong> (de 142)</span>
+<span class="hidden md:inline text-slate-300">|</span>
+<span class="hidden md:inline">Ordenado por: <strong class="text-slate-900">Fecha descendente</strong></span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-code-dense text-code-dense text-slate-700 font-medium mr-2">Página 1 de 29</span>
+<button class="w-8 h-8 rounded bg-white border border-slate-200 flex items-center justify-center text-slate-300 cursor-not-allowed" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded bg-white border border-slate-200 hover:bg-slate-100 flex items-center justify-center text-slate-700 transition-colors shadow-xs">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+</div>
+<script>
+  // 1. Manejo del contador de caracteres del título
+  function updateTitleCounter(input) {
+    const counter = document.getElementById('titleCounter');
+    const length = input.value.length;
+    counter.innerText = `${length} / 120 caracteres máx.`;
+    if (length >= 115) {
+      counter.classList.add('text-red-600');
+      counter.classList.remove('text-slate-500');
+    } else {
+      counter.classList.remove('text-red-600');
+      counter.classList.add('text-slate-500');
+    }
+  }
+
+  // 2. Colapsar / Desplegar Formulario de Nueva Incidencia
+  let isFormExpanded = true;
+  function toggleNewIncidentForm() {
+    const form = document.getElementById('newIncidentForm');
+    const icon = document.getElementById('formToggleIcon');
+    const label = document.getElementById('formToggleLabel');
+    isFormExpanded = !isFormExpanded;
+    if (isFormExpanded) {
+      form.classList.remove('hidden');
+      icon.classList.remove('rotate-180');
+      label.innerText = 'Ocultar panel';
+    } else {
+      form.classList.add('hidden');
+      icon.classList.add('rotate-180');
+      label.innerText = 'Desplegar formulario';
+    }
+  }
+
+  // 3. Selección de Origen con estilos dinámicos en Sede
+  function setOrigin(originValue, btn) {
+    document.getElementById('selectedOrigin').value = originValue;
+    const buttons = document.querySelectorAll('.origin-btn');
+    buttons.forEach(b => {
+      b.classList.remove('bg-emerald-700', 'text-white', 'font-semibold', 'shadow-xs');
+      b.classList.add('text-slate-600');
+    });
+    btn.classList.add('bg-emerald-700', 'text-white', 'font-semibold', 'shadow-xs');
+    btn.classList.remove('text-slate-600');
+
+    const sedeBox = document.getElementById('sedeContainer');
+    const sedeNotice = document.getElementById('sedeBadgeNotice');
+    if (originValue === 'Sede') {
+      sedeBox.classList.add('bg-emerald-50/80', 'border-2', 'border-emerald-500');
+      sedeNotice.innerText = 'Foco Sede';
+      sedeNotice.classList.remove('hidden');
+    } else {
+      sedeBox.classList.remove('bg-emerald-50/80', 'border-2', 'border-emerald-500');
+      sedeNotice.innerText = 'Sede Asignada';
+    }
+  }
+
+  // 4. Limpiar Formulario
+  function resetIncidentForm() {
+    document.getElementById('newIncidentForm').reset();
+    document.getElementById('titleCounter').innerText = '0 / 120 caracteres máx.';
+    // Restablecer botón origen por defecto a 'Sede'
+    const sedeBtn = document.querySelectorAll('.origin-btn')[1];
+    setOrigin('Sede', sedeBtn);
+  }
+
+  // 5. Envío de Formulario con Toast reactivo
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    const title = document.getElementById('inputTitle').value;
+    const toast = document.getElementById('toastNotification');
+    
+    // Simular creación instantánea
+    toast.style.display = 'flex';
+    toast.classList.remove('opacity-0', 'translate-y-4');
+    toast.classList.add('opacity-100', 'translate-y-0');
+
+    // Auto ocultar después de 6s
+    setTimeout(() => {
+      if (toast) toast.style.display = 'none';
+    }, 6000);
+
+    resetIncidentForm();
+  }
+
+  // 6. Expansión inline de filas de la tabla
+  function toggleRowExpand(rowId, btn) {
+    const detailRow = document.getElementById(rowId);
+    const icon = btn.querySelector('.material-symbols-outlined');
+    if (detailRow.classList.contains('hidden')) {
+      detailRow.classList.remove('hidden');
+      icon.classList.add('rotate-90');
+    } else {
+      detailRow.classList.add('hidden');
+      icon.classList.remove('rotate-90');
+    }
+  }
+
+  // 7. Transición de Estado de Casos (Reglas de Negocio)
+  function transitionCase(caseId, targetState, btn) {
+    const tr = document.querySelector(`tr[data-id="${caseId}"]`);
+    if (!tr) return;
+
+    // Cambiar a feedback 'Guardando...'
+    const actionCell = tr.querySelector('td:last-child');
+    const originalActionContent = actionCell.innerHTML;
+    actionCell.innerHTML = `
+      <div class="flex items-center justify-end gap-1 text-slate-500 font-label-sm text-label-sm">
+        <span class="material-symbols-outlined text-[15px] animate-spin text-emerald-700">sync</span>
+        <span>Guardando...</span>
+      </div>
+    `;
+
+    setTimeout(() => {
+      tr.setAttribute('data-status', targetState);
+      const statusCell = tr.children[3];
+
+      if (targetState === 'En curso') {
+        statusCell.innerHTML = `
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200 font-label-sm text-label-sm font-semibold">
+            <span class="material-symbols-outlined text-[13px] animate-spin">progress_activity</span> En curso
+          </span>
+        `;
+        actionCell.innerHTML = `
+          <div class="flex items-center justify-end gap-space-xs">
+            <button onclick="transitionCase('${caseId}', 'Resuelta', this)" class="px-space-sm py-1 rounded bg-[#10b981] hover:bg-emerald-600 text-white font-label-sm text-label-sm font-semibold transition-colors flex items-center gap-1 shadow-xs">
+              <span class="material-symbols-outlined text-[14px]">check</span> Resuelta
+            </button>
+            <button onclick="transitionCase('${caseId}', 'Descartada', this)" class="px-space-xs py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-600 border border-slate-200 font-label-sm text-label-sm transition-colors" title="Descartar">
+              <span class="material-symbols-outlined text-[14px]">close</span>
+            </button>
+          </div>
+        `;
+      } else if (targetState === 'Resuelta') {
+        statusCell.innerHTML = `
+          <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 font-label-sm text-label-sm font-semibold">
+            <span class="material-symbols-outlined text-[13px]">check_circle</span> Resuelta
+          </span>
+        `;
+        actionCell.innerHTML = `
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200 font-label-sm text-label-sm select-none">
+            <span class="material-symbols-outlined text-[13px]">lock</span> Estado Final
+          </span>
+        `;
+      } else if (targetState === 'Descartada') {
+        statusCell.innerHTML = `
+          <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-700 border border-slate-300 font-label-sm text-label-sm font-semibold">
+            <span class="material-symbols-outlined text-[13px]">block</span> Descartada
+          </span>
+        `;
+        actionCell.innerHTML = `
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200 font-label-sm text-label-sm select-none">
+            <span class="material-symbols-outlined text-[13px]">lock</span> Estado Final
+          </span>
+        `;
+      }
+    }, 700);
+  }
+
+  // 8. Filtrado Reactivo de la Tabla
+  function filterTableRows() {
+    const searchVal = (document.getElementById('tableSearchInput').value || '').toLowerCase();
+    const statusVal = document.getElementById('filterStatus').value;
+    const originVal = document.getElementById('filterOrigin').value;
+    const sedeVal = document.getElementById('filterSede').value;
+    const catVal = document.getElementById('filterCategory').value;
+
+    const rows = document.querySelectorAll('#incidentsTableBody > tr[data-id]');
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+      const rowId = row.getAttribute('data-id').toLowerCase();
+      const rowText = row.innerText.toLowerCase();
+      const rStatus = row.getAttribute('data-status');
+      const rOrigin = row.getAttribute('data-origin');
+      const rSede = row.getAttribute('data-sede');
+      const rCategory = row.getAttribute('data-category');
+
+      const matchesSearch = !searchVal || rowId.includes(searchVal) || rowText.includes(searchVal);
+      const matchesStatus = (statusVal === 'ALL' || rStatus === statusVal);
+      const matchesOrigin = (originVal === 'ALL' || rOrigin === originVal);
+      const matchesSede = (sedeVal === 'ALL' || rSede === sedeVal);
+      const matchesCat = (catVal === 'ALL' || rCategory === catVal);
+
+      const expandRow = document.querySelector(`tr[data-parent="${row.getAttribute('data-id')}"]`);
+
+      if (matchesSearch && matchesStatus && matchesOrigin && matchesSede && matchesCat) {
+        row.classList.remove('hidden');
+        visibleCount++;
+      } else {
+        row.classList.add('hidden');
+        if (expandRow) expandRow.classList.add('hidden');
+      }
+    });
+
+    // Actualizar indicador de conteo
+    document.getElementById('filterResultsCount').innerText = `Mostrando ${visibleCount} de 142 casos`;
+
+    // Si no hay resultados, mostrar empty state
+    const tableEl = document.getElementById('incidentsTable');
+    const emptyEl = document.getElementById('uiEmptyState');
+    if (visibleCount === 0) {
+      tableEl.classList.add('hidden');
+      emptyEl.classList.remove('hidden');
+    } else {
+      tableEl.classList.remove('hidden');
+      emptyEl.classList.add('hidden');
+    }
+  }
+
+  function clearAllFilters() {
+    document.getElementById('tableSearchInput').value = '';
+    document.getElementById('filterStatus').value = 'ALL';
+    document.getElementById('filterOrigin').value = 'ALL';
+    document.getElementById('filterSede').value = 'ALL';
+    document.getElementById('filterCategory').value = 'ALL';
+    setViewScenario('normal');
+    filterTableRows();
+  }
+
+  // 9. Conmutador de estados de UI (Normal, Loading, Empty, Error)
+  function setViewScenario(type) {
+    const table = document.getElementById('incidentsTable');
+    const loading = document.getElementById('uiLoadingState');
+    const empty = document.getElementById('uiEmptyState');
+    const error = document.getElementById('uiErrorState');
+
+    // Desactivar botones de auditoría
+    ['btnViewNormal', 'btnViewLoading', 'btnViewEmpty', 'btnViewError'].forEach(id => {
+      const btn = document.getElementById(id);
+      btn.className = 'px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-label-sm text-label-sm';
+    });
+
+    table.classList.add('hidden');
+    loading.classList.add('hidden');
+    empty.classList.add('hidden');
+    error.classList.add('hidden');
+
+    if (type === 'normal') {
+      table.classList.remove('hidden');
+      document.getElementById('btnViewNormal').className = 'px-2 py-0.5 rounded bg-emerald-700 text-white font-bold text-label-sm shadow-xs';
+      filterTableRows();
+    } else if (type === 'loading') {
+      loading.classList.remove('hidden');
+      document.getElementById('btnViewLoading').className = 'px-2 py-0.5 rounded bg-emerald-700 text-white font-bold text-label-sm shadow-xs';
+    } else if (type === 'empty') {
+      empty.classList.remove('hidden');
+      document.getElementById('btnViewEmpty').className = 'px-2 py-0.5 rounded bg-emerald-700 text-white font-bold text-label-sm shadow-xs';
+    } else if (type === 'error') {
+      error.classList.remove('hidden');
+      document.getElementById('btnViewError').className = 'px-2 py-0.5 rounded bg-emerald-700 text-white font-bold text-label-sm shadow-xs';
+    }
+  }
+
+  // 10. Reintentar Sincronización Telemetría
+  function triggerSyncDemo() {
+    const icon = document.getElementById('syncIcon');
+    icon.classList.add('animate-spin');
+    setTimeout(() => {
+      icon.classList.remove('animate-spin');
+      const toast = document.getElementById('toastNotification');
+      toast.querySelector('.text-slate-900').innerText = 'Red telemática sincronizada';
+      toast.querySelector('.text-slate-500').innerText = 'Todos los buffers de sedes están al día.';
+      toast.style.display = 'flex';
+      setTimeout(() => { toast.style.display = 'none'; }, 4000);
+    }, 900);
+  }
+</script></main><footer class="w-full bg-white border-t border-slate-200 py-space-md"><div class="w-full px-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-sm text-slate-500 font-body-sm text-body-sm"><span>© 2025 TrackFlow Logistics Hub. Entorno Interno Restringido.</span><div class="flex items-center gap-space-md"><span class="flex items-center gap-space-2xs text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>SLA Dispatch: 99.8%</span><span class="font-code-dense text-code-dense text-slate-500 font-medium">LAT-PROD-NODE-04</span></div></div></footer></body></html>

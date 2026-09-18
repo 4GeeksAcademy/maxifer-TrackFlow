@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&amp;family=Manrope:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-tertiary":"#ffffff","tertiary":"#7d4200","on-primary-fixed-variant":"#00513a","surface-container-highest":"#dae2fd","surface-variant":"#dae2fd","on-surface-variant":"#64748b","surface-container-low":"#f8fafc","on-tertiary-fixed-variant":"#6e3900","background":"#f8fafc","error":"#ba1a1a","primary-fixed-dim":"#7bd8b1","surface-dim":"#d2d9f4","tertiary-container":"#a05600","inverse-primary":"#7bd8b1","on-secondary-container":"#00476e","on-error-container":"#93000a","tertiary-fixed-dim":"#ffb77d","inverse-surface":"#283044","primary-fixed":"#97f5cc","outline-variant":"#e2e8f0","on-tertiary-fixed":"#2f1500","on-secondary-fixed":"#001d31","primary-container":"#10b981","on-primary":"#ffffff","secondary-fixed-dim":"#93ccff","on-tertiary-container":"#ffe5d3","on-secondary":"#ffffff","on-secondary-fixed-variant":"#004b73","on-error":"#ffffff","error-container":"#ffdad6","surface-container-high":"#f1f5f9","outline":"#cbd5e1","secondary":"#006398","inverse-on-surface":"#eef0ff","on-primary-fixed":"#002115","on-surface":"#0f172a","secondary-fixed":"#cce5ff","on-background":"#0f172a","surface-bright":"#ffffff","tertiary-fixed":"#ffdcc3","surface-tint":"#006c4e","surface":"#ffffff","surface-container-lowest":"#ffffff","on-primary-container":"#ffffff","primary":"#005d42","surface-container":"#ffffff","secondary-container":"#0284c7"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-xs":"0.25rem","margin-lg":"2rem","space-md":"0.75rem","space-xl":"1.75rem","margin":"1rem","space-sm":"0.5rem","gutter-md":"1.5rem","gutter":"1rem","margin-md":"1.5rem","gutter-lg":"1.5rem","space-lg":"1.25rem","space-2xs":"0.125rem"},"fontFamily":{"body-sm":["Hanken Grotesk"],"headline-lg":["Manrope"],"headline-xl":["Manrope"],"label-sm":["Hanken Grotesk"],"label-md":["Hanken Grotesk"],"display-lg-mobile":["Manrope"],"label-xs":["Hanken Grotesk"],"body-md":["Hanken Grotesk"],"display-lg":["Manrope"],"headline-sm":["Manrope"],"headline-md":["Manrope"],"body-lg":["Hanken Grotesk"],"code-dense":["Hanken Grotesk"]},"fontSize":{"body-sm":["0.75rem",{"lineHeight":"1rem","letterSpacing":"0.01em","fontWeight":"400"}],"headline-lg":["1.25rem",{"lineHeight":"1.75rem","letterSpacing":"-0.015em","fontWeight":"600"}],"headline-md":["1.375rem",{"lineHeight":"1.75rem","letterSpacing":"-0.015em","fontWeight":"700"}],"headline-xl":["1.5rem",{"lineHeight":"2rem","letterSpacing":"-0.02em","fontWeight":"600"}],"label-sm":["0.75rem",{"lineHeight":"1rem","letterSpacing":"0.02em","fontWeight":"600"}],"label-md":["0.875rem",{"lineHeight":"1.25rem","letterSpacing":"0.005em","fontWeight":"600"}],"display-lg-mobile":["1.75rem",{"lineHeight":"2.25rem","letterSpacing":"-0.02em","fontWeight":"700"}],"label-xs":["0.6875rem",{"lineHeight":"0.875rem","letterSpacing":"0.04em","fontWeight":"700"}],"body-md":["0.875rem",{"lineHeight":"1.25rem","letterSpacing":"0em","fontWeight":"400"}],"display-lg":["2.25rem",{"lineHeight":"2.75rem","letterSpacing":"-0.025em","fontWeight":"700"}],"headline-sm":["1.125rem",{"lineHeight":"1.5rem","letterSpacing":"-0.01em","fontWeight":"600"}],"body-lg":["1rem",{"lineHeight":"1.5rem","letterSpacing":"-0.005em","fontWeight":"400"}],"code-dense":["0.8125rem",{"lineHeight":"1.125rem","letterSpacing":"0.02em","fontWeight":"500"}]}}}};</script></head><body class="bg-background font-body-md text-on-surface antialiased min-h-screen"><header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm"><div class="h-16 w-full px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><img alt="TrackFlow Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UJUcdrUNCa3iA-zp_oUEGh9R2MuBWXD8b32ST8H9Cjx3BdgCnLBbr1tKTGJnugEE-xCc2P6s7CreW2BaNhnnf3ofYw42eSIsPvqk32S4myaTeYoDRV2rbAZhZScLSUykmSWLBpek2kAVMWtHWWSef59xS9JNa0kcu-Wtu4fIFwtBdvMytpqFoABgHG3o6ihzHxgHqj3ffqnmdzqp_IHICQBKxlX8Z10nDiV_PbEKcbIVLoroX6bOSV2AQ"/><span class="font-headline-sm text-headline-sm text-slate-900 tracking-tight font-bold hidden sm:inline-block">TrackFlow</span><span class="px-space-xs py-space-2xs bg-slate-100 text-slate-600 font-label-sm text-label-sm rounded uppercase border border-slate-200">Backoffice Ops v2.4</span></div><nav class="hidden md:flex items-center gap-space-xs" data-active-classes="bg-emerald-500 text-white font-semibold rounded-lg shadow-sm"><a aria-current="page" class="px-space-md py-space-sm transition-colors bg-emerald-500 text-white font-semibold rounded-lg shadow-sm" data-path="inicio" href="#">Inicio</a><a class="px-space-md py-space-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors rounded-lg font-label-md text-label-md" data-path="incidencias" href="#">Incidencias</a><a class="px-space-md py-space-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors rounded-lg font-label-md text-label-md" data-path="proveedores" href="#">Proveedores</a></nav><div class="flex items-center gap-space-md"><div class="hidden xl:flex items-center gap-space-xs px-space-sm py-space-2xs bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span></span><span class="font-label-sm text-label-sm font-medium">Red Operativa: Normal</span></div><button class="text-slate-500 hover:text-slate-900 p-space-xs rounded-lg hover:bg-slate-100 transition-colors relative border border-slate-200"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-emerald-500 rounded-full ring-2 ring-white"></span></button><div class="relative group"><button class="flex items-center gap-space-sm p-space-xs rounded-lg hover:bg-slate-100 transition-colors border border-transparent hover:border-slate-200"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-slate-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtuOtKcRM5JddMbdu1J6PQs9UekZAU_Xqp4z_DwwXkMev8isnfBdyLRm3D-P9396sID7D2togc-Ym-cnY8e7wzxoj81vIza3oAjAcFshqh-8_a9L-lDygIwxVdRtYGCaXeyHaSPxfJna75ABoKFF1kYcy-lqhIQzoUFiYenIc6O3eaPogBQe_vNk5CRfkKAwUWvskJXSJnvWsO16_AWzBaOu_obHdeeCiUXPr1ORm-k6_zsFC0h00K"/><div class="text-left hidden lg:block leading-tight"><p class="font-label-md text-label-md text-slate-900 font-semibold">Carlos M.</p><span class="font-label-sm text-label-sm text-emerald-700 font-semibold uppercase">ADMIN / OPS</span></div><span class="material-symbols-outlined text-slate-500 text-[18px]">expand_more</span></button><div class="absolute right-0 top-full mt-space-2xs w-60 bg-white rounded-lg shadow-lg border border-slate-200 py-space-xs hidden group-hover:block transition-all z-50"><div class="px-space-md py-space-sm bg-slate-50 border-b border-slate-100"><p class="font-label-md text-label-md text-slate-900 font-semibold">Carlos M. (Ops Manager)</p><p class="font-body-sm text-body-sm text-slate-500 truncate">carlos.m@trackflow.internal</p></div><nav class="py-space-xs" data-active-classes="bg-emerald-500 text-white font-semibold"><a class="flex items-center gap-space-sm px-space-md py-space-sm text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors font-label-md text-label-md" data-path="mi-perfil" href="#">Mi perfil</a><a class="flex items-center gap-space-sm px-space-md py-space-sm text-slate-600 hover:text-red-600 hover:bg-red-50 transition-colors font-label-md text-label-md" data-path="cerrar-sesion" href="#">Cerrar sesión</a></nav></div></div></div></div></header><main class="w-full pt-16 bg-[#f8fafc] min-h-[calc(100vh-4rem)]"><div class="flex flex-col w-full">
+<!-- Top Command & Status Bar -->
+<div class="w-full bg-white border-b border-slate-200 px-space-lg py-space-md">
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-md">
+<!-- Greeting & Facility Selector -->
+<div class="flex flex-col sm:flex-row sm:items-center gap-space-md">
+<div>
+<span class="font-label-sm text-label-sm text-emerald-700 font-semibold uppercase tracking-wider block">Panel de Control Unificado</span>
+<h1 class="font-headline-md text-headline-md text-slate-900">Bienvenido de nuevo, Carlos (Ops Manager)</h1>
+</div>
+<div class="relative flex items-center">
+<div class="bg-slate-50 border border-slate-200 px-space-md py-space-xs rounded-lg flex items-center gap-space-xs shadow-sm">
+<span class="material-symbols-outlined text-[18px] text-emerald-600">domain</span>
+<span class="font-label-md text-label-md text-slate-700 font-medium">Sede:</span>
+<select class="bg-transparent font-code-dense text-code-dense text-slate-900 focus:outline-none cursor-pointer pr-space-sm font-medium" id="hubSelector">
+<option class="bg-white text-slate-900" value="all">Todas las Sedes / Consolidado</option>
+<option class="bg-white text-slate-900" value="madrid">Central (Madrid Hub)</option>
+<option class="bg-white text-slate-900" value="la">Los Ángeles (Whs &amp; Logistics)</option>
+<option class="bg-white text-slate-900" value="zgza">Zaragoza (Fulfillment Node)</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Realtime Node Telemetry -->
+<div class="flex items-center gap-space-md flex-wrap">
+<div class="flex items-center gap-space-xs bg-slate-50 border border-slate-200 px-space-md py-space-xs rounded-lg">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+</span>
+<span class="font-label-sm text-label-sm text-slate-800 font-semibold">Sistemas Operando al 99.8%</span>
+<span class="text-slate-500 font-label-sm text-label-sm">• 0 alertas críticas</span>
+</div>
+<div class="hidden sm:flex items-center gap-space-xs font-code-dense text-code-dense text-slate-600 bg-slate-50 border border-slate-200 px-space-sm py-space-xs rounded-lg">
+<span class="material-symbols-outlined text-[16px] text-slate-500">schedule</span>
+<span id="liveClock">21:28:10 UTC</span>
+</div>
+</div>
+</div>
+</div>
+<div class="w-full px-space-lg py-space-xl flex flex-col gap-space-xl">
+<!-- ACCESOS DESTACADOS HERO (Módulo Incidencias & Directorio Proveedores) -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-lg">
+<!-- HERO CARD 1: MÓDULO DE INCIDENCIAS -->
+<div class="relative bg-white border border-slate-200 rounded-xl p-space-lg flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+<div class="absolute -right-8 -top-8 w-48 h-48 bg-emerald-50 rounded-full blur-2xl pointer-events-none"></div>
+<div>
+<div class="flex items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="p-space-xs bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-lg">
+<span class="material-symbols-outlined text-[24px]">report_problem</span>
+</span>
+<div>
+<span class="font-label-sm text-label-sm text-slate-500 uppercase tracking-wider font-semibold">Flujo Crítico Operativo</span>
+<h2 class="font-headline-sm text-headline-sm text-slate-900">Módulo de Incidencias Operativas</h2>
+</div>
+</div>
+<span class="px-space-sm py-space-2xs bg-rose-50 border border-rose-200 text-rose-700 font-label-sm text-label-sm rounded-full flex items-center gap-space-2xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse"></span>
+              2 Críticas Requieren Acción
+            </span>
+</div>
+<p class="font-body-md text-body-md text-slate-600 mt-space-md">
+            Supervisa 28 incidencias abiertas y 41 en curso en almacenes y transporte de última milla.
+          </p>
+<!-- Integrated KPI Triad -->
+<div class="grid grid-cols-3 gap-space-sm my-space-lg">
+<div class="bg-slate-50 border border-slate-200 p-space-md rounded-lg">
+<span class="font-label-sm text-label-sm text-rose-700 uppercase tracking-wider block font-semibold">Abiertas</span>
+<div class="flex items-baseline gap-space-xs mt-space-2xs">
+<span class="font-headline-md text-headline-md text-slate-900 font-bold">28</span>
+<span class="font-label-sm text-label-sm text-rose-600 font-semibold">+4 hoy</span>
+</div>
+</div>
+<div class="bg-slate-50 border border-slate-200 p-space-md rounded-lg">
+<span class="font-label-sm text-label-sm text-amber-700 uppercase tracking-wider block font-semibold">En Curso</span>
+<div class="flex items-baseline gap-space-xs mt-space-2xs">
+<span class="font-headline-md text-headline-md text-slate-900 font-bold">41</span>
+<span class="font-label-sm text-label-sm text-slate-500">Activas</span>
+</div>
+</div>
+<div class="bg-slate-50 border border-slate-200 p-space-md rounded-lg">
+<span class="font-label-sm text-label-sm text-emerald-700 uppercase tracking-wider block font-semibold">Resueltas (7d)</span>
+<div class="flex items-baseline gap-space-xs mt-space-2xs">
+<span class="font-headline-md text-headline-md text-slate-900 font-bold">68</span>
+<span class="font-label-sm text-label-sm text-emerald-600 font-semibold">92% SLA</span>
+</div>
+</div>
+</div>
+<!-- Quick Access Tags for Urgent Hubs -->
+<div class="flex flex-wrap items-center gap-space-xs mb-space-md font-body-sm text-body-sm">
+<span class="text-slate-500 font-label-sm text-label-sm uppercase font-semibold">Atención rápida:</span>
+<button class="bg-rose-50 border border-rose-200 hover:bg-rose-100 text-rose-800 px-space-sm py-space-2xs rounded-md flex items-center gap-space-2xs transition-colors font-medium">
+<span class="material-symbols-outlined text-[14px] text-rose-600">warning</span>
+              Zaragoza (14 casos)
+            </button>
+<button class="bg-amber-50 border border-amber-200 hover:bg-amber-100 text-amber-900 px-space-sm py-space-2xs rounded-md flex items-center gap-space-2xs transition-colors font-medium">
+<span class="material-symbols-outlined text-[14px] text-amber-600">schedule</span>
+              Los Ángeles (8 aduanas)
+            </button>
+</div>
+</div>
+<!-- Call To Actions -->
+<div class="pt-space-md flex flex-wrap items-center gap-space-sm border-t border-slate-100">
+<a class="flex-1 min-w-[160px] bg-emerald-600 hover:bg-emerald-700 text-white font-label-md text-label-md px-space-md py-space-sm rounded-lg flex items-center justify-center gap-space-xs shadow-sm transition-colors font-semibold" data-path="incidencias" href="#">
+            Ir a Incidencias
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+<button class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-label-md text-label-md px-space-md py-space-sm rounded-lg flex items-center justify-center gap-space-xs transition-colors font-semibold shadow-sm">
+<span class="material-symbols-outlined text-[18px] text-emerald-600">add_circle</span>
+            + Registrar Nueva Incidencia
+          </button>
+</div>
+</div>
+<!-- HERO CARD 2: DIRECTORIO DE PROVEEDORES -->
+<div class="relative bg-white border border-slate-200 rounded-xl p-space-lg flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+<div class="absolute -right-8 -top-8 w-48 h-48 bg-sky-50 rounded-full blur-2xl pointer-events-none"></div>
+<div>
+<div class="flex items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="p-space-xs bg-sky-50 text-sky-700 border border-sky-100 rounded-lg">
+<span class="material-symbols-outlined text-[24px]">local_shipping</span>
+</span>
+<div>
+<span class="font-label-sm text-label-sm text-slate-500 uppercase tracking-wider font-semibold">Red de Abastecimiento &amp; Fletes</span>
+<h2 class="font-headline-sm text-headline-sm text-slate-900">Directorio de Proveedores y Tarifas</h2>
+</div>
+</div>
+<span class="px-space-sm py-space-2xs bg-emerald-50 border border-emerald-200 text-emerald-700 font-label-sm text-label-sm rounded-full flex items-center gap-space-2xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+              98.2% Cumplimiento
+            </span>
+</div>
+<p class="font-body-md text-body-md text-slate-600 mt-space-md">
+            Administra los 38 proveedores logísticos activos en USA y España con tarifas y contratos indexados.
+          </p>
+<!-- Integrated KPI Triad -->
+<div class="grid grid-cols-3 gap-space-sm my-space-lg">
+<div class="bg-slate-50 border border-slate-200 p-space-md rounded-lg">
+<span class="font-label-sm text-label-sm text-emerald-700 uppercase tracking-wider block font-semibold">Activos</span>
+<div class="flex items-baseline gap-space-xs mt-space-2xs">
+<span class="font-headline-md text-headline-md text-slate-900 font-bold">34</span>
+<span class="font-label-sm text-label-sm text-slate-500">Con contrato</span>
+</div>
+</div>
+<div class="bg-slate-50 border border-slate-200 p-space-md rounded-lg">
+<span class="font-label-sm text-label-sm text-rose-700 uppercase tracking-wider block font-semibold">Suspendidos</span>
+<div class="flex items-baseline gap-space-xs mt-space-2xs">
+<span class="font-headline-md text-headline-md text-slate-900 font-bold">4</span>
+<span class="font-label-sm text-label-sm text-slate-500">Revisión SLA</span>
+</div>
+</div>
+<div class="bg-slate-50 border border-slate-200 p-space-md rounded-lg">
+<span class="font-label-sm text-label-sm text-sky-700 uppercase tracking-wider block font-semibold">Tarifa Promedio</span>
+<div class="flex items-baseline gap-space-xs mt-space-2xs">
+<span class="font-headline-md text-headline-md text-slate-900 font-bold">24.50 €</span>
+<span class="font-label-sm text-label-sm text-emerald-600 font-semibold">-1.8%</span>
+</div>
+</div>
+</div>
+<!-- Quick Metadata Summary -->
+<div class="flex flex-wrap items-center gap-space-md mb-space-md font-body-sm text-body-sm text-slate-600">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span>22 Proveedores Terrestres</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-sky-500"></span>
+<span>11 Operadores Aéreos</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+<span>5 Aduaneros / Marítimos</span>
+</div>
+</div>
+</div>
+<!-- Call To Actions -->
+<div class="pt-space-md flex flex-wrap items-center gap-space-sm border-t border-slate-100">
+<a class="flex-1 min-w-[160px] bg-emerald-600 hover:bg-emerald-700 text-white font-label-md text-label-md px-space-md py-space-sm rounded-lg flex items-center justify-center gap-space-xs shadow-sm transition-colors font-semibold" data-path="proveedores" href="#">
+            Gestionar Proveedores
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+<button class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-label-md text-label-md px-space-md py-space-sm rounded-lg flex items-center justify-center gap-space-xs transition-colors font-semibold shadow-sm">
+<span class="material-symbols-outlined text-[18px] text-sky-600">add_circle</span>
+            + Nuevo Proveedor
+          </button>
+</div>
+</div>
+</div>
+<!-- MAIN OPERATIONAL WORKSPACE: Grid Layout (Activity Feeds + Hub Monitor) -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-space-lg">
+<!-- COLUMN 1 & 2: Realtime Feeds (2 Cols on XL) -->
+<div class="xl:col-span-2 flex flex-col gap-space-lg">
+<!-- Tabbed Live Activity & Feed -->
+<div class="bg-white border border-slate-200 rounded-xl p-space-lg shadow-sm flex flex-col">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm pb-space-md border-b border-slate-100">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-slate-900">Últimas Incidencias Reportadas Hoy</h3>
+<p class="font-body-sm text-body-sm text-slate-500">Monitoreo de eventos en tiempo real con SLA activo</p>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-code-dense text-code-dense text-slate-500 px-space-sm py-space-2xs bg-slate-100 border border-slate-200 rounded-md">Auto-refresh 30s</span>
+<button class="p-space-xs text-slate-600 hover:text-slate-900 bg-slate-100 rounded-md hover:bg-slate-200 border border-slate-200 transition-colors">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+</button>
+</div>
+</div>
+<!-- Incidents Compact Data Table -->
+<div class="w-full overflow-x-auto mt-space-sm">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead>
+<tr class="bg-slate-100/80 text-slate-600 font-label-sm text-label-sm uppercase border-b border-slate-200">
+<th class="py-space-sm px-space-sm">Ticket ID</th>
+<th class="py-space-sm px-space-sm">Severidad / Asunto</th>
+<th class="py-space-sm px-space-sm">Sede</th>
+<th class="py-space-sm px-space-sm">Estado</th>
+<th class="py-space-sm px-space-sm">Reportado</th>
+<th class="py-space-sm px-space-sm text-right">Acción</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-space-sm px-space-sm font-code-dense text-code-dense text-emerald-700 font-semibold">#INC-8942</td>
+<td class="py-space-sm px-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-rose-500"></span>
+<span class="text-slate-800 font-medium truncate max-w-[220px]">Retraso en aduana aérea pallet 49</span>
+</div>
+</td>
+<td class="py-space-sm px-space-sm text-slate-600">Los Ángeles</td>
+<td class="py-space-sm px-space-sm">
+<span class="px-space-xs py-space-2xs rounded-full bg-rose-50 border border-rose-200 text-rose-700 font-label-sm text-label-sm font-semibold">Abierta</span>
+</td>
+<td class="py-space-sm px-space-sm text-slate-500 font-code-dense text-code-dense">Hace 12 min</td>
+<td class="py-space-sm px-space-sm text-right">
+<button class="text-emerald-700 hover:text-emerald-900 font-label-sm text-label-sm font-semibold hover:underline">Revisar</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-space-sm px-space-sm font-code-dense text-code-dense text-emerald-700 font-semibold">#INC-8941</td>
+<td class="py-space-sm px-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+<span class="text-slate-800 font-medium truncate max-w-[220px]">Fallo en sensor de cinta clasificadora C3</span>
+</div>
+</td>
+<td class="py-space-sm px-space-sm text-slate-600">Zaragoza</td>
+<td class="py-space-sm px-space-sm">
+<span class="px-space-xs py-space-2xs rounded-full bg-amber-50 border border-amber-200 text-amber-800 font-label-sm text-label-sm font-semibold">En Curso</span>
+</td>
+<td class="py-space-sm px-space-sm text-slate-500 font-code-dense text-code-dense">Hace 34 min</td>
+<td class="py-space-sm px-space-sm text-right">
+<button class="text-emerald-700 hover:text-emerald-900 font-label-sm text-label-sm font-semibold hover:underline">Revisar</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-space-sm px-space-sm font-code-dense text-code-dense text-emerald-700 font-semibold">#INC-8939</td>
+<td class="py-space-sm px-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span class="text-slate-800 font-medium truncate max-w-[220px]">Reubicación muelle de descarga 04</span>
+</div>
+</td>
+<td class="py-space-sm px-space-sm text-slate-600">Central (Madrid)</td>
+<td class="py-space-sm px-space-sm">
+<span class="px-space-xs py-space-2xs rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-label-sm text-label-sm font-semibold">Resuelta</span>
+</td>
+<td class="py-space-sm px-space-sm text-slate-500 font-code-dense text-code-dense">Hace 1h 15m</td>
+<td class="py-space-sm px-space-sm text-right">
+<button class="text-emerald-700 hover:text-emerald-900 font-label-sm text-label-sm font-semibold hover:underline">Detalles</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-space-sm px-space-sm font-code-dense text-code-dense text-emerald-700 font-semibold">#INC-8935</td>
+<td class="py-space-sm px-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+<span class="text-slate-800 font-medium truncate max-w-[220px]">Discrepancia en escaneo de manifiesto #880</span>
+</div>
+</td>
+<td class="py-space-sm px-space-sm text-slate-600">Zaragoza</td>
+<td class="py-space-sm px-space-sm">
+<span class="px-space-xs py-space-2xs rounded-full bg-amber-50 border border-amber-200 text-amber-800 font-label-sm text-label-sm font-semibold">En Curso</span>
+</td>
+<td class="py-space-sm px-space-sm text-slate-500 font-code-dense text-code-dense">Hace 2h 40m</td>
+<td class="py-space-sm px-space-sm text-right">
+<button class="text-emerald-700 hover:text-emerald-900 font-label-sm text-label-sm font-semibold hover:underline">Revisar</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Supplier Operational Bulletins & Alerts -->
+<div class="bg-white border border-slate-200 rounded-xl p-space-lg shadow-sm">
+<div class="flex items-center justify-between pb-space-sm border-b border-slate-100">
+<h3 class="font-headline-sm text-headline-sm text-slate-900 flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-emerald-600 text-[22px]">notifications_active</span>
+              Alertas y Actualizaciones de Proveedores
+            </h3>
+<a class="font-label-sm text-label-sm text-emerald-700 font-semibold hover:underline" data-path="proveedores" href="#">Ver registro completo →</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md mt-space-md">
+<!-- Alert 1 -->
+<div class="bg-slate-50 border border-slate-200 p-space-md rounded-lg flex items-start gap-space-sm">
+<span class="p-space-xs bg-sky-50 text-sky-700 border border-sky-100 rounded-lg shrink-0">
+<span class="material-symbols-outlined text-[20px]">currency_exchange</span>
+</span>
+<div class="min-w-0 flex-1">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-slate-900 font-semibold truncate">Express Courier US</span>
+<span class="font-code-dense text-code-dense text-slate-400 text-[10px]">Hace 45m</span>
+</div>
+<p class="font-body-sm text-body-sm text-slate-600 mt-space-2xs">
+                  Tarifa base actualizada: <strong class="text-slate-900">22.80 €/unidad</strong> en la ruta LAX-MAD (-4.2%).
+                </p>
+<div class="mt-space-xs flex items-center gap-space-xs">
+<span class="px-space-xs py-space-2xs bg-emerald-50 text-emerald-700 border border-emerald-200 font-label-sm text-label-sm rounded font-medium">Aprobada en Finanzas</span>
+</div>
+</div>
+</div>
+<!-- Alert 2 -->
+<div class="bg-slate-50 border border-slate-200 p-space-md rounded-lg flex items-start gap-space-sm">
+<span class="p-space-xs bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-lg shrink-0">
+<span class="material-symbols-outlined text-[20px]">verified</span>
+</span>
+<div class="min-w-0 flex-1">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-slate-900 font-semibold truncate">Logística Norte Iberia</span>
+<span class="font-code-dense text-code-dense text-slate-400 text-[10px]">Hace 2h</span>
+</div>
+<p class="font-body-sm text-body-sm text-slate-600 mt-space-2xs">
+                  Proveedor reactivado exitosamente tras superar auditoría de puntualidad SLA (99.1%).
+                </p>
+<div class="mt-space-xs flex items-center gap-space-xs">
+<span class="px-space-xs py-space-2xs bg-emerald-50 text-emerald-700 border border-emerald-200 font-label-sm text-label-sm rounded font-medium">Estado: Activo</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- COLUMN 3: Hub Breakdowns & Ops Hub Metrics -->
+<div class="flex flex-col gap-space-lg">
+<!-- Facility Breakdown Widget -->
+<div class="bg-white border border-slate-200 rounded-xl p-space-lg shadow-sm">
+<div class="flex items-center justify-between pb-space-sm border-b border-slate-100">
+<h3 class="font-headline-sm text-headline-sm text-slate-900">Desglose por Sedes</h3>
+<span class="font-label-sm text-label-sm text-emerald-700 font-semibold flex items-center gap-space-2xs">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> 3 Nodos Activos
+            </span>
+</div>
+<div class="flex flex-col gap-space-sm mt-space-md">
+<!-- Madrid Central -->
+<div class="bg-slate-50 border border-slate-200 p-space-md rounded-lg">
+<div class="flex items-center justify-between">
+<div>
+<h4 class="font-label-md text-label-md text-slate-900 font-semibold">Central (Madrid)</h4>
+<span class="font-body-sm text-body-sm text-slate-500">Hub Principal de Coordinación</span>
+</div>
+<span class="px-space-sm py-space-2xs bg-emerald-100 text-emerald-800 font-code-dense text-code-dense rounded-md font-semibold border border-emerald-200">Normal</span>
+</div>
+<div class="grid grid-cols-2 gap-space-xs mt-space-sm pt-space-xs border-t border-slate-200">
+<div>
+<span class="font-label-sm text-label-sm text-slate-500 font-medium">Despachos:</span>
+<span class="font-code-dense text-code-dense text-slate-900 ml-space-xs font-semibold">1,420 u.</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-slate-500 font-medium">Incidencias:</span>
+<span class="font-code-dense text-code-dense text-emerald-700 ml-space-xs font-semibold">6</span>
+</div>
+</div>
+</div>
+<!-- Los Angeles -->
+<div class="bg-slate-50 border border-slate-200 p-space-md rounded-lg">
+<div class="flex items-center justify-between">
+<div>
+<h4 class="font-label-md text-label-md text-slate-900 font-semibold">Los Ángeles</h4>
+<span class="font-body-sm text-body-sm text-slate-500">Warehouse &amp; North America Hub</span>
+</div>
+<span class="px-space-sm py-space-2xs bg-amber-100 text-amber-800 font-code-dense text-code-dense rounded-md font-semibold border border-amber-200">Carga Alta</span>
+</div>
+<div class="grid grid-cols-2 gap-space-xs mt-space-sm pt-space-xs border-t border-slate-200">
+<div>
+<span class="font-label-sm text-label-sm text-slate-500 font-medium">Despachos:</span>
+<span class="font-code-dense text-code-dense text-slate-900 ml-space-xs font-semibold">980 u.</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-slate-500 font-medium">Incidencias:</span>
+<span class="font-code-dense text-code-dense text-amber-800 ml-space-xs font-semibold">8</span>
+</div>
+</div>
+</div>
+<!-- Zaragoza -->
+<div class="bg-slate-50 border border-slate-200 p-space-md rounded-lg">
+<div class="flex items-center justify-between">
+<div>
+<h4 class="font-label-md text-label-md text-slate-900 font-semibold">Zaragoza</h4>
+<span class="font-body-sm text-body-sm text-slate-500">Fulfillment &amp; Intermodal Office</span>
+</div>
+<span class="px-space-sm py-space-2xs bg-rose-100 text-rose-800 font-code-dense text-code-dense rounded-md font-semibold border border-rose-200">Atención</span>
+</div>
+<div class="grid grid-cols-2 gap-space-xs mt-space-sm pt-space-xs border-t border-slate-200">
+<div>
+<span class="font-label-sm text-label-sm text-slate-500 font-medium">Despachos:</span>
+<span class="font-code-dense text-code-dense text-slate-900 ml-space-xs font-semibold">2,110 u.</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-slate-500 font-medium">Incidencias:</span>
+<span class="font-code-dense text-code-dense text-rose-700 ml-space-xs font-semibold">14</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Access & Personal Ops Widget -->
+<div class="bg-white border border-slate-200 rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-slate-900 pb-space-xs">Acceso Rápido y Métricas</h3>
+<p class="font-body-sm text-body-sm text-slate-500 mb-space-md">Atajos rápidos para tu jornada de supervisión</p>
+<div class="flex flex-col gap-space-xs">
+<a class="flex items-center justify-between p-space-sm rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200/80 transition-colors" data-path="mi-perfil" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-slate-700 text-[20px]">account_circle</span>
+<span class="font-label-md text-label-md text-slate-900 font-medium">Mi Perfil y Preferencias</span>
+</div>
+<span class="material-symbols-outlined text-[16px] text-slate-400">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-space-sm rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200/80 transition-colors" data-path="incidencias" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-emerald-600 text-[20px]">analytics</span>
+<span class="font-label-md text-label-md text-slate-900 font-medium">Informe Semanal de Cumplimiento</span>
+</div>
+<span class="material-symbols-outlined text-[16px] text-slate-400">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-space-sm rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200/80 transition-colors" data-path="proveedores" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-sky-600 text-[20px]">price_change</span>
+<span class="font-label-md text-label-md text-slate-900 font-medium">Matriz de Tarifas por Ruta</span>
+</div>
+<span class="material-symbols-outlined text-[16px] text-slate-400">chevron_right</span>
+</a>
+</div>
+</div>
+<!-- Micro Dispatch Telemetry Chart (Inline SVG) -->
+<div class="mt-space-md pt-space-md bg-slate-50 border border-slate-200 p-space-md rounded-lg">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-label-sm text-label-sm text-slate-600 uppercase font-semibold">Rendimiento Últimas 6 Horas</span>
+<span class="font-code-dense text-code-dense text-emerald-600 font-bold">+3.4% vs promedio</span>
+</div>
+<!-- Scaled inline sparkline -->
+<svg class="w-full h-10 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 200 40">
+<path d="M0 32 Q 25 28, 50 35 T 100 18 T 150 22 T 200 8"></path>
+<circle cx="200" cy="8" fill="#10b981" r="3.5"></circle>
+</svg>
+<div class="flex justify-between text-[10px] font-code-dense text-slate-500 mt-space-2xs font-medium">
+<span>08:00</span>
+<span>10:00</span>
+<span>12:00</span>
+<span>Ahora (14:32)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Dynamic Realtime Clock for Logistics Control Room
+  function updateLiveClock() {
+    const clockEl = document.getElementById('liveClock');
+    if (clockEl) {
+      const now = new Date();
+      const hours = String(now.getUTCHours()).padStart(2, '0');
+      const minutes = String(now.getUTCMinutes()).padStart(2, '0');
+      const seconds = String(now.getUTCSeconds()).padStart(2, '0');
+      clockEl.textContent = `${hours}:${minutes}:${seconds} UTC`;
+    }
+  }
+  setInterval(updateLiveClock, 1000);
+  updateLiveClock();
+
+  // Hub Switcher Simulation
+  const hubSelector = document.getElementById('hubSelector');
+  if (hubSelector) {
+    hubSelector.addEventListener('change', (e) => {
+      const selected = e.target.value;
+      console.info(`[TrackFlow Ops] Sede cambiada a: ${selected}`);
+    });
+  }
+</script></main><footer class="w-full bg-slate-100 border-t border-slate-200 py-space-md"><div class="w-full px-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-sm text-slate-600 font-body-sm text-body-sm"><span>© 2025 TrackFlow Logistics Hub. Entorno Interno Restringido.</span><div class="flex items-center gap-space-md"><span class="flex items-center gap-space-2xs font-medium"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>SLA Dispatch: 99.8%</span><span class="font-code-dense text-code-dense text-slate-500 font-semibold">LAT-PROD-NODE-04</span></div></div></footer></body></html>

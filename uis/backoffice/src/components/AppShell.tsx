@@ -24,7 +24,6 @@ function Brand({ onNavigate }: { onNavigate?: () => void }) {
 
 function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
   return <div className="flex h-full min-h-0 flex-col">
-    <div className="border-b border-line px-5 py-5"><Brand onNavigate={onNavigate} /></div>
     <nav aria-label="Navegación principal" className="flex flex-col gap-1 px-3 py-5 text-sm font-semibold">
       {links.map(({ href, label }) => <Link key={href} href={href} onClick={onNavigate} aria-current={pathname === href ? "page" : undefined} className={`rounded-lg px-4 py-3 transition-colors ${pathname === href ? "bg-accent text-white" : "text-ink hover:bg-surface-soft"}`}>{label}</Link>)}
     </nav>
@@ -97,19 +96,21 @@ export function AppShell({ children }: { children: ReactNode }) {
   </>;
 
   return <div className="backofficeShell">
-    <aside className="backofficeSidebar hidden lg:block"><SidebarContent pathname={pathname} /></aside>
+    <header className="backofficeTopbar">
+      <button type="button" onClick={openMenu} aria-label="Abrir menú" aria-haspopup="dialog" aria-expanded={menuOpen} className="mobileMenuButton lg:hidden">☰</button>
+      <Brand />
+      <div className="ml-auto flex items-center gap-2"><ThemeToggle /><AccountMenu key={pathname} /></div>
+    </header>
     <dialog ref={mobileMenu} aria-label="Menú de navegación" onClose={() => setMenuOpen(false)} onClick={(event) => { if (event.target === mobileMenu.current) closeMenu(); }} className="mobileSidebar">
       <button type="button" onClick={closeMenu} aria-label="Cerrar menú" className="mobileSidebarClose">×</button>
       <SidebarContent pathname={pathname} onNavigate={closeMenu} />
     </dialog>
-    <div className="flex min-w-0 flex-1 flex-col">
-      <header className="backofficeTopbar">
-        <button type="button" onClick={openMenu} aria-label="Abrir menú" aria-haspopup="dialog" aria-expanded={menuOpen} className="mobileMenuButton lg:hidden">☰</button>
-        <span className="text-sm font-semibold text-muted lg:hidden">Backoffice Ops</span>
-        <div className="ml-auto flex items-center gap-2"><ThemeToggle /><AccountMenu key={pathname} /></div>
-      </header>
-      <AuthGuard>{children}</AuthGuard>
-      <footer className="mt-auto border-t border-line bg-surface px-6 py-5 text-center text-xs text-muted">TrackFlow · Backoffice de operaciones</footer>
+    <div className="flex min-w-0 flex-1">
+      <aside className="backofficeSidebar hidden lg:block"><SidebarContent pathname={pathname} /></aside>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <AuthGuard>{children}</AuthGuard>
+        <footer className="mt-auto border-t border-line bg-surface px-6 py-5 text-center text-xs text-muted">TrackFlow · Backoffice de operaciones</footer>
+      </div>
     </div>
   </div>;
 }
