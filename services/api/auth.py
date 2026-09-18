@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -27,6 +29,8 @@ from services.api.user_service import (
     update_user,
 )
 
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -67,8 +71,8 @@ def forgot_password(payload: ForgotPasswordRequest):
 
     try:
         send_password_reset_email(user["email"], raw_token)
-    except Exception as error:
-        print("Error enviando email de reset:", error)
+    except RuntimeError:
+        logger.exception("Password reset email failed for user_id=%s", user["id"])
 
     return {"message": generic_message}
 
