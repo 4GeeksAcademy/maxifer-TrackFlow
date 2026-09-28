@@ -5,14 +5,23 @@ requires-python = ">=3.12"
 dependencies = [
   "email-validator>=2.3.0",
   "fastapi>=0.141.1",
+  "bcrypt<5",
   "libpass[bcrypt]>=1.9.3",
   "passlib[bcrypt]>=1.7.4",
   "python-dotenv>=1.2.3",
   "python-jose[cryptography]>=3.5.0",
   "python-multipart>=0.0.32",
+  "resend>=2.0.0",
   "tinydb>=4.8.0",
   "uvicorn[standard]>=0.52.4",
 ]
 
 [project.scripts]
 seed = "services.api.seed:main"
+
+[build-system]
+requires = ["setuptools>=78"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["services*"]

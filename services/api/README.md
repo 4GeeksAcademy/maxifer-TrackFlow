@@ -15,24 +15,14 @@ Actualmente cubre autenticación básica, gestión de usuarios/perfiles, proveed
 ## Requisitos
 
 - Python 3.11 o superior
-- Entorno virtual creado desde la raíz del monorepo
+- uv instalado
 
 ## Instalación
 
-Desde la raíz del repositorio:
-
-```powershell
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r services/api/requirements.txt
-```
-
-En macOS/Linux:
+Desde la raíz del repositorio, sincronizar las dependencias:
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r services/api/requirements.txt
+uv sync
 ```
 
 ## Ejecutar
@@ -40,7 +30,7 @@ pip install -r services/api/requirements.txt
 Desde la raíz del monorepo:
 
 ```bash
-python -m uvicorn services.api.main:app --host 0.0.0.0 --port 8000 --reload
+uv run uvicorn services.api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 La API queda disponible en `http://localhost:8000`.
@@ -58,7 +48,7 @@ Variables esperadas:
 
 | Variable | Uso |
 | --- | --- |
-| `SECRET_KEY` | Firma de tokens JWT |
+| `JWT_SECRET` | Firma de tokens JWT |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | Duración de sesión |
 
 ## Datos locales

@@ -48,7 +48,44 @@ TrackFlow/
 - Node.js 18 or newer
 - npm 9 or newer
 - Python 3.11 or newer
-- A Python virtual environment for the FastAPI service
+- uv for Python dependency and environment management
+
+## Installation
+
+From the repository root, install `uv` if it is not already available:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Then install all project dependencies:
+
+```bash
+# Python API and local tooling. Creates or updates .venv.
+uv sync
+
+# Static landing page
+npm ci
+
+# Incidents backoffice
+cd uis/backoffice
+npm ci
+
+# Talent pipeline tracker
+cd ../talent-pipeline-tracker
+npm ci
+
+# Return to the repository root
+cd ../..
+```
+
+Before starting the API, create its local configuration if it does not exist:
+
+```bash
+cp services/api/.env.example services/api/.env
+```
+
+Set a local `JWT_SECRET` in `services/api/.env`. This file is ignored by Git and must not be committed.
 
 ## Landing Page
 
@@ -81,7 +118,8 @@ This flow has two parts:
 Start the API first:
 
 ```bash
-python -m uvicorn services.api.main:app --host 0.0.0.0 --port 8000 --reload
+uv sync
+uv run uvicorn services.api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 Then start the UI:

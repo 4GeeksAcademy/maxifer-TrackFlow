@@ -1,5 +1,7 @@
 node_modules/
 .venv/
+myenv/
+*.egg-info/
 __pycache__/
 *.py[cod]
 results.csv

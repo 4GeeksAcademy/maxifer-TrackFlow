@@ -1,5 +1,6 @@
 fastapi
 uvicorn[standard]
+bcrypt<5
 python-multipart
 tinydb
 python-jose[cryptography]
