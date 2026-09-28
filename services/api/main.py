@@ -1,4 +1,5 @@
 import sys
+import os
 from pathlib import Path
 
 # Permite ejecutar la app desde distintos cwd (raíz o services/api).
@@ -23,6 +24,10 @@ from services.api.routers.suppliers import (
 from services.api.routers.users import router as users_router
 from services.api.routers.incidents import router as incidents_router
 from services.api.security import get_current_user, validate_jwt_secret
+from services.api.database import create_inventory_tables
+from services.api.routers.inventory import router as inventory_router
+from services.api.security import hash_password
+from services.api.user_service import create_user_with_profile, get_user_by_email
 
 validate_jwt_secret()
 
@@ -36,6 +41,27 @@ app.include_router(profiles_router)
 app.include_router(suppliers_router)
 app.include_router(users_router)
 app.include_router(incidents_router)
+app.include_router(inventory_router)
+
+
+@app.on_event("startup")
+def initialize_inventory_tables():
+    create_inventory_tables()
+    if get_user_by_email("maxifer@test.com"):
+        return
+
+    test_password = os.getenv("TEST_USER_PASSWORD")
+    if not test_password or len(test_password) < 12:
+        raise RuntimeError(
+            "Configura TEST_USER_PASSWORD con al menos 12 caracteres para crear "
+            "el usuario de prueba maxifer@test.com."
+        )
+
+    create_user_with_profile(
+        "maxifer@test.com",
+        hash_password(test_password),
+        {"name": "TrackFlow Test User"},
+    )
 
 
 @app.exception_handler(RequestValidationError)

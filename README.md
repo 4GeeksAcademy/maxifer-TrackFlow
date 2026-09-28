@@ -87,6 +87,8 @@ cp services/api/.env.example services/api/.env
 
 Set a local `JWT_SECRET` in `services/api/.env`. This file is ignored by Git and must not be committed.
 
+The API keeps the `maxifer@test.com` test account in TinyDB. On a clean installation, also set `TEST_USER_PASSWORD` in `services/api/.env` to a local password of at least 12 characters. At startup, the API creates the account only if it does not exist; it never replaces its password. Do not put credentials in the README or commit them.
+
 ## Landing Page
 
 From the repository root:

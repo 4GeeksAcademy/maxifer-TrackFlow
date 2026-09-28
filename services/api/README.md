@@ -50,6 +50,10 @@ Variables esperadas:
 | --- | --- |
 | `JWT_SECRET` | Firma de tokens JWT |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | Duración de sesión |
+| `DATABASE_URL` | Conexión PostgreSQL/Supabase para inventario |
+| `TEST_USER_PASSWORD` | Contraseña local (mínimo 12 caracteres) para crear `maxifer@test.com` si falta en TinyDB |
+
+El arranque crea las tablas SQLModel del inventario. También garantiza el usuario de prueba `maxifer@test.com`: si ya existe, conserva su contraseña; si falta, requiere `TEST_USER_PASSWORD` y lo crea en TinyDB. No se crea ninguna tabla de usuarios en PostgreSQL.
 
 ## Datos locales
 

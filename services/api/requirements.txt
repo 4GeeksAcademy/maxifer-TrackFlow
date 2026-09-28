@@ -8,3 +8,5 @@ libpass[bcrypt]
 python-dotenv
 email-validator
 resend
+sqlmodel
+psycopg2-binary
