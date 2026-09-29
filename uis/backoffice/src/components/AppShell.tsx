@@ -7,12 +7,13 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AuthHeaderActions } from "@/components/AuthHeaderActions";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { logoutAndRedirect } from "@/lib/auth";
+import { apiFetch, logoutAndRedirect, useAuthToken } from "@/lib/auth";
 
 const links = [
   { href: "/", label: "Inicio" },
   { href: "/incidents", label: "Incidencias" },
   { href: "/suppliers", label: "Proveedores" },
+  { href: "/inventory/products", label: "Inventario" },
 ];
 
 function Brand({ onNavigate }: { onNavigate?: () => void }) {
@@ -23,8 +24,54 @@ function Brand({ onNavigate }: { onNavigate?: () => void }) {
 }
 
 function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
+  const [userName, setUserName] = useState<string | null>(null);
+  const authToken = useAuthToken();
+
+  useEffect(() => {
+    if (!authToken) {
+      return;
+    }
+
+    let active = true;
+
+    async function loadUserName() {
+      try {
+        const response = await apiFetch("/backend/auth/me");
+
+        if (!response.ok) {
+          return;
+        }
+
+        const data = await response.json().catch(() => null);
+        const nextName = data?.profile?.name;
+
+        if (active && typeof nextName === "string" && nextName.trim()) {
+          setUserName(nextName.trim());
+        }
+      } catch {
+        if (active) {
+          setUserName(null);
+        }
+      }
+    }
+
+    void loadUserName();
+    window.addEventListener("trackflow-profile-state", loadUserName);
+
+    return () => {
+      active = false;
+      window.removeEventListener("trackflow-profile-state", loadUserName);
+    };
+  }, [authToken]);
+
   return <div className="flex h-full min-h-0 flex-col">
-    <nav aria-label="Navegación principal" className="flex flex-col gap-1 px-3 py-5 text-sm font-semibold">
+    <div className="min-h-[60px] px-4 pt-5 pb-2 text-sm font-bold text-ink">
+      {userName ? <>
+        <span className="block text-[10px] font-semibold uppercase tracking-[0.12em] text-muted">Sesión</span>
+        <span className="mt-1 block text-base">¡Hola, {userName}!</span>
+      </> : null}
+    </div>
+    <nav aria-label="Navegación principal" className="flex flex-col gap-1 px-3 py-2 text-sm font-semibold">
       {links.map(({ href, label }) => <Link key={href} href={href} onClick={onNavigate} aria-current={pathname === href ? "page" : undefined} className={`rounded-lg px-4 py-3 transition-colors ${pathname === href ? "bg-accent text-white" : "text-ink hover:bg-surface-soft"}`}>{label}</Link>)}
     </nav>
   </div>;

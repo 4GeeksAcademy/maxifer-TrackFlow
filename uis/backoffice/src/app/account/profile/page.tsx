@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
-import { apiFetch, getAuthToken, logoutAndRedirect } from "@/lib/auth";
+import { apiFetch, emitProfileStateChange, getAuthToken, logoutAndRedirect } from "@/lib/auth";
 
 type Profile = {
   name: string | null;
@@ -106,6 +106,7 @@ export default function AccountProfilePage() {
         phone: data?.phone ?? profile.phone,
         address: data?.address ?? profile.address,
       });
+      emitProfileStateChange();
       setSuccess("Perfil actualizado correctamente.");
     } catch (submitError) {
       if (submitError instanceof Error) {
