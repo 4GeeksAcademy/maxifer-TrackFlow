@@ -9,7 +9,7 @@ export function AuthHeaderActions() {
 
   if (!isAuthenticated) {
     return (
-      <Link href="/login" className="button secondaryButton">
+      <Link href="/login" className="button secondaryButton" style={{ marginTop: 0 }}>
         Iniciar sesión
       </Link>
     );
@@ -19,6 +19,7 @@ export function AuthHeaderActions() {
     <button
       type="button"
       className="button secondaryButton"
+      style={{ marginTop: 0 }}
       onClick={() => {
         logoutAndRedirect();
       }}
