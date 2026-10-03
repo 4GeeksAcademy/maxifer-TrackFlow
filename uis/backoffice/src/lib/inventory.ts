@@ -14,6 +14,8 @@ export type InventoryProduct = {
   current_stock: number;
 };
 
+export type InventoryProductInput = Omit<InventoryProduct, "id" | "current_stock">;
+
 export type InventoryOrder = {
   id: number;
   movement_type: InventoryMovementType;
@@ -92,6 +94,24 @@ export async function getInventoryProducts(): Promise<InventoryProduct[]> {
   }
 
   return Array.isArray(payload) ? (payload as InventoryProduct[]) : [];
+}
+
+export async function createInventoryProduct(product: InventoryProductInput): Promise<InventoryProduct> {
+  const response = await apiFetch("/backend/inventory/products", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(product),
+  });
+
+  const payload = await response.json().catch(() => null);
+
+  if (!response.ok) {
+    throw new Error(parseApiErrorMessage(payload?.detail ?? payload?.message ?? payload));
+  }
+
+  return payload as InventoryProduct;
 }
 
 export async function createInboundOrder(payload: {
