@@ -1,5 +1,6 @@
 fastapi
 uvicorn[standard]
+bcrypt<5
 python-multipart
 tinydb
 python-jose[cryptography]
@@ -7,3 +8,5 @@ libpass[bcrypt]
 python-dotenv
 email-validator
 resend
+sqlmodel
+psycopg2-binary

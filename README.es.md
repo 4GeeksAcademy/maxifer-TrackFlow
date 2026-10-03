@@ -48,7 +48,59 @@ TrackFlow/
 - Node.js 18 o superior
 - npm 9 o superior
 - Python 3.11 o superior
-- Un entorno virtual de Python para el servicio FastAPI
+- uv para gestionar las dependencias y el entorno de Python
+
+## Instalación
+
+Desde la raíz del repositorio, instalar `uv` si todavía no está disponible:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Después, instalar todas las dependencias del proyecto:
+
+```bash
+# API Python y herramientas locales. Crea o actualiza .venv.
+uv sync
+
+# Landing estática
+npm ci
+
+# Backoffice de incidencias
+cd uis/backoffice
+npm ci
+
+# Talent pipeline tracker
+cd ../talent-pipeline-tracker
+npm ci
+
+# Volver a la raíz del repositorio
+cd ../..
+```
+
+Antes de iniciar la API, crear su configuración local si no existe:
+
+```bash
+cp services/api/.env.example services/api/.env
+```
+
+Definir `JWT_SECRET` y `DATABASE_URL` (conexión PostgreSQL/Supabase del inventario) en `services/api/.env`. Este archivo está ignorado por Git y no se debe subir.
+
+### Datos de desarrollo automáticos
+
+Al iniciar la API, `DEMO_DATA_ENABLED=true` está habilitado por defecto:
+
+- Se garantiza una única cuenta de prueba: **`test@test.com`**, contraseña **`test1234`**. Se guarda en TinyDB; cada arranque restaura su contraseña y la activa sin duplicarla. No requiere configurar una contraseña de prueba en el entorno.
+- Se importa automáticamente `scripts/incidents-trackflow.csv` a SQLite. Los registros ya importados se omiten por identificador, sin sobrescribir sus cambios. El CSV incluido contiene 95 incidencias válidas; las filas inválidas se notifican y se omiten. Si falta el archivo, se registra un aviso y la API sigue arrancando.
+
+No es necesario ejecutar el cargador manualmente. Para una importación explícita o para repetirla:
+
+```bash
+uv run python scripts/seed_incidents.py
+```
+
+Estas credenciales son públicas y exclusivas para desarrollo local. **Antes de desplegar, configura `DEMO_DATA_ENABLED=false`** para desactivar tanto la cuenta de prueba automática como la importación. Esto no borra los datos ni las cuentas existentes: usa un almacenamiento separado para producción y no despliegues una cuenta con estas credenciales.
 
 ## Landing
 
@@ -81,7 +133,8 @@ Este flujo tiene dos partes:
 Primero iniciar la API:
 
 ```bash
-python -m uvicorn services.api.main:app --host 0.0.0.0 --port 8000 --reload
+uv sync
+uv run uvicorn services.api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 Después iniciar la UI:

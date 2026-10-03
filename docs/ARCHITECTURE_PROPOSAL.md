@@ -115,7 +115,8 @@ services/
         test_health.py
         test_shipments.py
         test_returns.py
-    requirements.txt
+    pyproject.toml
+    uv.lock
     README.md
 ```
 

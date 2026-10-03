@@ -48,7 +48,59 @@ TrackFlow/
 - Node.js 18 or newer
 - npm 9 or newer
 - Python 3.11 or newer
-- A Python virtual environment for the FastAPI service
+- uv for Python dependency and environment management
+
+## Installation
+
+From the repository root, install `uv` if it is not already available:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Then install all project dependencies:
+
+```bash
+# Python API and local tooling. Creates or updates .venv.
+uv sync
+
+# Static landing page
+npm ci
+
+# Incidents backoffice
+cd uis/backoffice
+npm ci
+
+# Talent pipeline tracker
+cd ../talent-pipeline-tracker
+npm ci
+
+# Return to the repository root
+cd ../..
+```
+
+Before starting the API, create its local configuration if it does not exist:
+
+```bash
+cp services/api/.env.example services/api/.env
+```
+
+Set `JWT_SECRET` and `DATABASE_URL` (the inventory PostgreSQL/Supabase connection) in `services/api/.env`. This file is ignored by Git and must not be committed.
+
+### Automatic Development Data
+
+When the API starts, `DEMO_DATA_ENABLED=true` is enabled by default:
+
+- A single test account is ensured: **`test@test.com`**, password **`test1234`**. It is stored in TinyDB; every startup restores its password and activates it without duplicating it. No test password environment setting is required.
+- `scripts/incidents-trackflow.csv` is automatically imported into SQLite. Previously imported records are skipped by identifier, preserving any changes. The bundled CSV contains 95 valid incidents; invalid rows are reported and skipped. If the file is missing, a warning is logged and the API still starts.
+
+No manual seed command is required. For an explicit import or to repeat it:
+
+```bash
+uv run python scripts/seed_incidents.py
+```
+
+These credentials are public and strictly for local development. **Before deploying, set `DEMO_DATA_ENABLED=false`** to disable both automatic test account setup and imports. This does not delete existing data or accounts: use separate production storage and never deploy an account with these credentials.
 
 ## Landing Page
 
@@ -81,7 +133,8 @@ This flow has two parts:
 Start the API first:
 
 ```bash
-python -m uvicorn services.api.main:app --host 0.0.0.0 --port 8000 --reload
+uv sync
+uv run uvicorn services.api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 Then start the UI:

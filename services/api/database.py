@@ -1,7 +1,10 @@
 from pathlib import Path
 
+from dotenv import load_dotenv
+from sqlmodel import Session, SQLModel, create_engine
 from tinydb import TinyDB
 from tinydb.table import Document, Table
+import os
 
 
 DB_FILE_PATH = Path(__file__).resolve().parent / "data" / "suppliers.json"
@@ -37,6 +40,14 @@ RESET_TOKENS_TABLE_NAME = "reset_tokens"
 
 _AUTH_DB_INSTANCE: TinyDB | None = None
 
+load_dotenv(Path(__file__).resolve().parent / ".env")
+DATABASE_URL = os.getenv("DATABASE_URL")
+inventory_engine = (
+	create_engine(DATABASE_URL, echo=False, pool_pre_ping=True)
+	if DATABASE_URL
+	else None
+)
+
 
 def get_auth_db() -> TinyDB:
     global _AUTH_DB_INSTANCE
@@ -58,3 +69,20 @@ def get_profiles_table() -> Table:
 
 def get_reset_tokens_table() -> Table:
     return get_auth_db().table(RESET_TOKENS_TABLE_NAME)
+
+
+def get_inventory_db():
+	if inventory_engine is None:
+		raise RuntimeError("DATABASE_URL no está configurada")
+
+	with Session(inventory_engine) as session:
+		yield session
+
+
+def create_inventory_tables() -> None:
+	if inventory_engine is None:
+		raise RuntimeError("DATABASE_URL no está configurada")
+
+	from services.api import inventory_models
+
+	SQLModel.metadata.create_all(inventory_engine)

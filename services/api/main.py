@@ -1,4 +1,5 @@
 import sys
+import os
 from pathlib import Path
 
 # Permite ejecutar la app desde distintos cwd (raíz o services/api).
@@ -23,6 +24,11 @@ from services.api.routers.suppliers import (
 from services.api.routers.users import router as users_router
 from services.api.routers.incidents import router as incidents_router
 from services.api.security import get_current_user, validate_jwt_secret
+from services.api.database import create_inventory_tables
+from services.api.routers.inventory import router as inventory_router
+from services.api.security import hash_password, verify_password
+from services.api.user_service import create_user_with_profile, delete_user, get_user_by_email, update_user
+from scripts.seed_incidents import CSV_PATH, seed as seed_incidents
 
 validate_jwt_secret()
 
@@ -36,6 +42,39 @@ app.include_router(profiles_router)
 app.include_router(suppliers_router)
 app.include_router(users_router)
 app.include_router(incidents_router)
+app.include_router(inventory_router)
+
+
+@app.on_event("startup")
+def initialize_inventory_tables():
+    create_inventory_tables()
+    if os.getenv("DEMO_DATA_ENABLED", "true").lower() != "true":
+        return
+
+    test_email = "test@test.com"
+    test_password = "test1234"
+    legacy_user = get_user_by_email("maxifer@test.com")
+    test_user = get_user_by_email(test_email) or legacy_user
+    if test_user:
+        changes = {"email": test_email, "is_active": True}
+        if not verify_password(test_password, test_user["hashed_password"]):
+            changes["hashed_password"] = hash_password(test_password)
+        update_user(test_user["id"], changes)
+        if legacy_user and legacy_user["id"] != test_user["id"]:
+            delete_user(legacy_user["id"])
+    else:
+        create_user_with_profile(
+            test_email,
+            hash_password(test_password),
+            {"name": "TrackFlow Test User"},
+        )
+
+    if CSV_PATH.is_file():
+        seed_incidents()
+    else:
+        logging.getLogger(__name__).warning(
+            "No se cargo el historico de incidencias: falta %s", CSV_PATH
+        )
 
 
 @app.exception_handler(RequestValidationError)

@@ -4,6 +4,7 @@ import { useSyncExternalStore } from "react";
 
 export const AUTH_TOKEN_KEY = "trackflow_auth_token";
 const AUTH_STATE_EVENT = "trackflow-auth-state";
+const PROFILE_STATE_EVENT = "trackflow-profile-state";
 
 function emitAuthStateChange() {
   if (typeof window === "undefined") {
@@ -11,6 +12,14 @@ function emitAuthStateChange() {
   }
 
   window.dispatchEvent(new Event(AUTH_STATE_EVENT));
+}
+
+export function emitProfileStateChange() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.dispatchEvent(new Event(PROFILE_STATE_EVENT));
 }
 
 export function getAuthToken(): string | null {
