@@ -85,9 +85,22 @@ Before starting the API, create its local configuration if it does not exist:
 cp services/api/.env.example services/api/.env
 ```
 
-Set a local `JWT_SECRET` in `services/api/.env`. This file is ignored by Git and must not be committed.
+Set `JWT_SECRET` and `DATABASE_URL` (the inventory PostgreSQL/Supabase connection) in `services/api/.env`. This file is ignored by Git and must not be committed.
 
-The API keeps the `maxifer@test.com` test account in TinyDB. On a clean installation, also set `TEST_USER_PASSWORD` in `services/api/.env` to a local password of at least 12 characters. At startup, the API creates the account only if it does not exist; it never replaces its password. Do not put credentials in the README or commit them.
+### Automatic Development Data
+
+When the API starts, `DEMO_DATA_ENABLED=true` is enabled by default:
+
+- A single test account is ensured: **`test@test.com`**, password **`test1234`**. It is stored in TinyDB; every startup restores its password and activates it without duplicating it. No test password environment setting is required.
+- `scripts/incidents-trackflow.csv` is automatically imported into SQLite. Previously imported records are skipped by identifier, preserving any changes. The bundled CSV contains 95 valid incidents; invalid rows are reported and skipped. If the file is missing, a warning is logged and the API still starts.
+
+No manual seed command is required. For an explicit import or to repeat it:
+
+```bash
+uv run python scripts/seed_incidents.py
+```
+
+These credentials are public and strictly for local development. **Before deploying, set `DEMO_DATA_ENABLED=false`** to disable both automatic test account setup and imports. This does not delete existing data or accounts: use separate production storage and never deploy an account with these credentials.
 
 ## Landing Page
 

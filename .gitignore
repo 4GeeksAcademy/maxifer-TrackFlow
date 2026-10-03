@@ -12,3 +12,4 @@ services/api/data/incidents.json
 services/api/data/incidents.sqlite3*
 RETO.md
 milestone_inventory_trackflow_powershell_revisado.md
+stitch_trackflow_operations_backoffice/

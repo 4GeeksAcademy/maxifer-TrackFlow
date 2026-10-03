@@ -51,17 +51,22 @@ Variables esperadas:
 | `JWT_SECRET` | Firma de tokens JWT |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | Duración de sesión |
 | `DATABASE_URL` | Conexión PostgreSQL/Supabase para inventario |
-| `TEST_USER_PASSWORD` | Contraseña local (mínimo 12 caracteres) para crear `maxifer@test.com` si falta en TinyDB |
+| `DEMO_DATA_ENABLED` | `true` por defecto; `false` desactiva la cuenta de prueba automática y la importación del histórico |
 
-El arranque crea las tablas SQLModel del inventario. También garantiza el usuario de prueba `maxifer@test.com`: si ya existe, conserva su contraseña; si falta, requiere `TEST_USER_PASSWORD` y lo crea en TinyDB. No se crea ninguna tabla de usuarios en PostgreSQL.
+El arranque crea las tablas SQLModel del inventario. Con los datos de demo habilitados, garantiza una sola cuenta de prueba en TinyDB: **`test@test.com`**, contraseña **`test1234`**. Si falta, se crea con su perfil; si existe, se activa y su contraseña se restaura al valor indicado. No requiere configurar una contraseña de prueba en el entorno. No se crea ninguna tabla de usuarios en PostgreSQL.
+
+Estas credenciales son públicas y exclusivas para desarrollo local. Configura `DEMO_DATA_ENABLED=false` antes de desplegar. Desactivar la demo no elimina cuentas ni datos existentes: usa almacenamiento separado en producción y no publiques la cuenta de prueba.
 
 ## Datos locales
 
 ### Gestor de incidencias
 
-Desde la raíz del repositorio, ejecutar `python scripts/seed_incidents.py` para cargar
-el histórico de `scripts/incidents-trackflow.csv`. Se puede repetir: usa `incident_id`
-para omitir registros ya importados. La colección local queda en
+Con `DEMO_DATA_ENABLED=true` (por defecto), cada arranque importa automáticamente
+el histórico de `scripts/incidents-trackflow.csv`. Usa `incident_id` para omitir
+registros ya importados sin sobrescribir cambios de estado ni duplicarlos. Si falta
+el CSV, se registra un aviso y el arranque continúa. También se puede importar
+manualmente desde la raíz con `uv run python scripts/seed_incidents.py`, incluso
+con la demo deshabilitada. La colección local queda en
 `services/api/data/incidents.sqlite3` y se crea automáticamente. Si existe el archivo
 local anterior `incidents.json`, sus registros se migran conservando los ID y el
 archivo original. El seed informa las

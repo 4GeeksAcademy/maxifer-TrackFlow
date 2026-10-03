@@ -85,9 +85,22 @@ Antes de iniciar la API, crear su configuración local si no existe:
 cp services/api/.env.example services/api/.env
 ```
 
-Definir un `JWT_SECRET` local en `services/api/.env`. Este archivo está ignorado por Git y no se debe subir.
+Definir `JWT_SECRET` y `DATABASE_URL` (conexión PostgreSQL/Supabase del inventario) en `services/api/.env`. Este archivo está ignorado por Git y no se debe subir.
 
-La API conserva la cuenta de prueba `maxifer@test.com` en TinyDB. En una instalación limpia, añade también `TEST_USER_PASSWORD` a `services/api/.env` con una contraseña local de al menos 12 caracteres. Al iniciar, la API crea la cuenta solo si todavía no existe; nunca reemplaza su contraseña. No guardes credenciales en el README ni las subas al repositorio.
+### Datos de desarrollo automáticos
+
+Al iniciar la API, `DEMO_DATA_ENABLED=true` está habilitado por defecto:
+
+- Se garantiza una única cuenta de prueba: **`test@test.com`**, contraseña **`test1234`**. Se guarda en TinyDB; cada arranque restaura su contraseña y la activa sin duplicarla. No requiere configurar una contraseña de prueba en el entorno.
+- Se importa automáticamente `scripts/incidents-trackflow.csv` a SQLite. Los registros ya importados se omiten por identificador, sin sobrescribir sus cambios. El CSV incluido contiene 95 incidencias válidas; las filas inválidas se notifican y se omiten. Si falta el archivo, se registra un aviso y la API sigue arrancando.
+
+No es necesario ejecutar el cargador manualmente. Para una importación explícita o para repetirla:
+
+```bash
+uv run python scripts/seed_incidents.py
+```
+
+Estas credenciales son públicas y exclusivas para desarrollo local. **Antes de desplegar, configura `DEMO_DATA_ENABLED=false`** para desactivar tanto la cuenta de prueba automática como la importación. Esto no borra los datos ni las cuentas existentes: usa un almacenamiento separado para producción y no despliegues una cuenta con estas credenciales.
 
 ## Landing
 
