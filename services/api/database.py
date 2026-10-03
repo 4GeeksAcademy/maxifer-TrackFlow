@@ -33,6 +33,7 @@ def document_to_record(document: Document) -> dict:
 AUTH_DB_FILE_PATH = Path(__file__).resolve().parent / "data" / "auth.json"
 USERS_TABLE_NAME = "users"
 PROFILES_TABLE_NAME = "profiles"
+RESET_TOKENS_TABLE_NAME = "reset_tokens"
 
 _AUTH_DB_INSTANCE: TinyDB | None = None
 
@@ -53,3 +54,7 @@ def get_users_table() -> Table:
 
 def get_profiles_table() -> Table:
     return get_auth_db().table(PROFILES_TABLE_NAME)
+
+
+def get_reset_tokens_table() -> Table:
+    return get_auth_db().table(RESET_TOKENS_TABLE_NAME)

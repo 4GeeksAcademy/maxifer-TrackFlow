@@ -5,7 +5,6 @@ import {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 
@@ -15,7 +14,6 @@ import type {
 } from "react";
 
 import { apiFetch } from "@/lib/auth";
-import { LoadingSkeleton } from "@/components/LoadingSkeleton";
 
 
 type SupplierCountry =
@@ -177,8 +175,6 @@ function parseErrorDetail(
 
 
 export default function SuppliersPage() {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-  const [createMessage, setCreateMessage] = useState("");
 
   const [
     suppliers,
@@ -190,7 +186,7 @@ export default function SuppliersPage() {
   const [
     loading,
     setLoading,
-  ] = useState(true);
+  ] = useState(false);
 
   const [
     pageError,
@@ -375,26 +371,6 @@ export default function SuppliersPage() {
     loadSuppliers,
   ]);
 
-  useEffect(() => {
-    const openFromHash = () => {
-      if (window.location.hash === "#new-supplier" && !dialogRef.current?.open) dialogRef.current?.showModal();
-    };
-    openFromHash();
-    window.addEventListener("hashchange", openFromHash);
-    return () => window.removeEventListener("hashchange", openFromHash);
-  }, []);
-
-  function closeDialog() {
-    dialogRef.current?.close();
-    if (window.location.hash === "#new-supplier") history.replaceState(null, "", window.location.pathname + window.location.search);
-  }
-
-  function handleDialogClick(event: React.MouseEvent<HTMLDialogElement>) {
-    if (event.target !== event.currentTarget) return;
-    const bounds = event.currentTarget.getBoundingClientRect();
-    if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) closeDialog();
-  }
-
 
   async function handleCreateSupplier(
     event:
@@ -472,8 +448,6 @@ export default function SuppliersPage() {
       });
 
       await loadSuppliers();
-      setCreateMessage("Proveedor creado correctamente.");
-      closeDialog();
 
     } catch (error) {
 
@@ -697,14 +671,13 @@ export default function SuppliersPage() {
       <header className="pageHeader">
 
         <span className="eyebrow">
-          COMPRAS / RED DE PROVEEDORES
+          COMPRAS
         </span>
 
 
-        <div className="pageHeaderTitleRow">
-          <h1>Gestión integrada de proveedores</h1>
-          <button id="new-supplier" type="button" className="button" onClick={() => { setCreateMessage(""); setFormError(""); dialogRef.current?.showModal(); }}>Crear proveedor</button>
-        </div>
+        <h1>
+          Directorio de proveedores
+        </h1>
 
 
         <p>
@@ -715,20 +688,13 @@ export default function SuppliersPage() {
         </p>
 
       </header>
-      {createMessage && <p role="status" className="successMessage mb-5">{createMessage}</p>}
 
 
-      <div className="mb-5 grid gap-3 sm:grid-cols-3">
-        {[
-          ["Proveedores mostrados", suppliers.length, "tone-info"],
-          ["Activos", suppliers.filter((supplier) => supplier.status === "active").length, "tone-success"],
-          ["Suspendidos", suppliers.filter((supplier) => supplier.status === "suspended").length, "tone-danger"],
-        ].map(([label, count, tone]) => <div key={label} className={`metricPanel ${tone}`}><span>{label}</span>{loading ? <div className="skeletonLine skeletonMetric" aria-label="Cargando proveedores" /> : <strong>{count}</strong>}</div>)}
-      </div>
+      <section className="card">
 
-      <dialog ref={dialogRef} className="incidentDialog" aria-labelledby="supplier-dialog-title" onClick={handleDialogClick} onCancel={event => { event.preventDefault(); closeDialog(); }} onClose={() => { if (window.location.hash === "#new-supplier") history.replaceState(null, "", window.location.pathname + window.location.search); }}>
-
-        <div className="incidentDialogHeader"><h2 id="supplier-dialog-title">Registrar proveedor</h2><button type="button" className="incidentDialogClose" aria-label="Cerrar formulario" onClick={closeDialog}>×</button></div>
+        <h2>
+          Registrar proveedor
+        </h2>
 
 
         <form
@@ -954,7 +920,7 @@ export default function SuppliersPage() {
           </label>
 
 
-          <div className="supplierFormWide flex flex-wrap gap-2">
+          <div className="supplierFormWide">
             <button
               type="submit"
               disabled={formLoading}
@@ -962,22 +928,21 @@ export default function SuppliersPage() {
               {
                 formLoading
                 ? "Guardando..."
-                : "Guardar proveedor"
+                : "Crear proveedor"
               }
             </button>
-            <button type="button" className="button secondaryButton" onClick={closeDialog}>Cancelar</button>
           </div>
 
         </form>
 
 
         {formError && (
-          <p role="alert" className="error">
+          <p className="error">
             {formError}
           </p>
         )}
 
-      </dialog>
+      </section>
 
 
       <section className="card">
@@ -1065,7 +1030,9 @@ export default function SuppliersPage() {
 
 
         {loading ? (
-          <LoadingSkeleton label="Cargando proveedores" variant="table" columns={6} />
+          <p>
+            Cargando proveedores...
+          </p>
         ) : (
           <div className="tableWrap">
             <table className="supplierTable">

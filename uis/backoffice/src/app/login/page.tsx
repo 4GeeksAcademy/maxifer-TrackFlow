@@ -52,45 +52,51 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="container">
-      <section className="auth-panel">
-        <span className="eyebrow">TRACKFLOW / ACCESO</span>
-        <h1>Iniciar sesión</h1>
+    <main className="container" style={{ maxWidth: 560 }}>
+      <section className="card" style={{ padding: "2rem" }}>
+        <span className="eyebrow">TRACKFLOW</span>
+        <h1 style={{ marginTop: "0.75rem" }}>Iniciar sesión</h1>
         <p>Accede al backoffice interno de operaciones.</p>
 
-        <form onSubmit={handleSubmit}>
-          <label className="form-field">
+        <form onSubmit={handleSubmit} style={{ display: "grid", gap: "1rem", marginTop: "1.5rem" }}>
+          <label style={{ display: "grid", gap: "0.4rem" }}>
             <span>Email</span>
             <input
               type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               required
+              style={{ padding: "0.8rem 0.9rem", borderRadius: 8, border: "1px solid #d1d5db" }}
             />
           </label>
 
-          <label className="form-field">
+          <label style={{ display: "grid", gap: "0.4rem" }}>
             <span>Contraseña</span>
             <input
               type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               required
+              style={{ padding: "0.8rem 0.9rem", borderRadius: 8, border: "1px solid #d1d5db" }}
             />
           </label>
 
+          <p style={{ margin: 0, textAlign: "right" }}>
+            <Link href="/forgot-password">Olvidaste tu contrasena?</Link>
+          </p>
+
           {error ? (
-            <p role="alert" className="error">
+            <p className="error" style={{ margin: 0 }}>
               {error}
             </p>
           ) : null}
 
-          <button type="submit" disabled={loading}>
+          <button type="submit" disabled={loading} style={{ width: "100%" }}>
             {loading ? "Entrando…" : "Entrar"}
           </button>
         </form>
 
-        <p className="mt-6 text-center">
+        <p style={{ marginTop: "1.5rem", textAlign: "center" }}>
           ¿No tienes cuenta? <Link href="/register">Crear una cuenta</Link>
         </p>
       </section>

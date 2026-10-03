@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { apiFetch, getAuthToken, logoutAndRedirect } from "@/lib/auth";
@@ -105,52 +106,56 @@ export default function AccountProfilePage() {
   }
 
   return (
-    <main className="container">
+    <main className="container" style={{ maxWidth: 760 }}>
       <header className="pageHeader">
         <span className="eyebrow">CUENTA</span>
-        <h1>Mi perfil</h1>
+        <h1>Perfil</h1>
         <p>Consulta y actualiza tus datos personales del backoffice.</p>
+        <p>
+          <Link href="/account/change-password">Cambiar contrasena</Link>
+        </p>
       </header>
 
-      <section className="card max-w-4xl">
-        <h2>Datos generales y ubicación</h2>
-        <form onSubmit={handleSubmit} className="grid gap-5">
-          <label className="form-field">
-            <span>Correo electrónico · solo lectura</span>
-            <input value={userEmail} readOnly aria-label="Correo electrónico" />
+      <section className="card" style={{ padding: "2rem" }}>
+        <form onSubmit={handleSubmit} style={{ display: "grid", gap: "1rem" }}>
+          <label style={{ display: "grid", gap: "0.4rem" }}>
+            <span>Email</span>
+            <input value={userEmail} readOnly disabled style={{ padding: "0.8rem 0.9rem", borderRadius: 8, border: "1px solid #d1d5db", background: "#f3f4f6" }} />
           </label>
 
-          <div className="form-grid">
-            <label className="form-field">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem" }}>
+            <label style={{ display: "grid", gap: "0.4rem" }}>
               <span>Nombre</span>
               <input
                 value={profile.name ?? ""}
                 onChange={(event) => setProfile((current) => ({ ...current, name: event.target.value }))}
+                style={{ padding: "0.8rem 0.9rem", borderRadius: 8, border: "1px solid #d1d5db" }}
               />
             </label>
 
-            <label className="form-field">
+            <label style={{ display: "grid", gap: "0.4rem" }}>
               <span>Teléfono</span>
               <input
                 value={profile.phone ?? ""}
                 onChange={(event) => setProfile((current) => ({ ...current, phone: event.target.value }))}
+                style={{ padding: "0.8rem 0.9rem", borderRadius: 8, border: "1px solid #d1d5db" }}
               />
             </label>
           </div>
 
-          <label className="form-field">
+          <label style={{ display: "grid", gap: "0.4rem" }}>
             <span>Dirección</span>
-            <textarea
+            <input
               value={profile.address ?? ""}
               onChange={(event) => setProfile((current) => ({ ...current, address: event.target.value }))}
-              rows={3}
+              style={{ padding: "0.8rem 0.9rem", borderRadius: 8, border: "1px solid #d1d5db" }}
             />
           </label>
 
           {error ? <p className="error">{error}</p> : null}
-          {success ? <p role="status" className="successMessage">{success}</p> : null}
+          {success ? <p style={{ color: "#166534", margin: 0 }}>{success}</p> : null}
 
-          <button type="submit" disabled={isSaving} className="w-fit">
+          <button type="submit" disabled={isSaving} style={{ width: "fit-content" }}>
             {isSaving ? "Guardando…" : "Guardar cambios"}
           </button>
         </form>
