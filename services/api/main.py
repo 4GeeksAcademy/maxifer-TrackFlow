@@ -6,8 +6,10 @@ ROOT_DIR = Path(__file__).resolve().parents[2]
 if str(ROOT_DIR) not in sys.path:
     sys.path.append(str(ROOT_DIR))
 
-from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
-from fastapi.responses import Response
+import logging
+from fastapi import Depends, FastAPI, File, HTTPException, UploadFile, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import Response, JSONResponse
 
 from packages.incidents_analysis import (
     analyze_csv_text,
@@ -19,6 +21,7 @@ from services.api.routers.suppliers import (
     router as suppliers_router,
 )
 from services.api.routers.users import router as users_router
+from services.api.routers.incidents import router as incidents_router
 from services.api.security import get_current_user
 
 app = FastAPI(
@@ -30,6 +33,24 @@ app.include_router(auth_router)
 app.include_router(profiles_router)
 app.include_router(suppliers_router)
 app.include_router(users_router)
+app.include_router(incidents_router)
+
+
+@app.exception_handler(RequestValidationError)
+async def request_validation_error(request: Request, exc: RequestValidationError):
+    first = exc.errors()[0]
+    location = first.get("loc", ())
+    field = str(location[-1]) if location else "unknown"
+    return JSONResponse(status_code=400, content={
+        "error": "validation_error", "field": field,
+        "message": f"El campo {field} es obligatorio" if first.get("type") == "missing" else f"El campo {field} no es válido",
+    })
+
+
+@app.exception_handler(Exception)
+async def unexpected_error(request: Request, exc: Exception):
+    logging.getLogger(__name__).exception("Unexpected API error", exc_info=exc)
+    return JSONResponse(status_code=500, content={"error": "internal_error", "message": "No se pudo completar la operación"})
 
 LAST_ANALYSIS = None
 

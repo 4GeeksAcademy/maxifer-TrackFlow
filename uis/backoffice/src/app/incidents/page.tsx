@@ -1,848 +1,137 @@
 "use client";
 
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { FormEvent } from "react";
+import { branches, branchLabels, categories, createIncident, getIncidents, getIncidentsSummary, IncidentApiError, origins, statuses, transitions, updateIncidentStatus } from "@/lib/incidents";
+import type { Incident, IncidentInput, Summary } from "@/lib/incidents";
+import { IncidentStatusBadge } from "@/components/IncidentStatusBadge";
+import { LoadingSkeleton } from "@/components/LoadingSkeleton";
 
-import {
-  useState
-} from "react";
-
-
-import type {
-  FormEvent
-} from "react";
-
-import { apiFetch } from "@/lib/auth";
-
-
-type BreakdownValue = {
-
-  count: number;
-
-  percentage: number;
-
-};
-
-
-type Satisfaction = {
-
-  closed_cases: number;
-
-  scored_cases: number;
-
-  average:
-    number | null;
-
-  scores:
-    Record<
-      string,
-      number
-    >;
-
-};
-
-
-type AnalysisResult = {
-
-  company: string;
-
-  source_file: string;
-
-  total_records: number;
-
-  valid_records: number;
-
-  invalid_records: number;
-
-  invalid_breakdown:
-    Record<
-      string,
-      number
-    >;
-
-  by_category:
-    Record<
-      string,
-      BreakdownValue
-    >;
-
-  by_status:
-    Record<
-      string,
-      BreakdownValue
-    >;
-
-  satisfaction:
-    Satisfaction;
-
-};
-
+const initialForm: IncidentInput = { title: "", description: "", category: "carrier_issue", status: "open", origin: "internal", branch: "central" };
+const pageSize = 10;
+const fieldLabels: Record<string, string> = { title: "Título", description: "Descripción", category: "Categoría", status: "Estado", origin: "Origen", branch: "Sede" };
+const label = (key: string) => branchLabels[key] || key.replaceAll("_", " ");
+const summaryTone = (group: string, key: string) => group === "by_status"
+  ? ({ open: "tone-danger", in_progress: "tone-warning", resolved: "tone-success", discarded: "tone-neutral" }[key] ?? "tone-neutral")
+  : "tone-neutral";
 
 export default function IncidentsPage() {
+  const [form, setForm] = useState<IncidentInput>(initialForm);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [formMessage, setFormMessage] = useState("");
+  const [saving, setSaving] = useState(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const [filters, setFilters] = useState({ status: "", origin: "", branch: "", category: "" });
+  const [rows, setRows] = useState<Incident[]>([]);
+  const [page, setPage] = useState(1);
+  const [listLoading, setListLoading] = useState(true);
+  const [listError, setListError] = useState("");
+  const [statusError, setStatusError] = useState("");
+  const [pendingId, setPendingId] = useState<number | null>(null);
+  const [summary, setSummary] = useState<Summary | null>(null);
+  const [summaryLoading, setSummaryLoading] = useState(true);
+  const [summaryError, setSummaryError] = useState("");
+  const listRequest = useRef(0);
+  const pageCount = Math.ceil(rows.length / pageSize);
+  const currentPage = Math.min(page, Math.max(pageCount, 1));
+  const pageRows = rows.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
+  const loadList = useCallback(async () => {
+    const requestId = ++listRequest.current;
+    setListLoading(true); setListError("");
+    try {
+      const result = await getIncidents(filters);
+      if (requestId === listRequest.current) setRows(result);
+    } catch { if (requestId === listRequest.current) setListError("No pudimos cargar las incidencias."); }
+    finally { if (requestId === listRequest.current) setListLoading(false); }
+  }, [filters]);
+  const loadSummary = useCallback(async () => {
+    setSummaryLoading(true); setSummaryError("");
+    try { setSummary(await getIncidentsSummary()); }
+    catch { setSummaryError("No se pudo cargar el resumen."); }
+    finally { setSummaryLoading(false); }
+  }, []);
+  useEffect(() => { const timer = setTimeout(() => void loadList(), 0); return () => clearTimeout(timer); }, [loadList]);
+  useEffect(() => { const timer = setTimeout(() => void loadSummary(), 0); return () => clearTimeout(timer); }, [loadSummary]);
+  useEffect(() => {
+    const openFromHash = () => { if (window.location.hash === "#new-incident" && !dialogRef.current?.open) dialogRef.current?.showModal(); };
+    openFromHash();
+    window.addEventListener("hashchange", openFromHash);
+    return () => window.removeEventListener("hashchange", openFromHash);
+  }, []);
 
-  const [
-    file,
-    setFile,
-  ] = useState<
-    File | null
-  >(null);
+  function closeDialog() {
+    dialogRef.current?.close();
+    if (window.location.hash === "#new-incident") history.replaceState(null, "", window.location.pathname + window.location.search);
+  }
 
+  function handleDialogClick(event: React.MouseEvent<HTMLDialogElement>) {
+    if (event.target !== event.currentTarget) return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) closeDialog();
+  }
 
-  const [
-    result,
-    setResult,
-  ] = useState<
-    AnalysisResult | null
-  >(null);
-
-
-  const [
-    error,
-    setError,
-  ] = useState("");
-
-
-  const [
-    loading,
-    setLoading,
-  ] = useState(false);
-
-
-  async function handleSubmit(
-
-    event:
-      FormEvent<HTMLFormElement>
-
-  ) {
-
+  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
-
-    if (!file) {
-
-      setError(
-        "Seleccioná un archivo CSV."
-      );
-
-      return;
-
+    const errors: Record<string, string> = {};
+    for (const field of ["title", "description", "category", "status", "origin", "branch"] as const) {
+      if (!form[field].trim()) errors[field] = `${fieldLabels[field]} es obligatorio`;
     }
-
-
-    setLoading(true);
-
-    setError("");
-
-    setResult(null);
-
-
-    const formData =
-      new FormData();
-
-
-    formData.append(
-      "file",
-      file
-    );
-
-
+    if (form.title.length > 120) errors.title = "El título no puede superar 120 caracteres";
+    setFieldErrors(errors); setFormMessage("");
+    if (Object.keys(errors).length) return;
+    setSaving(true);
     try {
-
-      const response =
-        await apiFetch(
-
-          (
-            "/backend"
-            + "/api/incidents/analyze"
-          ),
-
-          {
-            method:
-              "POST",
-
-            body:
-              formData,
-          }
-
-        );
-
-
-      const data =
-        await response
-          .json()
-          .catch(
-            () => null
-          );
-
-
-      if (!response.ok) {
-
-        throw new Error(
-
-          data?.detail
-          ??
-          (
-            "No fue posible "
-            + "analizar el CSV."
-          )
-
-        );
-
-      }
-
-
-      setResult(
-        data as AnalysisResult
-      );
-
-
+      await createIncident(form);
+      setPage(1);
+      setForm(initialForm); setFieldErrors({}); setFormMessage("Incidencia creada correctamente.");
+      closeDialog();
+      void loadList(); void loadSummary();
     } catch (error) {
-
-
-      if (
-        error
-        instanceof Error
-      ) {
-
-        setError(
-          error.message
-        );
-
-      } else {
-
-        setError(
-          "Ocurrió un error inesperado."
-        );
-
-      }
-
-
-    } finally {
-
-      setLoading(false);
-
-    }
-
+      if (error instanceof IncidentApiError && error.field && error.field in form) setFieldErrors({ [error.field]: error.message });
+      else setFormMessage(error instanceof Error ? error.message : "No se pudo crear la incidencia.");
+    } finally { setSaving(false); }
   }
 
-
-  async function downloadResults() {
-
-
-    setError("");
-
-
+  async function changeStatus(row: Incident, next: string) {
+    if (!next || pendingId !== null) return;
+    setStatusError(""); setPendingId(row.id);
+    setRows(current => current.map(item => item.id === row.id ? { ...item, status: next } : item));
     try {
-
-      const response =
-        await apiFetch(
-          (
-            "/backend"
-            + "/api/incidents/"
-            + "results/export"
-          )
-        );
-
-
-      if (!response.ok) {
-
-        throw new Error(
-          (
-            "No fue posible "
-            + "descargar "
-            + "los resultados."
-          )
-        );
-
-      }
-
-
-      const blob =
-        await response.blob();
-
-
-      const url =
-        URL.createObjectURL(
-          blob
-        );
-
-
-      const link =
-        document.createElement(
-          "a"
-        );
-
-
-      link.href =
-        url;
-
-
-      link.download =
-        "results.csv";
-
-
-      document.body
-        .appendChild(
-          link
-        );
-
-
-      link.click();
-
-      link.remove();
-
-
-      URL.revokeObjectURL(
-        url
-      );
-
-
-    } catch (error) {
-
-
-      if (
-        error
-        instanceof Error
-      ) {
-
-        setError(
-          error.message
-        );
-
-      }
-
-    }
-
+      const saved = await updateIncidentStatus(row.id, next);
+      setRows(current => current.map(item => item.id === row.id ? saved : item));
+      void loadSummary();
+    } catch {
+      setRows(current => current.map(item => item.id === row.id ? row : item));
+      setStatusError(`No se pudo actualizar «${row.title}». El estado anterior se restauró.`);
+    } finally { setPendingId(null); }
   }
 
-
-  return (
-
-    <main className="container">
-
-
-      <header className="pageHeader">
-
-        <span className="eyebrow">
-          OPERACIONES
-        </span>
-
-
-        <h1>
-          Análisis de incidencias
-        </h1>
-
-
-        <p>
-          Cargá el archivo CSV
-          para validar registros
-          y consultar sus métricas.
-        </p>
-
-      </header>
-
-
-      <section className="card">
-
-
-        <form
-          onSubmit={handleSubmit}
-          className="uploadForm"
-        >
-
-
-          <div className="fileArea">
-
-            <label htmlFor="csvFile">
-
-              Archivo CSV
-
-            </label>
-
-
-            <input
-
-              id="csvFile"
-
-              type="file"
-
-              accept=".csv,text/csv"
-
-              onChange={(
-                event
-              ) => {
-
-                const selected =
-                  event
-                    .target
-                    .files?.[0]
-                  ?? null;
-
-
-                setFile(
-                  selected
-                );
-
-              }}
-
-            />
-
-
-            {
-              file
-              && (
-
-                <small>
-
-                  Seleccionado:
-                  {" "}
-                  {file.name}
-
-                </small>
-
-              )
-            }
-
-          </div>
-
-
-          <button
-            type="submit"
-            disabled={loading}
-          >
-
-            {
-              loading
-              ? "Analizando..."
-              : "Analizar CSV"
-            }
-
-          </button>
-
-
-        </form>
-
-
-        {
-          error
-          && (
-
-            <div className="error">
-
-              {error}
-
-            </div>
-
-          )
-        }
-
-
-      </section>
-
-
-      {
-        result
-        && (
-
-          <>
-
-
-            <section className="metrics">
-
-
-              <article className="metric">
-
-                <span>
-                  Total
-                </span>
-
-                <strong>
-                  {
-                    result
-                      .total_records
-                  }
-                </strong>
-
-              </article>
-
-
-              <article className="metric">
-
-                <span>
-                  Válidos
-                </span>
-
-                <strong>
-                  {
-                    result
-                      .valid_records
-                  }
-                </strong>
-
-              </article>
-
-
-              <article className="metric">
-
-                <span>
-                  Inválidos
-                </span>
-
-                <strong>
-                  {
-                    result
-                      .invalid_records
-                  }
-                </strong>
-
-              </article>
-
-
-              <article className="metric">
-
-                <span>
-                  Satisfacción
-                </span>
-
-                <strong>
-
-                  {
-                    result
-                      .satisfaction
-                      .average
-                      ?.toFixed(2)
-                    ?? "N/A"
-                  }
-
-                </strong>
-
-              </article>
-
-
-            </section>
-
-
-            <section className="card">
-
-
-              <h2>
-                Registros inválidos
-              </h2>
-
-
-              {
-                Object.keys(
-                  result
-                    .invalid_breakdown
-                ).length === 0
-
-                ? (
-
-                  <p>
-                    No hay registros
-                    inválidos.
-                  </p>
-
-                )
-
-                : (
-
-                  <ul className="dataList">
-
-
-                    {
-                      Object.entries(
-
-                        result
-                          .invalid_breakdown
-
-                      ).map(
-                        ([
-                          reason,
-                          count,
-                        ]) => (
-
-                          <li key={reason}>
-
-                            <span>
-                              {reason}
-                            </span>
-
-                            <strong>
-                              {count}
-                            </strong>
-
-                          </li>
-
-                        )
-                      )
-                    }
-
-
-                  </ul>
-
-                )
-              }
-
-
-            </section>
-
-
-            <section className="twoColumns">
-
-
-              <article className="card">
-
-
-                <h2>
-                  Categorías
-                </h2>
-
-
-                <ul className="dataList">
-
-
-                  {
-                    Object.entries(
-
-                      result
-                        .by_category
-
-                    ).map(
-                      ([
-                        category,
-                        data,
-                      ]) => (
-
-                        <li key={category}>
-
-                          <span>
-                            {category}
-                          </span>
-
-                          <strong>
-
-                            {data.count}
-
-                            {" "}
-
-                            (
-                            {
-                              data
-                                .percentage
-                                .toFixed(1)
-                            }
-                            %)
-
-                          </strong>
-
-                        </li>
-
-                      )
-                    )
-                  }
-
-
-                </ul>
-
-
-              </article>
-
-
-              <article className="card">
-
-
-                <h2>
-                  Estados
-                </h2>
-
-
-                <ul className="dataList">
-
-
-                  {
-                    Object.entries(
-
-                      result
-                        .by_status
-
-                    ).map(
-                      ([
-                        status,
-                        data,
-                      ]) => (
-
-                        <li key={status}>
-
-                          <span>
-                            {status}
-                          </span>
-
-                          <strong>
-
-                            {data.count}
-
-                            {" "}
-
-                            (
-                            {
-                              data
-                                .percentage
-                                .toFixed(1)
-                            }
-                            %)
-
-                          </strong>
-
-                        </li>
-
-                      )
-                    )
-                  }
-
-
-                </ul>
-
-
-              </article>
-
-
-            </section>
-
-
-            <section className="card">
-
-
-              <h2>
-                Índice de satisfacción
-              </h2>
-
-
-              <div className="satisfactionGrid">
-
-
-                <div>
-
-                  <span>
-                    Casos cerrados
-                  </span>
-
-                  <strong>
-                    {
-                      result
-                        .satisfaction
-                        .closed_cases
-                    }
-                  </strong>
-
-                </div>
-
-
-                <div>
-
-                  <span>
-                    Casos puntuados
-                  </span>
-
-                  <strong>
-                    {
-                      result
-                        .satisfaction
-                        .scored_cases
-                    }
-                  </strong>
-
-                </div>
-
-
-                <div>
-
-                  <span>
-                    Promedio
-                  </span>
-
-                  <strong>
-
-                    {
-                      result
-                        .satisfaction
-                        .average
-                        ?.toFixed(2)
-                      ?? "N/A"
-                    }
-
-                  </strong>
-
-                </div>
-
-
-              </div>
-
-
-              <h3>
-                Distribución de puntajes
-              </h3>
-
-
-              <ul className="dataList">
-
-
-                {
-                  Object.entries(
-
-                    result
-                      .satisfaction
-                      .scores
-
-                  ).map(
-                    ([
-                      score,
-                      count,
-                    ]) => (
-
-                      <li key={score}>
-
-                        <span>
-                          Puntaje {score}
-                        </span>
-
-                        <strong>
-                          {count}
-                        </strong>
-
-                      </li>
-
-                    )
-                  )
-                }
-
-
-              </ul>
-
-
-              <button
-                type="button"
-                onClick={
-                  downloadResults
-                }
-                className="downloadButton"
-              >
-
-                Descargar resultados CSV
-
-              </button>
-
-
-            </section>
-
-
-          </>
-
-        )
-      }
-
-
-    </main>
-
-  );
-
+  return <main className="container">
+    <header className="pageHeader"><span className="eyebrow">Operaciones / Incidencias</span><div className="pageHeaderTitleRow"><h1>Gestión de incidencias</h1><button id="new-incident" type="button" className="button" onClick={() => { setFormMessage(""); dialogRef.current?.showModal(); }}>Registrar incidencia</button></div><p>Registrá y seguí los casos de todas las sedes de TrackFlow.</p></header>
+    {formMessage.includes("correctamente") && <p role="status" className="successMessage mb-5">{formMessage}</p>}
+    <dialog ref={dialogRef} className="incidentDialog" aria-labelledby="incident-dialog-title" onClick={handleDialogClick} onCancel={event => { event.preventDefault(); closeDialog(); }} onClose={() => { if (window.location.hash === "#new-incident") history.replaceState(null, "", window.location.pathname + window.location.search); }}>
+      <div className="incidentDialogHeader"><h2 id="incident-dialog-title">Registro rápido de incidencia</h2><button type="button" className="incidentDialogClose" aria-label="Cerrar formulario" onClick={closeDialog}>×</button></div>
+      <form className="incidentForm" onSubmit={submit} noValidate>
+        {(["title", "description"] as const).map(field => <label key={field} className={field === "description" ? "incidentWide" : ""}>{fieldLabels[field]}
+          {field === "description" ? <textarea value={form[field]} onChange={event => setForm({ ...form, [field]: event.target.value })} aria-invalid={!!fieldErrors[field]} /> : <input value={form[field]} onChange={event => setForm({ ...form, [field]: event.target.value })} maxLength={121} aria-invalid={!!fieldErrors[field]} />}
+          {fieldErrors[field] && <small className="fieldError">{fieldErrors[field]}</small>}
+        </label>)}
+        {(["category", "status", "origin", "branch"] as const).map(field => <label key={field} className={field === "branch" && form.origin === "branch" ? "branchRequired" : ""}>{fieldLabels[field]}
+          <select value={form[field]} onChange={event => setForm({ ...form, [field]: event.target.value })} aria-invalid={!!fieldErrors[field]}>
+            {(field === "category" ? categories : field === "status" ? statuses : field === "origin" ? origins : branches).map(value => <option key={value} value={value}>{label(value)}</option>)}
+          </select>{fieldErrors[field] && <small className="fieldError">{fieldErrors[field]}</small>}
+        </label>)}
+        <div className="incidentWide flex flex-wrap gap-2"><button type="submit" disabled={saving}>{saving ? "Guardando..." : "Guardar incidencia"}</button><button type="button" className="button secondaryButton" onClick={() => { setForm(initialForm); setFieldErrors({}); setFormMessage(""); }}>Limpiar formulario</button><button type="button" className="button secondaryButton" onClick={closeDialog}>Cancelar</button></div>
+      </form>{formMessage && !formMessage.includes("correctamente") && <p role="alert" className="error">{formMessage}</p>}
+    </dialog>
+    <section className="card"><h2>Resumen de incidencias</h2>
+      {summaryLoading ? <LoadingSkeleton label="Cargando resumen de incidencias" variant="summary" /> : summaryError ? <p role="alert">{summaryError} <button onClick={() => void loadSummary()}>Reintentar</button></p> : summary && <><p className="summaryTotal">Total: <strong>{summary.total}</strong></p><div className="summaryGrid">{(["by_status", "by_category", "by_origin", "by_branch"] as const).map(group => <div key={group}><h3>{{ by_status: "Por estado", by_category: "Por categoría", by_origin: "Por origen", by_branch: "Por sede" }[group]}</h3>{Object.keys(summary[group]).length ? <ul className="dataList">{Object.entries(summary[group]).map(([key, count]) => <li key={key} className={summaryTone(group, key)}><span>{label(key)}</span><strong>{count}</strong></li>)}</ul> : <p>Sin datos</p>}</div>)}</div></>}
+    </section>
+    <section className="card"><h2>Incidencias</h2><div className="incidentFilters">
+      {(["status", "origin", "branch", "category"] as const).map(field => <label key={field}>{fieldLabels[field]}<select value={filters[field]} onChange={event => { setPage(1); setFilters({ ...filters, [field]: event.target.value }); }}><option value="">Todos</option>{(field === "status" ? statuses : field === "origin" ? origins : field === "branch" ? branches : categories).map(value => <option key={value} value={value}>{label(value)}</option>)}</select></label>)}
+    </div>{statusError && <p role="alert" className="error">{statusError}</p>}
+      {listLoading ? <LoadingSkeleton label="Cargando incidencias" variant="table" columns={7} /> : listError ? <p role="alert">{listError} <button onClick={() => void loadList()}>Reintentar</button></p> : rows.length === 0 ? <p>No hay incidencias para los filtros seleccionados.</p> : <><div className="tableWrap"><table className="incidentTable"><thead><tr><th>Título</th><th>Categoría</th><th>Estado</th><th>Origen</th><th>Sede</th><th>Fecha</th><th>Actualizar</th></tr></thead><tbody>{pageRows.map(row => <tr key={row.id}><td title={row.description}>{row.title}</td><td>{label(row.category)}</td><td><IncidentStatusBadge status={row.status} /></td><td>{label(row.origin)}</td><td>{label(row.branch)}</td><td>{new Date(row.created_at).toLocaleDateString("es")}</td><td>{transitions[row.status]?.length ? <select aria-label={`Cambiar estado de ${row.title}`} value="" disabled={pendingId === row.id} onChange={event => void changeStatus(row, event.target.value)}><option value="">Cambiar estado</option>{transitions[row.status].map(next => <option key={next} value={next}>{label(next)}</option>)}</select> : "Final"}</td></tr>)}</tbody></table></div><nav className="incidentPagination" aria-label="Paginación de incidencias"><span>Mostrando {(currentPage - 1) * pageSize + 1}–{Math.min(currentPage * pageSize, rows.length)} de {rows.length}</span><div><button type="button" className="button secondaryButton" disabled={currentPage === 1} onClick={() => setPage(currentPage - 1)}>Anterior</button><span aria-live="polite">Página {currentPage} de {pageCount}</span><button type="button" className="button secondaryButton" disabled={currentPage === pageCount} onClick={() => setPage(currentPage + 1)}>Siguiente</button></div></nav></>}
+    </section>
+  </main>;
 }

@@ -8,7 +8,7 @@ Actualmente cubre autenticación básica, gestión de usuarios/perfiles, proveed
 
 - FastAPI
 - Uvicorn
-- TinyDB para persistencia local en JSON
+- TinyDB para usuarios y proveedores; SQLite para incidencias
 - `python-jose` para tokens JWT
 - `python-multipart` para subida de archivos
 
@@ -63,12 +63,29 @@ Variables esperadas:
 
 ## Datos locales
 
-TinyDB guarda archivos JSON en `services/api/data/`.
+### Gestor de incidencias
+
+Desde la raíz del repositorio, ejecutar `python scripts/seed_incidents.py` para cargar
+el histórico de `scripts/incidents-trackflow.csv`. Se puede repetir: usa `incident_id`
+para omitir registros ya importados. La colección local queda en
+`services/api/data/incidents.sqlite3` y se crea automáticamente. Si existe el archivo
+local anterior `incidents.json`, sus registros se migran conservando los ID y el
+archivo original. El seed informa las
+filas inválidas y debe dejar 95 incidencias: 29 abiertas, 52 resueltas y 14
+descartadas.
+
+La API del gestor está en `/api/incidents` (POST y GET con filtros por `status`,
+`origin`, `branch` y `category`), `/api/incidents/{id}`,
+`/api/incidents/{id}/status` (PATCH) y `/api/incidents/summary`.
+El backoffice en `/incidents` ofrece formulario, listado y resumen.
+
+Los datos locales se guardan en `services/api/data/`.
 
 | Archivo | Contenido |
 | --- | --- |
 | `auth.json` | Usuarios y datos de autenticación local |
 | `suppliers.json` | Proveedores logísticos de demo |
+| `incidents.sqlite3` | Incidencias con restricciones de integridad |
 
 Estos datos son locales y de desarrollo. No deben usarse como fuente productiva.
 
