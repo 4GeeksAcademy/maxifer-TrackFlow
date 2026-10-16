@@ -16,6 +16,12 @@ Para medir también seguridad, recuperación de contraseña y usuarios:
 uv run pytest --cov=services.api.auth --cov=services.api.security --cov=services.api.password_reset_service --cov=services.api.routers.users --cov-report=term-missing
 ```
 
+Para verificar API-042, incluyendo el umbral por router:
+
+```bash
+uv run pytest --cov=services.api.routers.incidents --cov=services.api.routers.inventory --cov-report=term-missing
+```
+
 En el backoffice, desde la raíz:
 
 ```bash
@@ -31,7 +37,11 @@ Las pruebas backend llaman directamente a las funciones de negocio y usan TinyDB
 - `services/api/tests/test_auth_security.py`: hashing y verificación de contraseñas, secreto JWT, claims, expiración y rechazo de tokens o usuarios no válidos.
 - `services/api/tests/test_password_reset_service.py`: almacenamiento hasheado, vencimiento, consumo único, tokens anteriores e invalidación.
 - `services/api/tests/test_users_routes.py`: registro y CRUD de usuarios, campos públicos, contraseñas, duplicados y permisos owner/admin.
+- `services/api/tests/test_incidents_routes.py`: creación/validación, filtros, resumen, detalle y transiciones de estado sobre SQLite temporal.
+- `services/api/tests/test_inventory_routes.py`: listado, stock calculado, productos, entradas/salidas y movimientos sobre SQLite en memoria.
 - `uis/backoffice/src/lib/__tests__/auth.test.ts`: almacenamiento de sesión, eventos, suscripción del hook, encabezado bearer y respuesta 401.
+- `uis/backoffice/src/lib/__tests__/incidents.test.ts`: consulta de incidencias, filtros vacíos, errores de API y desconexión.
+- `uis/backoffice/src/lib/__tests__/inventory.test.ts`: parseo de errores, listado de productos, payload inválido y formato de stock.
 - Las suites existentes de incidencias, startup y scripts se mantienen dentro de `uv run pytest` como regresión.
 
 ## Casos planeados
@@ -50,12 +60,28 @@ Las pruebas backend llaman directamente a las funciones de negocio y usan TinyDB
 | `DELETE /users/{id}` | Elimina usuario y perfil | Usuario inexistente | Otro usuario no puede eliminarlo |
 | Utilidades de auth | Hash/JWT, token y sesión válidos | Datos ausentes o vacíos | Hash no coincidente, secreto ausente, token alterado/expirado o respuesta 401 |
 
+### API-042: Incidencias e inventario
+
+| Grupo | Camino feliz | Caso límite | Modo de fallo |
+| --- | --- | --- | --- |
+| Incidencias | Crear/listar, resumir y obtener un incidente; transición permitida | Filtros sin resultados y store vacío | Payload/filtro inválido, transición prohibida e ID inexistente |
+| Inventario | Crear producto, registrar entradas/salidas y listar movimientos con stock neto | Listas vacías y stock cero | SKU duplicado, producto ausente, almacén incompatible, stock insuficiente o usuario sin ID |
+
+### FE-019: Helpers frontend
+
+| Función | Camino feliz | Caso límite | Modo de fallo |
+| --- | --- | --- | --- |
+| `readApiError` | Extrae mensajes anidados de validación | Lista de errores con varios mensajes | JSON inválido usa mensaje genérico |
+| `getInventoryProducts` | Devuelve los productos recibidos | Payload válido que no es una lista devuelve `[]` | Respuesta HTTP fallida produce el mensaje de API |
+| `getIncidents` | Devuelve resultados y serializa filtros | Filtros vacíos no generan query string | Error HTTP o de conexión se convierte en `IncidentApiError` |
+
 ## Resultados
 
 Verificación local:
 
-- `uv run pytest --cov=services.api.auth --cov=services.api.security --cov=services.api.password_reset_service --cov=services.api.routers.users --cov-report=term-missing`: **56 passed**; cobertura de `auth.py`, `security.py`, `password_reset_service.py` y `routers/users.py`: **100%** en cada módulo.
-- `npm --prefix uis/backoffice test -- --coverage`: **7 passed**; `auth.ts`: **92,23%** de líneas, 83,33% de ramas y 100% de funciones.
+- `uv run pytest --cov=services.api.routers.incidents --cov=services.api.routers.inventory --cov-report=term-missing`: **71 passed**; `incidents.py` e `inventory.py`: **100%** de cobertura cada uno.
+- La medición AUTH-088 cubrió `auth.py`, `security.py`, `password_reset_service.py` y `routers/users.py` al **100%** cada uno.
+- `npm --prefix uis/backoffice test -- --coverage`: **15 passed**; `auth.ts`: 92,23% de líneas, `incidents.ts`: 100%, `inventory.ts`: 58,82%.
 - La ejecución backend emite tres advertencias deprecadas provenientes de Starlette/FastAPI (`BlockingPortal` y `on_event`); no afectan los resultados.
 
 ## Revisión asistida y hallazgos
