@@ -6,6 +6,8 @@ __pycache__/
 *.py[cod]
 results.csv
 .env
+.env.*
+!.env.example
 services/api/.env
 services/api/data/auth.json
 services/api/data/incidents.json

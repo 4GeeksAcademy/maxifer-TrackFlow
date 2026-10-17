@@ -1,0 +1,14 @@
+.git
+**/node_modules
+**/.next
+**/.venv
+**/__pycache__
+**/*.py[cod]
+**/.env*
+**/tests
+**/__tests__
+**/*.log
+**/*.egg-info
+.pytest_cache
+services/api/data/*
+stitch_trackflow_operations_backoffice
