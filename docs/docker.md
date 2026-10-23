@@ -1,5 +1,9 @@
 # Dockerización de TrackFlow
 
+El despliegue automático desde `main` se configura en
+[GitHub Actions](./github-actions.md). Esa guía describe los secretos, las
+variables, las comprobaciones y la recuperación ante fallos.
+
 ## Adaptación del reto
 
 TrackFlow no tiene `uis/website`: el sitio público es `index.html` y
