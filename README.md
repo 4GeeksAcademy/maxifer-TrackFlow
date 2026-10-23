@@ -6,6 +6,8 @@ The repository combines several deliverables for the 4Geeks Academy AI Engineeri
 
 Spanish documentation is available in [README.es.md](./README.es.md).
 
+Run the complete stack with Docker Compose: [Docker setup and VPS deployment](./docs/docker.md).
+
 ## What Is Included
 
 | Area | Path | Status |

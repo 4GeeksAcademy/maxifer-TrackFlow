@@ -1,0 +1,190 @@
+name: Validate and deploy TrackFlow
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trackflow-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: API, recovery and deployment tests
+        run: |
+          docker run --rm -v "$PWD:/workspace" -w /workspace \
+            -e PYTHON_DOTENV_DISABLED=1 -e DEMO_DATA_ENABLED=false \
+            -e DATABASE_URL=sqlite:// python:3.12-slim sh -ec '
+              pip install --no-cache-dir uv==0.12.12
+              uv sync --frozen --python 3.12
+              uv run --frozen pytest -q
+            '
+      - name: Backoffice tests
+        run: |
+          docker run --rm -v "$PWD:/workspace" -w /workspace/uis/backoffice \
+            node:22-alpine sh -ec 'npm ci; npm test -- --runInBand'
+      - name: Talent lint and landing checks
+        run: |
+          docker run --rm -v "$PWD:/workspace" -w /workspace node:22-alpine sh -ec '
+            node scripts/check-spanish-copy.mjs
+            npm ci --prefix uis/talent-pipeline-tracker
+            npm run lint --prefix uis/talent-pipeline-tracker
+          '
+
+  images:
+    needs: tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      prefix: ${{ steps.names.outputs.prefix }}
+    env:
+      PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+      - name: Image names
+        id: names
+        env:
+          REPOSITORY: ${{ github.repository }}
+        run: echo "prefix=ghcr.io/${REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build landing
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: .
+          file: infra/landing/Dockerfile
+          platforms: linux/amd64
+          load: true
+          push: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
+          tags: ${{ steps.names.outputs.prefix }}/landing:${{ github.sha }}
+          labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
+          cache-from: type=gha,scope=landing
+          cache-to: type=gha,mode=max,scope=landing
+      - name: Build Next.js interfaces
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: uis
+          target: production
+          platforms: linux/amd64
+          load: true
+          push: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
+          tags: ${{ steps.names.outputs.prefix }}/uis:${{ github.sha }}
+          labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
+          build-args: |
+            BACKEND_INTERNAL_URL=http://services:8000
+            NEXT_PUBLIC_API_URL=${{ env.PUBLIC_API_URL }}
+          cache-from: type=gha,scope=uis
+          cache-to: type=gha,mode=max,scope=uis
+      - name: Build API
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: .
+          file: services/Dockerfile
+          target: production
+          platforms: linux/amd64
+          load: true
+          push: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
+          tags: ${{ steps.names.outputs.prefix }}/services:${{ github.sha }}
+          labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
+          cache-from: type=gha,scope=services
+          cache-to: type=gha,mode=max,scope=services
+      - name: Test production containers with isolated data
+        id: smoke
+        env:
+          LANDING_IMAGE: ${{ steps.names.outputs.prefix }}/landing:${{ github.sha }}
+          UIS_IMAGE: ${{ steps.names.outputs.prefix }}/uis:${{ github.sha }}
+          API_IMAGE: ${{ steps.names.outputs.prefix }}/services:${{ github.sha }}
+        run: |
+          python3 - <<'PY'
+          import os, pathlib, secrets
+          values = {
+              'JWT_SECRET': secrets.token_urlsafe(48),
+              'DATABASE_URL': 'sqlite:////app/services/api/data/inventory.sqlite3',
+              'DEMO_DATA_ENABLED': 'false',
+              'BACKEND_INTERNAL_URL': 'http://services:8000',
+              'NEXT_PUBLIC_API_URL': os.environ.get('PUBLIC_API_URL', ''),
+              'LANDING_PORT': '3000', 'BACKOFFICE_PORT': '3001', 'TALENT_PORT': '3002',
+          }
+          pathlib.Path('.env').write_text(''.join(f'{k}={v}\n' for k,v in values.items()))
+          PY
+          docker compose -p trackflow-ci -f docker-compose.prod.yml up -d --no-build --pull never --wait --wait-timeout 180
+          docker compose -p trackflow-ci -f docker-compose.prod.yml exec -T services python - < scripts/verify_deployment.py
+      - name: Production smoke-test logs
+        if: failure() && steps.smoke.outcome == 'failure'
+        run: docker compose -p trackflow-ci -f docker-compose.prod.yml logs --tail 60
+      - name: Clean up isolated CI containers
+        if: always() && steps.smoke.outcome != 'skipped'
+        run: docker compose -p trackflow-ci -f docker-compose.prod.yml down -v --remove-orphans
+
+  deploy:
+    needs: images
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      packages: read
+    env:
+      VPS_HOST: ${{ vars.VPS_HOST }}
+      VPS_USER: ${{ vars.VPS_USER || 'root' }}
+      VPS_PORT: ${{ vars.VPS_PORT || '22' }}
+      VPS_PATH: ${{ vars.VPS_PATH || '/opt/trackflow' }}
+      IMAGE_PREFIX: ${{ needs.images.outputs.prefix }}
+      PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Configure deployment SSH identity
+        env:
+          DEPLOY_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          KNOWN_HOSTS: ${{ secrets.VPS_SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          [[ "$VPS_HOST" =~ ^[a-zA-Z0-9.-]+$ && "$VPS_PORT" =~ ^[0-9]+$ ]]
+          [[ "$VPS_USER" =~ ^[a-z_][a-z0-9_-]*$ && "$VPS_PATH" =~ ^/[a-zA-Z0-9_./-]+$ && "$VPS_PATH" != / ]]
+          [[ -n "$DEPLOY_KEY" && -n "$KNOWN_HOSTS" ]]
+          umask 077
+          printf '%s\n' "$DEPLOY_KEY" > "$RUNNER_TEMP/deploy-key"
+          printf '%s\n' "$KNOWN_HOSTS" > "$RUNNER_TEMP/deploy-known-hosts"
+          ssh-keygen -y -f "$RUNNER_TEMP/deploy-key" >/dev/null
+      - name: Transfer deployment configuration and update VPS
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          ssh_options=(-i "$RUNNER_TEMP/deploy-key" -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes -o "UserKnownHostsFile=$RUNNER_TEMP/deploy-known-hosts" -o ConnectTimeout=20)
+          remote="$VPS_USER@$VPS_HOST"
+          release="$VPS_PATH/releases/$GITHUB_SHA"
+          python3 - <<'PY'
+          import json,os,pathlib
+          pathlib.Path('release.json').write_text(json.dumps({'commit':os.environ['GITHUB_SHA'],'public_api_url':os.environ.get('PUBLIC_API_URL','')}))
+          PY
+          ssh "${ssh_options[@]}" -p "$VPS_PORT" "$remote" "install -d -m 700 '$release'"
+          scp "${ssh_options[@]}" -P "$VPS_PORT" docker-compose.prod.yml scripts/deploy.sh scripts/verify_deployment.py release.json "$remote:$release/"
+          printf '%s\n' "$GHCR_TOKEN" | ssh "${ssh_options[@]}" -p "$VPS_PORT" "$remote" "bash '$release/deploy.sh' '$VPS_PATH' '$GITHUB_SHA' '$IMAGE_PREFIX' '$GITHUB_ACTOR'"
+      - name: Remove runner SSH identity
+        if: always()
+        run: rm -f -- "$RUNNER_TEMP/deploy-key" "$RUNNER_TEMP/deploy-known-hosts"
