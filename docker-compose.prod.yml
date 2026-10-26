@@ -1,0 +1,59 @@
+name: trackflow-prod
+
+services:
+  landing:
+    build:
+      context: .
+      dockerfile: infra/landing/Dockerfile
+    ports:
+      - "${LANDING_PORT:?Set LANDING_PORT in .env}:80"
+    restart: unless-stopped
+    networks: [trackflow]
+
+  uis:
+    build:
+      context: ./uis
+      target: production
+      args:
+        BACKEND_INTERNAL_URL: ${BACKEND_INTERNAL_URL:?Set BACKEND_INTERNAL_URL in .env}
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-}
+    environment:
+      BACKEND_INTERNAL_URL: ${BACKEND_INTERNAL_URL:?Set BACKEND_INTERNAL_URL in .env}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-}
+    ports:
+      - "${BACKOFFICE_PORT:?Set BACKOFFICE_PORT in .env}:3001"
+      - "${TALENT_PORT:?Set TALENT_PORT in .env}:3002"
+    depends_on:
+      services:
+        condition: service_healthy
+    restart: unless-stopped
+    networks: [trackflow]
+
+  services:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+      target: production
+    env_file: .env
+    environment:
+      JWT_SECRET: ${JWT_SECRET:?Generate JWT_SECRET in .env}
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in .env}
+      PYTHON_DOTENV_DISABLED: "1"
+      DEMO_DATA_ENABLED: "false"
+    volumes:
+      - api_data:/app/services/api/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/', timeout=5)"]
+      interval: 15s
+      timeout: 6s
+      start_period: 30s
+      retries: 5
+    restart: unless-stopped
+    networks: [trackflow]
+
+networks:
+  trackflow:
+    name: trackflow-production
+
+volumes:
+  api_data:

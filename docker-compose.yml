@@ -1,0 +1,72 @@
+name: trackflow
+
+services:
+  landing:
+    build:
+      context: .
+      dockerfile: infra/landing/Dockerfile
+    ports:
+      - "${LANDING_PORT:?Set LANDING_PORT in .env}:80"
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+      - ./application.html:/usr/share/nginx/html/application.html:ro
+      - ./assets:/usr/share/nginx/html/assets:ro
+    networks: [trackflow]
+
+  uis:
+    build:
+      context: ./uis
+      target: development
+    environment:
+      BACKEND_INTERNAL_URL: ${BACKEND_INTERNAL_URL:?Set BACKEND_INTERNAL_URL in .env}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-}
+      WATCHPACK_POLLING: ${WATCHPACK_POLLING:-true}
+    ports:
+      - "${BACKOFFICE_PORT:?Set BACKOFFICE_PORT in .env}:3001"
+      - "${TALENT_PORT:?Set TALENT_PORT in .env}:3002"
+    volumes:
+      - ./uis:/app/uis
+      - backoffice_modules:/app/uis/backoffice/node_modules
+      - backoffice_next:/app/uis/backoffice/.next
+      - talent_modules:/app/uis/talent-pipeline-tracker/node_modules
+      - talent_next:/app/uis/talent-pipeline-tracker/.next
+    depends_on:
+      services:
+        condition: service_healthy
+    networks: [trackflow]
+
+  services:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+      target: development
+    env_file: .env
+    environment:
+      JWT_SECRET: ${JWT_SECRET:?Generate JWT_SECRET in .env}
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in .env}
+      PYTHON_DOTENV_DISABLED: "1"
+    ports:
+      - "${API_PORT:?Set API_PORT in .env}:8000"
+    volumes:
+      - ./services:/app/services
+      - ./packages:/app/packages
+      - ./scripts:/app/scripts
+      - api_data:/app/services/api/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/', timeout=5)"]
+      interval: 10s
+      timeout: 6s
+      start_period: 30s
+      retries: 5
+    networks: [trackflow]
+
+networks:
+  trackflow:
+    name: trackflow-development
+
+volumes:
+  api_data:
+  backoffice_modules:
+  backoffice_next:
+  talent_modules:
+  talent_next:

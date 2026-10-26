@@ -1,5 +1,7 @@
 # TrackFlow
 
+Para levantar el stack con Docker Compose: [Dockerización y despliegue al VPS](./docs/docker.md).
+
 TrackFlow es un proyecto de AI Engineering para una empresa de logística de última milla y gestión de almacenes con operaciones en Los Ángeles y Zaragoza.
 
 El repositorio reúne entregables del track de AI Engineering de 4Geeks Academy: landing pública, dashboards internos, backend FastAPI, lógica compartida de análisis, áreas de datos y estructura para futuros agentes, workflows, servidores MCP e infraestructura.
