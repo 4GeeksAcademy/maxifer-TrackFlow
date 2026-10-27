@@ -12,13 +12,13 @@ stop() {
 if [ "${1:-development}" = "production" ]; then
     npm --prefix /app/uis/backoffice run start -- --hostname 0.0.0.0 --port 3001 &
     backoffice_pid=$!
-    npm --prefix /app/uis/talent-pipeline-tracker run start -- --hostname 0.0.0.0 --port 3002 &
+    npm --prefix /app/uis/backoffice/talent-pipeline-tracker run start -- --hostname 0.0.0.0 --port 3002 &
     talent_pid=$!
 else
     # Webpack supports WATCHPACK_POLLING on Docker Desktop bind mounts.
     npm --prefix /app/uis/backoffice run dev -- --webpack --hostname 0.0.0.0 --port 3001 &
     backoffice_pid=$!
-    npm --prefix /app/uis/talent-pipeline-tracker run dev -- --webpack --hostname 0.0.0.0 --port 3002 &
+    npm --prefix /app/uis/backoffice/talent-pipeline-tracker run dev -- --webpack --hostname 0.0.0.0 --port 3002 &
     talent_pid=$!
 fi
 

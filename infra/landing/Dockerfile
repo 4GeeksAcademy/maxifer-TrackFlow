@@ -1,4 +1,4 @@
 FROM nginx:alpine
-COPY index.html application.html i18n.js validation.js /usr/share/nginx/html/
-COPY assets /usr/share/nginx/html/assets/
+COPY uis/website/index.html uis/website/application.html uis/website/i18n.js uis/website/validation.js /usr/share/nginx/html/
+COPY uis/website/assets /usr/share/nginx/html/assets/
 EXPOSE 80

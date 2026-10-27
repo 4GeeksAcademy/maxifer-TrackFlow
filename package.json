@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build:css": "tailwindcss -i ./tailwind.input.css -o ./assets/tailwind.min.css --minify",
+    "build:css": "tailwindcss -c ./uis/website/tailwind.config.js -i ./uis/website/tailwind.input.css -o ./uis/website/assets/tailwind.min.css --minify",
     "optimize:images": "node ./scripts/optimize-hero.mjs",
     "build:landing": "npm run test:spanish-copy && npm run build:css && npm run optimize:images",
-    "test:spanish-copy": "node ./scripts/check-spanish-copy.mjs"
+    "test:spanish-copy": "node ./scripts/check-spanish-copy.mjs",
+    "validate:ai-setup": "node .agents/skills/validate-ai-setup/scripts/validate.mjs --root .",
+    "test:ai-setup": "node --test .agents/skills/validate-ai-setup/scripts/validate.test.mjs"
   },
   "devDependencies": {
     "sharp": "^0.33.5",

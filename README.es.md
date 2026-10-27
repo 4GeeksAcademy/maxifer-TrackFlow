@@ -12,9 +12,9 @@ English documentation is available in [README.md](./README.md).
 
 | Área | Ruta | Estado |
 | --- | --- | --- |
-| Landing estática | `index.html`, `application.html` | Disponible |
+| Landing estática | `uis/website/index.html`, `uis/website/application.html` | Disponible |
 | Backoffice de incidencias | `uis/backoffice` | Disponible |
-| Talent Pipeline Tracker | `uis/talent-pipeline-tracker` | Disponible |
+| Talent Pipeline Tracker | `uis/backoffice/talent-pipeline-tracker` | Disponible |
 | Servicio FastAPI | `services/api` | Disponible |
 | Lógica compartida de incidencias | `packages/incidents_analysis` | Disponible |
 | Datos, agentes, workflows, infraestructura | `data/`, `agents/`, `workflows/`, `infra/` | Estructura del proyecto |
@@ -25,11 +25,11 @@ English documentation is available in [README.md](./README.md).
 TrackFlow/
 ├── README.md
 ├── README.es.md
+├── AGENTS.md                  # Protocolo del asistente
+├── memory-bank/               # Contexto de negocio, técnico y progreso
+├── .agents/                   # Reglas y skills del asistente
 ├── CONTEXT.md                 # Brief de empresa de TrackFlow
 ├── TrackFlow.md               # Elección de empresa y reto de automatización
-├── index.html                 # Landing pública estática
-├── application.html           # Página estática de aplicación/demo
-├── assets/                    # Assets de la landing
 ├── agents/                    # Prototipos, templates y tools de agentes
 ├── data/                      # Datos raw, procesados, pipelines y evaluación
 ├── docs/                      # Documentación de arquitectura y proyecto
@@ -41,15 +41,15 @@ TrackFlow/
 ├── services/                  # Servicios backend
 ├── shared/                    # Recursos compartidos que no son paquetes
 ├── skills/                    # Skills reutilizables para agentes
-├── uis/                       # Aplicaciones frontend
+├── uis/                       # website, backoffice (tracker anidado)
 └── workflows/                 # Flujos de automatización y orquestación
 ```
 
 ## Requisitos
 
-- Node.js 18 o superior
+- Node.js 22 o superior
 - npm 9 o superior
-- Python 3.11 o superior
+- Python 3.12 o superior
 - uv para gestionar las dependencias y el entorno de Python
 
 ## Instalación
@@ -74,11 +74,11 @@ cd uis/backoffice
 npm ci
 
 # Talent pipeline tracker
-cd ../talent-pipeline-tracker
+cd talent-pipeline-tracker
 npm ci
 
 # Volver a la raíz del repositorio
-cd ../..
+cd ../../..
 ```
 
 Antes de iniciar la API, crear su configuración local si no existe:
@@ -111,7 +111,7 @@ Desde la raíz del repositorio:
 ```bash
 npm install
 npm run build:landing
-npx --yes serve -l 3000 .
+npx --yes serve -l 3000 uis/website
 ```
 
 Abrir `http://localhost:3000`.
@@ -149,10 +149,10 @@ npm run dev
 
 ## Talent Pipeline Tracker
 
-El dashboard de reclutamiento vive en [uis/talent-pipeline-tracker](./uis/talent-pipeline-tracker/README.md).
+El dashboard de reclutamiento vive en [uis/backoffice/talent-pipeline-tracker](./uis/backoffice/talent-pipeline-tracker/README.md).
 
 ```bash
-cd uis/talent-pipeline-tracker
+cd uis/backoffice/talent-pipeline-tracker
 npm install
 npm run dev
 ```

@@ -6,8 +6,7 @@ variables, las comprobaciones y la recuperación ante fallos.
 
 ## Adaptación del reto
 
-TrackFlow no tiene `uis/website`: el sitio público es `index.html` y
-`application.html`. Se sirve con Nginx, sin mover ni convertir la landing.
+El sitio público vive en `uis/website` y se sirve con Nginx. Las URLs públicas se conservan.
 El contenedor `uis` ejecuta las dos aplicaciones Next.js existentes mediante
 `uis/start.sh`: backoffice en 3001 y talent-pipeline-tracker en 3002.
 La landing conserva el puerto 3000 y FastAPI usa 8000.
@@ -96,7 +95,7 @@ Si cambian dependencias del frontend:
 
 ```sh
 docker compose exec uis npm ci --prefix /app/uis/backoffice
-docker compose exec uis npm ci --prefix /app/uis/talent-pipeline-tracker
+docker compose exec uis npm ci --prefix /app/uis/backoffice/talent-pipeline-tracker
 docker compose restart uis
 docker compose build uis
 ```
