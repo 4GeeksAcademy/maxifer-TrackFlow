@@ -7,6 +7,9 @@ variables, las comprobaciones y la recuperación ante fallos.
 ## Adaptación del reto
 
 El sitio público vive en `uis/website` y se sirve con Nginx. Las URLs públicas se conservan.
+
+El despliegue estático alternativo de Netlify usa `netlify.toml`: ejecuta
+`npm run build:landing` desde la raíz y publica únicamente `uis/website`.
 El contenedor `uis` ejecuta las dos aplicaciones Next.js existentes mediante
 `uis/start.sh`: backoffice en 3001 y talent-pipeline-tracker en 3002.
 La landing conserva el puerto 3000 y FastAPI usa 8000.

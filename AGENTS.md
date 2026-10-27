@@ -21,10 +21,10 @@ Requieren confirmación explícita del desarrollador humano antes de modificarla
 - `.env`, `.env.*` salvo ejemplos sin secretos, claves, certificados y credenciales.
 - `services/api/data/`, datos reales en `data/`, bases de datos, backups y volúmenes persistentes; nunca ejecutar limpiezas o seeds contra producción.
 - `BRIEFING.md`, `RETO.md`, `CONTEXT*.md` y `TrackFlow.md`, fuentes de requisitos y negocio.
-- `.github/workflows/`, `infra/`, Dockerfiles, archivos Compose y `scripts/deploy.sh`: infraestructura y despliegue.
+- `.github/workflows/`, `infra/`, Dockerfiles, archivos Compose, `netlify.toml` y `scripts/deploy.sh`: infraestructura y despliegue.
 
 La solicitud de este hito autoriza incorporar BRIEFING.md y adaptar rutas en Docker,
-Compose y CI para la migración acordada. No autoriza fusionar la PR, desplegar,
+Compose, CI y Netlify para la migración acordada. No autoriza fusionar la PR, desplegar,
 alterar secretos o modificar datos de producción. Para cambios futuros, comprobar
 la autorización de la sesión; no repetir preguntas por acciones ya autorizadas.
 

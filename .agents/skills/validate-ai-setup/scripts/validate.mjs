@@ -18,7 +18,7 @@ function frontmatter(source) {
     const pair = line.match(/^([a-zA-Z][a-zA-Z0-9]*): (.+)$/);
     if (!pair || Object.hasOwn(fields, pair[1])) throw new Error('campo inválido o repetido');
     const value = pair[2].trim();
-    if (/^[\[\]{}&*!|>#'"%@`]/.test(value) || value.includes(' #')) throw new Error('solo escalares simples');
+    if (/^[\[\]{}&*!|>#'"%@`]/.test(value) || /:\s|\s#|^[-?:](?:\s|$)/.test(value)) throw new Error('solo escalares simples');
     fields[pair[1]] = value;
   }
   return fields;
@@ -55,7 +55,7 @@ export function validate(root, { checkBranch = false } = {}) {
   check('frontmatter skill', () => {
     const fields = frontmatter(fs.readFileSync(path.join(root, required.at(-1)), 'utf8'));
     assert(fields.name === 'validate-ai-setup' && /^[a-z0-9-]{1,64}$/.test(fields.name), 'nombre inválido');
-    assert(fields.description?.trim(), 'descripción vacía');
+    assert(fields.description?.trim() && !/^(?:null|true|false|~|[-+]?\d[\d.e+-]*)$/i.test(fields.description), 'descripción debe ser texto');
   });
   check('frontmatter regla', () => {
     const fields = frontmatter(fs.readFileSync(path.join(root, '.agents/rules/architecture.md'), 'utf8'));

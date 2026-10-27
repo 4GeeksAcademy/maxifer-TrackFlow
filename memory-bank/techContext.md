@@ -7,6 +7,7 @@
 - Backend: FastAPI, Python >=3.12, uv y uv.lock; rutas en `services/api`. Autenticación y usuarios en TinyDB, contraseñas hasheadas y JWT; incidencias en SQLite; inventario con SQLModel y PostgreSQL/Supabase (SQLite aislado en pruebas).
 - Lógica compartida de incidencias en `packages/incidents_analysis`; no duplicarla en interfaces.
 - Docker usa Node 22. Puertos públicos de desarrollo: landing 3000, backoffice 3001, tracker 3002, API configurable (habitualmente 8000). Mantener contratos HTTP y rewrites `/backend`.
+- Netlify tiene una integración de previews de PR: `netlify.toml` construye desde raíz y publica solo `uis/website`. No ejecutar despliegues manuales al entregar este hito.
 
 Los manifiestos y lockfiles prevalecen sobre mínimos desactualizados del README.
 El briefing describe necesidades del negocio, no impone un stack nuevo. No cambiar

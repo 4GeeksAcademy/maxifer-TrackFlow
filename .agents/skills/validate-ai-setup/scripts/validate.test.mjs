@@ -58,7 +58,7 @@ test('detecta ruta antigua y entrada canónica ausente', t => {
 });
 test('rechaza frontmatter inválido, campos duplicados y alcance inactivo', t => {
   const root = fixture(t);
-  for (const source of ['sin frontmatter', '---\nname: validate-ai-setup\nname: repetido\ndescription: prueba\n---\n', '---\nname: []\ndescription: prueba\n---\n']) {
+  for (const source of ['sin frontmatter', '---\nname: validate-ai-setup\nname: repetido\ndescription: prueba\n---\n', '---\nname: []\ndescription: prueba\n---\n', '---\nname: validate-ai-setup\ndescription: texto: YAML inválido\n---\n', '---\nname: validate-ai-setup\ndescription: null\n---\n']) {
     fs.writeFileSync(path.join(root, required.at(-1)), source);
     assert(failures(root).some(result => result.name === 'frontmatter skill'));
   }
