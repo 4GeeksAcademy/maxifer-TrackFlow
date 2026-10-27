@@ -8,9 +8,11 @@ services:
     ports:
       - "${LANDING_PORT:?Set LANDING_PORT in .env}:80"
     volumes:
-      - ./index.html:/usr/share/nginx/html/index.html:ro
-      - ./application.html:/usr/share/nginx/html/application.html:ro
-      - ./assets:/usr/share/nginx/html/assets:ro
+      - ./uis/website/index.html:/usr/share/nginx/html/index.html:ro
+      - ./uis/website/application.html:/usr/share/nginx/html/application.html:ro
+      - ./uis/website/i18n.js:/usr/share/nginx/html/i18n.js:ro
+      - ./uis/website/validation.js:/usr/share/nginx/html/validation.js:ro
+      - ./uis/website/assets:/usr/share/nginx/html/assets:ro
     networks: [trackflow]
 
   uis:
@@ -28,8 +30,8 @@ services:
       - ./uis:/app/uis
       - backoffice_modules:/app/uis/backoffice/node_modules
       - backoffice_next:/app/uis/backoffice/.next
-      - talent_modules:/app/uis/talent-pipeline-tracker/node_modules
-      - talent_next:/app/uis/talent-pipeline-tracker/.next
+      - talent_modules:/app/uis/backoffice/talent-pipeline-tracker/node_modules
+      - talent_next:/app/uis/backoffice/talent-pipeline-tracker/.next
     depends_on:
       services:
         condition: service_healthy

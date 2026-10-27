@@ -4,7 +4,7 @@ Fuente de verdad para colores de interfaz usando Tailwind + variables CSS.
 
 ## Tokens oficiales
 
-Definicion en `:root` de `index.html` y `application.html`:
+Definicion en `:root` de `uis/website/index.html` y `uis/website/application.html`:
 
 - `--tf-bg`: `#0f172a`
 - `--tf-surface`: `#111827`

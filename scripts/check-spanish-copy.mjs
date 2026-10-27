@@ -1,17 +1,19 @@
 import fs from "node:fs";
 import vm from "node:vm";
+import { fileURLToPath } from "node:url";
+const website = fileURLToPath(new URL("../uis/website/", import.meta.url));
 
 const files = ["index.html", "application.html", "i18n.js", "validation.js"];
 const failures = [];
 
 for (const file of files) {
-  const content = fs.readFileSync(file, "utf8");
+  const content = fs.readFileSync(website + file, "utf8");
   if (/[ÃÂ�]/.test(content)) {
     failures.push(`${file}: contiene texto con mojibake o caracteres de reemplazo.`);
   }
 }
 
-const i18nSource = fs.readFileSync("i18n.js", "utf8");
+const i18nSource = fs.readFileSync(website + "i18n.js", "utf8");
 const esBlockStart = i18nSource.indexOf("    es: {");
 const esBlockEnd = i18nSource.indexOf("    en: {");
 const esBlock = esBlockStart >= 0 && esBlockEnd > esBlockStart

@@ -35,12 +35,16 @@ jobs:
         run: |
           docker run --rm -v "$PWD:/workspace" -w /workspace/uis/backoffice \
             node:22-alpine sh -ec 'npm ci; npm test -- --runInBand'
+      - name: AI setup validation
+        run: |
+          node .agents/skills/validate-ai-setup/scripts/validate.mjs --root .
+          node --test .agents/skills/validate-ai-setup/scripts/validate.test.mjs
       - name: Talent lint and landing checks
         run: |
           docker run --rm -v "$PWD:/workspace" -w /workspace node:22-alpine sh -ec '
             node scripts/check-spanish-copy.mjs
-            npm ci --prefix uis/talent-pipeline-tracker
-            npm run lint --prefix uis/talent-pipeline-tracker
+            npm ci --prefix uis/backoffice/talent-pipeline-tracker
+            npm run lint --prefix uis/backoffice/talent-pipeline-tracker
           '
 
   images:
