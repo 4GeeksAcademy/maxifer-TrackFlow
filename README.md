@@ -12,9 +12,9 @@ Run the complete stack with Docker Compose: [Docker setup and VPS deployment](./
 
 | Area | Path | Status |
 | --- | --- | --- |
-| Static landing | `index.html`, `application.html` | Available |
+| Static landing | `uis/website/index.html`, `uis/website/application.html` | Available |
 | Incidents backoffice | `uis/backoffice` | Available |
-| Talent pipeline tracker | `uis/talent-pipeline-tracker` | Available |
+| Talent pipeline tracker | `uis/backoffice/talent-pipeline-tracker` | Available |
 | FastAPI service | `services/api` | Available |
 | Shared incidents logic | `packages/incidents_analysis` | Available |
 | Data, agents, workflows, infra | `data/`, `agents/`, `workflows/`, `infra/` | Project structure |
@@ -25,11 +25,11 @@ Run the complete stack with Docker Compose: [Docker setup and VPS deployment](./
 TrackFlow/
 ├── README.md
 ├── README.es.md
+├── AGENTS.md                  # Protocolo del asistente
+├── memory-bank/               # Contexto de negocio, técnico y progreso
+├── .agents/                   # Reglas y skills del asistente
 ├── CONTEXT.md                 # TrackFlow company brief
 ├── TrackFlow.md               # Company choice and selected automation challenge
-├── index.html                 # Static public landing page
-├── application.html           # Static application/demo page
-├── assets/                    # Landing assets
 ├── agents/                    # Agent prototypes, templates and tools
 ├── data/                      # Raw, processed, pipeline and evaluation data
 ├── docs/                      # Architecture and project documentation
@@ -41,15 +41,15 @@ TrackFlow/
 ├── services/                  # Backend services
 ├── shared/                    # Shared resources that are not packages
 ├── skills/                    # Reusable agent skills
-├── uis/                       # Frontend applications
+├── uis/                       # website, backoffice (tracker anidado)
 └── workflows/                 # Automation and orchestration flows
 ```
 
 ## Requirements
 
-- Node.js 18 or newer
+- Node.js 22 or newer
 - npm 9 or newer
-- Python 3.11 or newer
+- Python 3.12 or newer
 - uv for Python dependency and environment management
 
 ## Installation
@@ -74,11 +74,11 @@ cd uis/backoffice
 npm ci
 
 # Talent pipeline tracker
-cd ../talent-pipeline-tracker
+cd talent-pipeline-tracker
 npm ci
 
 # Return to the repository root
-cd ../..
+cd ../../..
 ```
 
 Before starting the API, create its local configuration if it does not exist:
@@ -111,7 +111,7 @@ From the repository root:
 ```bash
 npm install
 npm run build:landing
-npx --yes serve -l 3000 .
+npx --yes serve -l 3000 uis/website
 ```
 
 Open `http://localhost:3000`.
@@ -149,10 +149,10 @@ npm run dev
 
 ## Talent Pipeline Tracker
 
-The recruiting dashboard lives in [uis/talent-pipeline-tracker](./uis/talent-pipeline-tracker/README.md).
+The recruiting dashboard lives in [uis/backoffice/talent-pipeline-tracker](./uis/backoffice/talent-pipeline-tracker/README.md).
 
 ```bash
-cd uis/talent-pipeline-tracker
+cd uis/backoffice/talent-pipeline-tracker
 npm install
 npm run dev
 ```

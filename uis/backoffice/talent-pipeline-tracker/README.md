@@ -50,7 +50,7 @@ Permite al equipo de Recursos Humanos y Operations:
 ```bash
 # Clonar el repositorio
 git clone https://github.com/4GeeksAcademy/maxifer-TrackFlow.git
-cd maxifer-TrackFlow/uis/talent-pipeline-tracker
+cd maxifer-TrackFlow/uis/backoffice/talent-pipeline-tracker
 
 # Instalar dependencias
 npm install
@@ -75,7 +75,7 @@ Abrir [http://localhost:3000](http://localhost:3000) en el navegador.
 ## 🧱 Estructura del proyecto
 
 ```
-uis/talent-pipeline-tracker/
+uis/backoffice/talent-pipeline-tracker/
 ├── app/
 │   ├── layout.tsx          # Layout raíz con AppShell y fuente Inter
 │   ├── page.tsx            # Página principal (Pipeline de candidatos)

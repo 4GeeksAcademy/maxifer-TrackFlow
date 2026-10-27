@@ -7,7 +7,7 @@ Esta carpeta contiene las aplicaciones frontend construidas para TrackFlow.
 | App | Ruta | Propósito | Stack |
 | --- | --- | --- | --- |
 | Backoffice | `uis/backoffice` | Dashboard interno para cargar y analizar CSV de incidencias | Next.js, React, TypeScript, Tailwind CSS |
-| Talent Pipeline Tracker | `uis/talent-pipeline-tracker` | Dashboard de pipeline de candidaturas para procesos de selección de TrackFlow | Next.js, React, TypeScript, Tailwind CSS |
+| Talent Pipeline Tracker | `uis/backoffice/talent-pipeline-tracker` | Dashboard de pipeline de candidaturas para procesos de selección de TrackFlow | Next.js, React, TypeScript, Tailwind CSS |
 
 ## Convenciones
 
