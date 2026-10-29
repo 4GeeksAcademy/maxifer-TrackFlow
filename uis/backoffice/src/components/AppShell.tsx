@@ -14,6 +14,7 @@ const links = [
   { href: "/incidents", label: "Incidencias" },
   { href: "/suppliers", label: "Proveedores" },
   { href: "/inventory/products", label: "Inventario" },
+  { href: "/assistant", label: "Asistente comercial" },
 ];
 
 function Brand({ onNavigate }: { onNavigate?: () => void }) {

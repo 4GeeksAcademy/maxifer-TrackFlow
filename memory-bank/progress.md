@@ -1,5 +1,13 @@
 # Progreso
 
+## Hito RAG comercial — 29 de octubre de 2026
+
+Implementado el pipeline RAG con `setup`, `embed`, `retrieve`, `generate_answer` y `query`, endpoint FastAPI autenticado y UI de consulta para account managers. Qdrant se añade al Compose de desarrollo. En este Codespace, el bridge de Docker no resuelve DNS externo; el override `docker-compose.rag-host.yml` usa la red del host para la API, conserva Qdrant solo en loopback y se documenta como solución de desarrollo local.
+
+La configuración LiteLLM consume las variables del `.env` raíz. El adaptador API elimina el prefijo `litellm/` de los aliases autorizados y fija el provider OpenAI-compatible. Prueba real desde el contenedor: login HTTP 200, `POST /api/rag/query` HTTP 200, respuesta generada y dos fuentes. No se modificó `.env`.
+
+Validaciones: backend 93 passed, 9 subtests; backoffice 17 tests, lint y build aprobados; validador AI 35 checks y 7 tests aprobados; ambos Compose válidos; `git diff --check` limpio. Evaluación del corpus: Recall@3 = 70%, por debajo del umbral requerido de 80%; no marcar el KPI como aprobado. Siguiente paso: mejorar chunking/recuperación y repetir la evaluación con el modelo y umbral calibrados.
+
 ## Estado base
 Existen landing pública, backoffice de incidencias e inventario, autenticación,
 tracker de contratación, pruebas y despliegue Docker/CI. Sus capacidades se

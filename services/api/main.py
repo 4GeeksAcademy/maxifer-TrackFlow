@@ -26,6 +26,7 @@ from services.api.routers.incidents import router as incidents_router
 from services.api.security import get_current_user, validate_jwt_secret
 from services.api.database import create_inventory_tables
 from services.api.routers.inventory import router as inventory_router
+from services.api.routers.rag import router as rag_router
 from services.api.security import hash_password, verify_password
 from services.api.user_service import create_user_with_profile, delete_user, get_user_by_email, update_user
 from scripts.seed_incidents import CSV_PATH, seed as seed_incidents
@@ -43,6 +44,7 @@ app.include_router(suppliers_router)
 app.include_router(users_router)
 app.include_router(incidents_router)
 app.include_router(inventory_router)
+app.include_router(rag_router)
 
 
 @app.on_event("startup")

@@ -47,18 +47,35 @@ services:
       JWT_SECRET: ${JWT_SECRET:?Generate JWT_SECRET in .env}
       DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in .env}
       PYTHON_DOTENV_DISABLED: "1"
+      QDRANT_URL: http://qdrant:6333
     ports:
       - "${API_PORT:?Set API_PORT in .env}:8000"
     volumes:
       - ./services:/app/services
+      - ./data:/app/data
+      - ./docs/company-knowledge-base:/app/docs/company-knowledge-base:ro
       - ./packages:/app/packages
       - ./scripts:/app/scripts
       - api_data:/app/services/api/data
+    depends_on:
+      qdrant:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/', timeout=5)"]
       interval: 10s
       timeout: 6s
       start_period: 30s
+      retries: 5
+    networks: [trackflow]
+
+  qdrant:
+    image: qdrant/qdrant:v1.15.3
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD", "bash", "-lc", "echo > /dev/tcp/127.0.0.1/6333"]
+      interval: 10s
+      timeout: 5s
       retries: 5
     networks: [trackflow]
 
@@ -68,6 +85,7 @@ networks:
 
 volumes:
   api_data:
+  qdrant_data:
   backoffice_modules:
   backoffice_next:
   talent_modules:
