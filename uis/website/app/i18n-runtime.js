@@ -278,6 +278,7 @@
         currentToolsPlaceholder:
           "Ej: ERP legacy + hojas de cálculo + portal transportista",
         countryOptions: ["Selecciona un país", "Estados Unidos", "España", "Otro"],
+        goToStep: "Ir al paso",
         next: "Siguiente",
         previous: "Anterior",
         submit: "Enviar consulta",
@@ -485,6 +486,7 @@
         currentToolsPlaceholder:
           "Ex: legacy ERP + spreadsheets + carrier portals",
         countryOptions: ["Select a country", "United States", "Spain", "Other"],
+        goToStep: "Go to step",
         next: "Next",
         previous: "Previous",
         submit: "Send inquiry",
@@ -560,11 +562,11 @@
       nav.setAttribute("aria-label", common.navAria);
     }
 
-    qa('a[href="#inicio"], a[href="index.html#inicio"]').forEach((link) => {
+    qa('a[href="#inicio"], a[href="/#inicio"]').forEach((link) => {
       link.setAttribute("aria-label", common.homeAria);
     });
 
-    qa('img[src="assets/trackflow-logo.svg"]').forEach((img) => {
+    qa('img[src="/assets/trackflow-logo.svg"]').forEach((img) => {
       img.setAttribute("alt", common.logoAlt);
     });
 
@@ -581,10 +583,10 @@
 
     setText("[data-contact-link]", common.contact);
     setText("[data-back-link]", common.backToLanding);
-    setText('[data-nav-link][href="#inicio"], [data-nav-link][href="index.html#inicio"]', common.navHome);
-    setText('[data-nav-link][href="#plataforma"], [data-nav-link][href="index.html#plataforma"]', common.navServices);
-    setText('[data-nav-link][href="#mercados"], [data-nav-link][href="index.html#mercados"]', common.navMarkets);
-    setText('[data-nav-link][href="#faqs"], [data-nav-link][href="index.html#faqs"]', common.navFaqs);
+    setText('[data-nav-link][href="#inicio"], [data-nav-link][href="/#inicio"]', common.navHome);
+    setText('[data-nav-link][href="#plataforma"], [data-nav-link][href="/#plataforma"]', common.navServices);
+    setText('[data-nav-link][href="#mercados"], [data-nav-link][href="/#mercados"]', common.navMarkets);
+    setText('[data-nav-link][href="#faqs"], [data-nav-link][href="/#faqs"]', common.navFaqs);
 
     qa("[data-language-switch]").forEach((node) => {
       node.setAttribute("aria-label", common.switchAria);
@@ -616,7 +618,7 @@
     setText('[data-nav-link][href="#mercados"]', content.navMarkets);
     setText('[data-nav-link][href="#faqs"]', content.navFaqs);
 
-    const heroImage = q('img[src="assets/trackflow-hero.png"]');
+    const heroImage = q('img[src="/assets/trackflow-hero.png"]');
     if (heroImage) {
       heroImage.setAttribute("alt", content.heroAlt);
     }
@@ -638,7 +640,7 @@
     setText("[data-offer-title]", content.offerTitle);
     setText("[data-offer-body]", content.offerBody);
 
-    qa("#plataforma .mt-14 article").forEach((card, index) => {
+    qa("#plataforma .mt-10 article").forEach((card, index) => {
       const title = card.querySelector("h3");
       const body = card.querySelector("p");
       const value = content.serviceCards[index];
@@ -710,6 +712,12 @@
     setText('[data-step-label="2"]', content.indicatorLabels[1]);
     setText('[data-step-label="3"]', content.indicatorLabels[2]);
     setText('[data-step-label="4"]', content.indicatorLabels[3]);
+    qa("[data-step-indicator]").forEach((indicator, index) => {
+      const label = content.indicatorLabels[index];
+      if (label) {
+        indicator.setAttribute("aria-label", `${content.goToStep} ${index + 1}: ${label}`);
+      }
+    });
     setText("[data-summary-title]", content.summaryTitle);
 
     const labels = content.labels;
@@ -783,11 +791,13 @@
 
     applyCommon(selectedLang);
 
-    if (document.body.dataset.page === "index") {
+    const page = document.body.dataset.page || document.querySelector("[data-page]")?.dataset.page;
+
+    if (page === "index") {
       applyIndex(selectedLang);
     }
 
-    if (document.body.dataset.page === "application") {
+    if (page === "application") {
       applyApplication(selectedLang);
     }
 
@@ -814,7 +824,16 @@
     }
   };
 
-  document.addEventListener("DOMContentLoaded", () => {
+  const initialize = () => {
     window.TrackFlowI18n.init();
-  });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initialize, { once: true });
+  } else {
+    initialize();
+  }
 })();
+
+// Imported after the page markup mounts so browser APIs are available.
+export {};

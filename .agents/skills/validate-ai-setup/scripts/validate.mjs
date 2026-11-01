@@ -64,10 +64,33 @@ export function validate(root, { checkBranch = false } = {}) {
   for (const dir of ['uis/website', 'uis/backoffice', 'services']) {
     check(`ruta ${dir}`, () => assert(fs.statSync(path.join(root, dir)).isDirectory(), 'no es directorio'));
   }
-  for (const file of ['uis/website/index.html', 'uis/website/application.html', 'uis/website/i18n.js', 'uis/website/validation.js', 'uis/website/assets/trackflow-logo.svg', 'uis/backoffice/package.json', 'uis/backoffice/talent-pipeline-tracker/package.json']) {
+  for (const file of [
+    'uis/website/app/page.tsx',
+    'uis/website/app/application/page.tsx',
+    'uis/website/app/index-content.tsx',
+    'uis/website/app/application-content.tsx',
+    'uis/website/app/i18n-runtime.js',
+    'uis/website/app/application-form.js',
+    'uis/website/assets/trackflow-logo.svg',
+    'uis/backoffice/package.json',
+    'uis/backoffice/talent-pipeline-tracker/package.json',
+  ]) {
     check(`entrada ${file}`, () => assert(fs.statSync(path.join(root, file)).isFile(), 'entrada ausente'));
   }
-  for (const old of ['index.html', 'application.html', 'i18n.js', 'validation.js', 'assets', 'tailwind.config.js', 'tailwind.input.css', 'uis/talent-pipeline-tracker']) {
+  for (const old of [
+    'index.html',
+    'application.html',
+    'i18n.js',
+    'validation.js',
+    'uis/website/index.html',
+    'uis/website/application.html',
+    'uis/website/i18n.js',
+    'uis/website/validation.js',
+    'assets',
+    'tailwind.config.js',
+    'tailwind.input.css',
+    'uis/talent-pipeline-tracker',
+  ]) {
     check(`sin ruta antigua ${old}`, () => assert(!fs.existsSync(path.join(root, old)), 'ruta antigua presente'));
   }
   if (checkBranch) check('rama de entrega', () => {

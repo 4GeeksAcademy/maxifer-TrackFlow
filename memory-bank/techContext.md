@@ -1,13 +1,13 @@
 # Contexto técnico
 
 ## Arquitectura comprobada
-- Público: HTML, JavaScript y assets estáticos en `uis/website`, Tailwind CSS 3 y optimización con sharp. Nginx sirve las mismas URLs públicas.
+- Público: Next.js 16.4.3, React 19.2.8, TypeScript 5 y Tailwind CSS 3 en `uis/website`, con exportación estática y `trailingSlash: true`. Las rutas `/` y `/application/` se renderizan desde componentes React en `app/`; los módulos cliente de idioma, navegación y formulario se empaquetan con Next y se inicializan tras montar el contenido. Los antiguos HTML y scripts públicos no son fuentes ni dependencias del build. Nginx sirve `uis/website/out`; Docker y Netlify redirigen con 301 `/index.html` y `/application.html` a las rutas sin extensión.
 - Backoffice: Next.js 16.3.1, React 19.2.8, TypeScript 5 y Tailwind CSS 4 en `uis/backoffice`.
 - Tracker de contratación: Next.js 16.2.10 y React 19.2.4 en `uis/backoffice/talent-pipeline-tracker`; aplicación independiente con lockfile propio. Excluir su árbol del TypeScript, ESLint y Jest del padre.
 - Backend: FastAPI, Python >=3.12, uv y uv.lock; rutas en `services/api`. Autenticación y usuarios en TinyDB, contraseñas hasheadas y JWT; incidencias en SQLite; inventario con SQLModel y PostgreSQL/Supabase (SQLite aislado en pruebas).
 - Lógica compartida de incidencias en `packages/incidents_analysis`; no duplicarla en interfaces.
 - Docker usa Node 22. Puertos públicos de desarrollo: landing 3000, backoffice 3001, tracker 3002, API configurable (habitualmente 8000). Mantener contratos HTTP y rewrites `/backend`.
-- Netlify tiene una integración de previews de PR: `netlify.toml` construye desde raíz y publica solo `uis/website`. No ejecutar despliegues manuales al entregar este hito.
+- Netlify tiene una integración de previews de PR: `netlify.toml` instala las dependencias de `uis/website`, ejecuta el build de la raíz y publica solo `uis/website/out`. No ejecutar despliegues manuales al entregar este hito.
 
 Los manifiestos y lockfiles prevalecen sobre mínimos desactualizados del README.
 El briefing describe necesidades del negocio, no impone un stack nuevo. No cambiar
@@ -27,10 +27,10 @@ stock negativo y mantiene usuarios en TinyDB; no crear usuarios SQL. Esta entreg
 no modifica estas reglas de negocio ni endpoints existentes.
 
 ## Comprobaciones reproducibles (desde raíz)
-Instalación: `npm ci`, `npm ci --prefix uis/backoffice`,
+Instalación: `npm ci --prefix uis/website`, `npm ci`, `npm ci --prefix uis/backoffice`,
 `npm ci --prefix uis/backoffice/talent-pipeline-tracker`, `uv sync --frozen`.
 - Infraestructura IA: `npm run validate:ai-setup -- --check-branch` y `npm run test:ai-setup`. En CI/main omitir `--check-branch`.
-- Landing: `npm run build:landing`; servir con `npx serve -l 3000 uis/website`.
+- Website: `npm run build:landing`; servir con `npx serve -l 3000 uis/website/out`.
 - Backend: `uv run --frozen pytest -q` con almacenamiento aislado y sin servicios externos reales.
 - Backoffice: `npm --prefix uis/backoffice test -- --runInBand`, `npm --prefix uis/backoffice run lint`, `npm --prefix uis/backoffice run build`.
 - Tracker: `npm --prefix uis/backoffice/talent-pipeline-tracker run lint` y `npm --prefix uis/backoffice/talent-pipeline-tracker run build`.
