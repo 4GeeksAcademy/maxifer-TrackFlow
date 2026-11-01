@@ -1,0 +1,27 @@
+{
+  "name": "trackflow-website",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "predev": "node scripts/prepare-public-assets.mjs",
+    "dev": "next dev -p 3000",
+    "prebuild": "node scripts/prepare-public-assets.mjs",
+    "build": "next build",
+    "postbuild": "node scripts/finalize-export.mjs"
+  },
+  "dependencies": {
+    "next": "16.4.3",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "trackflow-landing": "file:../.."
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.3"
+  }
+}

@@ -1,3 +1,15 @@
 [build]
-  command = "npm run build:landing"
-  publish = "uis/website"
+  command = "npm ci --prefix uis/website && npm run build:landing"
+  publish = "uis/website/out"
+
+[[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/application.html"
+  to = "/application/"
+  status = 301
+  force = true

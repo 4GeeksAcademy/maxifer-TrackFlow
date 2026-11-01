@@ -53,7 +53,13 @@ def capture(*, check_assets=True):
     orders = get("/inventory/orders")
     urls = ["http://landing/", "http://uis:3001/login", "http://uis:3002/"]
     if check_assets:
-        urls += ["http://landing/i18n.js", "http://landing/validation.js"]
+        urls += [
+            "http://landing/index.html",
+            "http://landing/application.html",
+            "http://landing/application/",
+            "http://landing/assets/trackflow-logo.svg",
+            "http://landing/assets/trackflow-hero.webp",
+        ]
     for url in urls:
         with urllib.request.urlopen(url, timeout=20) as response:
             assert response.status == 200

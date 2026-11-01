@@ -3,7 +3,12 @@ import vm from "node:vm";
 import { fileURLToPath } from "node:url";
 const website = fileURLToPath(new URL("../uis/website/", import.meta.url));
 
-const files = ["index.html", "application.html", "i18n.js", "validation.js"];
+const files = [
+  "app/index-content.tsx",
+  "app/application-content.tsx",
+  "app/i18n-runtime.js",
+  "app/application-form.js"
+];
 const failures = [];
 
 for (const file of files) {
@@ -13,7 +18,7 @@ for (const file of files) {
   }
 }
 
-const i18nSource = fs.readFileSync(website + "i18n.js", "utf8");
+const i18nSource = fs.readFileSync(website + "app/i18n-runtime.js", "utf8");
 const esBlockStart = i18nSource.indexOf("    es: {");
 const esBlockEnd = i18nSource.indexOf("    en: {");
 const esBlock = esBlockStart >= 0 && esBlockEnd > esBlockStart
@@ -21,7 +26,7 @@ const esBlock = esBlockStart >= 0 && esBlockEnd > esBlockStart
   : "";
 
 if (!esBlock) {
-  failures.push("i18n.js: no se pudo aislar el bloque de traducciones en español.");
+  failures.push("app/i18n-runtime.js: no se pudo aislar el bloque de traducciones en español.");
 }
 
 const accentlessSpanishPatterns = [
@@ -60,7 +65,7 @@ const accentlessSpanishPatterns = [
 
 for (const pattern of accentlessSpanishPatterns) {
   if (pattern.test(esBlock)) {
-    failures.push(`i18n.js: el bloque ES contiene texto sin tilde: ${pattern}`);
+    failures.push(`app/i18n-runtime.js: el bloque ES contiene texto sin tilde: ${pattern}`);
   }
 }
 
@@ -90,7 +95,9 @@ const context = {
 };
 
 vm.createContext(context);
-vm.runInContext(i18nSource, context, { filename: "i18n.js" });
+vm.runInContext(i18nSource.replace(/\nexport \{\};\s*$/, ""), context, {
+  filename: "i18n.js"
+});
 
 const t = context.window.TrackFlowI18n?.t;
 if (typeof t !== "function") {
@@ -117,7 +124,7 @@ if (typeof t !== "function") {
   for (const [path, value] of expected) {
     const actual = t(path);
     if (actual !== value) {
-      failures.push(`i18n.js: ${path} esperaba "${value}" y recibió "${actual}".`);
+      failures.push(`app/i18n-runtime.js: ${path} esperaba "${value}" y recibió "${actual}".`);
     }
   }
 }

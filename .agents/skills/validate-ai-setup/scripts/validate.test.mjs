@@ -18,7 +18,17 @@ function fixture(t) {
     fs.copyFileSync(path.join(sourceRoot, file), path.join(root, file));
   }
   // README has additional links: only mandatory documents are link-validated.
-  for (const file of ['uis/website/index.html', 'uis/website/application.html', 'uis/website/i18n.js', 'uis/website/validation.js', 'uis/website/assets/trackflow-logo.svg', 'uis/backoffice/package.json', 'uis/backoffice/talent-pipeline-tracker/package.json']) {
+  for (const file of [
+    'uis/website/app/page.tsx',
+    'uis/website/app/application/page.tsx',
+    'uis/website/app/index-content.tsx',
+    'uis/website/app/application-content.tsx',
+    'uis/website/app/i18n-runtime.js',
+    'uis/website/app/application-form.js',
+    'uis/website/assets/trackflow-logo.svg',
+    'uis/backoffice/package.json',
+    'uis/backoffice/talent-pipeline-tracker/package.json',
+  ]) {
     fs.mkdirSync(path.dirname(path.join(root, file)), { recursive: true });
     fs.writeFileSync(path.join(root, file), 'fixture');
   }
@@ -49,12 +59,14 @@ test('detecta enlaces rotos y fuera de raíz', t => {
     assert(failures(root).some(result => result.name === 'enlaces AGENTS.md'));
   }
 });
-test('detecta ruta antigua y entrada canónica ausente', t => {
+test('detecta fuentes HTML antiguas y entradas Next ausentes', t => {
   const root = fixture(t);
   fs.writeFileSync(path.join(root, 'index.html'), 'legacy');
-  fs.unlinkSync(path.join(root, 'uis/website/index.html'));
+  fs.writeFileSync(path.join(root, 'uis/website/index.html'), 'legacy');
+  fs.unlinkSync(path.join(root, 'uis/website/app/page.tsx'));
   assert(failures(root).some(result => result.name === 'sin ruta antigua index.html'));
-  assert(failures(root).some(result => result.name === 'entrada uis/website/index.html'));
+  assert(failures(root).some(result => result.name === 'sin ruta antigua uis/website/index.html'));
+  assert(failures(root).some(result => result.name === 'entrada uis/website/app/page.tsx'));
 });
 test('rechaza frontmatter inválido, campos duplicados y alcance inactivo', t => {
   const root = fixture(t);

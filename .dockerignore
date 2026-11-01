@@ -2,6 +2,8 @@
 **/node_modules
 **/.next
 **/.venv
+uis/website/out
+uis/website/public
 **/__pycache__
 **/*.py[cod]
 **/.env*

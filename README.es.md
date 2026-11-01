@@ -1,7 +1,5 @@
 # TrackFlow
 
-Para levantar el stack con Docker Compose: [Dockerización y despliegue al VPS](./docs/docker.md).
-
 TrackFlow es un proyecto de AI Engineering para una empresa de logística de última milla y gestión de almacenes con operaciones en Los Ángeles y Zaragoza.
 
 El repositorio reúne entregables del track de AI Engineering de 4Geeks Academy: landing pública, dashboards internos, backend FastAPI, lógica compartida de análisis, áreas de datos y estructura para futuros agentes, workflows, servidores MCP e infraestructura.
@@ -12,7 +10,7 @@ English documentation is available in [README.md](./README.md).
 
 | Área | Ruta | Estado |
 | --- | --- | --- |
-| Landing estática | `uis/website/index.html`, `uis/website/application.html` | Disponible |
+| Sitio público | `uis/website` | Exportación estática de Next.js |
 | Backoffice de incidencias | `uis/backoffice` | Disponible |
 | Talent Pipeline Tracker | `uis/backoffice/talent-pipeline-tracker` | Disponible |
 | Servicio FastAPI | `services/api` | Disponible |
@@ -47,10 +45,75 @@ TrackFlow/
 
 ## Requisitos
 
+- Docker Engine con Docker Compose, o Docker Desktop usando contenedores Linux
 - Node.js 22 o superior
 - npm 9 o superior
 - Python 3.12 o superior
 - uv para gestionar las dependencias y el entorno de Python
+
+Los requisitos de Node.js, npm, Python y uv aplican al desarrollo local. Docker
+Compose construye y ejecuta los servicios en contenedores.
+
+## Levantar todo el proyecto con Docker
+
+Desde la raíz del repositorio, copia `.env.example` a `.env`:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+En macOS o Linux, usa `cp .env.example .env`. Mantén `.env` privado y no lo
+subas al repositorio. Define un `JWT_SECRET` privado; puedes generar uno con
+Docker:
+
+```sh
+docker run --rm python:3.12-slim python -c "import secrets; print(secrets.token_urlsafe(48))"
+```
+
+Pega el valor generado en `JWT_SECRET`. Comprueba también que `.env` defina
+`DATABASE_URL` y estos puertos de Compose: `LANDING_PORT=3000`,
+`BACKOFFICE_PORT=3001`, `TALENT_PORT=3002` y `API_PORT=8000`. La configuración
+de ejemplo usa SQLite dentro de un volumen Docker, así que no necesitas
+PostgreSQL para una ejecución local. Si vas a usar otra base de datos, define
+su URL de conexión en `.env` antes de iniciar.
+
+Valida la configuración y construye e inicia los servicios:
+
+```sh
+docker compose config --quiet
+docker compose up --build -d
+docker compose ps
+```
+
+Para seguir los logs de los servicios, ejecuta `docker compose logs -f`. Pulsa
+Ctrl+C para dejar de seguirlos sin detener los servicios.
+
+Abre los servicios en estas direcciones:
+
+| Servicio | URL |
+| --- | --- |
+| Website público | http://localhost:3000 |
+| Backoffice de incidencias | http://localhost:3001 |
+| Talent Pipeline Tracker | http://localhost:3002 |
+| API / OpenAPI | http://localhost:8000/docs |
+
+Si esos puertos están ocupados, cámbialos en `.env`. Si cambias el puerto del
+backoffice, actualiza también `FRONTEND_URL`. La API habilita datos demo por
+defecto: `test@test.com` / `test1234`. Son credenciales solo para desarrollo
+local; configura `DEMO_DATA_ENABLED=false` antes de cualquier despliegue de
+producción. Los datos de la API persisten en el volumen Docker `api_data`.
+`docker compose down` detiene el stack y conserva los volúmenes; **no uses
+`docker compose down -v`** salvo que quieras eliminar deliberadamente sus datos.
+
+El tracker necesita una API independiente con endpoints `/records` y notas;
+FastAPI, tal como está incluido, no ofrece esos endpoints. Sin
+`NEXT_PUBLIC_API_URL`, el tracker muestra que su servicio no está configurado.
+El envío de correos de recuperación de contraseña también necesita
+`RESEND_API_KEY` y un `EMAIL_FROM` válido; el resto del backoffice funciona sin
+correo.
+
+Para configuración de servicios, datos, solución de problemas y despliegue en
+VPS, consulta [Dockerización y despliegue](./docs/docker.md).
 
 ## Instalación
 
@@ -66,8 +129,8 @@ Después, instalar todas las dependencias del proyecto:
 # API Python y herramientas locales. Crea o actualiza .venv.
 uv sync
 
-# Landing estática
-npm ci
+# Website público (exportación estática de Next.js)
+npm ci --prefix uis/website
 
 # Backoffice de incidencias
 cd uis/backoffice
@@ -109,9 +172,9 @@ Estas credenciales son públicas y exclusivas para desarrollo local. **Antes de 
 Desde la raíz del repositorio:
 
 ```bash
-npm install
+npm ci --prefix uis/website
 npm run build:landing
-npx --yes serve -l 3000 uis/website
+npx --yes serve -l 3000 uis/website/out
 ```
 
 Abrir `http://localhost:3000`.
@@ -120,10 +183,9 @@ Scripts útiles en raíz:
 
 | Comando | Para qué sirve |
 | --- | --- |
-| `npm run build:css` | Genera el CSS de Tailwind usado por la landing estática |
-| `npm run optimize:images` | Optimiza imágenes de la landing |
+| `npm run optimize:images` | Optimiza imágenes del website |
 | `npm run test:spanish-copy` | Valida convenciones de copy en español |
-| `npm run build:landing` | Ejecuta la validación/build de la landing |
+| `npm run build:landing` | Valida el copy y genera la exportación estática de Next.js |
 
 ## Backoffice de incidencias
 

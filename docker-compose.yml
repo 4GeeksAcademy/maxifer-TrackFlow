@@ -7,12 +7,6 @@ services:
       dockerfile: infra/landing/Dockerfile
     ports:
       - "${LANDING_PORT:?Set LANDING_PORT in .env}:80"
-    volumes:
-      - ./uis/website/index.html:/usr/share/nginx/html/index.html:ro
-      - ./uis/website/application.html:/usr/share/nginx/html/application.html:ro
-      - ./uis/website/i18n.js:/usr/share/nginx/html/i18n.js:ro
-      - ./uis/website/validation.js:/usr/share/nginx/html/validation.js:ro
-      - ./uis/website/assets:/usr/share/nginx/html/assets:ro
     networks: [trackflow]
 
   uis:
