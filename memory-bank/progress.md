@@ -2,6 +2,7 @@
 
 ## Preparación de publicación autorizada — 7 de noviembre de 2026
 
+- Preparado commit independiente del nombre accesible de marca en ambas páginas e i18n. Build de landing aprobado en esta sesión, sin cambios posteriores de producto. Pruebas en navegador confirmadas por el usuario.
 - Geometría registrada en c81ba64. Preparado commit de contraste: separar texto de acento y fondo de acción, conservando temas y navegación. Mismos controles del backoffice aprobados; sin cambios adicionales de producto.
 - El usuario confirma que realizó las pruebas en navegador y autoriza commits y publicación en la rama de auditoría. Se registra como comprobación humana, sin atribuir al agente una ejecución ni afirmar cobertura específica no detallada.
 - Entrega de las mediciones existentes aceptada por el usuario; se conserva la diferencia conocida de extensiones y la ausencia de mediciones intermedias. No se certifica equivalencia experimental.

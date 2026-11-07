@@ -561,6 +561,7 @@
     }
 
     qa('a[href="#inicio"], a[href="index.html#inicio"]').forEach((link) => {
+      if (link.querySelector('img[src="assets/trackflow-logo.svg"]')) return;
       link.setAttribute("aria-label", common.homeAria);
     });
 
