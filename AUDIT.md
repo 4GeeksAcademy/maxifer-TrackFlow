@@ -1,18 +1,85 @@
 # AUDIT — Auditoría inicial
 
+## Actualización de verificación — 7 de noviembre de 2026
+
+El usuario confirma posteriormente las pruebas en navegador y autoriza commits y publicación de la auditoría con los resultados existentes. Se registra confirmación humana general sin desglose de casos; no cambia la diferencia conocida de extensiones ni acredita mediciones intermedias. Correcciones en commits c81ba64 (geometría), f57285a (contraste) y 28cf504 (nombre accesible). El diagnóstico inicial y sus hipótesis pendientes se conservan como registro histórico.
+
+El usuario confirma condiciones iguales salvo extensiones: las mediciones después se hicieron sin ellas; las iniciales contienen tareas de extensiones. No se acredita una comparación controlada del efecto del código. Las seis capturas after están presentes; sus nombres del dashboard se unifican con el patrón before. El estado detallado de los requisitos de la sección 09 y el procedimiento pendiente se registran en REPORT.md. Esta actualización prevalece sobre las notas históricas que todavía indican ausencia de confirmación de condiciones o capturas.
+
+## Registro after comunicado
+
+El usuario aporta dashboard del backoffice Desktop: Performance 98, Accessibility 100, Best Practices 100, SEO 100; FCP 0.2 s, LCP 0.7 s, TBT 0 ms, CLS 0.083 y Speed Index 0.3 s. Comparativa en [REPORT.md](REPORT.md): Performance +11 puntos, Accessibility y Best Practices +4 cada una; CLS de 0.252 a 0.083. Con este registro están comunicadas las seis combinaciones after. Evidencias y equivalencia del entorno pendientes de verificar; sin atribución causal ni cierre de hallazgos solo por puntuaciones.
+
+El usuario aporta dashboard del backoffice Mobile: Performance 89, Accessibility 100, Best Practices 96, SEO 92; FCP 0.8 s, LCP 3.1 s, TBT 250 ms, CLS 0.069 y Speed Index 1.0 s. Comparativa en [REPORT.md](REPORT.md): Performance +2 puntos, Accessibility +4, SEO −8; LCP aumenta y CLS se mantiene. Revisar el reporte after para investigar SEO y verificar contenido, entorno y errores; sin atribución causal ni cierre de hallazgos a partir de puntuaciones.
+
+El usuario aporta `/application` Desktop: Performance 100, Accessibility 96, Best Practices 100, SEO 92; FCP 0.2 s, LCP 0.3 s, TBT 0 ms, CLS 0 y Speed Index 0.3 s. Comparativa en [REPORT.md](REPORT.md). Las cuatro puntuaciones coinciden con la línea base; Accessibility permanece en 96. No se identifica el fallo actual sin revisar el reporte after. Entorno, repeticiones y evidencias pendientes de verificar.
+
+El usuario aporta `/application` Mobile: Performance 100, Accessibility 100, Best Practices 100, SEO 92; FCP 1.0 s, LCP 1.0 s, TBT 0 ms, CLS 0 y Speed Index 1.0 s. Comparativa con la línea base en [REPORT.md](REPORT.md). Entorno, repeticiones y evidencias pendientes de verificar.
+
+El usuario aporta además website Mobile: Performance 100, Accessibility 100, Best Practices 100, SEO 92; FCP 0.8 s, LCP 1.7 s, TBT 20 ms, CLS 0 y Speed Index 0.8 s. Registrado junto con Desktop en [REPORT.md](REPORT.md), interpretando Home como ruta provisional. Entorno y evidencias de esta ejecución pendientes de verificar.
+
+El usuario confirma que la medicion after corresponde a website Desktop: Performance 100, Accessibility 100, Best Practices 100, SEO 92; FCP 0.3 s, LCP 0.4 s, TBT 0 ms, CLS 0 y Speed Index 0.3 s. Comparativa parcial en [REPORT.md](REPORT.md), con Home como ruta provisional. No corresponde a Mobile.
+
+## Cierre del diagnóstico — sección 04
+
+Alcance acordado el 7 de noviembre de 2026: investigar website y backoffice con las seis evidencias existentes, instalar y utilizar skills, sin implementar correcciones. Los datos son sintéticos según confirmación del usuario. Cierre documental del análisis disponible; las causas que necesitan trazas o logs siguen abiertas.
+
+### Skills utilizadas y evidencia de uso
+
+Instaladas localmente desde [addyosmani/web-quality-skills](https://github.com/addyosmani/web-quality-skills), rama `main`, mediante el helper de `skill-installer` con destino `.agents/skills`:
+
+```powershell
+python C:/Users/Equipo/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py --repo addyosmani/web-quality-skills --path skills/core-web-vitals skills/performance --dest .agents/skills
+```
+
+- [core-web-vitals](.agents/skills/core-web-vitals/SKILL.md), metadata versión 2.0: aplicada a LCP, CLS y ausencia de INP medido. Leídas sus referencias LCP, CLS e INP. Resultado: priorizar estabilidad del dashboard; distinguir elemento desplazado de causa y retraso de texto de descarga de imágenes.
+- [performance](.agents/skills/performance/SKILL.md), metadata versión 2.0, y [MEASUREMENT](.agents/skills/performance/references/MEASUREMENT.md): aplicadas a tareas largas, reflow y peticiones. Resultado: separar interferencia externa, trabajo propio e hipótesis de carga; no aplicar presupuestos genéricos como requisitos del negocio.
+- Instalación confirmada por el helper y lectura directa de los archivos en esta sesión. La descarga se hizo desde una rama mutable; no se registró un SHA upstream y la versión declarada no equivale a una revisión inmutable. Los archivos locales conservan las instrucciones utilizadas.
+
+No se ejecutaron nuevas navegaciones, trazas, Lighthouse ni consultas CrUX/RUM. No hay datos de campo disponibles en esta revisión ni p75 que permita afirmar el estado de Core Web Vitals de usuarios reales. Se conserva la limitación de extensiones, IndexedDB y una ejecución por caso por decisión del usuario. TBT no sustituye INP.
+
+### Priorización y decisiones
+
+La evidencia cuantitativa detallada y los enlaces a reportes están en los nueve problemas de este documento. Esta tabla define corrección mínima candidata, evidencia faltante y riesgo; todas las correcciones quedan propuestas.
+
+| Orden | Hallazgo y archivos exactos | Estado y causa | Siguiente corrección o investigación mínima | Evidencia pendiente y riesgo de regresión |
+|---|---|---|---|---|
+| 1 | Errores 500: `uis/backoffice/src/components/AppShell.tsx`, `uis/backoffice/next.config.ts`, `services/api/routers/suppliers.py` | Fallos medidos; causa de servidor desconocida. Impiden comparar estados equivalentes. | Correlacionar solicitudes de perfil/proveedores con logs API y proxy en entorno aislado; corregir únicamente la causa reproducida. | Falta traceback y reproducción. No ocultar el fallo ni cambiar autenticación o contratos por conjetura. |
+| 2 | CLS: `uis/backoffice/src/app/page.tsx`, `uis/backoffice/src/components/LoadingSkeleton.tsx`, `uis/backoffice/src/app/globals.css` | Desktop 0.251940; Mobile 0.068999. Geometría de placeholder y contenido distinta. El nodo proveedores desplazado no prueba que origine todo el movimiento. | Igualar estructura responsive del placeholder a cuatro métricas de incidencias y tres de proveedores; reservar espacio en error. | Aislar desplazamientos y estados carga/éxito/error/vacío. Riesgo de huecos, overflow y contenido recortado; evitar altura rígida sin verificar. |
+| 3 | Contraste: `uis/backoffice/src/app/globals.css`, `uis/backoffice/src/components/IncidentStatusBadge.tsx` | Fallo medido; accent compartido para texto y fondo produce combinaciones insuficientes. | Separar color de texto de color de acción y revisar ambos selectores de tema oscuro. | Validar claro/oscuro, hover, foco, badges y sidebar. Aclarar un único accent puede empeorar botones blancos. |
+| 4 | LCP/hidratación: `uis/backoffice/src/components/AuthGuard.tsx`, `uis/backoffice/src/lib/auth.ts`, `uis/backoffice/src/app/page.tsx` | LCP Mobile 2.797 s de un párrafo. Snapshot servidor de token nulo y transición a contenido comprobados en fuente; contribución temporal no demostrada. No hay evidencia de error de hidratación. | Perfilar recuperación de sesión, hidratación y aparición de cabecera antes de elegir un cambio. | Traza limpia con sesión válida, ausente y expirada. Riesgo de redirecciones o exposición de contenido privado si se altera guard sin prueba. |
+| 5 | Reflow home: `uis/website/index.html`, `getHeaderOffset` y `updateActiveNavLink` | Lectura geométrica identificada por Lighthouse: 40.804 ms Mobile / 47.242 ms Desktop; escritura desencadenante sin aislar. | Evaluar lecturas agrupadas, una actualización por frame y altura cacheada con invalidación por resize/cambio de idioma. | Perfil de scroll, anclas, FAQ y menú. Riesgo de offset incorrecto, enlace activo atrasado o caché obsoleta. Ya existe requestAnimationFrame en clic de ancla; añadirlo allí sin más no resuelve la causa. |
+| 6 | Nombre accesible: `uis/website/index.html`, `uis/website/application.html` | Fallo medido; aria-label omite parte del texto visible. | Derivar nombre del contenido o incluir texto completo y traducción. | Verificar árbol accesible, navegación de marca y español/inglés; riesgo de etiquetas duplicadas o traducción inconsistente. |
+| 7 | Canonical: `uis/website/index.html`, `uis/website/application.html` | Fallo medido por URL relativa. | Usar URL absoluta cuando se confirme dominio público y URL preferida del formulario. | Dominio pendiente; riesgo de consolidar SEO hacia un host equivocado. No implementar con localhost. |
+| 8 | TBT/cargas: scripts inline del website y componentes cliente del backoffice | Tareas de extensiones y propias medidas. No hay función propia identificada que justifique dividir bundles o memoizar componentes ahora. | Perfilar tareas propias e iniciadores de peticiones; mantener extensiones fuera de una futura comparación de código. | INP e interacción sin medir. Riesgo de romper orden de inicialización, idioma o formularios al diferir scripts sin causalidad. |
+| 9 | Hero/CSS/caché: `uis/website/index.html`, `scripts/optimize-hero.mjs` | Hero AVIF ya priorizado y con dimensiones; CLS del website 0. Ahorro estimado de imagen 35932 bytes; TTL local no describe producción. | Evaluar variantes/compresión con revisión visual si se prioriza transferencia; comprobar hosting antes de cambiar caché. | Riesgo de degradar recorte/calidad, generar doble descarga o flashes al diferir CSS. No se justifican infraestructura nueva ni lazy loading del hero. |
+
+### Cargas y coordinación: ampliación verificada en fuente
+
+- `AppShell.tsx` renderiza dos instancias de `SidebarContent`, una móvil y otra de escritorio, y cada una ejecuta su efecto de `/backend/auth/me`. Ocultar por CSS no evita ejecutar el efecto. Los JSON de ambos modos contienen cuatro solicitudes al perfil; la doble instancia explica una oportunidad concreta de compartir la lectura, pero no prueba por sí sola el origen de las cuatro ni del 500. Propuesta posterior: cargar el perfil una vez en un propietario común manteniendo actualización por `trackflow-profile-state`, cambio de token y logout. Verificar Network e iniciadores antes/después; riesgo de datos obsoletos entre sesiones.
+- `Home` usa `await Promise.allSettled` para resumen, lista y proveedores; solo después actualiza los tres paneles. Las solicitudes empiezan en paralelo, pero la publicación de resultados queda ligada a la más lenta. Es un acoplamiento comprobado en código, con impacto temporal pendiente. Si una traza demuestra espera perceptible, resolver cada panel al terminar su solicitud conservando cancelación lógica y errores independientes. Riesgo: estados parciales incoherentes; no se atribuye este punto al párrafo LCP, que no depende de esos datos.
+- `Home` descarga la lista de incidencias, la copia, ordena y recorta a cinco; también descarga proveedores completos para contar estados. Es trabajo comprobado, sin cuello de botella demostrado con este volumen. No se propone cambiar endpoints o añadir virtualización: solo se pintan cinco filas recientes. Medir tamaño, duración y CPU con volumen representativo antes de ampliar alcance al backend.
+- Los JSON incluyen peticiones `_rsc` a rutas enlazadas y dos solicitudes de proveedores en Desktop. No bastan para calificar el prefetch de desperdicio ni para atribuir una doble llamada a una única ejecución del efecto de Home. Se necesitan iniciadores y secuencia de navegación/montaje.
+
+### Comprobación posterior prevista
+
+Para una futura corrección: conservar build de producción, misma URL, viewport, throttling, tema, sesión y datos sintéticos; comprobar carga, éxito, error y vacío. Registrar al menos tres navegaciones equivalentes con mediana y rango si se decide por una métrica. La nueva línea base limpia deberá medirse antes de tocar código; compararla con estos reportes contaminados solo aporta contexto. Repetir la medición del dashboard `/`, la vista interna seleccionada para esta auditoría. Probar navegación, filtros, formulario, menú/FAQ, idioma y sesión según el archivo afectado. Las comprobaciones visuales, lector de pantalla y trazas siguen pendientes.
+
+No se crea un informe de mejoras aplicadas: en este alcance no hay correcciones ni mediciones después. Las recomendaciones quedan listas para seleccionar una intervención concreta.
+
 ## Entorno de medición
 
 - Fecha: 7 de noviembre de 2026, 17:31–17:43 de Uruguay (UTC−03:00), extraída de `fetchTime`.
 - Navegador: Google Chrome confirmado por el usuario; el hostUserAgent declara Chrome 157.0.0.0 sobre Windows 10 x64. No se verificó la versión completa en «Acerca de Chrome».
 - Modo de ejecución: website `build:landing` + `serve`; backoffice `build` + `start`, según confirmación del usuario de que siguió la guía. No se ejecutaron nuevas mediciones en esta revisión.
-- URLs medidas: `http://localhost:3000/`, `http://localhost:3000/application` y `http://localhost:3001/`; requestedUrl y finalDisplayedUrl coinciden. El formulario corresponde a `uis/website/application.html`, pero la URL medida no lleva extensión. El dashboard medido es `/`, no `/incidents`; los nodos y capturas integradas muestran «Backoffice operativo», no el login. Falta medir `/incidents` para cubrir literalmente la selección de la guía.
+- URLs medidas: `http://localhost:3000/`, `http://localhost:3000/application` y `http://localhost:3001/`; requestedUrl y finalDisplayedUrl coinciden. El formulario corresponde a `uis/website/application.html`, pero la URL medida no lleva extensión. El dashboard medido es `/`; los nodos y capturas integradas muestran «Backoffice operativo», no el login. El usuario confirma el dashboard `/` como alcance; no queda pendiente medir otra ruta interna.
 - Dispositivos simulados: Mobile y Desktop (configSettings.formFactor). Mobile: 412 × 823, DPR 1.75, RTT 150 ms, 1638.4 Kbps, CPU ×4. Desktop: RTT 40 ms, 10240 Kbps, CPU ×1; screenEmulation.disabled=true, por lo que el tamaño móvil residual de ese objeto no describe el viewport Desktop. El dashboard Desktop conserva tarjetas apiladas en su captura.
 - Versiones: Lighthouse 13.5.0, canal DevTools, throttlingMethod=simulate. Node y serve utilizados al medir: no registrados. En esta revisión posterior, Node local v26.13.0 y npm 11.20.0; no se atribuyen retrospectivamente a las mediciones.
 - Commit y rama: código revisado sobre `2a23e48`, rama `perf/auditoria-lighthouse`. Commit exacto medido: no consta en los reportes. El usuario autorizó expresamente el primer commit local en esta rama; la exigencia de `feature/agent-memory-bank` pertenece al hito anterior. No se cambia de rama ni se altera el validador.
-- Cantidad de incidencias y filtros: el dashboard muestra 95 incidencias (29 abiertas, 0 en curso y 52 resueltas; no se inventa el estado de las 14 restantes). Home llama a getIncidents({}), sin filtros explícitos, ordena por fecha y muestra cinco recientes. El origen sintético de los datos no está confirmado. No se consultaron bases ni se modificaron datos.
+- Cantidad de incidencias y filtros: el dashboard muestra 95 incidencias (29 abiertas, 0 en curso y 52 resueltas; no se inventa el estado de las 14 restantes). Home llama a getIncidents({}), sin filtros explícitos, ordena por fecha y muestra cinco recientes. El usuario confirmó el 7 de noviembre de 2026 que los datos son sintéticos. No se consultaron bases ni se modificaron datos.
 - Caché/almacenamiento: los seis reportes advierten de IndexedDB existente. disableStorageReset=false; clearStorageTypes incluye file_systems, shader_cache, service_workers y cache_storage, pero no local_storage. Hay scripts chrome-extension:// en tareas y diagnósticos JavaScript: no es un perfil limpio.
 - Número de repeticiones y valores individuales: una ejecución por combinación, registrada abajo. No hay medianas ni evidencia de variabilidad o mejora antes/después.
-- Evidencias: el usuario dejó los reportes en audit/after y confirmó que corresponden a las puntuaciones registradas. Se conservan copias idénticas en audit/before con nombres de línea base para este diagnóstico, preservando los originales. Esto no prueba ausencia de cambios previos ni constituye una segunda medición comparable.
+- Evidencias: el usuario confirmó que las capturas y reportes guardados inicialmente en audit/after corresponden al antes. La línea base queda en audit/before con los nombres enlazados abajo; se retiraron de audit/after los 12 duplicados tras verificar igualdad SHA-256. audit/after queda vacía, reservada para nuevas mediciones posteriores a las correcciones. Esto no prueba ausencia de cambios previos ni constituye una segunda medición comparable.
 
 ## Puntuaciones iniciales
 

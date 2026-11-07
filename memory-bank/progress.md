@@ -2,6 +2,7 @@
 
 ## Preparación de publicación autorizada — 7 de noviembre de 2026
 
+- Creados c81ba64 (geometría), f57285a (contraste) y 28cf504 (nombre accesible). Preparada entrega documental con AUDIT.md, REPORT.md, guía local, seis capturas after y las dos skills usadas. Resultados existentes aceptados para entrega, conservando sus límites. Controles estructurales y sus 7 pruebas repetidos antes de cada commit; aprobados. Check de rama conserva discrepancia histórica. Siguiente paso: push y PR hacia main, sin merge ni despliegue manual.
 - Preparado commit independiente del nombre accesible de marca en ambas páginas e i18n. Build de landing aprobado en esta sesión, sin cambios posteriores de producto. Pruebas en navegador confirmadas por el usuario.
 - Geometría registrada en c81ba64. Preparado commit de contraste: separar texto de acento y fondo de acción, conservando temas y navegación. Mismos controles del backoffice aprobados; sin cambios adicionales de producto.
 - El usuario confirma que realizó las pruebas en navegador y autoriza commits y publicación en la rama de auditoría. Se registra como comprobación humana, sin atribuir al agente una ejecución ni afirmar cobertura específica no detallada.
