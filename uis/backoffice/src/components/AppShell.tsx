@@ -72,7 +72,7 @@ function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate
       </> : null}
     </div>
     <nav aria-label="Navegación principal" className="flex flex-col gap-1 px-3 py-2 text-sm font-semibold">
-      {links.map(({ href, label }) => <Link key={href} href={href} onClick={onNavigate} aria-current={pathname === href ? "page" : undefined} className={`rounded-lg px-4 py-3 transition-colors ${pathname === href ? "bg-accent text-white" : "text-ink hover:bg-surface-soft"}`}>{label}</Link>)}
+      {links.map(({ href, label }) => <Link key={href} href={href} onClick={onNavigate} aria-current={pathname === href ? "page" : undefined} className={`rounded-lg px-4 py-3 transition-colors ${pathname === href ? "bg-action text-white" : "text-ink hover:bg-surface-soft"}`}>{label}</Link>)}
     </nav>
   </div>;
 }

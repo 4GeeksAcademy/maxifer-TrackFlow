@@ -2,6 +2,7 @@
 
 ## Preparación de publicación autorizada — 7 de noviembre de 2026
 
+- Geometría registrada en c81ba64. Preparado commit de contraste: separar texto de acento y fondo de acción, conservando temas y navegación. Mismos controles del backoffice aprobados; sin cambios adicionales de producto.
 - El usuario confirma que realizó las pruebas en navegador y autoriza commits y publicación en la rama de auditoría. Se registra como comprobación humana, sin atribuir al agente una ejecución ni afirmar cobertura específica no detallada.
 - Entrega de las mediciones existentes aceptada por el usuario; se conserva la diferencia conocida de extensiones y la ausencia de mediciones intermedias. No se certifica equivalencia experimental.
 - Preparada la corrección de geometría del dashboard para commit independiente. Checks del backoffice ya aprobados en esta sesión de trabajo: 4 suites/15 pruebas, lint y build. No hay cambios nuevos de código desde esos checks. Quedan fuera secretos, datos, .tmp y .vscode. Sin merge ni despliegue manual.
