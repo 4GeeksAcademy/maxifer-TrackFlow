@@ -49,16 +49,22 @@ export default function Home() {
     <div className="grid gap-5 lg:grid-cols-2">
       <section className="card flex flex-col">
         <span className="eyebrow">Flujo operativo</span><h2 className="mt-2">Gestión de incidencias</h2>
-        {incidentsError ? <p role="alert" className="error">{incidentsError}</p> : summary ? <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {([["Total", summary.total, "tone-neutral"], ["Abiertas", summary.by_status.open ?? 0, "tone-danger"], ["En curso", summary.by_status.in_progress ?? 0, "tone-warning"], ["Resueltas", summary.by_status.resolved ?? 0, "tone-success"]] as const).map(([label, value, tone]) => <MetricCard key={label} label={label} value={value} tone={tone} />)}
-        </div> : <LoadingSkeleton label="Cargando resumen de incidencias" variant="summary" />}
+        <div className="grid">
+          <div className={`col-start-1 row-start-1 grid grid-cols-2 gap-3 sm:grid-cols-4${incidentsError ? " invisible" : ""}`} aria-hidden={incidentsError ? true : undefined} role={!summary && !incidentsError ? "status" : undefined} aria-label={!summary && !incidentsError ? "Cargando resumen de incidencias" : undefined}>
+            {([["Total", summary?.total ?? 0, "tone-neutral"], ["Abiertas", summary?.by_status.open ?? 0, "tone-danger"], ["En curso", summary?.by_status.in_progress ?? 0, "tone-warning"], ["Resueltas", summary?.by_status.resolved ?? 0, "tone-success"]] as const).map(([label, value, tone]) => <MetricCard key={label} label={label} value={value} tone={tone} loading={!summary} />)}
+          </div>
+          {incidentsError && <p role="alert" className="error col-start-1 row-start-1 self-start">{incidentsError}</p>}
+        </div>
         <div className="mt-auto flex flex-wrap gap-2 pt-5"><Link href="/incidents" className="button">Ir a incidencias →</Link><Link href="/incidents#new-incident" className="button secondaryButton">Registrar incidencia</Link></div>
       </section>
       <section className="card flex flex-col">
         <span className="eyebrow">Red de proveedores</span><h2 className="mt-2">Directorio de proveedores y tarifas</h2>
-        {suppliersError ? <p role="alert" className="error">{suppliersError}</p> : suppliers ? <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {([["Total", suppliers.length, "tone-info"], ["Activos", activeSuppliers ?? 0, "tone-success"], ["Suspendidos", suppliers.length - (activeSuppliers ?? 0), "tone-danger"]] as const).map(([label, value, tone]) => <MetricCard key={label} label={label} value={value} tone={tone} />)}
-        </div> : <LoadingSkeleton label="Cargando resumen de proveedores" variant="summary" />}
+        <div className="grid">
+          <div className={`col-start-1 row-start-1 grid grid-cols-2 gap-3 sm:grid-cols-3${suppliersError ? " invisible" : ""}`} aria-hidden={suppliersError ? true : undefined} role={!suppliers && !suppliersError ? "status" : undefined} aria-label={!suppliers && !suppliersError ? "Cargando resumen de proveedores" : undefined}>
+            {([["Total", suppliers?.length ?? 0, "tone-info"], ["Activos", activeSuppliers ?? 0, "tone-success"], ["Suspendidos", (suppliers?.length ?? 0) - (activeSuppliers ?? 0), "tone-danger"]] as const).map(([label, value, tone]) => <MetricCard key={label} label={label} value={value} tone={tone} loading={!suppliers} />)}
+          </div>
+          {suppliersError && <p role="alert" className="error col-start-1 row-start-1 self-start">{suppliersError}</p>}
+        </div>
         <div className="mt-auto flex flex-wrap gap-2 pt-5"><Link href="/suppliers" className="button">Gestionar proveedores →</Link><Link href="/suppliers#new-supplier" className="button secondaryButton">Nuevo proveedor</Link></div>
       </section>
     </div>
