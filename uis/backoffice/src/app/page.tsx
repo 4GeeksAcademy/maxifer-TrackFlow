@@ -6,6 +6,7 @@ import { apiFetch } from "@/lib/auth";
 import { getIncidents, getIncidentsSummary, branchLabels } from "@/lib/incidents";
 import type { Incident, Summary } from "@/lib/incidents";
 import { IncidentStatusBadge } from "@/components/IncidentStatusBadge";
+import { MetricCard } from "@/components/MetricCard";
 import { LoadingSkeleton } from "@/components/LoadingSkeleton";
 
 type SupplierOverview = { id: string; status: "active" | "suspended"; country: string };
@@ -49,14 +50,14 @@ export default function Home() {
       <section className="card flex flex-col">
         <span className="eyebrow">Flujo operativo</span><h2 className="mt-2">Gestión de incidencias</h2>
         {incidentsError ? <p role="alert" className="error">{incidentsError}</p> : summary ? <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {[["Total", summary.total, "tone-neutral"], ["Abiertas", summary.by_status.open ?? 0, "tone-danger"], ["En curso", summary.by_status.in_progress ?? 0, "tone-warning"], ["Resueltas", summary.by_status.resolved ?? 0, "tone-success"]].map(([label, value, tone]) => <div key={label} className={`metricPanel ${tone}`}><span>{label}</span><strong>{value}</strong></div>)}
+          {([["Total", summary.total, "tone-neutral"], ["Abiertas", summary.by_status.open ?? 0, "tone-danger"], ["En curso", summary.by_status.in_progress ?? 0, "tone-warning"], ["Resueltas", summary.by_status.resolved ?? 0, "tone-success"]] as const).map(([label, value, tone]) => <MetricCard key={label} label={label} value={value} tone={tone} />)}
         </div> : <LoadingSkeleton label="Cargando resumen de incidencias" variant="summary" />}
         <div className="mt-auto flex flex-wrap gap-2 pt-5"><Link href="/incidents" className="button">Ir a incidencias →</Link><Link href="/incidents#new-incident" className="button secondaryButton">Registrar incidencia</Link></div>
       </section>
       <section className="card flex flex-col">
         <span className="eyebrow">Red de proveedores</span><h2 className="mt-2">Directorio de proveedores y tarifas</h2>
         {suppliersError ? <p role="alert" className="error">{suppliersError}</p> : suppliers ? <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {[["Total", suppliers.length, "tone-info"], ["Activos", activeSuppliers ?? 0, "tone-success"], ["Suspendidos", suppliers.length - (activeSuppliers ?? 0), "tone-danger"]].map(([label, value, tone]) => <div key={label} className={`metricPanel ${tone}`}><span>{label}</span><strong>{value}</strong></div>)}
+          {([["Total", suppliers.length, "tone-info"], ["Activos", activeSuppliers ?? 0, "tone-success"], ["Suspendidos", suppliers.length - (activeSuppliers ?? 0), "tone-danger"]] as const).map(([label, value, tone]) => <MetricCard key={label} label={label} value={value} tone={tone} />)}
         </div> : <LoadingSkeleton label="Cargando resumen de proveedores" variant="summary" />}
         <div className="mt-auto flex flex-wrap gap-2 pt-5"><Link href="/suppliers" className="button">Gestionar proveedores →</Link><Link href="/suppliers#new-supplier" className="button secondaryButton">Nuevo proveedor</Link></div>
       </section>

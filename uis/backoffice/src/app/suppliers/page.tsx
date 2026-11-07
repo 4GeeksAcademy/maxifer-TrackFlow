@@ -15,6 +15,7 @@ import type {
 } from "react";
 
 import { apiFetch } from "@/lib/auth";
+import { MetricCard } from "@/components/MetricCard";
 import { LoadingSkeleton } from "@/components/LoadingSkeleton";
 
 
@@ -694,11 +695,11 @@ export default function SuppliersPage() {
 
 
       <div className="mb-5 grid gap-3 sm:grid-cols-3">
-        {[
+        {([
           ["Proveedores mostrados", suppliers.length, "tone-info"],
           ["Activos", suppliers.filter((supplier) => supplier.status === "active").length, "tone-success"],
           ["Suspendidos", suppliers.filter((supplier) => supplier.status === "suspended").length, "tone-danger"],
-        ].map(([label, count, tone]) => <div key={label} className={`metricPanel ${tone}`}><span>{label}</span>{loading ? <div className="skeletonLine skeletonMetric" aria-label="Cargando proveedores" /> : <strong>{count}</strong>}</div>)}
+        ] as const).map(([label, count, tone]) => <MetricCard key={label} label={label} value={count} tone={tone} loading={loading} loadingLabel="Cargando proveedores" />)}
       </div>
 
       <dialog ref={dialogRef} className="incidentDialog" aria-labelledby="supplier-dialog-title" onClick={handleDialogClick} onCancel={event => { event.preventDefault(); closeDialog(); }} onClose={() => { if (window.location.hash === "#new-supplier") history.replaceState(null, "", window.location.pathname + window.location.search); }}>

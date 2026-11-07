@@ -1,5 +1,15 @@
 # Progreso
 
+## Auditoría inicial de rendimiento — 7 de noviembre de 2026
+
+- Sección 03 de la guía local: diagnóstico documentado en `AUDIT.md`, con seis mediciones extraídas de los JSON aportados y nueve hallazgos vinculados al código, diferenciando causas comprobadas e hipótesis. Se usa una referencia textual porque las pruebas del validador copian únicamente los archivos de configuración a una raíz temporal, sin el informe de auditoría.
+- URLs reales: home, formulario `/application` y dashboard principal `/` del backoffice. Falta medir `/incidents` para cubrir literalmente la guía. Una ejecución por caso; extensiones activas e IndexedDB limitan las comparaciones. No hay nuevas mediciones ni mejoras de rendimiento demostradas.
+- Evidencias copiadas sin alterar bytes desde `audit/after` a `audit/before` con nombres de línea base; originales preservados. El usuario confirmó que son los reportes de las puntuaciones registradas y que siguió el modo de ejecución de la guía. No confirmó el origen sintético de los datos; no se accedió a bases ni se modificaron datos. Revisión de JSON sin correos ni tokens JWT/Bearer detectados y capturas de resultados sin datos personales visibles; capturas finales integradas del dashboard muestran agregados operativos.
+- Dos candidatos de reutilización: menú móvil del website y tarjetas de métricas del backoffice. Se extrae MetricCard, usado por Home y SuppliersPage, conservando marcado, carga, cálculos y estilos; no se aplican correcciones de rendimiento.
+- Validación: backoffice 4 suites/15 pruebas, lint y build aprobados; aviso no bloqueante de múltiples lockfiles de Turbopack. Sin comprobación visual interactiva ni pruebas de filtros/escrituras. Validador normal: 34 comprobaciones aprobadas; tests del validador: 7 aprobados. Modo `--check-branch`: 34 aprobadas y fallo exclusivo por exigir la rama del hito anterior.
+- El usuario confirma `perf/auditoria-lighthouse` y autoriza el primer commit local; no autoriza publicación, PR, merge ni despliegue para esta tarea. La política de rama del hito AI-ready se conserva como antecedente, sin alterar el validador.
+- Siguientes pasos: repetir línea base sin extensiones con sesión/datos controlados; investigar logs de los 500; confirmar dominio canonical antes de corregirlo; comprobar visualmente la extracción; corregir contraste y geometría en commits dirigidos con mediciones comparables. El error 500 no tiene causa de servidor confirmada.
+
 ## Estado base
 Existen landing pública, backoffice de incidencias e inventario, autenticación,
 tracker de contratación, pruebas y despliegue Docker/CI. Sus capacidades se
