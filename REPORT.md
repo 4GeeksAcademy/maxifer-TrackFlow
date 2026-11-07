@@ -134,7 +134,7 @@ El usuario confirma las mismas condiciones de medición salvo las extensiones: e
 | Funcionalidades y regresiones | Controles automáticos aprobados y pruebas en navegador confirmadas por el usuario, sin desglose de casos. |
 | Comparación e identificación de la corrección de mayor impacto | Parcial: mayor mejora observada identificada; efecto individual sin aislar. |
 | Mejora por frontend con condiciones comparables | Pendiente: resultados superiores registrados, con diferencia de extensiones entre antes y después. |
-| Publicación en GitHub | Autorizada; entrega preparada en perf/auditoria-lighthouse con código, informe y capturas. El resultado del push se comunica al completar la operación. |
+| Publicación en GitHub | Cumplido: rama perf/auditoria-lighthouse publicada en origin. Crear PR mediante la integración devuelve HTTP 403 por falta de permisos; PR pendiente. |
 
 Controles repetidos durante esta revisión: `npm.cmd run build:landing`, tests del backoffice (4 suites/15 pruebas), lint y build del backoffice aprobados. Persisten los avisos de caniuse-lite desactualizado y de múltiples lockfiles. No se ejecutó Lighthouse ni se comprobó la interfaz en navegador en esta revisión.
 

@@ -1,5 +1,11 @@
 # Progreso
 
+## Publicación de auditoría — 7 de noviembre de 2026
+
+- Publicados en origin/perf/auditoria-lighthouse los commits c81ba64, f57285a, 28cf504 y ff96c0a. Push aprobado y completado; no se fusionó ni se ejecutó despliegue manual. Se actualiza el estado de publicación de REPORT.md.
+- La búsqueda de PR abierta no devolvió resultados. Crear la PR hacia main con la integración GitHub falló con HTTP 403: Resource not accessible by integration. PR pendiente por permisos del conector. Enlace de creación: https://github.com/4GeeksAcademy/maxifer-TrackFlow/compare/main...perf/auditoria-lighthouse?expand=1 . gh no está instalado. No afirmar que existe una PR.
+- Permanecen fuera del historial .tmp y .vscode. Checks estructurales (34), pruebas del validador (7) y revisión de espacios aprobados; se conserva el fallo histórico de --check-branch. Tests/lint/build del producto ya aprobados, sin cambios nuevos de producto.
+
 ## Preparación de publicación autorizada — 7 de noviembre de 2026
 
 - Creados c81ba64 (geometría), f57285a (contraste) y 28cf504 (nombre accesible). Preparada entrega documental con AUDIT.md, REPORT.md, guía local, seis capturas after y las dos skills usadas. Resultados existentes aceptados para entrega, conservando sus límites. Controles estructurales y sus 7 pruebas repetidos antes de cada commit; aprobados. Check de rama conserva discrepancia histórica. Siguiente paso: push y PR hacia main, sin merge ni despliegue manual.
