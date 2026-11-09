@@ -13,6 +13,13 @@
   limitadas al restante. Cachés por proceso de 256 entradas: embeddings 15 min y
   respuestas 5 min; la respuesta depende del contexto recuperado actual. Qdrant se
   consulta en cada pregunta. No se cambian modelos ni parámetros de generación.
+- RAG en producción: imagen API con módulos mínimos y corpus, Qdrant `v1.15.3`
+  privado con volumen propio y alias `trackflow_knowledge_prod` seleccionado por
+  `RAG_COLLECTION_NAME` (desarrollo conserva `trackflow_knowledge`). Preparación
+  idempotente en `data/pipelines/production_rag.py`, índices inmutables por huella,
+  activación atómica durante la pausa API y restauración del alias en rollback.
+  Requiere las cuatro variables privadas de proveedor/modelos y cuenta activa
+  existente en el VPS. CI usa Qdrant real y gateway sintético; no mide Recall.
 - Docker usa Node 22. Puertos públicos de desarrollo: landing 3000, backoffice 3001, tracker 3002, API configurable (habitualmente 8000). Mantener contratos HTTP y rewrites `/backend`.
 - Netlify tiene una integración de previews de PR: `netlify.toml` instala las dependencias de `uis/website`, ejecuta el build de la raíz y publica solo `uis/website/out`. No ejecutar despliegues manuales al entregar este hito.
 

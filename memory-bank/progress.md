@@ -1,5 +1,49 @@
 # Progreso
 
+## Integración RAG en producción — 9 de noviembre de 2026
+
+Implementada en `feature/rag-knowledge-base` por solicitud explícita del
+desarrollador, incluyendo autorización para Dockerfile, Compose y workflow.
+La API incorpora únicamente módulos RAG y corpus canónico; Qdrant `v1.15.3`
+permanece privado con volumen propio. Se mantienen gateway, modelos, contratos,
+autenticación, cachés y presupuestos de consulta existentes. No se lee ni cambia
+el `.env` local ni se accede al VPS o a datos de producción.
+
+Preparación idempotente mediante huella de corpus/procesamiento/gateway/modelo
+de embeddings, colecciones nuevas y alias `trackflow_knowledge_prod`.
+Se verifican UUID, payload, cantidad y dimensiones antes de publicar; los
+índices previos e incompletos se conservan. El despliegue valida configuración
+y cuenta activa, prepara el índice antes de detener la API (máximo 180 s),
+guarda estado del alias, lo publica durante la pausa y exige consulta real
+autenticada con fuentes a través de Next.js. Ante fallos posteriores restaura
+alias e imágenes; si falla la restauración del alias mantiene la API detenida.
+El comando destructivo de desarrollo rechaza el alias de producción.
+
+Validaciones realizadas: backend aislado con 116 pruebas y once subtests
+aprobados, seis pruebas Linux omitidas en Windows y tres avisos de deprecación
+existentes. Las once pruebas de verificación/despliegue/rollback pasan en Linux
+con Docker simulado. Las doce pruebas de indexación de producción pasan tras
+añadir el caso de cambio de corpus. Ambos Compose válidos usando entorno
+ejemplo y JWT sintético; sintaxis Bash aprobada. Tres imágenes de producción
+construidas. Smoke completo con Qdrant real y gateway sintético: indexación,
+reutilización y consulta autenticada con fuentes antes y después de reiniciar
+Qdrant aprobadas; sus contenedores y volúmenes exclusivos se eliminan al terminar.
+El primer smoke falló por codificación del stdin en Windows; se fija UTF-8 y
+la repetición verifica el flujo completo. Validación AI: 40 comprobaciones y
+siete pruebas aprobadas. Revisión del diff sin secretos nuevos y whitespace limpio.
+
+Limitaciones conservadas: aviso cliente Qdrant `1.20.0`/servidor `1.15.3`,
+compatibilidad funcional comprobada por smoke; Recall@3 histórico 70% frente
+al objetivo 80%, sin nueva evaluación ni afirmación de mejora; los builds de
+interfaces avisan de vulnerabilidades existentes (backoffice: dos altas y una
+crítica; tracker: una moderada, cuatro altas y una crítica). No se actualizan
+dependencias en esta integración.
+
+Siguiente paso: finalizar revisión y comprobaciones de entrega, publicar rama
+y PR hacia `main` con enlace a AGENTS.md y resultados. Antes del merge, el
+responsable debe configurar las cuatro variables privadas LiteLLM/modelos en
+el VPS y disponer de una cuenta activa. No se fusiona ni despliega esta entrega.
+
 ## Commit local de optimización RAG — 8 de noviembre de 2026
 
 El desarrollador confirma que sus pruebas muestran una mejora y solicita un

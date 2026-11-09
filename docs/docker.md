@@ -162,9 +162,31 @@ también todos los volúmenes y sus datos; usarlo solo para un reinicio delibera
 
 ## Producción en VPS
 
-El Compose de producción no incluye Qdrant ni el montaje del pipeline y del corpus.
-El RAG descrito aquí corresponde al Compose de desarrollo; su disponibilidad en
-producción requiere una integración adicional.
+El Compose de producción incluye Qdrant `v1.15.3`, sin puertos publicados y con
+volumen independiente `trackflow-prod_qdrant_data`. La API contiene los módulos
+RAG y el corpus de cuatro documentos dentro de la imagen; no monta fuentes.
+Se conserva la versión probada en desarrollo. El cliente `1.20.0` sigue avisando
+de diferencia de versiones; el smoke de CI verifica las operaciones utilizadas.
+
+Antes de mergear a `main`, configurar en el `.env` privado del VPS
+`LITELLM_API_BASE`, `LITELLM_API_KEY`, `RAG_EMBEDDING_MODEL` y `RAG_LLM_MODEL`,
+con el mismo gateway y aliases probados. No usar variables `NEXT_PUBLIC_*` para
+estos valores. Debe existir una cuenta activa para la verificación autenticada.
+El despliegue automático prepara el índice si falta o cambia; no requiere
+copiar el índice local ni ejecutar `setup_rag` por SSH.
+
+La indexación usa colecciones versionadas y el alias `trackflow_knowledge_prod`.
+Reutiliza un índice íntegro con la misma huella de corpus/procesamiento/gateway/
+modelo de embeddings; un cambio de clave o modelo generativo no lo reconstruye.
+Antes de pausar la API se valida el nuevo índice. Un fallo de preparación deja
+la versión anterior funcionando. Tras la pausa se cambia el alias y se verifica
+una consulta con fuentes a través de Next.js; un fallo restaura alias e imágenes.
+Los índices antiguos se conservan para recuperación. No ejecutar el `setup()`
+destructivo de desarrollo contra producción.
+
+El flujo de actualización completo está descrito en
+[GitHub Actions](github-actions.md). Los comandos siguientes arrancan los
+contenedores, pero no sustituyen la preparación/verificación del despliegue.
 
 Usar el archivo independiente `docker-compose.prod.yml`, sin combinarlo con
 el de desarrollo. Ejecuta `next start` y Uvicorn sin reload, no monta fuentes,

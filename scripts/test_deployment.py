@@ -1,6 +1,7 @@
 """Exercise data-loss checks and the actual deployment/rollback shell script."""
 
 from copy import deepcopy
+import io
 import json
 import os
 from pathlib import Path
@@ -9,11 +10,39 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
-from scripts.verify_deployment import compare
+from scripts.verify_deployment import compare, verify_rag
 
 
-STATE = {"users": ["registered-user"], "suppliers": ["1"], "incidents": [97], "products": [1], "orders": ["inbound:1"], "database_sha256": "original-database", "jwt_sha256": "original-jwt"}
+STATE = {"active_user_available": True, "users": ["registered-user"], "suppliers": ["1"], "incidents": [97], "products": [1], "orders": ["inbound:1"], "database_sha256": "original-database", "jwt_sha256": "original-jwt"}
+
+
+class RAGVerificationTests(unittest.TestCase):
+    def response(self, payload):
+        response = io.BytesIO(json.dumps(payload).encode())
+        response.status = 200
+        return response
+
+    def test_authenticated_request_passes_through_next_proxy(self):
+        payload = {"answer": "Synthetic", "sources": [{"source_document": "returns-policy", "section": "Test"}],
+                   "retrieved_count": 1, "abstained": False}
+        with patch("urllib.request.urlopen", return_value=self.response(payload)) as request:
+            verify_rag({"Authorization": "Bearer synthetic"})
+        args, kwargs = request.call_args
+        self.assertEqual(args[0].full_url, "http://uis:3001/backend/api/rag/query")
+        self.assertEqual(args[0].get_method(), "POST")
+        self.assertEqual(args[0].get_header("Authorization"), "Bearer synthetic")
+        self.assertEqual(kwargs["timeout"], 40)
+
+    def test_empty_abstained_or_unsourced_answer_blocks_release(self):
+        payload = {"answer": "Synthetic", "sources": [{"source_document": "returns-policy"}],
+                   "retrieved_count": 1, "abstained": False}
+        for change in [{"answer": ""}, {"sources": []}, {"retrieved_count": 0}, {"abstained": True}]:
+            with self.subTest(change=change):
+                with patch("urllib.request.urlopen", return_value=self.response(payload | change)):
+                    with self.assertRaises(AssertionError):
+                        verify_rag({"Authorization": "Bearer synthetic"})
 
 
 class DataPreservationTests(unittest.TestCase):
@@ -41,28 +70,43 @@ class DataPreservationTests(unittest.TestCase):
 
 FAKE_DOCKER = r'''#!/usr/bin/env python3
 import json,os,pathlib,sys
+if os.environ.get('FAIL_RESTORE_AND_VERIFY')=='1':
+    os.environ['FAIL_VERIFY']='1';os.environ['FAIL_RESTORE']='1'
 a=sys.argv[1:]
 with open(os.environ['DOCKER_CALLS'],'a') as stream:stream.write(json.dumps(a)+'\n')
 if a[0]=='login':sys.stdin.read();sys.exit(0)
 if a[0]=='inspect':print('sha256:previous-image');sys.exit(0)
 if a[0]!='compose':sys.exit(0)
+if 'run' in a:
+    action=a[a.index('data.pipelines.production_rag')+1]
+    if action=='prepare' and os.environ.get('FAIL_PREPARE_TIMEOUT')=='1':sys.exit(124)
+    if os.environ.get('FAIL_'+action.upper())=='1':sys.exit(1)
+    if action=='prepare':
+        print(json.dumps({'alias':'trackflow_knowledge_prod','previous':'previous-index' if os.environ.get('EXISTING_RAG')=='1' else None,'candidate':'new-index','fingerprint':'test','chunks':20,'documents':4,'reused':False}))
+    else:print('{"ok":true}')
+    sys.exit(0)
 if 'ps' in a:print('previous-'+a[-1]);sys.exit(0)
 if 'exec' in a:
     sys.stdin.read()
-    if '--snapshot' in a:print(os.environ['TEST_STATE'])
+    if '--snapshot' in a:
+        state=json.loads(os.environ['TEST_STATE'])
+        if os.environ.get('FAIL_NO_ACTIVE_USER')=='1':state['active_user_available']=False
+        print(json.dumps(state))
     elif os.environ.get('FAIL_VERIFY')=='1':sys.exit(1)
     else:print('verified')
     sys.exit(0)
 if 'config' in a and 'json' in a:
-    print(json.dumps({'volumes':{'api_data':{'name':'trackflow-prod_api_data'}},'services':{'services':{'volumes':[{'type':'volume','source':'api_data','target':'/app/services/api/data'}],'environment':{'DEMO_DATA_ENABLED':'false'}},'uis':{'environment':{'BACKEND_INTERNAL_URL':'http://services:8000','NEXT_PUBLIC_API_URL':''}}}}))
+    environment={'DEMO_DATA_ENABLED':'false','QDRANT_URL':'http://qdrant:6333','RAG_COLLECTION_NAME':'trackflow_knowledge_prod','LITELLM_API_BASE':'http://synthetic','LITELLM_API_KEY':'synthetic','RAG_EMBEDDING_MODEL':'embedding','RAG_LLM_MODEL':'chat'}
+    if os.environ.get('FAIL_CONFIG')=='1':environment.pop('LITELLM_API_KEY')
+    print(json.dumps({'volumes':{'api_data':{'name':'trackflow-prod_api_data'},'qdrant_data':{'name':'trackflow-prod_qdrant_data'}},'services':{'services':{'volumes':[{'type':'volume','source':'api_data','target':'/app/services/api/data'}],'environment':environment},'qdrant':{},'uis':{'environment':{'BACKEND_INTERNAL_URL':'http://services:8000','NEXT_PUBLIC_API_URL':''}}}}))
 if 'pull' in a and os.environ.get('FAIL_PULL')=='1':sys.exit(1)
-if 'up' in a and os.environ.get('FAIL_UP')=='1' and not any(v.endswith('rollback-images.yml') for v in a):sys.exit(1)
+if 'up' in a and a[-1]!='qdrant' and os.environ.get('FAIL_UP')=='1' and not any(v.endswith('rollback-images.yml') for v in a):sys.exit(1)
 '''
 
 
 @unittest.skipUnless(sys.platform == "linux" and shutil.which("bash") and shutil.which("flock"), "Deployment script runs on Linux")
 class DeploymentScriptTests(unittest.TestCase):
-    def run_deployment(self, failure=None):
+    def run_deployment(self, failure=None, existing_rag=False):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         app = Path(temporary.name)
@@ -83,6 +127,8 @@ class DeploymentScriptTests(unittest.TestCase):
         env = os.environ | {"PATH": str(executable.parent) + os.pathsep + os.environ["PATH"], "DOCKER_CALLS": str(calls), "TEST_STATE": json.dumps(STATE)}
         if failure:
             env[failure] = "1"
+        if existing_rag:
+            env["EXISTING_RAG"] = "1"
         result = subprocess.run(["bash", str(Path(__file__).with_name("deploy.sh")), str(app), commit, "ghcr.io/example/trackflow", "ci-user"], input="short-lived-token\n", text=True, capture_output=True, env=env)
         log = [json.loads(line) for line in calls.read_text().splitlines()]
         self.assertEqual((app / ".env").read_text(), "JWT_SECRET=unchanged\nDATABASE_URL=unchanged\n")
@@ -103,13 +149,42 @@ class DeploymentScriptTests(unittest.TestCase):
         self.assertEqual((app / "docker-compose.prod.yml").read_bytes(), original)
 
     def test_startup_and_verification_failures_restore_previous_images(self):
-        for failure in ["FAIL_UP", "FAIL_VERIFY"]:
+        for failure in ["FAIL_UP", "FAIL_VERIFY", "FAIL_ACTIVATE"]:
             with self.subTest(failure=failure):
                 result, calls, app, original = self.run_deployment(failure)
                 self.assertNotEqual(result.returncode, 0)
                 self.assertTrue(any("up" in call and any(v.endswith("rollback-images.yml") for v in call) for call in calls))
                 self.assertEqual((app / "docker-compose.prod.yml").read_bytes(), original)
                 self.assertFalse((app / "current-release").exists())
+                self.assertTrue(any("restore" in call for call in calls))
+
+    def test_configuration_or_preparation_failure_does_not_stop_api(self):
+        for failure in ["FAIL_CONFIG", "FAIL_CHECK", "FAIL_PREPARE", "FAIL_PREPARE_TIMEOUT", "FAIL_NO_ACTIVE_USER"]:
+            with self.subTest(failure=failure):
+                result, calls, app, original = self.run_deployment(failure)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertFalse(any("stop" in call for call in calls))
+                self.assertFalse(any("activate" in call for call in calls))
+                self.assertEqual((app / "docker-compose.prod.yml").read_bytes(), original)
+                self.assertTrue(any(call[:2] == ["rm", "-f"] and call[-1] == "trackflow-rag-" + "a" * 40 for call in calls))
+
+    def test_existing_index_saved_and_rollback_precedes_previous_api(self):
+        result, calls, app, _ = self.run_deployment("FAIL_VERIFY", existing_rag=True)
+        self.assertNotEqual(result.returncode, 0)
+        import base64
+        restore = next(call for call in calls if "restore" in call)
+        state = json.loads(base64.b64decode(restore[restore.index("--state-b64") + 1]))
+        self.assertEqual(state["previous"], "previous-index")
+        restore_position = calls.index(restore)
+        rollback_position = next(i for i, call in enumerate(calls)
+                                 if "up" in call and any(v.endswith("rollback-images.yml") for v in call))
+        self.assertLess(restore_position, rollback_position)
+
+    def test_alias_restore_failure_keeps_api_stopped(self):
+        # Simulate both verification and rollback failure with a composite flag.
+        result, calls, _, _ = self.run_deployment("FAIL_RESTORE_AND_VERIFY")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertFalse(any("up" in call and any(v.endswith("rollback-images.yml") for v in call) for call in calls))
 
 
 if __name__ == "__main__":

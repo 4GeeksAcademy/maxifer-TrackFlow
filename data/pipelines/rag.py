@@ -26,6 +26,10 @@ DEFAULT_K = 3
 MODEL_TIMEOUT_SECONDS = 45
 
 
+def collection_name() -> str:
+    return os.getenv("RAG_COLLECTION_NAME", COLLECTION_NAME).strip() or COLLECTION_NAME
+
+
 class RAGConfigurationError(RuntimeError):
     pass
 
@@ -88,21 +92,21 @@ def _embed_texts(texts: list[str]) -> list[list[float]]:
 def _ensure_collection(
     client: QdrantClient, vector_size: int, replace: bool = False
 ) -> None:
-    exists = client.collection_exists(COLLECTION_NAME)
+    exists = client.collection_exists(collection_name())
     if exists and replace:
-        client.delete_collection(COLLECTION_NAME)
+        client.delete_collection(collection_name())
         exists = False
 
     if not exists:
         client.create_collection(
-            collection_name=COLLECTION_NAME,
+            collection_name=collection_name(),
             vectors_config=models.VectorParams(
                 size=vector_size, distance=models.Distance.COSINE
             ),
         )
         return
 
-    collection = client.get_collection(COLLECTION_NAME)
+    collection = client.get_collection(collection_name())
     vector_config = collection.config.params.vectors
     if isinstance(vector_config, dict):
         raise RAGConfigurationError("La colección debe tener un único vector")
@@ -143,7 +147,7 @@ def embed(
             )
             for chunk, vector in zip(chunks, vectors, strict=True)
         ]
-        qdrant.upsert(collection_name=COLLECTION_NAME, points=points, wait=True)
+        qdrant.upsert(collection_name=collection_name(), points=points, wait=True)
     except (RAGConfigurationError, RAGUnavailableError):
         raise
     except Exception as error:
@@ -156,6 +160,8 @@ def setup(
     *,
     client: QdrantClient | None = None,
 ) -> dict[str, int]:
+    if collection_name() != COLLECTION_NAME:
+        raise RAGConfigurationError("Usa production_rag para preparar índices de producción sin borrar colecciones")
     chunks = load_corpus_chunks(Path(corpus_dir))
     client = client or _cached_qdrant_client()
     count = embed(chunks, client=client, replace_collection=True)
@@ -169,7 +175,7 @@ async def _search(query_vector: list[float], k: int, min_score: float):
         client = AsyncQdrantClient(url=_settings()["qdrant_url"], check_compatibility=False)
         try:
             return await client.query_points(
-                collection_name=COLLECTION_NAME, query=query_vector, limit=k,
+                collection_name=collection_name(), query=query_vector, limit=k,
                 score_threshold=min_score, with_payload=True,
             )
         finally:
@@ -199,7 +205,7 @@ def retrieve(
         embedding_cache.put(key, query_vector)
     try:
         response = client.query_points(
-            collection_name=COLLECTION_NAME,
+            collection_name=collection_name(),
             query=query_vector,
             limit=k,
             score_threshold=min_score,

@@ -138,6 +138,10 @@ correo.
 
 Para configuración de servicios, datos, solución de problemas y despliegue en
 VPS, consulta [Dockerización y despliegue](./docs/docker.md).
+
+En producción, el despliegue de `main` incluye Qdrant persistente e indexación
+RAG automática. Antes del merge, configura las cuatro variables LiteLLM/modelos
+en el `.env` privado del VPS; consulta la [guía de Actions](./docs/github-actions.md).
 ## Instalación
 
 Desde la raíz del repositorio, instalar `uv` si todavía no está disponible:

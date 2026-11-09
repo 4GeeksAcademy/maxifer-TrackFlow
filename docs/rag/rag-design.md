@@ -4,7 +4,7 @@
 
 El asistente ayuda al equipo de account managers y business development a responder preguntas de marcas durante conversaciones comerciales. La API requiere un usuario activo autenticado del backoffice. El corpus compartido se limita a los cuatro Markdown de `docs/company-knowledge-base/`; no se incorporan datos de pedidos, clientes ni fuentes externas.
 
-Qdrant se ejecuta en `docker-compose.yml` para desarrollo, con colección `trackflow_knowledge` y volumen persistente independiente. No se añade Qdrant a producción en este hito. LiteLLM recibe la configuración del backend mediante `LITELLM_API_KEY`, `LITELLM_API_BASE`, `RAG_EMBEDDING_MODEL` y `RAG_LLM_MODEL`. El modelo de embeddings debe ser distinto del modelo generativo. No poner estas variables en código cliente ni registrar sus valores.
+Qdrant se ejecuta en ambos Compose con almacenamiento persistente y sin puertos públicos. Desarrollo usa la colección `trackflow_knowledge`; producción usa el alias `trackflow_knowledge_prod`, seleccionado por `RAG_COLLECTION_NAME`. LiteLLM recibe la configuración del backend mediante `LITELLM_API_KEY`, `LITELLM_API_BASE`, `RAG_EMBEDDING_MODEL` y `RAG_LLM_MODEL`. El modelo de embeddings debe ser distinto del modelo generativo. No poner estas variables en código cliente ni registrar sus valores.
 
 En entornos Linux donde Docker bridge no puede resolver DNS externo, se puede usar el override `docker-compose.rag-host.yml`. Este mantiene Qdrant enlazado solo a loopback, ejecuta la API en la red del host y enruta el backoffice a través de `host.docker.internal`:
 
@@ -23,6 +23,21 @@ Para indexar explícitamente desde el entorno donde están montados el corpus y 
 ```bash
 python -m data.pipelines.setup_rag
 ```
+
+Ese comando es destructivo y está reservado a desarrollo. En producción,
+`python -m data.pipelines.production_rag prepare` devuelve estado JSON sin
+activar el índice; `activate --state-b64 <estado>` publica el alias y
+`restore --state-b64 <estado>` recupera su destino anterior. El script de
+despliegue coordina estas operaciones bajo su bloqueo exclusivo y limita cada
+comando a 180 segundos, retirando su contenedor temporal si excede el plazo.
+`check` valida únicamente la configuración, sin consultar al proveedor.
+
+La huella incluye chunks, gateway, alias de embeddings y `INDEX_VERSION`.
+Incrementar esa versión al cambiar el procesamiento o la representación del
+índice. La validación comprueba todos los UUID, payloads, dimensiones y cantidad
+de puntos; los índices incompletos se conservan pero no se reutilizan. La
+preparación nunca borra una colección existente. El rollback elimina el alias
+si no existía antes del primer despliegue, conservando las colecciones físicas.
 
 ## Chunking y payload
 

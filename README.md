@@ -136,6 +136,10 @@ Password-reset email delivery also needs `RESEND_API_KEY` and a valid
 
 For service configuration, data, troubleshooting and VPS deployment, see
 [Docker setup and deployment](./docs/docker.md).
+
+Production deployments from `main` include persistent Qdrant and automatic RAG
+indexing. Before merging, configure the four LiteLLM/model variables in the VPS
+private `.env`; see the [Actions guide](./docs/github-actions.md).
 ## Installation
 
 From the repository root, install `uv` if it is not already available:
