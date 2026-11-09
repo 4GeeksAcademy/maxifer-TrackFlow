@@ -25,14 +25,34 @@ compose() {
 DOCKER_CONFIG=$(mktemp -d)
 export DOCKER_CONFIG
 ROLLBACK_NEEDED=0
+RAG_ACTIVATION_STARTED=0
+RAG_JOB="trackflow-rag-$COMMIT"
 BACKUP=""
-cleanup() { rm -rf -- "$DOCKER_CONFIG"; }
+cleanup() {
+    docker rm -f "$RAG_JOB" >/dev/null 2>&1 || true
+    rm -rf -- "$DOCKER_CONFIG"
+}
+rag() {
+    timeout --signal=TERM --kill-after=5 180 docker compose --ansi never \
+        --project-directory "$APP_DIR" --env-file "$APP_DIR/.env" \
+        --project-name trackflow-prod -f "$RELEASE/docker-compose.prod.yml" \
+        run --rm --no-deps -T --name "$RAG_JOB" services \
+        python -m data.pipelines.production_rag "$@"
+}
 rollback() {
     local status=$?
     trap - ERR HUP INT TERM
     set +e
     if [[ "$ROLLBACK_NEEDED" == 1 ]]; then
         echo 'Deployment failed; restoring previous container images.'
+        if [[ "$RAG_ACTIVATION_STARTED" == 1 ]]; then
+            compose stop services
+            docker rm -f "$RAG_JOB" >/dev/null 2>&1 || true
+            if ! rag restore --state-b64 "$RAG_STATE"; then
+                echo "Alias rollback failed; API remains stopped. Recovery files: $BACKUP" >&2
+                exit 1
+            fi
+        fi
         cp "$BACKUP/docker-compose.prod.yml" "$APP_DIR/docker-compose.prod.yml"
         COMPOSE_FILE="$BACKUP/docker-compose.prod.yml"
         if compose -f "$BACKUP/rollback-images.yml" up -d --no-build --pull never --wait --wait-timeout 180; then
@@ -72,6 +92,7 @@ for SERVICE in landing uis services; do
 done
 { printf 'services:\n'; cat "$BACKUP/image-entries.yml"; } > "$BACKUP/rollback-images.yml"
 compose exec -T services python - --snapshot < "$RELEASE/verify_deployment.py" > "$BACKUP/before.json"
+python3 -c 'import json,sys; assert json.load(open(sys.argv[1]))["active_user_available"], "An existing active user is required for RAG verification"' "$BACKUP/before.json"
 
 export LANDING_IMAGE="$IMAGE_PREFIX/landing:$COMMIT"
 export UIS_IMAGE="$IMAGE_PREFIX/uis:$COMMIT"
@@ -86,11 +107,23 @@ assert config["volumes"]["api_data"]["name"] == "trackflow-prod_api_data"
 api=config["services"]["services"]
 assert any(v["type"]=="volume" and v["source"]=="api_data" and v["target"]=="/app/services/api/data" for v in api["volumes"])
 assert str(api["environment"]["DEMO_DATA_ENABLED"]).lower()=="false"
+for key in ["LITELLM_API_BASE", "LITELLM_API_KEY", "RAG_EMBEDDING_MODEL", "RAG_LLM_MODEL"]:
+    assert str(api["environment"].get(key, "")).strip(), "Missing required RAG variable: " + key
+assert api["environment"]["QDRANT_URL"] == "http://qdrant:6333"
+assert api["environment"]["RAG_COLLECTION_NAME"] == "trackflow_knowledge_prod"
+assert not config["services"]["qdrant"].get("ports"), "Qdrant must remain private"
+assert config["volumes"]["qdrant_data"]["name"] == "trackflow-prod_qdrant_data"
 ui=config["services"]["uis"]["environment"]
 assert ui["BACKEND_INTERNAL_URL"] == "http://services:8000"
 assert (ui.get("NEXT_PUBLIC_API_URL") or "") == manifest["public_api_url"], "NEXT_PUBLIC_API_URL differs between build and VPS"
 ' "$RELEASE/release.json" "$COMMIT"
 compose pull
+rag check
+compose up -d --no-build --pull never --wait --wait-timeout 180 qdrant
+echo 'Preparing production RAG index (maximum 180 seconds).'
+rag prepare > "$BACKUP/rag.json"
+RAG_STATE=$(base64 -w0 "$BACKUP/rag.json")
+cat "$BACKUP/rag.json"
 
 # A short API pause gives TinyDB and SQLite a consistent on-disk backup.
 ROLLBACK_NEEDED=1
@@ -98,9 +131,11 @@ compose stop services
 docker run --rm --user 0 --network none -v trackflow-prod_api_data:/data:ro \
     -v "$BACKUP:/backup" "$PREVIOUS_API_IMAGE" python -c \
     "import shutil; shutil.copytree('/data', '/backup/data')"
+RAG_ACTIVATION_STARTED=1
+rag activate --state-b64 "$RAG_STATE"
 compose up -d --no-build --pull never --wait --wait-timeout 180
 BASELINE=$(base64 -w0 "$BACKUP/before.json")
-compose exec -T services python - --baseline-b64 "$BASELINE" < "$RELEASE/verify_deployment.py" > "$BACKUP/verification.json"
+compose exec -T services python - --baseline-b64 "$BASELINE" --rag < "$RELEASE/verify_deployment.py" > "$BACKUP/verification.json"
 [[ $(sha256sum "$APP_DIR/.env" | awk '{print $1}') == "$ENV_SHA" ]]
 
 # Persist only image references; application secrets stay in the existing .env.

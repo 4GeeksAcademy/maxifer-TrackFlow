@@ -48,19 +48,36 @@ services:
       context: .
       dockerfile: services/Dockerfile
       target: production
-    env_file: .env
+    env_file: ${TRACKFLOW_ENV_FILE:-.env}
     environment:
       JWT_SECRET: ${JWT_SECRET:?Generate JWT_SECRET in .env}
       DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in .env}
       PYTHON_DOTENV_DISABLED: "1"
       DEMO_DATA_ENABLED: "false"
+      QDRANT_URL: http://qdrant:6333
+      RAG_COLLECTION_NAME: trackflow_knowledge_prod
     volumes:
       - api_data:/app/services/api/data
+    depends_on:
+      qdrant:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/', timeout=5)"]
       interval: 15s
       timeout: 6s
       start_period: 30s
+      retries: 5
+    restart: unless-stopped
+    networks: [trackflow]
+
+  qdrant:
+    image: qdrant/qdrant:v1.15.3
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD", "bash", "-lc", "echo > /dev/tcp/127.0.0.1/6333"]
+      interval: 10s
+      timeout: 5s
       retries: 5
     restart: unless-stopped
     networks: [trackflow]
@@ -71,3 +88,4 @@ networks:
 
 volumes:
   api_data:
+  qdrant_data:

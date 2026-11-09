@@ -114,33 +114,13 @@ jobs:
           labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
           cache-from: type=gha,scope=services
           cache-to: type=gha,mode=max,scope=services
-      - name: Test production containers with isolated data
+      - name: Test production RAG with isolated Qdrant and synthetic gateway
         id: smoke
         env:
           LANDING_IMAGE: ${{ steps.names.outputs.prefix }}/landing:${{ github.sha }}
           UIS_IMAGE: ${{ steps.names.outputs.prefix }}/uis:${{ github.sha }}
           API_IMAGE: ${{ steps.names.outputs.prefix }}/services:${{ github.sha }}
-        run: |
-          python3 - <<'PY'
-          import os, pathlib, secrets
-          values = {
-              'JWT_SECRET': secrets.token_urlsafe(48),
-              'DATABASE_URL': 'sqlite:////app/services/api/data/inventory.sqlite3',
-              'DEMO_DATA_ENABLED': 'false',
-              'BACKEND_INTERNAL_URL': 'http://services:8000',
-              'NEXT_PUBLIC_API_URL': os.environ.get('PUBLIC_API_URL', ''),
-              'LANDING_PORT': '3000', 'BACKOFFICE_PORT': '3001', 'TALENT_PORT': '3002',
-          }
-          pathlib.Path('.env').write_text(''.join(f'{k}={v}\n' for k,v in values.items()))
-          PY
-          docker compose -p trackflow-ci -f docker-compose.prod.yml up -d --no-build --pull never --wait --wait-timeout 180
-          docker compose -p trackflow-ci -f docker-compose.prod.yml exec -T services python - < scripts/verify_deployment.py
-      - name: Production smoke-test logs
-        if: failure() && steps.smoke.outcome == 'failure'
-        run: docker compose -p trackflow-ci -f docker-compose.prod.yml logs --tail 60
-      - name: Clean up isolated CI containers
-        if: always() && steps.smoke.outcome != 'skipped'
-        run: docker compose -p trackflow-ci -f docker-compose.prod.yml down -v --remove-orphans
+        run: python3 scripts/rag_smoke.py
 
   deploy:
     needs: images

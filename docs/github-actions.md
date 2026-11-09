@@ -58,6 +58,10 @@ La URL pública de talento se incorpora durante la compilación y debe coincidir
 con `NEXT_PUBLIC_API_URL` del `.env` del VPS. El backend interno de las imágenes
 es `http://services:8000`. La discrepancia se detecta antes de detener la API.
 Credenciales de PostgreSQL, JWT y correo permanecen en el `.env` del servidor.
+Antes del primer merge con RAG, añadir allí `LITELLM_API_BASE`,
+`LITELLM_API_KEY`, `RAG_EMBEDDING_MODEL` y `RAG_LLM_MODEL` con los valores ya
+probados. No se trasladan a GitHub Secrets ni a las imágenes. Se requiere una
+cuenta activa existente; no se crean usuarios durante el despliegue.
 
 ## Qué cambia en el VPS
 
@@ -74,11 +78,14 @@ El script de despliegue:
    de la conexión de datos y del JWT, sin imprimir credenciales.
 4. Descarga todas las imágenes con el token temporal de GHCR. Un fallo de
    descarga deja los contenedores actuales funcionando.
-5. Pausa únicamente la API para respaldar de forma consistente su volumen.
-6. Actualiza los contenedores y espera los healthchecks de API, landing y
-   ambas aplicaciones Next.js.
-7. Comprueba las rutas a través de Next.js, la cuenta existente cuando la hay,
-   y la conservación de IDs de usuarios, proveedores, incidencias e inventario.
+5. Valida las cuatro variables RAG sin imprimir valores, arranca Qdrant y
+   prepara/reutiliza un índice completo con la imagen nueva. La preparación
+   tiene un límite de 180 segundos y no sustituye el índice activo.
+6. Pausa únicamente la API para respaldar su volumen, publica el alias RAG,
+   actualiza los contenedores y espera todos sus healthchecks.
+7. Comprueba rutas, cuenta existente y conservación de IDs; exige una consulta
+   autenticada con respuesta y fuentes a través de Next.js. Usa un JWT efímero
+   para la cuenta existente, sin imprimirlo ni almacenar su respuesta.
 8. Guarda las referencias exactas de las imágenes en el Compose activo y
    registra el commit en `/opt/trackflow/current-release`.
 
@@ -87,17 +94,22 @@ la red `trackflow-production`, el `.env` y la base PostgreSQL original. No se
 ejecutan semillas ni comandos que eliminen volúmenes. La API se pausa brevemente
 durante el respaldo y la sustitución de su contenedor; no es un despliegue sin
 interrupciones.
+El volumen nuevo `trackflow-prod_qdrant_data` conserva los índices al reiniciar.
+Qdrant solo es accesible desde la red Docker. Los índices previos no se borran.
 
 ## Fallos y recuperación
 
 Un fallo después de detener la API activa la restauración de la configuración
-y las imágenes anteriores. El workflow permanece fallido para que el error
+y las imágenes anteriores, restaurando primero el destino del alias RAG. Si
+restaurar el alias falla, la API queda detenida para evitar usar un índice
+incompatible y el log indica los archivos de recuperación. El workflow permanece fallido para que el error
 sea visible. Si el rollback también falla, el log indica el directorio de
 recuperación. No se usa `latest` para elegir una versión de producción.
 
 Los respaldos quedan en `/opt/trackflow/backups/deploy-<fecha>-<commit>/` con
 permisos privados. Incluyen el `.env` anterior, Compose, etiquetas de las
-imágenes anteriores, estado de referencia y copia del volumen. No se suben
+imágenes anteriores, estado de referencia, copia del volumen y `rag.json` con
+el destino previo del alias y el candidato. No se suben
 como artefactos de GitHub.
 
 El rollback vuelve a las imágenes anteriores y conserva los datos actuales;
@@ -120,6 +132,16 @@ docker compose -f docker-compose.prod.yml config --quiet
 Los tests de control de datos funcionan en Windows. Las pruebas que ejecutan
 el script real con un Docker simulado requieren Linux y se ejecutan en CI;
 cubren éxito, fallo al descargar, fallo de arranque y fallo de verificación.
+También cubren configuración incompleta, fallo de preparación, primera
+instalación, actualización y errores de restauración del alias.
+
+`python scripts/rag_smoke.py` requiere las tres imágenes de producción indicadas
+por `LANDING_IMAGE`, `UIS_IMAGE` y `API_IMAGE`. Crea un proyecto Compose único,
+configuración sintética temporal, Qdrant real y un gateway OpenAI-compatible
+simulado. Verifica indexación, reutilización, consulta por Next.js y persistencia
+tras reiniciar Qdrant; elimina exclusivamente sus propios contenedores/volúmenes.
+Usa Compose moderno con soporte de `!reset`. El `.env` local no se lee ni modifica.
+Este smoke valida integración, no calidad del modelo ni Recall@3.
 
 Referencias: [publicación de imágenes en GitHub Actions](https://docs.github.com/en/actions/tutorials/publish-packages/publish-docker-images),
 [secrets de Actions](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets),

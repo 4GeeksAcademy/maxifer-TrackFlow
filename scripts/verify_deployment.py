@@ -28,7 +28,20 @@ def read_table(path, table):
             time.sleep(0.2)
 
 
-def capture(*, check_assets=True):
+def verify_rag(headers):
+    request = urllib.request.Request(
+        "http://uis:3001/backend/api/rag/query",
+        data=json.dumps({"question": "¿Cuál es la ventana estándar para solicitar una devolución?"}).encode(),
+        headers={**headers, "Content-Type": "application/json"}, method="POST",
+    )
+    with urllib.request.urlopen(request, timeout=40) as response:
+        result = json.load(response)
+        assert response.status == 200
+    assert result.get("answer", "").strip() and result.get("sources")
+    assert result.get("retrieved_count", 0) > 0 and result.get("abstained") is False
+
+
+def capture(*, check_assets=True, check_rag=False):
     data = Path("/app/services/api/data")
     users = read_table(data / "auth.json", "users")
     active = next((u for u in users.values() if u.get("is_active")), None)
@@ -48,6 +61,10 @@ def capture(*, check_assets=True):
     if active:
         assert get("/auth/me")["user"]["id"] == active["id"]
         get("/suppliers")
+    if check_rag:
+        if not active:
+            raise RuntimeError("RAG verification requires an existing active user")
+        verify_rag(headers)
     incidents = get("/api/incidents")
     products = get("/inventory/products")
     orders = get("/inventory/orders")
@@ -72,6 +89,7 @@ def capture(*, check_assets=True):
     assert set(stored_incidents) == {row["id"] for row in incidents}
     assert os.environ.get("DEMO_DATA_ENABLED", "").lower() == "false"
     return {
+        "active_user_available": active is not None,
         "users": sorted(u["id"] for u in users.values()),
         "suppliers": sorted(read_table(data / "suppliers.json", "suppliers")),
         "incidents": sorted(stored_incidents),
@@ -95,8 +113,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--snapshot", action="store_true")
     parser.add_argument("--baseline-b64")
+    parser.add_argument("--rag", action="store_true")
     args = parser.parse_args()
-    state = capture(check_assets=not args.snapshot)
+    state = capture(check_assets=not args.snapshot, check_rag=args.rag)
     if args.baseline_b64:
         compare(json.loads(base64.b64decode(args.baseline_b64)), state)
     if args.snapshot:

@@ -1,0 +1,64 @@
+{
+  "queries": [
+    {
+      "question": "¿Cuál es el plazo estándar de entrega dentro del mismo país?",
+      "expected_source_document": "sla-delivery",
+      "expected_section": "SLA de Entrega",
+      "expected_text": "3 a 5 días hábiles"
+    },
+    {
+      "question": "¿Cuánto tarda un envío express en una zona metropolitana?",
+      "expected_source_document": "sla-delivery",
+      "expected_section": "SLA de Entrega",
+      "expected_text": "24 a 48 horas"
+    },
+    {
+      "question": "¿Se garantizan los plazos de entrega durante Black Friday?",
+      "expected_source_document": "sla-delivery",
+      "expected_section": "SLA de Entrega",
+      "expected_text": "Black Friday"
+    },
+    {
+      "question": "¿Cuál es la ventana estándar para solicitar una devolución?",
+      "expected_source_document": "returns-policy",
+      "expected_section": "Política de Devoluciones",
+      "expected_text": "30 días desde la entrega"
+    },
+    {
+      "question": "¿Cómo se procesan las devoluciones internacionales?",
+      "expected_source_document": "returns-policy",
+      "expected_section": "Política de Devoluciones",
+      "expected_text": "requieren gestión manual"
+    },
+    {
+      "question": "¿Qué transportista tiene mejor cobertura rural en Aragón?",
+      "expected_source_document": "carrier-coverage",
+      "expected_section": "Cobertura de Transportistas",
+      "expected_text": "SEUR: mejor cobertura en zonas rurales de Aragón"
+    },
+    {
+      "question": "¿Qué transportista ofrece mejor tarifa para paquetes pesados en Estados Unidos?",
+      "expected_source_document": "carrier-coverage",
+      "expected_section": "Cobertura de Transportistas",
+      "expected_text": "mejor tarifa para paquetes pesados"
+    },
+    {
+      "question": "¿Cuál es la tarifa de almacenamiento mensual en Los Ángeles?",
+      "expected_source_document": "storage-pricing",
+      "expected_section": "Tarifas de Almacenamiento",
+      "expected_text": "18 USD por metro cúbico al mes"
+    },
+    {
+      "question": "¿Cuándo se aplica la tarifa de inventario de larga duración?",
+      "expected_source_document": "storage-pricing",
+      "expected_section": "Tarifas de Almacenamiento",
+      "expected_text": "150% sobre la tarifa estándar"
+    },
+    {
+      "question": "¿Quién debe aprobar una tarifa preferencial de almacenamiento?",
+      "expected_source_document": "storage-pricing",
+      "expected_section": "Tarifas de Almacenamiento",
+      "expected_text": "siempre debe pasar por Miguel Torres"
+    }
+  ]
+}
