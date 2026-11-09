@@ -2,17 +2,15 @@
 
 TrackFlow is an AI Engineering project for a last-mile logistics and warehouse operations company with teams in Los Angeles and Zaragoza.
 
-The repository combines several deliverables for the 4Geeks Academy AI Engineering Track: a public landing page, internal dashboards, a FastAPI backend, shared analysis logic, data areas, and placeholders for future agents, workflows, MCP servers, and infrastructure.
+The repository combines several deliverables for the 4Geeks Academy AI Engineering Track: a public website, internal dashboards, a FastAPI backend, shared analysis logic, data areas, and placeholders for future agents, workflows, MCP servers, and infrastructure.
 
 Spanish documentation is available in [README.es.md](./README.es.md).
-
-Run the complete stack with Docker Compose: [Docker setup and VPS deployment](./docs/docker.md).
 
 ## What Is Included
 
 | Area | Path | Status |
 | --- | --- | --- |
-| Static landing | `uis/website/index.html`, `uis/website/application.html` | Available |
+| Public website | `uis/website` | Next.js static export |
 | Incidents backoffice | `uis/backoffice` | Available |
 | Talent pipeline tracker | `uis/backoffice/talent-pipeline-tracker` | Available |
 | FastAPI service | `services/api` | Available |
@@ -47,10 +45,73 @@ TrackFlow/
 
 ## Requirements
 
+- Docker Engine with Docker Compose, or Docker Desktop using Linux containers
 - Node.js 22 or newer
 - npm 9 or newer
 - Python 3.12 or newer
 - uv for Python dependency and environment management
+
+The host requirements for Node.js, npm, Python and uv apply to local development.
+Docker Compose builds and runs the services in containers.
+
+## Run the Full Stack with Docker
+
+From the repository root, copy `.env.example` to `.env`:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+On macOS or Linux, use `cp .env.example .env`. Keep `.env` private and do not
+commit it. Set a private `JWT_SECRET` in `.env`; Docker can generate one with:
+
+```sh
+docker run --rm python:3.12-slim python -c "import secrets; print(secrets.token_urlsafe(48))"
+```
+
+Paste the generated value into `JWT_SECRET`. Make sure `.env` also defines
+`DATABASE_URL` and these Compose ports: `LANDING_PORT=3000`,
+`BACKOFFICE_PORT=3001`, `TALENT_PORT=3002` and `API_PORT=8000`. The example
+configuration uses SQLite in a Docker volume, so PostgreSQL is not required for
+a local run. To use a different database, set its connection URL in `.env`
+before starting.
+
+Validate the configuration and build/start the services:
+
+```sh
+docker compose config --quiet
+docker compose up --build -d
+docker compose ps
+```
+
+To follow service logs, run `docker compose logs -f`; press Ctrl+C to stop
+following logs without stopping the services.
+
+Open the services at:
+
+| Service | URL |
+| --- | --- |
+| Public website | http://localhost:3000 |
+| Incidents backoffice | http://localhost:3001 |
+| Talent pipeline tracker | http://localhost:3002 |
+| API / OpenAPI | http://localhost:8000/docs |
+
+Use the port values in `.env` if those defaults are occupied. If you change the
+backoffice port, update `FRONTEND_URL` in `.env` as well. The development API
+enables demo data by default: `test@test.com` / `test1234`. These credentials
+are for local development only; set `DEMO_DATA_ENABLED=false` before any
+production deployment. The API data persists in the `api_data` Docker volume.
+`docker compose down` stops the stack while preserving volumes; **do not use
+`docker compose down -v`** unless you deliberately want to delete its data.
+
+The tracker needs a separate API with `/records` and notes endpoints; the
+included FastAPI service does not provide those endpoints. Without
+`NEXT_PUBLIC_API_URL`, the tracker shows that its service is not configured.
+Password-reset email delivery also needs `RESEND_API_KEY` and a valid
+`EMAIL_FROM`; the rest of the backoffice can run without email.
+
+For service configuration, data, troubleshooting and VPS deployment, see
+[Docker setup and deployment](./docs/docker.md).
 
 ## Installation
 
@@ -66,8 +127,8 @@ Then install all project dependencies:
 # Python API and local tooling. Creates or updates .venv.
 uv sync
 
-# Static landing page
-npm ci
+# Public website (Next.js static export)
+npm ci --prefix uis/website
 
 # Incidents backoffice
 cd uis/backoffice
@@ -109,9 +170,9 @@ These credentials are public and strictly for local development. **Before deploy
 From the repository root:
 
 ```bash
-npm install
+npm ci --prefix uis/website
 npm run build:landing
-npx --yes serve -l 3000 uis/website
+npx --yes serve -l 3000 uis/website/out
 ```
 
 Open `http://localhost:3000`.
@@ -120,10 +181,9 @@ Useful root scripts:
 
 | Command | Purpose |
 | --- | --- |
-| `npm run build:css` | Builds the Tailwind CSS file used by the static landing |
-| `npm run optimize:images` | Optimizes landing images |
+| `npm run optimize:images` | Optimizes website images |
 | `npm run test:spanish-copy` | Checks Spanish copy conventions |
-| `npm run build:landing` | Runs the landing validation/build pipeline |
+| `npm run build:landing` | Checks Spanish copy and creates the Next.js static export |
 
 ## Incidents Backoffice
 

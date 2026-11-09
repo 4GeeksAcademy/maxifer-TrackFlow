@@ -15,3 +15,11 @@ services/api/data/incidents.sqlite3*
 RETO.md
 milestone_inventory_trackflow_powershell_revisado.md
 stitch_trackflow_operations_backoffice/
+/uis/website/.next/
+/uis/website/out/
+/uis/website/node_modules/
+/uis/website/next-env.d.ts
+/uis/website/tsconfig.tsbuildinfo
+/uis/website/public/assets/
+/uis/website/public/i18n.js
+/uis/website/public/validation.js

@@ -470,7 +470,7 @@ function focusFirstInvalid(step) {
   invalid?.focus();
 }
 
-form.addEventListener("input", (event) => {
+const updateFieldState = (event) => {
   if (fields[event.target.name]) {
     validateField(event.target);
     if (event.target.closest("[data-form-step]")) {
@@ -497,7 +497,10 @@ form.addEventListener("input", (event) => {
       }
     }
   }
-});
+};
+
+form.addEventListener("input", updateFieldState);
+form.addEventListener("change", updateFieldState);
 
 form.addEventListener(
   "blur",
@@ -669,3 +672,6 @@ document.addEventListener("trackflow:languagechange", () => {
 setSubmissionState(false);
 goToStep(1);
 }
+
+// Imported after the application form mounts so its controls are available.
+export {};

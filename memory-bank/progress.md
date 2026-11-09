@@ -1,5 +1,27 @@
 # Progreso
 
+## Integración de main en la rama RAG — 8 de noviembre de 2026
+
+A petición del desarrollador se integra `origin/main` (`1717ccc`) en
+`feature/rag-knowledge-base`, conservando el RAG de `5e71bb0` y la migración
+del website a Next.js. Merge automático sin conflictos; Compose conserva Qdrant
+y usa la imagen del website migrado. Backend, pipelines y backoffice permanecen
+sin cambios respecto de la rama RAG. No se modifica `.env` ni datos persistentes.
+
+Validaciones de esta integración: build/export del website, copy español,
+validador estructural (40 comprobaciones), siete pruebas del validador y ambos
+Compose con `config --quiet` aprobados. Docker muestra avisos de acceso a su
+configuración local; no se construyen imágenes ni se ejecuta el stack completo.
+`--check-branch` falla únicamente porque exige la antigua rama
+`feature/agent-memory-bank`; se conserva la rama RAG solicitada. No se repiten
+las suites de backend/backoffice sin cambios. Revisión del diff sin secretos ni
+datos personales nuevos; comprobaciones de whitespace aprobadas.
+
+Los cambios locales de ambos README se guardan temporalmente para el merge y
+se restauran después; los archivos locales no seguidos quedan fuera del commit.
+Siguiente paso: optimizar la recuperación RAG y repetir su evaluación antes de
+preparar la futura PR hacia main. Esta integración es local, sin push ni despliegue.
+
 ## Hito RAG comercial — 29 de octubre de 2026
 
 Implementado el pipeline RAG con `setup`, `embed`, `retrieve`, `generate_answer` y `query`, endpoint FastAPI autenticado y UI de consulta para account managers. Qdrant se añade al Compose de desarrollo. En este Codespace, el bridge de Docker no resuelve DNS externo; el override `docker-compose.rag-host.yml` usa la red del host para la API, conserva Qdrant solo en loopback y se documenta como solución de desarrollo local.
@@ -46,3 +68,114 @@ Commit inicial `72341e7` publicado en `feature/agent-memory-bank` y
 con enlace directo a AGENTS.md. CI inicial aprobada; cada subida vuelve a validarse. La integración Netlify detectada
 al abrir la PR requiere publicar `uis/website`; se incorpora `netlify.toml` para
 alinear el hosting estático. No se fusionó la PR ni se ejecutó un despliegue manual.
+
+## Migración del website a Next.js — 31 de octubre de 2026
+
+Implementado en `feature/website-nextjs-migration`, rama nueva basada en
+`feature/agent-memory-bank` a petición del desarrollador. El website se construye
+con Next.js 16.4.3 y se exporta de forma estática dentro de `uis/website`.
+El contenido y estilos están en componentes React/CSS de `app/`; Next genera
+las rutas estáticas `/`, `/index.html` y `/application.html`. Los HTML fuente y
+los endpoints públicos de scripts fueron retirados. Idioma, navegación y
+formulario se cargan como módulos cliente después de montar el contenido React.
+Las imágenes se preparan en `public/` durante los comandos Next.
+
+Netlify publica `uis/website/out`; el contenedor landing genera el mismo export
+y Nginx lo sirve en el puerto existente. Se quitaron los bind mounts de HTML y
+assets en Compose de desarrollo porque ya no son los archivos servidos por el
+contenedor.
+La lectura de la guía local de Next.js fue denegada por la política de exclusión
+de contenido; no se intentó acceder a ella por otra vía.
+
+Verificación realizada:
+- `npm run build:landing`: copy español y build/export de Next aprobados.
+- `npm audit --prefix uis/website --omit=dev`: cero vulnerabilidades conocidas.
+- Smoke HTTP al export: páginas, scripts y assets principales devolvieron 200.
+- `docker compose build landing`: imagen construida. Smoke test con contenedor
+  aislado y puerto temporal: `/`, `/index.html`, `/application.html`, ambos
+  scripts y los assets logo/hero devolvieron HTTP 200; el contenedor temporal se
+  detuvo y eliminó al terminar. No se levantó Compose completo ni se tocaron
+  volúmenes o datos.
+- El contexto de Docker excluyó el lockfile del website; debido a la política de
+  acceso al archivo, la imagen instala dependencias desde `package.json` con
+  `npm install --package-lock=false`, en vez de instalación reproducible con
+  `npm ci`.
+- Revisión correctiva en navegador sobre la imagen previa: el cambio de idioma
+  dejaba las tarjetas de servicios en español y las selecciones del paso 2 no
+  habilitaban «Siguiente». Se corrigió el selector de tarjetas y se procesa el
+  evento `change` del formulario; las etiquetas accesibles del stepper también
+  se actualizan con el idioma.
+- `npm run build:landing` pasó después de retirar `index.html` y
+  `application.html`; el export sigue produciendo las rutas `.html` requeridas.
+- `docker compose config --quiet` y `docker compose build landing` pasaron con
+  el Dockerfile sin copiar HTML ni scripts antiguos.
+- `npm run validate:ai-setup` y `npm run test:ai-setup`: aprobados tras actualizar
+  el validador para requerir entradas App Router y rechazar las fuentes antiguas.
+- La prueba de navegador posterior al cambio quedó bloqueada: la política de
+  contenido denegó el ejecutable local de Next.js al intentar iniciar el servidor
+  de desarrollo. No se intentó leer el export restringido por otra vía.
+- `git diff --check`: aprobado. No se ejecutó el modo `--check-branch`, porque
+  exige `feature/agent-memory-bank` y el desarrollador pidió esta rama nueva.
+
+## URLs sin extensión del website — 31 de octubre de 2026
+
+A petición del desarrollador, se sustituye la conservación de URLs `.html`
+documentada en la migración anterior: la navegación y las URLs canónicas ahora
+usan `/` y `/application/`. `trailingSlash: true` genera el formulario como
+`out/application/index.html`. Se ajustan datos estructurados, selectores de
+idioma y rutas de imágenes a las nuevas direcciones.
+
+Nginx y Netlify tienen redirecciones 301 para `/index.html` y
+`/application.html`; Nginx también normaliza `/application/index.html`.
+Las redirecciones Nginx conservan parámetros y usan destinos relativos para
+respetar el puerto publicado por Docker. El smoke de despliegue incluye la ruta
+nueva del formulario y mantiene las antiguas para comprobar compatibilidad.
+
+Verificación realizada:
+- `npm run build:landing`: copy español, TypeScript y export de Next aprobados.
+- `npm run validate:ai-setup` y `npm run test:ai-setup`: aprobados, siete pruebas.
+  El primer intento encontró EPERM del sandbox; el reintento autorizado pasó.
+- `docker compose config --quiet`, build de landing y `nginx -t`: aprobados.
+- HTTP en contenedor temporal aislado: páginas nuevas, logo, hero y assets
+  referenciados por ambas páginas devuelven 200. No hay enlaces de navegación
+  `.html` en el HTML generado y ambas páginas tienen su canonical nuevo.
+  Las URLs antiguas, `/application` y `/application/index.html` devuelven 301
+  hacia los destinos correctos, sin bucles; los parámetros `?lang=en` se
+  conservan. Una ruta inexistente devuelve 404.
+- No se verificaron las redirecciones en un hosting Netlify publicado ni se
+  ejecutó una prueba de interacción en navegador.
+- Contenedor temporal detenido y eliminado automáticamente; landing local
+  iniciada con la imagen nueva mediante `docker compose up -d --no-deps landing`.
+  Acceso HTTP en puerto 3000 aprobado para ambas páginas y URLs antiguas.
+- No se crea commit ni PR en esta corrección; se mantiene la rama existente
+  `feature/website-nextjs-migration`, con los cambios previos del desarrollador.
+
+## Preparación de entrega de la migración — 31 de octubre de 2026
+
+El desarrollador confirmó que probó el proyecto y funciona correctamente, y
+autorizó commit, push y PR hacia `main`. Se mantiene
+`feature/website-nextjs-migration`; las referencias remotas actualizadas no
+muestran commits de esta rama pendientes respecto de `origin/main` antes de
+incorporar la migración. Se revisa únicamente el conjunto de cambios del website,
+su integración Docker/Netlify, documentación y validador. No se incluyen secretos,
+datos persistentes ni cambios del backend o las interfaces internas.
+
+Comprobaciones previas al commit:
+- `npm run build:landing`: aprobado, incluidas comprobación de copy,
+  compilación, TypeScript y exportación estática.
+- `npm run validate:ai-setup`: aprobado; `npm run test:ai-setup`: siete pruebas
+  aprobadas.
+- La invocación npm con `-- --check-branch` no transmitió la opción en este
+  entorno. La ejecución directa de `node .../validate.mjs --root . --check-branch`
+  confirmó un único fallo: exige `feature/agent-memory-bank`. Se documenta la
+  excepción porque la rama nueva fue solicitada para esta migración; no se
+  cambia de rama ni se presenta esta comprobación como aprobada.
+- Ambos Compose (`docker-compose.yml` y `docker-compose.prod.yml`) pasan
+  `config --quiet`. El build Docker, `nginx -t` y smoke HTTP del website ya
+  aprobados en esta sesión siguen siendo aplicables; no se modificó su código.
+- El desarrollador validó manualmente el proyecto tras la corrección de rutas.
+  No se repiten las suites de backend/backoffice/tracker sin cambios; sus
+  comprobaciones automáticas y smoke del stack completo quedan a cargo de CI.
+- Próximo paso: publicar la rama y abrir PR a `main`, adjuntando resultados y
+  el enlace a AGENTS.md. No fusionar ni desplegar; el proyecto local fue detenido
+  a petición del desarrollador.
