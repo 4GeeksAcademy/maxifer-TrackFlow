@@ -1,6 +1,5 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 export const required = [
@@ -24,7 +23,7 @@ function frontmatter(source) {
   return fields;
 }
 
-export function validate(root, { checkBranch = false } = {}) {
+export function validate(root) {
   root = path.resolve(root);
   const results = [];
   const check = (name, fn) => {
@@ -93,23 +92,19 @@ export function validate(root, { checkBranch = false } = {}) {
   ]) {
     check(`sin ruta antigua ${old}`, () => assert(!fs.existsSync(path.join(root, old)), 'ruta antigua presente'));
   }
-  if (checkBranch) check('rama de entrega', () => {
-    const branch = execFileSync('git', ['branch', '--show-current'], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
-    assert(branch === 'feature/agent-memory-bank', `rama incorrecta: ${branch || 'detached HEAD'}`);
-  });
   return results;
 }
 
 export function main(args) {
   let root = process.cwd();
-  let checkBranch = false;
   try {
     for (let i = 0; i < args.length; i++) {
-      if (args[i] === '--check-branch') checkBranch = true;
+      // Legacy invocations remain valid; structural checks do not depend on Git.
+      if (args[i] === '--check-branch') continue;
       else if (args[i] === '--root' && args[i + 1] && !args[i + 1].startsWith('--')) root = args[++i];
       else throw new Error(`opción inválida o sin valor: ${args[i]}`);
     }
-    const results = validate(root, { checkBranch });
+    const results = validate(root);
     for (const result of results) console.log(`${result.ok ? 'PASS' : 'FAIL'} ${result.name}${result.detail ? ': ' + result.detail : ''}`);
     return results.every(result => result.ok) ? 0 : 1;
   } catch (error) { console.error(`FAIL ${error.message}`); return 1; }

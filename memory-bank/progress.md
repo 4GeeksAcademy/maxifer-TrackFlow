@@ -1,5 +1,109 @@
 # Progreso
 
+## Commit local de correcciones RAG — 8 de noviembre de 2026
+
+El desarrollador autoriza únicamente un commit en `feature/rag-knowledge-base`,
+sin push, PR ni despliegue. Se incluyen las correcciones de proveedor y timeouts,
+documentación de arranque, ejemplo de entorno y validador independiente de rama.
+Se excluyen `.tmp/` y `.vscode/`; no se modifican secretos ni datos persistentes.
+La integración RAG de producción sigue pendiente: Qdrant persistente sin puertos
+públicos, conexión de la API, pipeline y corpus en la imagen, variables privadas
+del VPS e indexación inicial. No se modifica infraestructura en esta entrega.
+
+Validaciones repetidas antes del commit: 40 comprobaciones AI y siete pruebas
+aprobadas; backend aislado con 92 pruebas y siete subtests aprobados, tres pruebas
+omitidas y tres avisos de deprecación; backoffice con 17 pruebas, lint y build
+aprobados. Persiste el aviso de múltiples lockfiles. En Windows se usa `npm.cmd`
+porque PowerShell bloquea `npm.ps1`; uv requiere ejecución autorizada fuera del
+sandbox. No se repiten consultas remotas, indexación ni builds de contenedores.
+Siguiente paso: preparar la integración de producción en un trabajo posterior.
+
+## Documentación Docker y ejemplo de entorno RAG — 8 de noviembre de 2026
+
+Revisados README español/inglés, guía Docker y `.env.example` contra Compose y
+el pipeline. Faltaban las cuatro variables LiteLLM/modelos en el ejemplo y el
+paso de indexación en las guías de arranque. Se añaden campos vacíos sin secretos,
+aliases a completar por el desarrollador, indexación inicial, persistencia del
+índice, acceso autenticado al asistente y comandos de parada/reanudación.
+Se consolidan las dos secciones Docker duplicadas en cada README, conservando
+sus instrucciones en una única sección. La guía distingue desarrollo de producción,
+explica recarga del pipeline/entorno y registra el aviso Qdrant pendiente.
+No se modifica `.env`, Compose ni datos; el proyecto permanece detenido.
+Validaciones: 40 comprobaciones estructurales y siete pruebas aprobadas;
+`git diff --check` limpio. Compose acepta `.env.example` con un JWT sintético
+proporcionado solo al proceso de validación, sin arrancar contenedores. No se
+validan credenciales ni aliases remotos: el ejemplo los deja vacíos deliberadamente.
+Siguiente paso: completar los valores privados al instalar y seguir la guía;
+la sesión actual ya había verificado indexación y consulta real. Sin commit.
+
+## Margen de espera para consultas RAG — 8 de noviembre de 2026
+
+El desarrollador volvió a observar el error genérico y confirmó que una consulta
+de devoluciones terminó funcionando tras más de treinta segundos. El proxy de
+Next instalado limita por defecto las peticiones a 30 segundos; sus logs muestran
+`socket hang up`/`ECONNRESET`. Se configura `experimental.proxyTimeout=120000` en
+backoffice y cada llamada LiteLLM del pipeline usa timeout de 45 segundos sin
+reintentos automáticos. Así el proxy dispone de margen para embeddings y generación
+y el proveedor tiene esperas acotadas. Reiniciados API e interfaces conservando datos.
+
+Pruebas reales autenticadas a través del backoffice: pregunta de ventana estándar
+de devolución HTTP 200 en 15,0 segundos, pregunta de cobertura rural HTTP 200 en
+1,2 segundos; ambas con respuesta y fuentes. No se simuló una respuesta de más de
+30 segundos en esta verificación. Quince pruebas de pipeline/endpoint y diecisiete
+del backoffice aprobadas; lint, build de backoffice y `git diff --check` aprobados.
+Persisten avisos existentes de deprecación, múltiples lockfiles y versiones Qdrant.
+Siguiente paso: continuar optimización de latencia y recuperación; sin commit.
+
+## Consulta RAG por backoffice verificada — 8 de noviembre de 2026
+
+El desarrollador confirmó indexación de cuatro documentos y veinte chunks.
+La consulta desde la UI fallaba con mensaje genérico; los logs del proxy Next
+mostraban `ECONNRESET` y HTTP 500. El pipeline ejecutado directamente en el
+contenedor respondió en 10,8 segundos. Se retiró del endpoint la instalación
+del adaptador global LiteLLM: la configuración del proveedor ya reside en el
+pipeline, tanto para CLI como para API. Se reinició únicamente la API para
+cargar el código actual y descartar peticiones bloqueadas; no se reindexó ni
+se eliminaron volúmenes. No se aisló si el reinicio por sí solo habría bastado.
+
+Verificación real autenticada usando la cuenta demo local, a través de
+`http://uis:3001/backend/api/rag/query`: HTTP 200 en 18,4 segundos, respuesta
+generada, tres fragmentos recuperados y dos fuentes. Quince pruebas aisladas
+del endpoint y pipeline aprobadas; tres avisos de deprecación existentes.
+El aviso de versiones de Qdrant sigue pendiente, pero no impide esta consulta.
+Sin cambios de timeout ni cambios en el backoffice. Corrección sin commit.
+
+## Corrección de indexación RAG por CLI — 8 de noviembre de 2026
+
+La salida Docker aportada por el desarrollador confirma build del website y
+arranque de los cuatro servicios, con API y Qdrant saludables. La indexación
+falló porque el CLI no inicializaba el adaptador LiteLLM del endpoint: el alias
+del modelo no incluía un proveedor reconocido. El pipeline ahora especifica
+el proveedor OpenAI-compatible y retira el prefijo opcional `litellm/` en las
+llamadas de embeddings y generación, también fuera de FastAPI. No se toca `.env`.
+
+Pruebas aisladas del pipeline: 12 aprobadas, incluidos aliases con/sin prefijo
+y configuración del proveedor en generación. Validador AI y sus siete pruebas
+aprobados; `git diff --check` limpio. No se repite indexación real ni se valida
+una respuesta del proveedor remoto en esta corrección. Persiste el aviso de
+versiones Qdrant (cliente 1.20.0, servidor 1.15.3); no fue la causa del fallo
+mostrado y su alineación queda pendiente. Siguiente paso: repetir el comando
+de indexación en el contenedor y probar una consulta autenticada. Sin commit.
+
+## Validador independiente de la rama — 8 de noviembre de 2026
+
+Se retira la exigencia histórica de `feature/agent-memory-bank` a petición del
+desarrollador. AGENTS.md, techContext y la skill indican ahora usar la rama
+acordada para cada trabajo. El validador no consulta Git; `--check-branch` sigue
+aceptándose sin efecto para conservar comandos existentes. Las referencias de
+entregas anteriores en este registro se mantienen como historial.
+
+Validación normal y con la opción heredada: 40 comprobaciones aprobadas.
+Siete pruebas aprobadas, incluyendo ramas main/RAG/otra, checkout detached,
+directorio sin Git y detección de errores estructurales con la opción heredada.
+`git diff --check` aprobado. Cambios sin commit ni push; los README y archivos
+locales del desarrollador quedan fuera de esta corrección. Siguiente paso:
+continuar la optimización RAG en la rama actual.
+
 ## Integración de main en la rama RAG — 8 de noviembre de 2026
 
 A petición del desarrollador se integra `origin/main` (`1717ccc`) en

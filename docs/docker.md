@@ -28,14 +28,19 @@ documenta también las exclusiones de esa carpeta. El frontend usa contexto
 Requisito: Docker Engine con Compose o Docker Desktop con contenedores Linux.
 No se necesitan Node, Python ni uv instalados en el host.
 
-1. Copiar `.env.example` a `.env` en la raíz.
+1. Copiar `.env.example` a `.env` en la raíz solo en la primera instalación;
+   conservar la configuración existente en actualizaciones.
 2. Definir un `JWT_SECRET` aleatorio y privado. Para generarlo con Docker:
 
    ```sh
    docker run --rm python:3.12-slim python -c "import secrets; print(secrets.token_urlsafe(48))"
    ```
 
-3. Arrancar desde la raíz:
+3. Para el asistente RAG, completar `LITELLM_API_BASE`, `LITELLM_API_KEY`,
+   `RAG_EMBEDDING_MODEL` y `RAG_LLM_MODEL` con el proxy compatible con OpenAI y
+   aliases autorizados. Los modelos deben ser distintos. Sin esta configuración
+   el resto del stack puede arrancar, pero no se pueden indexar ni consultar documentos.
+4. Arrancar desde la raíz:
 
    ```sh
    docker compose config --quiet
@@ -44,10 +49,23 @@ No se necesitan Node, Python ni uv instalados en el host.
    docker compose logs -f
    ```
 
+5. Cuando API y Qdrant estén saludables, indexar el corpus en la primera ejecución:
+
+   ```sh
+   docker compose exec services python -m data.pipelines.setup_rag
+   ```
+
+   El corpus actual produce `{'documents': 4, 'chunks': 20}`. La indexación llama
+   al proveedor de embeddings y reemplaza la colección; repetir si cambia el corpus
+   o el modelo de embeddings, no en cada arranque. El índice persiste en
+   `qdrant_data`. Compose fija `QDRANT_URL=http://qdrant:6333` para la API; Qdrant
+   no publica puertos al host en la configuración normal.
+
 | Aplicación | URL local |
 | --- | --- |
 | Landing | http://localhost:3000 |
 | Backoffice | http://localhost:3001 |
+| Asistente RAG (sesión requerida) | http://localhost:3001/assistant |
 | Talento | http://localhost:3002 |
 | API / OpenAPI | http://localhost:8000/docs |
 
@@ -90,7 +108,15 @@ El envío de recuperación de contraseña necesita `RESEND_API_KEY` y un
 
 ### Recarga y dependencias
 
-Se montan `uis/`, `services/`, `packages/` y `scripts/` desde el host.
+El proxy del backoffice permite hasta 120 segundos para las peticiones a la API.
+Cada llamada al proveedor RAG tiene un timeout de 45 segundos sin reintentos
+automáticos; embeddings y generación son llamadas separadas. Una respuesta lenta
+puede tardar varios segundos. Los errores `ECONNRESET` del proxy se revisan con
+`docker compose logs --tail 100 uis services`. Existe un aviso pendiente de
+alineación entre cliente Qdrant 1.20.0 y servidor 1.15.3; indexación y consultas
+han sido verificadas con esas versiones, pero eso no garantiza compatibilidad completa.
+
+Se montan `uis/`, `services/`, `packages/`, `scripts/`, `data/` y el corpus desde el host.
 Los `node_modules` de Linux y las carpetas `.next` viven en volúmenes separados.
 Next.js usa Webpack con polling para Docker Desktop; Uvicorn usa `--reload`
 y `WATCHFILES_FORCE_POLLING=true`. La landing se genera como exportación estática
@@ -101,6 +127,11 @@ solo ese servicio:
 ```sh
 docker compose up --build -d landing
 ```
+
+Uvicorn no vigila `data/` para recarga: tras cambiar el pipeline RAG, ejecutar
+`docker compose restart services`. Si cambias variables de `.env`, recrear la API
+con `docker compose up -d --force-recreate services`; un simple restart no actualiza
+el entorno del contenedor.
 
 Si cambian dependencias del frontend:
 
@@ -120,10 +151,16 @@ uv export --frozen --no-dev --no-emit-project --format requirements-txt --output
 docker compose up -d --build services
 ```
 
-`docker compose down` conserva datos. `docker compose down -v` elimina
+`docker compose stop` detiene los contenedores y `docker compose up -d` los inicia
+de nuevo. `docker compose down` conserva datos, incluido el índice `qdrant_data`.
+`docker compose down -v` elimina
 también todos los volúmenes y sus datos; usarlo solo para un reinicio deliberado.
 
 ## Producción en VPS
+
+El Compose de producción no incluye Qdrant ni el montaje del pipeline y del corpus.
+El RAG descrito aquí corresponde al Compose de desarrollo; su disponibilidad en
+producción requiere una integración adicional.
 
 Usar el archivo independiente `docker-compose.prod.yml`, sin combinarlo con
 el de desarrollo. Ejecuta `next start` y Uvicorn sin reload, no monta fuentes,

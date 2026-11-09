@@ -16,6 +16,7 @@ DEFAULT_CORPUS_DIR = ROOT_DIR / "docs" / "company-knowledge-base"
 COLLECTION_NAME = "trackflow_knowledge"
 DEFAULT_MIN_SCORE = 0.35
 DEFAULT_K = 3
+MODEL_TIMEOUT_SECONDS = 45
 
 
 class RAGConfigurationError(RuntimeError):
@@ -61,7 +62,10 @@ def _embed_texts(texts: list[str]) -> list[list[float]]:
 
     try:
         response = litellm.embedding(
-            model=settings["embedding_model"],
+            model=settings["embedding_model"].removeprefix("litellm/"),
+            custom_llm_provider="openai",
+            timeout=MODEL_TIMEOUT_SECONDS,
+            num_retries=0,
             input=texts,
             api_key=settings["api_key"],
             api_base=settings["api_base"],
@@ -196,7 +200,10 @@ def generate_answer(question: str, context: list[dict[str, Any]]) -> str:
 
     try:
         response = litellm.completion(
-            model=settings["llm_model"],
+            model=settings["llm_model"].removeprefix("litellm/"),
+            custom_llm_provider="openai",
+            timeout=MODEL_TIMEOUT_SECONDS,
+            num_retries=0,
             api_key=settings["api_key"],
             api_base=settings["api_base"],
             messages=[

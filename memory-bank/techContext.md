@@ -29,7 +29,7 @@ no modifica estas reglas de negocio ni endpoints existentes.
 ## Comprobaciones reproducibles (desde raíz)
 Instalación: `npm ci --prefix uis/website`, `npm ci`, `npm ci --prefix uis/backoffice`,
 `npm ci --prefix uis/backoffice/talent-pipeline-tracker`, `uv sync --frozen`.
-- Infraestructura IA: `npm run validate:ai-setup -- --check-branch` y `npm run test:ai-setup`. En CI/main omitir `--check-branch`.
+- Infraestructura IA: `npm run validate:ai-setup` y `npm run test:ai-setup`, en cualquier rama o checkout detached. La opción heredada `--check-branch` se acepta sin efecto por compatibilidad.
 - Website: `npm run build:landing`; servir con `npx serve -l 3000 uis/website/out`.
 - Backend: `uv run --frozen pytest -q` con almacenamiento aislado y sin servicios externos reales.
 - Backoffice: `npm --prefix uis/backoffice test -- --runInBand`, `npm --prefix uis/backoffice run lint`, `npm --prefix uis/backoffice run build`.

@@ -77,13 +77,21 @@ test('rechaza frontmatter inválido, campos duplicados y alcance inactivo', t =>
   fs.writeFileSync(path.join(root, '.agents/rules/architecture.md'), '---\ndescription: prueba\nalwaysApply: false\n---\n');
   assert(failures(root).some(result => result.name === 'frontmatter regla'));
 });
-test('rama obligatoria solo en modo entrega', t => {
+test('validación independiente de Git y compatibilidad con --check-branch', t => {
   const root = fixture(t);
+  const runLegacy = () => spawnSync(process.execPath, [cli, '--root', root, '--check-branch']);
+  assert.equal(runLegacy().status, 0);
   execFileSync('git', ['init', '--initial-branch=main', root], { stdio: 'pipe' });
-  assert.deepEqual(failures(root), []);
-  assert(validate(root, { checkBranch: true }).some(result => !result.ok && result.name === 'rama de entrega'));
-  execFileSync('git', ['symbolic-ref', 'HEAD', 'refs/heads/feature/agent-memory-bank'], { cwd: root });
-  assert(validate(root, { checkBranch: true }).every(result => result.ok));
+  for (const branch of ['main', 'feature/rag-knowledge-base', 'fix/other-work']) {
+    execFileSync('git', ['symbolic-ref', 'HEAD', `refs/heads/${branch}`], { cwd: root });
+    assert.deepEqual(failures(root), []);
+    assert.equal(runLegacy().status, 0);
+  }
+  // A detached checkout must also work, without requiring a commit in the fixture.
+  fs.writeFileSync(path.join(root, '.git/HEAD'), '0123456789abcdef0123456789abcdef01234567\n');
+  assert.equal(runLegacy().status, 0);
+  fs.unlinkSync(path.join(root, 'uis/website/app/page.tsx'));
+  assert.equal(runLegacy().status, 1);
 });
 test('CLI rechaza opciones desconocidas y raíz sin valor', () => {
   for (const args of [['--unknown'], ['--root']]) assert.equal(spawnSync(process.execPath, [cli, ...args]).status, 1);

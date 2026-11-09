@@ -11,12 +11,12 @@ asistencia de TrackFlow sin modificar archivos, datos ni referencias Git.
 
 ## Inputs
 - `--root <directorio>`: raíz del repositorio; por defecto el directorio actual. Resolver rutas relativas desde el directorio actual.
-- `--check-branch`: opcional; exigir la rama `feature/agent-memory-bank` para entregar este hito. Omitir en CI sobre main o checkout detached.
+- `--check-branch`: opción obsoleta aceptada sin efecto por compatibilidad. La validación es independiente de Git, del nombre de rama y de un checkout detached.
 - No admite otras opciones; error de uso produce código 1.
 
 ## Ejecución
 Desde la raíz, ejecutar `node .agents/skills/validate-ai-setup/scripts/validate.mjs --root .`.
-Añadir `--check-branch` al preparar la entrega del hito. Para comprobar el propio
+No es necesario añadir opciones de rama al preparar una entrega. Para comprobar el propio
 validador ejecutar `node --test .agents/skills/validate-ai-setup/scripts/validate.test.mjs`.
 El script funciona con Node 22 y módulos estándar, sin instalación de paquetes.
 Con otra raíz utilizar la ruta absoluta al script y pasar la raíz como argumento.
@@ -26,7 +26,7 @@ Con otra raíz utilizar la ruta absoluta al script y pasar la raíz como argumen
 - Frontmatter de skill con nombre válido y descripción no vacía; regla con `alwaysApply: true` y descripción no vacía, sin campos repetidos ni YAML fuera del formato simple soportado por el validador.
 - Cero enlaces Markdown locales rotos o fuera de la raíz en los documentos obligatorios; ignorar enlaces externos y comprobar existencia del archivo para enlaces con fragmento.
 - Existen las rutas App Router de la landing (`app/page.tsx` y `app/application/page.tsx`), sus componentes y módulos de idioma/formulario, además de las entradas de backoffice y tracker. No existen fuentes HTML/JS públicas heredadas, entradas antiguas en raíz ni `uis/talent-pipeline-tracker`.
-- En modo entrega, la rama exacta coincide; en modo normal no se consulta la rama.
+- No se exige ninguna rama ni se consulta Git; también funciona sin repositorio Git.
 - Se muestra PASS/FAIL por comprobación; código 0 únicamente si todas pasan, 1 en otro caso.
 
 La revisión semántica del negocio y la autorización de cambios protegidos siguen

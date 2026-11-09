@@ -14,6 +14,7 @@ English documentation is available in [README.md](./README.md).
 | Backoffice de incidencias | `uis/backoffice` | Disponible |
 | Talent Pipeline Tracker | `uis/backoffice/talent-pipeline-tracker` | Disponible |
 | Servicio FastAPI | `services/api` | Disponible |
+| Asistente comercial RAG | `uis/backoffice`, `data/pipelines` | LiteLLM y Qdrant; requiere indexación |
 | Lógica compartida de incidencias | `packages/incidents_analysis` | Disponible |
 | Datos, agentes, workflows, infraestructura | `data/`, `agents/`, `workflows/`, `infra/` | Estructura del proyecto |
 
@@ -56,7 +57,8 @@ Compose construye y ejecuta los servicios en contenedores.
 
 ## Levantar todo el proyecto con Docker
 
-Desde la raíz del repositorio, copia `.env.example` a `.env`:
+En la primera instalación, copia `.env.example` a `.env` desde la raíz. Si ya
+tienes `.env`, consérvalo y añade únicamente las variables que te falten:
 
 ```powershell
 Copy-Item .env.example .env
@@ -77,13 +79,32 @@ de ejemplo usa SQLite dentro de un volumen Docker, así que no necesitas
 PostgreSQL para una ejecución local. Si vas a usar otra base de datos, define
 su URL de conexión en `.env` antes de iniciar.
 
-Valida la configuración y construye e inicia los servicios:
+Para usar el RAG, completa también `LITELLM_API_BASE`, `LITELLM_API_KEY`,
+`RAG_EMBEDDING_MODEL` y `RAG_LLM_MODEL` con la URL, clave y aliases autorizados
+de tu proxy LiteLLM compatible con OpenAI. Los modelos de embeddings y generación
+deben ser distintos. Sin esas variables el stack arranca, pero el RAG no funciona.
+Compose configura automáticamente `QDRANT_URL=http://qdrant:6333` para la API.
+
+Valida la configuración y construye e inicia los servicios. El comando construye
+el website Next.js como exportación estática servida por Nginx, además del
+backoffice, tracker, API y Qdrant:
 
 ```sh
 docker compose config --quiet
 docker compose up --build -d
 docker compose ps
 ```
+
+Cuando la API y Qdrant estén saludables, indexa el corpus en la primera ejecución:
+
+```sh
+docker compose exec services python -m data.pipelines.setup_rag
+```
+
+El corpus actual contiene cuatro documentos y veinte fragmentos. La indexación
+usa el proveedor de embeddings y puede tener coste. Repite el comando si cambias
+el corpus o el modelo de embeddings: reemplaza la colección de conocimiento.
+No hace falta reindexar en cada arranque; el índice persiste en `qdrant_data`.
 
 Para seguir los logs de los servicios, ejecuta `docker compose logs -f`. Pulsa
 Ctrl+C para dejar de seguirlos sin detener los servicios.
@@ -94,6 +115,7 @@ Abre los servicios en estas direcciones:
 | --- | --- |
 | Website público | http://localhost:3000 |
 | Backoffice de incidencias | http://localhost:3001 |
+| Asistente RAG (requiere iniciar sesión) | http://localhost:3001/assistant |
 | Talent Pipeline Tracker | http://localhost:3002 |
 | API / OpenAPI | http://localhost:8000/docs |
 
@@ -102,7 +124,9 @@ backoffice, actualiza también `FRONTEND_URL`. La API habilita datos demo por
 defecto: `test@test.com` / `test1234`. Son credenciales solo para desarrollo
 local; configura `DEMO_DATA_ENABLED=false` antes de cualquier despliegue de
 producción. Los datos de la API persisten en el volumen Docker `api_data`.
-`docker compose down` detiene el stack y conserva los volúmenes; **no uses
+Para detener los contenedores conservando los datos y el índice RAG, usa
+`docker compose stop`; para iniciarlos de nuevo, `docker compose up -d`.
+`docker compose down` también conserva los volúmenes; **no uses
 `docker compose down -v`** salvo que quieras eliminar deliberadamente sus datos.
 
 El tracker necesita una API independiente con endpoints `/records` y notas;
@@ -114,7 +138,6 @@ correo.
 
 Para configuración de servicios, datos, solución de problemas y despliegue en
 VPS, consulta [Dockerización y despliegue](./docs/docker.md).
-
 ## Instalación
 
 Desde la raíz del repositorio, instalar `uv` si todavía no está disponible:

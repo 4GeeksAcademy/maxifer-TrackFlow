@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field, field_validator
 
-from services.api.litellm_gateway import configure_litellm_proxy
 from services.api.security import get_current_user
 
 
@@ -25,7 +24,6 @@ def query_knowledge(
     payload: RAGQueryRequest,
     current_user: dict = Depends(get_current_user),
 ):
-    configure_litellm_proxy()
     try:
         from data.pipelines.rag import (
             RAGConfigurationError,
