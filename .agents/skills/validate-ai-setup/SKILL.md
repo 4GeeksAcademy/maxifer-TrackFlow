@@ -25,7 +25,7 @@ Con otra raíz utilizar la ruta absoluta al script y pasar la raíz como argumen
 - Cero archivos obligatorios ausentes o vacíos: briefing, AGENTS.md, los tres documentos de memoria, regla y esta skill.
 - Frontmatter de skill con nombre válido y descripción no vacía; regla con `alwaysApply: true` y descripción no vacía, sin campos repetidos ni YAML fuera del formato simple soportado por el validador.
 - Cero enlaces Markdown locales rotos o fuera de la raíz en los documentos obligatorios; ignorar enlaces externos y comprobar existencia del archivo para enlaces con fragmento.
-- Existen las tres rutas canónicas y las entradas de landing, backoffice y tracker; no existen las antiguas entradas públicas en raíz ni `uis/talent-pipeline-tracker`.
+- Existen las rutas App Router de la landing (`app/page.tsx` y `app/application/page.tsx`), sus componentes y módulos de idioma/formulario, además de las entradas de backoffice y tracker. No existen fuentes HTML/JS públicas heredadas, entradas antiguas en raíz ni `uis/talent-pipeline-tracker`.
 - En modo entrega, la rama exacta coincide; en modo normal no se consulta la rama.
 - Se muestra PASS/FAIL por comprobación; código 0 únicamente si todas pasan, 1 en otro caso.
 

@@ -1,5 +1,10 @@
 module.exports = {
-  content: { relative: true, files: ["./index.html", "./application.html", "./i18n.js", "./validation.js"] },
+  content: {
+    relative: true,
+    files: [
+      "./app/**/*.{js,ts,tsx}"
+    ]
+  },
   theme: {
     extend: {}
   },

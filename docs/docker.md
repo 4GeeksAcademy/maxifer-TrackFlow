@@ -6,10 +6,13 @@ variables, las comprobaciones y la recuperación ante fallos.
 
 ## Adaptación del reto
 
-El sitio público vive en `uis/website` y se sirve con Nginx. Las URLs públicas se conservan.
+El sitio público vive en `uis/website`, se construye con Next.js como exportación
+estática y se sirve con Nginx. Las rutas públicas son `/` y `/application/`;
+las direcciones anteriores `/index.html` y `/application.html` redirigen con 301.
 
 El despliegue estático alternativo de Netlify usa `netlify.toml`: ejecuta
-`npm run build:landing` desde la raíz y publica únicamente `uis/website`.
+`npm ci --prefix uis/website` y `npm run build:landing` desde la raíz; publica
+`uis/website/out`.
 El contenedor `uis` ejecuta las dos aplicaciones Next.js existentes mediante
 `uis/start.sh`: backoffice en 3001 y talent-pipeline-tracker en 3002.
 La landing conserva el puerto 3000 y FastAPI usa 8000.
@@ -90,9 +93,14 @@ El envío de recuperación de contraseña necesita `RESEND_API_KEY` y un
 Se montan `uis/`, `services/`, `packages/` y `scripts/` desde el host.
 Los `node_modules` de Linux y las carpetas `.next` viven en volúmenes separados.
 Next.js usa Webpack con polling para Docker Desktop; Uvicorn usa `--reload`
-y `WATCHFILES_FORCE_POLLING=true`. La landing monta HTML y assets en lectura.
-Modificar fuentes no requiere reconstrucción. Si se cambia Tailwind de la
-landing, hay que regenerar `assets/tailwind.min.css` con el script ya existente.
+y `WATCHFILES_FORCE_POLLING=true`. La landing se genera como exportación estática
+durante la construcción de la imagen y Nginx sirve ese resultado; no monta HTML
+ni assets desde el host. Después de cambiar el website, reconstruye y reinicia
+solo ese servicio:
+
+```sh
+docker compose up --build -d landing
+```
 
 Si cambian dependencias del frontend:
 
