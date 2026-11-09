@@ -6,6 +6,13 @@
 - Tracker de contratación: Next.js 16.2.10 y React 19.2.4 en `uis/backoffice/talent-pipeline-tracker`; aplicación independiente con lockfile propio. Excluir su árbol del TypeScript, ESLint y Jest del padre.
 - Backend: FastAPI, Python >=3.12, uv y uv.lock; rutas en `services/api`. Autenticación y usuarios en TinyDB, contraseñas hasheadas y JWT; incidencias en SQLite; inventario con SQLModel y PostgreSQL/Supabase (SQLite aislado en pruebas).
 - Lógica compartida de incidencias en `packages/incidents_analysis`; no duplicarla en interfaces.
+- RAG comercial: pipeline en `data/pipelines/rag.py` y transporte/cachés en
+  `data/pipelines/rag_runtime.py`. HTTPX asíncrono consume el mismo gateway LiteLLM
+  y aliases OpenAI-compatible, sin reintentos locales; el endpoint sigue síncrono.
+  Presupuesto de consulta 30 s, etapas de embedding/búsqueda/generación 10/5/20 s
+  limitadas al restante. Cachés por proceso de 256 entradas: embeddings 15 min y
+  respuestas 5 min; la respuesta depende del contexto recuperado actual. Qdrant se
+  consulta en cada pregunta. No se cambian modelos ni parámetros de generación.
 - Docker usa Node 22. Puertos públicos de desarrollo: landing 3000, backoffice 3001, tracker 3002, API configurable (habitualmente 8000). Mantener contratos HTTP y rewrites `/backend`.
 - Netlify tiene una integración de previews de PR: `netlify.toml` instala las dependencias de `uis/website`, ejecuta el build de la raíz y publica solo `uis/website/out`. No ejecutar despliegues manuales al entregar este hito.
 

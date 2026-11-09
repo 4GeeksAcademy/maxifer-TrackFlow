@@ -48,4 +48,33 @@ El dataset contiene diez preguntas, resultados esperados por documento/sección 
 
 ## Límites operativos
 
-La indexación es explícita y no ocurre durante import/startup de FastAPI. Los tests unitarios sustituyen Qdrant y LiteLLM por mocks; no requieren servicios externos. La imagen de producción no incluye Qdrant, por lo que el endpoint responde 503 si el pipeline no está disponible en ese despliegue. El Compose de desarrollo monta el código `data/` y el corpus como solo lectura.
+La indexación es explícita y no ocurre durante import/startup de FastAPI. Las pruebas sustituyen Qdrant y las llamadas a modelos por dobles locales; una prueba HTTP usa exclusivamente loopback para verificar que la cancelación cierra el socket. La imagen de producción no incluye Qdrant, por lo que el endpoint responde 503 si el pipeline no está disponible en ese despliegue. El Compose de desarrollo monta el código `data/` y el corpus como solo lectura.
+
+Las consultas conservan los aliases y el gateway LiteLLM configurados en el entorno.
+El pipeline envía el contrato OpenAI-compatible mediante HTTPX asíncrono, sin pasar
+por los reintentos implícitos del SDK LiteLLM. El transporte local realiza un solo
+intento y no sigue redirecciones; los reintentos internos del gateway remoto no
+están controlados por este cliente. No se modifican modelos ni parámetros de generación.
+
+Cada consulta comparte un presupuesto de 30 segundos: embeddings hasta 10 segundos,
+búsqueda hasta 5 y generación hasta 20, siempre reducidos al tiempo restante.
+`asyncio.timeout` cancela la operación de red y cierra su transporte, sin dejar un
+hilo de petición separado. Los errores conservan HTTP 503 y explican que se agotó
+la espera y se puede reintentar. Esto limita la espera; puede aumentar los timeouts
+cuando el proveedor está lento y no garantiza que el servidor remoto cancele su
+propia inferencia. La indexación por lotes conserva 45 segundos para embeddings.
+El cliente Qdrant inyectado explícitamente en herramientas/pruebas conserva su
+contrato síncrono; los límites de búsqueda cancelables se aplican al camino normal
+de la API, que crea un cliente asíncrono por consulta.
+
+Hay dos cachés en memoria por proceso, con máximo de 256 entradas cada una:
+embeddings de preguntas durante 15 minutos y respuestas generadas durante 5 minutos.
+Las claves son hashes que incluyen la configuración del proveedor/modelos; las
+respuestas incluyen además la pregunta, el prompt y los fragmentos efectivos del
+índice. Cada consulta vuelve a buscar en Qdrant, incluso si ambos modelos están
+cacheados, para detectar cambios externos del contexto. No se cachean errores,
+respuestas vacías o truncadas. La indexación local limpia ambas cachés. Reiniciar
+la API también las vacía; no son compartidas entre procesos. Peticiones simultáneas
+que todavía no tengan entrada pueden realizar llamadas duplicadas.
+
+El detalle de las mediciones y su repetición está en `latency-2026-11-08.md`.

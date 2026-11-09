@@ -1,5 +1,90 @@
 # Progreso
 
+## Commit local de optimización RAG — 8 de noviembre de 2026
+
+El desarrollador confirma que sus pruebas muestran una mejora y solicita un
+commit en la rama actual `feature/rag-knowledge-base`. Se incluyen transporte
+cancelable, límites, cachés, pruebas, dependencia HTTPX y documentación/mediciones
+de esta tarea. Se excluyen `.tmp/` y `.vscode/`; no se modifican zonas protegidas.
+Esta autorización es para el commit local; no se hace push, PR ni despliegue.
+Validaciones repetidas antes del commit: 40 comprobaciones AI y siete pruebas
+aprobadas; backend aislado con 103 pruebas y siete subtests aprobados, tres
+pruebas omitidas y tres avisos de deprecación existentes. `git diff --check`
+limpio; revisión del diff sin secretos ni datos personales nuevos. No se repiten
+comprobaciones de interfaces sin cambios, consultas remotas, indexación ni
+nuevas pruebas manuales contra el gateway.
+La limitación conocida del proveedor y los cuatro timeouts de la medición se
+conservan en el informe; la confirmación manual no sustituye esos resultados.
+Siguiente paso: conservar seguimiento de latencia y preparar una futura entrega
+cuando el desarrollador la solicite.
+
+## Límites y cachés RAG implementados — 8 de noviembre de 2026
+
+Se mantienen los modelos asignados y el mismo gateway/entorno. El pipeline usa
+HTTPX asíncrono OpenAI-compatible sin el SDK LiteLLM para evitar sus reintentos
+implícitos; se declara HTTPX directamente y se sincronizan lockfile/requirements
+sin actualizar versiones. Presupuesto por consulta 30 s; embedding 10 s,
+Qdrant 5 s y generación 20 s reducidos al restante, con cancelación del transporte.
+El endpoint sigue síncrono y responde 503 con mensaje de timeout accionable.
+Los lotes de indexación conservan 45 s. No se cambia el prompt ni la generación.
+
+Cachés en memoria por proceso, 256 entradas cada una: embeddings de preguntas
+15 minutos y respuestas 5 minutos. La respuesta incluye en su clave pregunta,
+contexto efectivo del índice, prompt y configuración. Se consulta Qdrant cada
+vez para detectar cambios del contenido indexado. No se cachean fallos, vacíos
+ni truncamientos; la indexación local limpia las cachés. No se consolidan llamadas
+simultáneas ni se comparte caché entre procesos.
+
+La revisión automática bloqueó inicialmente consultas remotas por el envío del
+corpus al gateway. El desarrollador autorizó explícitamente seis consultas con
+las preguntas y fragmentos existentes. Resultado: dos respuestas (3,00 y 10,76 s)
+y cuatro cancelaciones de embedding a 10,01 s. El límite está verificado, pero
+es restrictivo para el proveedor actual. No hubo aciertos de caché remotos en
+esa tanda: los primeros cuatro intentos fallaron. La caché repetida se valida
+localmente contando llamadas, sin afirmar una latencia remota no medida.
+
+Validación final de backend aislado: 103 pruebas y siete subtests aprobados,
+tres pruebas omitidas y tres avisos de deprecación existentes. Se prueban cierre
+de socket local por cancelación, un único intento HTTP ante errores, presupuesto
+compartido, TTL/capacidad/invalidación, orden de embeddings y HTTP 503. Una
+ejecución intermedia encontró que la carga de certificados en Windows agotaba
+el plazo breve del test antes de enviar datos; se prepara ese transporte antes
+del plazo de prueba y la suite completa posterior pasa.
+
+API de desarrollo reiniciada sin reindexar ni borrar volúmenes; salud HTTP 200.
+Se actualizan diseño RAG, guía Docker e informe de latencia. No se modifican
+`.env`, modelos, infraestructura ni datos del corpus. Sin commit ni push.
+Siguiente paso: contrastar timeouts con disponibilidad del proveedor; medir
+aciertos reales de caché cuando haya respuestas iniciales y repetir evaluación
+de recuperación antes de la entrega futura. Validaciones AI tras actualizar el
+banco: 40 comprobaciones y siete pruebas aprobadas; `git diff --check` limpio.
+
+## Medición de latencia RAG — 8 de noviembre de 2026
+
+Diez consultas reales secuenciales desde el contenedor API, sin reindexar ni
+modificar datos: mediana total 5,51 s, rango 1,57–92,96 s. Embedding 0,41–78,22 s,
+Qdrant 4–8 ms y generación 0,80–14,73 s. Las pilas de una consulta lenta muestran
+espera HTTP/TLS de respuesta remota; el pico también aparece en una segunda
+consulta, por lo que no se explica únicamente por arranque. No se mide aquí
+navegador, autenticación o proxy ni se evalúa calidad de respuesta.
+
+El adaptador instalado usa `max_retries` y un fallback a dos reintentos; el
+`num_retries=0` del pipeline no garantiza desactivar esa capa. Los 45 s efectivos
+del transporte se comprobaron en una consulta rápida, pero no son un límite total.
+No se contaron los intentos HTTP de los picos; su causa interna en gateway/red/
+proveedor sigue pendiente. Se propone presupuesto total con cancelación real,
+verificar reintentos, investigar proveedor, caché versionada y menor razonamiento.
+Informe y reproducción: `docs/rag/latency-2026-11-08.md`,
+script `scripts/benchmark_rag.py`. No se aplican optimizaciones funcionales.
+
+Validación: ejecución real del script y ayuda aprobadas; 40 comprobaciones AI y
+siete pruebas aprobadas tras actualizar memoria; `git diff --check` limpio.
+La primera repetición de tests falló porque su fixture no copia el nuevo informe
+enlazado desde memoria; se usa su ruta en texto y la repetición pasa.
+No se repiten suites de aplicación sin cambios. Sin commit ni push.
+Contradicción documental pendiente: projectbrief y los siguientes pasos históricos
+todavía describen RAG como futuro, aunque el pipeline y estas consultas lo prueban.
+
 ## Commit local de correcciones RAG — 8 de noviembre de 2026
 
 El desarrollador autoriza únicamente un commit en `feature/rag-knowledge-base`,

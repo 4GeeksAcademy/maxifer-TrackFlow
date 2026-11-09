@@ -46,6 +46,16 @@ def configure_models(monkeypatch):
     monkeypatch.setenv("RAG_LLM_MODEL", "chat-model")
 
 
+@pytest.fixture(autouse=True)
+def isolated_rag_cache(monkeypatch):
+    configure_models(monkeypatch)
+    rag.embedding_cache.clear()
+    rag.answer_cache.clear()
+    yield
+    rag.embedding_cache.clear()
+    rag.answer_cache.clear()
+
+
 def test_chunk_markdown_preserves_sections_and_list_units():
     chunks = chunk_markdown(
         "# Política\n\nIntroducción.\n\n## Pasos\n\n1. Solicitar.\n2. Inspeccionar.\n\nCierre.",
@@ -137,17 +147,13 @@ def test_query_abstains_without_hits_and_skips_generation(monkeypatch):
 def test_generate_answer_uses_context_and_business_rules(monkeypatch):
     configure_models(monkeypatch)
     monkeypatch.setenv("RAG_LLM_MODEL", "litellm/online/chat-model")
-    import litellm
-
     captured = {}
 
-    def completion(**kwargs):
-        captured.update(kwargs)
-        return SimpleNamespace(
-            choices=[SimpleNamespace(message=SimpleNamespace(content="El SLA estándar es de 3 a 5 días hábiles."))]
-        )
+    def completion(settings, route, payload, timeout):
+        captured.update(payload, route=route, timeout=timeout)
+        return {"choices": [{"message": {"content": "El SLA estándar es de 3 a 5 días hábiles."}}]}
 
-    monkeypatch.setattr(litellm, "completion", completion)
+    monkeypatch.setattr(rag, "request_model", completion)
     answer = rag.generate_answer(
         "¿Cuál es el SLA estándar?",
         [{"source_document": "sla-delivery", "section": "SLA", "text": "3 a 5 días hábiles"}],
@@ -155,9 +161,8 @@ def test_generate_answer_uses_context_and_business_rules(monkeypatch):
 
     system_prompt = captured["messages"][0]["content"]
     assert captured["model"] == "online/chat-model"
-    assert captured["custom_llm_provider"] == "openai"
-    assert captured["timeout"] == 45
-    assert captured["num_retries"] == 0
+    assert captured["route"] == "/chat/completions"
+    assert captured["timeout"] == 20
     user_prompt = captured["messages"][1]["content"]
     assert answer == "El SLA estándar es de 3 a 5 días hábiles."
     assert "Black Friday" in system_prompt
@@ -170,21 +175,18 @@ def test_generate_answer_uses_context_and_business_rules(monkeypatch):
 def test_embeddings_use_proxy_provider_without_api_initialization(monkeypatch, alias):
     configure_models(monkeypatch)
     monkeypatch.setenv("RAG_EMBEDDING_MODEL", alias)
-    import litellm
-
     captured = {}
 
-    def embedding(**kwargs):
-        captured.update(kwargs)
-        return SimpleNamespace(data=[{"embedding": [0.1, 0.2]}])
+    def embedding(settings, route, payload, timeout):
+        captured.update(payload, route=route, timeout=timeout, api_base=settings["api_base"])
+        return {"data": [{"embedding": [0.1, 0.2], "index": 0}]}
 
-    monkeypatch.setattr(litellm, "embedding", embedding)
+    monkeypatch.setattr(rag, "request_model", embedding)
     assert rag._embed_texts(["texto"]) == [[0.1, 0.2]]
     assert captured["model"] == "online/embed-model"
-    assert captured["custom_llm_provider"] == "openai"
+    assert captured["route"] == "/embeddings"
     assert captured["api_base"] == "https://litellm.test"
-    assert captured["timeout"] == 45
-    assert captured["num_retries"] == 0
+    assert captured["timeout"] == 10
 
 
 def test_eval_dataset_covers_all_sources_and_peak_demand():

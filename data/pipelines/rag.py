@@ -1,14 +1,21 @@
 from __future__ import annotations
 
+import asyncio
 import os
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
+from time import monotonic
 from uuid import NAMESPACE_URL, uuid5
 
-from qdrant_client import QdrantClient, models
+from qdrant_client import AsyncQdrantClient, QdrantClient, models
 
 from data.process.rag import load_corpus_chunks
+from data.pipelines.rag_runtime import (
+    EMBEDDING_TIMEOUT_SECONDS, GENERATION_TIMEOUT_SECONDS, QUERY_TIMEOUT_SECONDS,
+    SEARCH_TIMEOUT_SECONDS, RAGRequestTimeout, answer_cache, cache_key, deadline,
+    embedding_cache, remaining_timeout, request_model,
+)
 
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
@@ -58,21 +65,24 @@ def _cached_qdrant_client() -> QdrantClient:
 
 def _embed_texts(texts: list[str]) -> list[list[float]]:
     settings = _settings()
-    import litellm
-
     try:
-        response = litellm.embedding(
-            model=settings["embedding_model"].removeprefix("litellm/"),
-            custom_llm_provider="openai",
-            timeout=MODEL_TIMEOUT_SECONDS,
-            num_retries=0,
-            input=texts,
-            api_key=settings["api_key"],
-            api_base=settings["api_base"],
+        response = request_model(
+            settings, "/embeddings",
+            {"model": settings["embedding_model"].removeprefix("litellm/"),
+             "input": texts, "encoding_format": "float"},
+            EMBEDDING_TIMEOUT_SECONDS if len(texts) == 1 else MODEL_TIMEOUT_SECONDS,
         )
+        data = sorted(response["data"], key=lambda item: item["index"])
+        if len(data) != len(texts) or [item["index"] for item in data] != list(range(len(texts))):
+            raise ValueError("Cantidad u orden de embeddings inválidos")
+        vectors = [[float(value) for value in item["embedding"]] for item in data]
+        if any(not vector for vector in vectors):
+            raise ValueError("Embedding vacío")
+        return vectors
+    except RAGRequestTimeout as error:
+        raise RAGUnavailableError("El modelo de embeddings tardó demasiado. Vuelve a intentarlo.") from error
     except Exception as error:
         raise RAGUnavailableError("No se pudieron generar los embeddings") from error
-    return [[float(value) for value in item["embedding"]] for item in response.data]
 
 
 def _ensure_collection(
@@ -112,6 +122,8 @@ def embed(
         return 0
 
     qdrant = client or _cached_qdrant_client()
+    answer_cache.clear()
+    embedding_cache.clear()
     try:
         vectors = _embed_texts([str(chunk["text"]) for chunk in chunks])
         if len(vectors) != len(chunks) or not vectors or not vectors[0]:
@@ -150,6 +162,20 @@ def setup(
     return {"documents": len({chunk["source_document"] for chunk in chunks}), "chunks": count}
 
 
+async def _search(query_vector: list[float], k: int, min_score: float):
+    async with asyncio.timeout(remaining_timeout(SEARCH_TIMEOUT_SECONDS)):
+        # Avoid spawning a compatibility-check thread on every query. The sync
+        # indexing/diagnostic client still performs that check.
+        client = AsyncQdrantClient(url=_settings()["qdrant_url"], check_compatibility=False)
+        try:
+            return await client.query_points(
+                collection_name=COLLECTION_NAME, query=query_vector, limit=k,
+                score_threshold=min_score, with_payload=True,
+            )
+        finally:
+            await client.close()
+
+
 def retrieve(
     question: str,
     *,
@@ -164,16 +190,23 @@ def retrieve(
     if not 0 <= min_score <= 1:
         raise ValueError("min_score debe estar entre 0 y 1")
 
-    qdrant = client or _cached_qdrant_client()
-    query_vector = _embed_texts([question])[0]
+    settings = _settings()
+    remaining_timeout(QUERY_TIMEOUT_SECONDS)
+    key = cache_key(settings["api_base"], settings["api_key"], settings["embedding_model"], question)
+    query_vector = embedding_cache.get(key)
+    if query_vector is None:
+        query_vector = _embed_texts([question])[0]
+        embedding_cache.put(key, query_vector)
     try:
-        response = qdrant.query_points(
+        response = client.query_points(
             collection_name=COLLECTION_NAME,
             query=query_vector,
             limit=k,
             score_threshold=min_score,
             with_payload=True,
-        )
+        ) if client is not None else asyncio.run(_search(query_vector, k, min_score))
+    except TimeoutError as error:
+        raise RAGUnavailableError("La búsqueda tardó demasiado. Vuelve a intentarlo.") from error
     except Exception as error:
         raise RAGUnavailableError("No se pudo consultar Qdrant") from error
 
@@ -196,31 +229,37 @@ def generate_answer(question: str, context: list[dict[str, Any]]) -> str:
     )
     system_prompt = """Eres un account manager de TrackFlow que responde en español durante una conversación comercial con una marca. Responde con claridad y calidez profesional usando exclusivamente el contexto proporcionado. Conserva exactamente las tarifas, porcentajes y plazos del contexto. Nunca prometas SLA durante Black Friday, Navidad o Rebajas de enero. Las devoluciones internacionales requieren gestión manual y no son automáticas. Cualquier descuento de almacenamiento requiere aprobación de Miguel Torres. Una excepción de transportista requiere aprobación de Carlos Vega. Si el contexto no contiene la respuesta o no permite confirmar una condición, dilo claramente y no inventes hechos. No escribas citas inline; la aplicación muestra la fuente por separado."""
 
-    import litellm
-
+    # Include actual indexed context so external index updates invalidate answers.
+    key = cache_key(settings, question, context_text, system_prompt)
+    remaining_timeout(QUERY_TIMEOUT_SECONDS)
+    cached = answer_cache.get(key)
+    if cached is not None:
+        return cached
     try:
-        response = litellm.completion(
-            model=settings["llm_model"].removeprefix("litellm/"),
-            custom_llm_provider="openai",
-            timeout=MODEL_TIMEOUT_SECONDS,
-            num_retries=0,
-            api_key=settings["api_key"],
-            api_base=settings["api_base"],
-            messages=[
+        response = request_model(settings, "/chat/completions", {
+            "model": settings["llm_model"].removeprefix("litellm/"),
+            "messages": [
                 {"role": "system", "content": system_prompt},
                 {
                     "role": "user",
                     "content": f"Contexto recuperado:\n{context_text}\n\nPregunta: {question}",
                 },
             ],
-        )
+        }, GENERATION_TIMEOUT_SECONDS)
+        choice = response["choices"][0]
+        if choice.get("finish_reason") == "length":
+            raise ValueError("Respuesta truncada")
+        answer = choice["message"]["content"]
+    except RAGRequestTimeout as error:
+        raise RAGUnavailableError("El modelo de respuesta tardó demasiado. Vuelve a intentarlo.") from error
     except Exception as error:
         raise RAGUnavailableError("No se pudo generar la respuesta") from error
 
-    answer = response.choices[0].message.content
     if not isinstance(answer, str) or not answer.strip():
         raise RAGUnavailableError("LiteLLM devolvió una respuesta vacía")
-    return answer.strip()
+    answer = answer.strip()
+    answer_cache.put(key, answer)
+    return answer
 
 
 def query(
@@ -230,6 +269,18 @@ def query(
     min_score: float = DEFAULT_MIN_SCORE,
     client: QdrantClient | None = None,
 ) -> dict[str, Any]:
+    token = deadline.set(monotonic() + QUERY_TIMEOUT_SECONDS)
+    try:
+        result = _query(question, k=k, min_score=min_score, client=client)
+        remaining_timeout(QUERY_TIMEOUT_SECONDS)
+        return result
+    except RAGRequestTimeout as error:
+        raise RAGUnavailableError("La consulta tardó demasiado. Vuelve a intentarlo.") from error
+    finally:
+        deadline.reset(token)
+
+
+def _query(question: str, *, k: int, min_score: float, client: QdrantClient | None) -> dict[str, Any]:
     context = retrieve(question, k=k, min_score=min_score, client=client)
     if not context:
         return {

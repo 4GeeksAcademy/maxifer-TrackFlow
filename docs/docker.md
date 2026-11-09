@@ -109,9 +109,13 @@ El envío de recuperación de contraseña necesita `RESEND_API_KEY` y un
 ### Recarga y dependencias
 
 El proxy del backoffice permite hasta 120 segundos para las peticiones a la API.
-Cada llamada al proveedor RAG tiene un timeout de 45 segundos sin reintentos
-automáticos; embeddings y generación son llamadas separadas. Una respuesta lenta
-puede tardar varios segundos. Los errores `ECONNRESET` del proxy se revisan con
+El pipeline RAG comparte un presupuesto de 30 segundos por consulta: embeddings
+hasta 10 segundos, búsqueda hasta 5 y generación hasta 20, sin superar el tiempo
+restante. El transporte HTTP de modelos cancela la espera y no reintenta; la
+indexación por lotes conserva hasta 45 segundos. La caché por proceso conserva
+embeddings de preguntas 15 minutos y respuestas 5 minutos, comprobando siempre el
+contexto actual de Qdrant. Un proveedor lento puede producir un error de espera
+agotada; estos límites no aceleran su respuesta. Los errores `ECONNRESET` del proxy se revisan con
 `docker compose logs --tail 100 uis services`. Existe un aviso pendiente de
 alineación entre cliente Qdrant 1.20.0 y servidor 1.15.3; indexación y consultas
 han sido verificadas con esas versiones, pero eso no garantiza compatibilidad completa.

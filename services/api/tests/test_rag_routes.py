@@ -45,3 +45,17 @@ def test_rag_query_rejects_blank_question():
         app.dependency_overrides.pop(get_current_user, None)
 
     assert response.status_code == 400
+
+
+def test_rag_timeout_returns_actionable_service_error(monkeypatch):
+    def timeout(question):
+        raise rag.RAGUnavailableError("El modelo de embeddings tardó demasiado. Vuelve a intentarlo.")
+
+    monkeypatch.setattr(rag, "query", timeout)
+    app.dependency_overrides[get_current_user] = lambda: {"id": "test-user"}
+    try:
+        response = TestClient(app).post("/api/rag/query", json={"question": "¿Plazo?"})
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+    assert response.status_code == 503
+    assert response.json() == {"detail": "El modelo de embeddings tardó demasiado. Vuelve a intentarlo."}
