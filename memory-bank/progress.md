@@ -35,8 +35,14 @@ Validación final: 146 tests backend y once subtests aprobados, seis omisiones
 Linux en Windows y tres avisos previos; 21 tests backoffice, lint y build aprobados.
 40 comprobaciones AI y siete pruebas aprobadas; revisión de diff sin secretos
 ni datos personales nuevos y whitespace limpio. Sin contenedores ni despliegue.
-Se prepara publicación y PR a main; siguientes comprobaciones: CI remoto y
-revisión humana. Sin merge. Datos persistentes e infraestructura intactos.
+Implementación publicada en `origin/feature/caching-optimisation`, commit
+`166a598`. La PR a main sigue pendiente: el conector GitHub responde 403 por
+permisos de integración. La revisión automática rechaza el método alternativo
+que leería la credencial de Git para reutilizarla en la API; no se ejecuta el
+script ni se extraen credenciales. Ese método necesita autorización explícita
+adicional, o puede abrirse la PR desde GitHub con la rama publicada.
+Siguientes pasos: abrir PR, comprobar CI remoto y revisión humana. Sin merge ni
+despliegue. Datos persistentes e infraestructura intactos.
 
 ## Corrección del usuario sintético del smoke RAG — 9 de noviembre de 2026
 
