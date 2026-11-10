@@ -1,5 +1,29 @@
 # Progreso
 
+## Acciones Docker con Node.js 24 — 9 de noviembre de 2026
+
+Con autorización explícita del desarrollador para modificar el workflow protegido,
+se actualizan en `.github/workflows/deploy.yml` las referencias de
+`docker/setup-buildx-action` a v4.4.1 (SHA
+`f87e5991a6d7451dcb8d9637bfbc97413f497069`) y `docker/build-push-action` a
+v7.4.0 (SHA `c3c9e263c25d99ce0380d002d59b67737d91b0dc`, tres builds).
+Los SHA se contrastan con las releases oficiales y sus action.yml declaran
+`runs.using: node24`. Las notas de las versiones mayores requieren runner
+v2.327.1 o posterior; los jobs usan `ubuntu-latest`. No se utilizan los parámetros
+retirados en las versiones mayores. Se conserva el Node 22 de los contenedores.
+
+Validación: YAML parseado con PyYAML y comparación semántica con HEAD confirman
+que solo cambian esas cuatro referencias; parámetros, triggers, permisos y
+condiciones de despliegue se conservan. Las 40 comprobaciones AI y siete pruebas
+aprueban mediante `npm.cmd` (PowerShell bloquea el wrapper npm.ps1).
+Diff revisado sin secretos ni datos personales nuevos y `git diff --check` limpio.
+El desarrollador autoriza commit y push en `feature/serialization-audit`;
+se prepara la publicación de estos dos archivos con las comprobaciones AI
+repetidas y aprobadas. Sin merge ni despliegue.
+Pendiente ejecutar GitHub Actions tras publicar el cambio para comprobar los
+builds y la desaparición del aviso en el runner; no se presenta CI remoto como
+verificado. Archivos ajenos de `.tmp/` y `.vscode/` fuera del trabajo.
+
 ## Ajuste documental de auditoría — 9 de noviembre de 2026
 
 Por solicitud del desarrollador, se eliminan las referencias al archivo local
