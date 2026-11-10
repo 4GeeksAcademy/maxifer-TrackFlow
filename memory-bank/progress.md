@@ -36,13 +36,16 @@ Linux en Windows y tres avisos previos; 21 tests backoffice, lint y build aproba
 40 comprobaciones AI y siete pruebas aprobadas; revisión de diff sin secretos
 ni datos personales nuevos y whitespace limpio. Sin contenedores ni despliegue.
 Implementación publicada en `origin/feature/caching-optimisation`, commit
-`166a598`. La PR a main sigue pendiente: el conector GitHub responde 403 por
-permisos de integración. La revisión automática rechaza el método alternativo
-que leería la credencial de Git para reutilizarla en la API; no se ejecuta el
-script ni se extraen credenciales. Ese método necesita autorización explícita
-adicional, o puede abrirse la PR desde GitHub con la rama publicada.
-Siguientes pasos: abrir PR, comprobar CI remoto y revisión humana. Sin merge ni
-despliegue. Datos persistentes e infraestructura intactos.
+`166a598`. [PR #35](https://github.com/4GeeksAcademy/maxifer-TrackFlow/pull/35)
+abierta hacia `main`, con informe, resultados y enlace a AGENTS.md de la rama.
+El conector GitHub respondió 403 por permisos de integración y la revisión
+automática bloqueó inicialmente el método alternativo. Tras autorización
+explícita del desarrollador, se utilizó la credencial de Git solo en memoria
+para crear la PR mediante la API; no se imprimió ni guardó la credencial.
+Archivos temporales del trámite eliminados. Esta actualización es documental;
+las comprobaciones de aplicación anteriores siguen vigentes sin cambios de código.
+Siguientes pasos: comprobar CI remoto y revisión humana. Sin merge ni despliegue.
+Datos persistentes e infraestructura intactos.
 
 ## Corrección del usuario sintético del smoke RAG — 9 de noviembre de 2026
 
