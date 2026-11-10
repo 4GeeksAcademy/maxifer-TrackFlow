@@ -62,7 +62,7 @@ jobs:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
-      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
       - name: Image names
         id: names
         env:
@@ -75,7 +75,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build landing
-        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           context: .
           file: infra/landing/Dockerfile
@@ -87,7 +87,7 @@ jobs:
           cache-from: type=gha,scope=landing
           cache-to: type=gha,mode=max,scope=landing
       - name: Build Next.js interfaces
-        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           context: uis
           target: production
@@ -102,7 +102,7 @@ jobs:
           cache-from: type=gha,scope=uis
           cache-to: type=gha,mode=max,scope=uis
       - name: Build API
-        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           context: .
           file: services/Dockerfile
@@ -114,33 +114,13 @@ jobs:
           labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
           cache-from: type=gha,scope=services
           cache-to: type=gha,mode=max,scope=services
-      - name: Test production containers with isolated data
+      - name: Test production RAG with isolated Qdrant and synthetic gateway
         id: smoke
         env:
           LANDING_IMAGE: ${{ steps.names.outputs.prefix }}/landing:${{ github.sha }}
           UIS_IMAGE: ${{ steps.names.outputs.prefix }}/uis:${{ github.sha }}
           API_IMAGE: ${{ steps.names.outputs.prefix }}/services:${{ github.sha }}
-        run: |
-          python3 - <<'PY'
-          import os, pathlib, secrets
-          values = {
-              'JWT_SECRET': secrets.token_urlsafe(48),
-              'DATABASE_URL': 'sqlite:////app/services/api/data/inventory.sqlite3',
-              'DEMO_DATA_ENABLED': 'false',
-              'BACKEND_INTERNAL_URL': 'http://services:8000',
-              'NEXT_PUBLIC_API_URL': os.environ.get('PUBLIC_API_URL', ''),
-              'LANDING_PORT': '3000', 'BACKOFFICE_PORT': '3001', 'TALENT_PORT': '3002',
-          }
-          pathlib.Path('.env').write_text(''.join(f'{k}={v}\n' for k,v in values.items()))
-          PY
-          docker compose -p trackflow-ci -f docker-compose.prod.yml up -d --no-build --pull never --wait --wait-timeout 180
-          docker compose -p trackflow-ci -f docker-compose.prod.yml exec -T services python - < scripts/verify_deployment.py
-      - name: Production smoke-test logs
-        if: failure() && steps.smoke.outcome == 'failure'
-        run: docker compose -p trackflow-ci -f docker-compose.prod.yml logs --tail 60
-      - name: Clean up isolated CI containers
-        if: always() && steps.smoke.outcome != 'skipped'
-        run: docker compose -p trackflow-ci -f docker-compose.prod.yml down -v --remove-orphans
+        run: python3 scripts/rag_smoke.py
 
   deploy:
     needs: images

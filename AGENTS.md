@@ -12,7 +12,7 @@ sin resolverlas inventando información.
 1. Revisar solicitud, rama, `git status --short` y `git diff`; limitar el cambio al alcance autorizado.
 2. Contrastar los archivos afectados con las zonas protegidas y comprobar autorización humana vigente.
 3. Actualizar el banco de memoria con decisiones, progreso y siguientes pasos comprobados.
-4. Ejecutar `npm run validate:ai-setup`, `npm run test:ai-setup` y las comprobaciones del área modificada descritas en techContext. Añadir `-- --check-branch` al validador al entregar este hito. Registrar resultados reales y bloqueos; no presentar comprobaciones omitidas como aprobadas.
+4. Ejecutar `npm run validate:ai-setup`, `npm run test:ai-setup` y las comprobaciones del área modificada descritas en techContext. El validador estructural es independiente del nombre de rama. Registrar resultados reales y bloqueos; no presentar comprobaciones omitidas como aprobadas.
 5. Revisar secretos y datos personales en el diff y ejecutar `git diff --check`; corregir problemas introducidos.
 6. Añadir únicamente los archivos del trabajo con rutas explícitas; revisar `git diff --cached --check` y `git diff --cached` antes de crear el commit. Nunca incorporar cambios ajenos automáticamente.
 
@@ -34,7 +34,9 @@ El producto público vive en `uis/website`, las interfaces internas en `uis/back
 `services`. No crear árboles paralelos. `.agents/` configura al asistente;
 `agents/` contiene agentes de producto, y `skills/` no sustituye `.agents/skills/`.
 
-Para este hito usar `feature/agent-memory-bank`. Publicar PR hacia `main` de
+Usar la rama acordada con el desarrollador para cada trabajo; no se exige un
+nombre fijo. `feature/agent-memory-bank` fue la rama del hito AI-ready original.
+Al preparar una entrega, publicar PR hacia `main` de
 `4GeeksAcademy/maxifer-TrackFlow`, enlazar AGENTS.md de la rama y adjuntar resultados.
 No fusionar ni desplegar. La skill [validate-ai-setup](.agents/skills/validate-ai-setup/SKILL.md)
 automatiza la revisión estructural, pero no sustituye la revisión del contexto de negocio.

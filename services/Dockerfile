@@ -7,6 +7,9 @@ COPY services/requirements.txt ./requirements.txt
 RUN uv pip install --system --no-cache -r requirements.txt
 COPY services ./services
 COPY packages ./packages
+COPY data/pipelines/rag.py data/pipelines/rag_runtime.py data/pipelines/production_rag.py ./data/pipelines/
+COPY data/process/rag.py ./data/process/
+COPY docs/company-knowledge-base/*.md ./docs/company-knowledge-base/
 COPY scripts/seed_incidents.py scripts/incidents-trackflow.csv ./scripts/
 RUN mkdir -p services/api/data
 EXPOSE 8000

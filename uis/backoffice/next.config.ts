@@ -4,6 +4,10 @@ import type {
 
 
 const nextConfig: NextConfig = {
+  // Embeddings and generation can together exceed the default 30-second proxy limit.
+  experimental: {
+    proxyTimeout: 120_000,
+  },
 
   async rewrites() {
 

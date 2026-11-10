@@ -23,9 +23,12 @@ devoluciones y atención automatizada, con alertas y recomendaciones de transpor
 No se han fijado objetivos numéricos de mejora: no inventar compromisos de servicio.
 
 El repositorio ya ofrece landing, gestión de incidencias, inventario, autenticación
-y tracker de contratación. Integración real con transportistas, agentes de soporte,
-RAG, automatización de devoluciones e informes ejecutivos son objetivos futuros,
-no capacidades que puedan darse por entregadas por este hito.
+y tracker de contratación. El RAG comercial está implementado y probado en
+desarrollo; su integración de producción incorpora indexación automática y
+verificación en el despliegue, integrada en `main` mediante la PR #32. La
+configuración privada y el estado operativo del VPS no se verifican en esta sesión.
+Integración real con transportistas, agentes de soporte, automatización de
+devoluciones e informes ejecutivos siguen siendo objetivos futuros.
 
 ## Discrepancia pendiente
 El briefing identifica al fundador/CEO como Thomas Harry al inicio y como Thomas

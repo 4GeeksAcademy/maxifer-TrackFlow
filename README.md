@@ -14,6 +14,7 @@ Spanish documentation is available in [README.es.md](./README.es.md).
 | Incidents backoffice | `uis/backoffice` | Available |
 | Talent pipeline tracker | `uis/backoffice/talent-pipeline-tracker` | Available |
 | FastAPI service | `services/api` | Available |
+| Commercial RAG assistant | `uis/backoffice`, `data/pipelines` | LiteLLM and Qdrant; indexing required |
 | Shared incidents logic | `packages/incidents_analysis` | Available |
 | Data, agents, workflows, infra | `data/`, `agents/`, `workflows/`, `infra/` | Project structure |
 
@@ -56,7 +57,8 @@ Docker Compose builds and runs the services in containers.
 
 ## Run the Full Stack with Docker
 
-From the repository root, copy `.env.example` to `.env`:
+For a first installation, copy `.env.example` to `.env` from the repository root.
+If `.env` already exists, keep it and add only the missing variables:
 
 ```powershell
 Copy-Item .env.example .env
@@ -76,13 +78,32 @@ configuration uses SQLite in a Docker volume, so PostgreSQL is not required for
 a local run. To use a different database, set its connection URL in `.env`
 before starting.
 
-Validate the configuration and build/start the services:
+For RAG, also set `LITELLM_API_BASE`, `LITELLM_API_KEY`, `RAG_EMBEDDING_MODEL`
+and `RAG_LLM_MODEL` using your OpenAI-compatible LiteLLM proxy URL, key and
+authorized model aliases. Embedding and generation models must be different.
+The stack can start without these values, but RAG will not work.
+Compose automatically sets `QDRANT_URL=http://qdrant:6333` for the API.
+
+Validate the configuration and build/start the services. This builds the Next.js
+website as a static export served by Nginx, plus the backoffice, tracker, API
+and Qdrant:
 
 ```sh
 docker compose config --quiet
 docker compose up --build -d
 docker compose ps
 ```
+
+Once the API and Qdrant are healthy, index the corpus on the first run:
+
+```sh
+docker compose exec services python -m data.pipelines.setup_rag
+```
+
+The current corpus contains four documents and twenty chunks. Indexing calls
+the embedding provider and may incur charges. Repeat it when changing the corpus
+or embedding model: it replaces the knowledge collection. You do not need to
+reindex on every startup; the index persists in `qdrant_data`.
 
 To follow service logs, run `docker compose logs -f`; press Ctrl+C to stop
 following logs without stopping the services.
@@ -93,6 +114,7 @@ Open the services at:
 | --- | --- |
 | Public website | http://localhost:3000 |
 | Incidents backoffice | http://localhost:3001 |
+| RAG assistant (sign-in required) | http://localhost:3001/assistant |
 | Talent pipeline tracker | http://localhost:3002 |
 | API / OpenAPI | http://localhost:8000/docs |
 
@@ -101,7 +123,9 @@ backoffice port, update `FRONTEND_URL` in `.env` as well. The development API
 enables demo data by default: `test@test.com` / `test1234`. These credentials
 are for local development only; set `DEMO_DATA_ENABLED=false` before any
 production deployment. The API data persists in the `api_data` Docker volume.
-`docker compose down` stops the stack while preserving volumes; **do not use
+Use `docker compose stop` to stop containers while preserving data and the RAG
+index; start them again with `docker compose up -d`.
+`docker compose down` also preserves volumes; **do not use
 `docker compose down -v`** unless you deliberately want to delete its data.
 
 The tracker needs a separate API with `/records` and notes endpoints; the
@@ -113,6 +137,9 @@ Password-reset email delivery also needs `RESEND_API_KEY` and a valid
 For service configuration, data, troubleshooting and VPS deployment, see
 [Docker setup and deployment](./docs/docker.md).
 
+Production deployments from `main` include persistent Qdrant and automatic RAG
+indexing. Before merging, configure the four LiteLLM/model variables in the VPS
+private `.env`; see the [Actions guide](./docs/github-actions.md).
 ## Installation
 
 From the repository root, install `uv` if it is not already available:

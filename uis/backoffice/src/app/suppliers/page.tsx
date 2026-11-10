@@ -44,7 +44,7 @@ type SupplierCurrency =
   | "EUR";
 
 
-type Supplier = {
+type SupplierListItem = {
   id: string;
   name: string;
   country: SupplierCountry;
@@ -53,10 +53,6 @@ type Supplier = {
   rate_per_shipment: number;
   currency: SupplierCurrency;
   status: SupplierStatus;
-  updated_at: string;
-  service_zone?: string | null;
-  contact_email?: string | null;
-  notes?: string | null;
 };
 
 
@@ -159,7 +155,7 @@ export default function SuppliersPage() {
     suppliers,
     setSuppliers,
   ] = useState<
-    Supplier[]
+    SupplierListItem[]
   >([]);
 
   const [
@@ -307,7 +303,7 @@ export default function SuppliersPage() {
         setDraftRates(
           Object.fromEntries(
             rows.map(
-              (supplier: Supplier) => [
+              (supplier: SupplierListItem) => [
                 supplier.id,
                 String(
                   supplier.rate_per_shipment,
@@ -574,7 +570,7 @@ export default function SuppliersPage() {
 
 
   async function toggleStatus(
-    supplier: Supplier,
+    supplier: SupplierListItem,
   ) {
     const nextStatus =
       supplier.status

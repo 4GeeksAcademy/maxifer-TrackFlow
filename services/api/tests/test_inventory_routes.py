@@ -177,7 +177,7 @@ def test_create_outbound_order_checks_available_stock(inventory_session):
     assert missing.value.status_code == 404
 
 
-def test_get_orders_lists_movements_with_updated_stock(inventory_session):
+def test_get_orders_lists_movements_with_product_projection(inventory_session):
     assert inventory.get_orders(db=inventory_session) == []
     product = add_product(inventory_session)
     add_inbound(inventory_session, product, 10)
@@ -196,4 +196,7 @@ def test_get_orders_lists_movements_with_updated_stock(inventory_session):
     orders = inventory.get_orders(db=inventory_session)
 
     assert [order.movement_type for order in orders] == ["inbound", "outbound"]
-    assert all(order.sku.current_stock == 8 for order in orders)
+    assert all(order.sku.model_dump() == {
+        "id": product.id, "name": product.name, "sku": product.sku,
+    } for order in orders)
+    assert inventory.calculate_stock(inventory_session, product.id, "LA") == 8

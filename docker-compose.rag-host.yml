@@ -1,0 +1,17 @@
+services:
+  uis:
+    environment:
+      BACKEND_INTERNAL_URL: http://host.docker.internal:8000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  services:
+    network_mode: host
+    networks: !reset []
+    ports: !reset []
+    environment:
+      QDRANT_URL: http://127.0.0.1:6333
+
+  qdrant:
+    ports:
+      - "127.0.0.1:6333:6333"
