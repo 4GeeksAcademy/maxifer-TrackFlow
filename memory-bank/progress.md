@@ -1,5 +1,22 @@
 # Progreso
 
+## Entrega de auditoría de serialización — 9 de noviembre de 2026
+
+Tres fases completadas en `feature/serialization-audit`, commit de implementación
+`ec6a286`. Rama publicada y [PR #33](https://github.com/4GeeksAcademy/maxifer-TrackFlow/pull/33)
+abierta contra `main` con el título exacto `feat: serialization audit and implementation`,
+enlace a AGENTS.md de la rama, auditoría y resultados. El conector GitHub permitió
+lectura pero rechazó crear la PR con 403 por permisos de integración; se creó
+mediante la autenticación Git existente sin imprimir ni guardar credenciales.
+
+Validación final: backend con 137 pruebas y once subtests aprobados, seis omisiones
+Linux documentadas; backoffice con 17 pruebas, lint y build aprobados; configuración
+AI con 40 comprobaciones y siete pruebas aprobadas. Tres operaciones comprobadas
+desde Swagger real, con API y navegador temporales ya cerrados. Diff revisado,
+whitespace limpio y sin secretos nuevos; solo veinte rutas del trabajo incluidas.
+Este registro de entrega actualiza únicamente documentación. Siguiente paso:
+revisión humana de la PR y de sus comprobaciones CI. No fusionar ni desplegar.
+
 ## Auditoría de serialización — fase 3, 9 de noviembre de 2026
 
 El desarrollador autoriza seguir con fase 3 en `feature/serialization-audit`.

@@ -290,6 +290,7 @@ No se guardan JWT ni contraseñas en la evidencia versionada.
 Entrega final tras las tres fases: commit con rutas explícitas, push y PR contra
 `main` en `4GeeksAcademy/maxifer-TrackFlow`, título exacto
 `feat: serialization audit and implementation`, enlace a AGENTS.md de la rama y
-resultados reales. No fusionar ni desplegar. La fase 3 deja la entrega preparada
-para publicar según estas instrucciones; las limitaciones anteriores se adjuntan
-a la PR sin presentar pruebas omitidas como aprobadas.
+resultados reales. Publicada como [PR #33](https://github.com/4GeeksAcademy/maxifer-TrackFlow/pull/33),
+con commit de implementación `ec6a286`. Las limitaciones anteriores se adjuntan
+sin presentar pruebas omitidas como aprobadas. Pendiente de revisión humana y
+comprobaciones CI de la PR; no fusionar ni desplegar.
