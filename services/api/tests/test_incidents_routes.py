@@ -50,8 +50,8 @@ def test_list_incidents_filters_results_and_returns_empty_for_no_match(isolated_
     incidents.create_incident(incident_payload())
     incidents.create_incident(incident_payload(origin="customer", branch="la_office"))
 
-    filtered = incidents.list_incidents(origin="customer", branch="la_office")
-    no_match = incidents.list_incidents(category="lost_parcel")
+    filtered = incidents.list_incidents(current_user={"id": "synthetic"}, origin="customer", branch="la_office")
+    no_match = incidents.list_incidents(current_user={"id": "synthetic"}, category="lost_parcel")
 
     assert len(filtered) == 1
     assert filtered[0]["origin"] == "customer"
@@ -59,18 +59,18 @@ def test_list_incidents_filters_results_and_returns_empty_for_no_match(isolated_
 
 
 def test_list_incidents_rejects_unknown_filter(isolated_incidents):
-    response = incidents.list_incidents(status="waiting")
+    response = incidents.list_incidents(current_user={"id": "synthetic"}, status="waiting")
 
     assert isinstance(response, JSONResponse)
     assert response.status_code == 400
 
 
 def test_summary_groups_records_and_handles_empty_store(isolated_incidents):
-    assert incidents.incidents_summary()["total"] == 0
+    assert incidents.incidents_summary(current_user={"id": "synthetic"})["total"] == 0
     incidents.create_incident(incident_payload())
     incidents.create_incident(incident_payload(category="lost_parcel", branch="la_office"))
 
-    summary = incidents.incidents_summary()
+    summary = incidents.incidents_summary(current_user={"id": "synthetic"})
 
     assert summary["total"] == 2
     assert summary["by_status"] == {"open": 2}

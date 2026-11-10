@@ -29,3 +29,11 @@ def create_test_user(auth_db):
         return user_service.get_user_by_id(user["id"])
 
     return create
+
+
+@pytest.fixture(autouse=True)
+def isolated_incident_cache():
+    from services.api.incident_cache import incident_cache
+    incident_cache.clear()
+    yield
+    incident_cache.clear()

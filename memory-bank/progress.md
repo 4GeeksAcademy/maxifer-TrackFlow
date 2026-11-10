@@ -1,5 +1,52 @@
 # Progreso
 
+## Caching de incidencias y backoffice — 10 de noviembre de 2026
+
+Rama `feature/caching-optimisation` creada desde `origin/main` actualizado,
+`e005162`; auditoría de serialización integrada. Archivos ajenos de `.tmp/` y
+`.vscode/` excluidos. El desarrollador autoriza implementar el plan, exigir sesión
+en listado/resumen de incidencias y preparar commit, push y PR hacia main.
+
+Implementadas dos cachés TTL 30 s por usuario/filtros, límite 128 entradas,
+copias defensivas y coordinación de cargas/escrituras. Invalidación global desde
+el repositorio después del commit, también para seeds; sin cachear errores ni
+identidad. Middleware timing con ruta normalizada y sin datos sensibles.
+Formularios de incidencias/proveedores extraídos a chunks bajo demanda, con foco,
+Escape, hash, validación y avisos conservados. Preparación O(n) del listado de
+proveedores memoizada; elección de moneda directa.
+
+Seeder y benchmark exclusivos de almacenamiento temporal: 10.000 incidencias,
+5.000 proveedores, 1.000 SKU y 20.000 movimientos. En control/caché con idéntica
+autenticación, 20 peticiones por escenario: mediana secuencial listado 202,15 a
+114,87 ms, resumen 168,47 a 4,47 ms; 20 SELECT a cero en cada escenario caliente.
+Respuestas iguales de 2.512.785 y 159 bytes. Informe completo en
+`CACHING_REPORT.md` (raíz), con auditoría de 33 operaciones,
+trade-offs y límites. No se atribuyen estas cifras a producción.
+
+Chrome verifica descarga de ambos formularios después del clic: 3.696 y 5.143 B
+diferidos. El JS inicial total aumenta ligeramente por el runtime de carga;
+se documenta sin afirmar reducción inicial ni mejora LCP. Preparar 5.000
+proveedores cuesta 1,63 ms de mediana en el benchmark Node; test React verifica
+reutilización durante edición y recálculo tras mutación. La prueba concurrente
+descubrió una carrera previa en lecturas TinyDB auth por archivo; control y caché
+usan MemoryStorage sintético para aislar esa variable. No se cambia auth real.
+
+Validación final: 146 tests backend y once subtests aprobados, seis omisiones
+Linux en Windows y tres avisos previos; 21 tests backoffice, lint y build aprobados.
+40 comprobaciones AI y siete pruebas aprobadas; revisión de diff sin secretos
+ni datos personales nuevos y whitespace limpio. Sin contenedores ni despliegue.
+Implementación publicada en `origin/feature/caching-optimisation`, commit
+`166a598`. [PR #35](https://github.com/4GeeksAcademy/maxifer-TrackFlow/pull/35)
+abierta hacia `main`, con informe, resultados y enlace a AGENTS.md de la rama.
+El conector GitHub respondió 403 por permisos de integración y la revisión
+automática bloqueó inicialmente el método alternativo. Tras autorización
+explícita del desarrollador, se utilizó la credencial de Git solo en memoria
+para crear la PR mediante la API; no se imprimió ni guardó la credencial.
+Archivos temporales del trámite eliminados. Esta actualización es documental;
+las comprobaciones de aplicación anteriores siguen vigentes sin cambios de código.
+Siguientes pasos: comprobar CI remoto y revisión humana. Sin merge ni despliegue.
+Datos persistentes e infraestructura intactos.
+
 ## Corrección del usuario sintético del smoke RAG — 9 de noviembre de 2026
 
 El CI del commit c82fe04 construye las imágenes pero falla en el smoke RAG:

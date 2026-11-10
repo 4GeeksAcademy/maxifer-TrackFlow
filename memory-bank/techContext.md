@@ -1,5 +1,34 @@
 # Contexto técnico
 
+## Caching de incidencias y backoffice — 10 de noviembre de 2026
+
+En `feature/caching-optimisation`, desde `origin/main` (`e005162`), las lecturas
+`GET /api/incidents` y `GET /api/incidents/summary` exigen usuario autenticado
+(cambio de acceso autorizado; 401 declarado en OpenAPI). Conservan filtros y
+cuerpos 200. Caché por proceso con TTL 30 s, reloj monotónico, máximo 128 entradas
+LRU, claves por UUID y filtros normalizados, copias defensivas y bloqueo de cargas
+y escrituras. El repositorio invalida todas las variantes tras commits de altas,
+seeds y cambios de estado; rollback y errores no publican datos nuevos.
+La configuración actual ejecuta un proceso API; escalar exige invalidación
+compartida. Los cambios SQL externos pueden verse hasta 30 s después.
+
+El middleware `api.timing` registra a nivel INFO método, plantilla de ruta, estado
+y milisegundos, sin query, identificadores ni cuerpos. El colector debe habilitar
+ese nivel. Los formularios de incidencias/proveedores se cargan bajo demanda con
+`next/dynamic`; `useMemo([suppliers])` prepara filas y contadores, sin memoizar
+la elección trivial de moneda. Cancelar y reabrir inicia un formulario nuevo.
+
+Evidencia y auditoría de las 33 operaciones en `CACHING_REPORT.md` (raíz).
+Benchmark aislado: `uv run --frozen python -m scripts.benchmark_caching --uncached`
+y el mismo comando sin `--uncached`; seeder determinista en TemporaryDirectory,
+dotenv/demo desactivados y auth sintética MemoryStorage. Se observó una carrera
+previa del cursor JSON de TinyDB auth al leer concurrentemente: no se modifica
+su almacenamiento y no se certifica con el benchmark su concurrencia real.
+Medición UI: `node scripts/benchmark_supplier_view.mjs`; smoke Chrome/Windows:
+`uv run --frozen python -m scripts.check_caching_browser --port 3103`, contra
+backoffice de producción temporal en ese puerto y con backend sintético.
+No hay dependencias, migraciones, cambios de stock, secretos ni infraestructura.
+
 ## Arquitectura comprobada
 - Público: Next.js 16.4.3, React 19.2.8, TypeScript 5 y Tailwind CSS 3 en `uis/website`, con exportación estática y `trailingSlash: true`. Las rutas `/` y `/application/` se renderizan desde componentes React en `app/`; los módulos cliente de idioma, navegación y formulario se empaquetan con Next y se inicializan tras montar el contenido. Los antiguos HTML y scripts públicos no son fuentes ni dependencias del build. Nginx sirve `uis/website/out`; Docker y Netlify redirigen con 301 `/index.html` y `/application.html` a las rutas sin extensión.
 - Backoffice: Next.js 16.3.1, React 19.2.8, TypeScript 5 y Tailwind CSS 4 en `uis/backoffice`.
