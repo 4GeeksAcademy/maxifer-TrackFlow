@@ -1,5 +1,24 @@
 # Progreso
 
+## Corrección del usuario sintético del smoke RAG — 9 de noviembre de 2026
+
+El CI del commit c82fe04 construye las imágenes pero falla en el smoke RAG:
+`GET /auth/me` devuelve 500 porque el nuevo contrato EmailStr rechaza el correo
+`smoke@example.invalid` insertado directamente por `scripts/rag_smoke.py`.
+Se sustituye por `smoke@example.com`, centralizado en SMOKE_USER_EMAIL.
+No se relajan contratos de API ni se modifican datos reales. Una regresión HTTP
+usa el correo compartido, la creación directa y el hash sintético del smoke;
+comprueba respuesta 200 e identidad del usuario autenticado en `/auth/me`.
+
+Validación aislada con dotenv y demo desactivados, SQLite en memoria y JWT
+sintético: 21 pruebas de contratos aprobadas; suite completa con 138 pruebas
+y once subtests aprobados, seis omisiones Linux y tres avisos previos.
+Docker local sin daemon: no se ejecuta aquí el smoke con contenedores.
+Se prepara commit y push en `feature/serialization-audit` para repetir CI
+por solicitud del desarrollador; sin merge ni despliegue.
+Siguiente paso: comprobar smoke RAG en GitHub Actions antes de afirmar que la
+integración completa pasa. Archivos ajenos fuera del commit.
+
 ## Acciones Docker con Node.js 24 — 9 de noviembre de 2026
 
 Con autorización explícita del desarrollador para modificar el workflow protegido,

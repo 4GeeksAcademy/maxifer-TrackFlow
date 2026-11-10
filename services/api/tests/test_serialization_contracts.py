@@ -9,6 +9,7 @@ from sqlalchemy.pool import StaticPool
 from sqlmodel import Session, SQLModel, create_engine
 from tinydb import TinyDB
 
+from scripts.rag_smoke import SMOKE_USER_EMAIL
 from services.api import auth, database, incident_store, main, security, user_service
 from services.api.password_reset_service import create_password_reset_token
 
@@ -44,6 +45,14 @@ def account(create_test_user):
 
 def headers(account):
     return {"Authorization": "Bearer " + security.create_access_token(account["id"])}
+
+
+def test_container_smoke_user_can_read_own_account(client):
+    user, _ = user_service.create_user_with_profile(SMOKE_USER_EMAIL, "unused-synthetic-hash")
+    response = client.get("/auth/me", headers=headers(user))
+    assert response.status_code == 200
+    assert response.json()["user"]["email"] == SMOKE_USER_EMAIL
+    assert response.json()["user"]["id"] == user["id"]
 
 
 def assert_no_private_keys(value, *, public_auth=False):

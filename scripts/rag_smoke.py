@@ -13,6 +13,7 @@ import uuid
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SMOKE_USER_EMAIL = "smoke@example.com"
 
 
 def main():
@@ -64,7 +65,7 @@ networks:
             run("up", "-d", "--no-build", "--pull", "never", "--wait", "--wait-timeout", "180")
             run("exec", "-T", "services", "python", "-c",
                 "from services.api.user_service import create_user_with_profile; "
-                "create_user_with_profile('smoke@example.invalid', 'unused-synthetic-hash')")
+                f"create_user_with_profile({SMOKE_USER_EMAIL!r}, 'unused-synthetic-hash')")
             first = rag("prepare")
             import base64
             state = base64.b64encode(json.dumps(first).encode()).decode()
