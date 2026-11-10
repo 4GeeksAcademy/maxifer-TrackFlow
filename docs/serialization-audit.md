@@ -5,7 +5,6 @@
 Tres fases completadas el 9 de noviembre de 2026, con autorización del desarrollador
 para avanzar después de cada revisión. Base: `main`, commit `91350ab3b0f149d9cf5ddd0008337a566f7c3bcc`
 (merge de la PR #32 de RAG). Rama: `feature/serialization-audit`.
-Requisitos: archivo local `RETO.md` (fuente protegida, no incorporada a esta PR).
 
 En fase 1 se inspeccionaron `services/api/main.py`, sus siete routers registrados, los
 esquemas, servicios de persistencia, pipeline RAG, analizador CSV, tests existentes
@@ -14,7 +13,7 @@ consultó el gateway ni accedió a bases de datos. El inventario es estático; l
 respuestas descritas proceden del código, no de solicitudes HTTP de esta fase.
 
 El estado original tenía **33 operaciones de negocio**: **10 ✅ ya serializadas**, **4 ⚠️ parcialmente
-serializadas** y **19 ❌ sin serializar** según el criterio de `RETO.md`. El grupo
+serializadas** y **19 ❌ sin serializar** según los criterios de esta auditoría. El grupo
 sin serializar incluye una descarga CSV que necesita documentación de transporte,
 no conversión a JSON. No se encontraron retornos directos de entidades SQLModel:
 inventario ya las convierte a esquemas. Predominan diccionarios sin contrato de

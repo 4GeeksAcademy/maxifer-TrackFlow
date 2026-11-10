@@ -1,5 +1,15 @@
 # Progreso
 
+## Ajuste documental de auditoría — 9 de noviembre de 2026
+
+Por solicitud del desarrollador, se eliminan las referencias al archivo local
+de requisitos en `docs/serialization-audit.md`. Se conserva el contenido técnico
+y los resultados de las tres fases. Se prepara commit local en la rama
+`feature/serialization-audit`; sin cambios de código ni de fuentes protegidas.
+Validación: 40 comprobaciones AI y siete pruebas aprobadas; búsqueda de referencias
+al archivo retirado sin coincidencias y `git diff --check` limpio. Diff sin secretos
+ni datos personales nuevos. No se repiten suites de aplicación sin cambios de código.
+
 ## Entrega de auditoría de serialización — 9 de noviembre de 2026
 
 Tres fases completadas en `feature/serialization-audit`, commit de implementación
