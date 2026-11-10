@@ -10,10 +10,12 @@ from services.api.password_reset_service import (
     invalidate_user_reset_tokens,
 )
 from services.api.schemas_auth import (
+    AccountResponse,
     ChangePasswordRequest,
     ForgotPasswordRequest,
     MessageResponse,
     ResetPasswordRequest,
+    TokenResponse,
 )
 from services.api.security import (
     create_access_token,
@@ -35,7 +37,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@router.post("/login")
+@router.post("/login", response_model=TokenResponse)
 def login(form: OAuth2PasswordRequestForm = Depends()):
     user = get_user_by_email(form.username)
 
@@ -51,7 +53,7 @@ def login(form: OAuth2PasswordRequestForm = Depends()):
     }
 
 
-@router.get("/me")
+@router.get("/me", response_model=AccountResponse)
 def get_me(current_user: dict = Depends(get_current_user)):
     return {
         "user": public_user(current_user),

@@ -1,5 +1,6 @@
 from datetime import datetime
 from enum import Enum
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
@@ -71,7 +72,37 @@ class UserPublic(BaseModel):
 
 class ProfilePublic(BaseModel):
     id: str
-    user_id: str
     name: str | None = None
     phone: str | None = None
     address: str | None = None
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: Literal["bearer"]
+
+
+class RegisteredUser(BaseModel):
+    id: str
+    is_active: bool
+    role: Role
+    created_at: datetime
+
+
+class RegistrationResponse(BaseModel):
+    user: RegisteredUser
+    profile: ProfilePublic
+
+
+class AccountResponse(BaseModel):
+    user: UserPublic
+    profile: ProfilePublic | None
+
+
+class UserListItem(UserPublic):
+    """Flat public fields; profiles and credentials never belong in this list."""
+
+
+class UserDeleteResponse(BaseModel):
+    deleted: bool
+    id: str

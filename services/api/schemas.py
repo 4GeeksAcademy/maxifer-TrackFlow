@@ -8,7 +8,7 @@ class InventoryRequest(BaseModel):
 	model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
 
-class SKUCreate(InventoryRequest):
+class SKUFields(BaseModel):
 	name: str = Field(min_length=1)
 	sku: str = Field(min_length=1)
 	client_name: str = Field(min_length=1)
@@ -16,7 +16,11 @@ class SKUCreate(InventoryRequest):
 	warehouse: Literal["LA", "ZGZ"]
 
 
-class SKUResponse(SKUCreate):
+class SKUCreate(SKUFields, InventoryRequest):
+	pass
+
+
+class SKUResponse(SKUFields):
 	id: int
 	current_stock: int
 
@@ -44,20 +48,29 @@ class StockExitCreate(InventoryRequest):
 		return self
 
 
-class StockEntryResponse(StockEntryCreate):
+class SKUReference(BaseModel):
+	model_config = ConfigDict(from_attributes=True)
+	id: int
+	name: str
+	sku: str
+
+
+class StockMovementResponse(BaseModel):
 	id: int
 	created_at: datetime
 	user_uuid: str
+	quantity: int
+	warehouse: Literal["LA", "ZGZ"]
+	sku: SKUReference
 
-	model_config = ConfigDict(from_attributes=True)
+
+class StockEntryResponse(StockMovementResponse):
+	reference: str
 
 
-class StockExitResponse(StockExitCreate):
-	id: int
-	created_at: datetime
-	user_uuid: str
-
-	model_config = ConfigDict(from_attributes=True)
+class StockExitResponse(StockMovementResponse):
+	exit_type: Literal["dispatch", "loss"]
+	tracking_number: str | None = None
 
 
 class OrderResponse(BaseModel):
@@ -70,4 +83,4 @@ class OrderResponse(BaseModel):
 	reference: str | None = None
 	exit_type: Literal["dispatch", "loss"] | None = None
 	tracking_number: str | None = None
-	sku: SKUResponse
+	sku: SKUReference

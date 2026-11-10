@@ -1,5 +1,180 @@
 # Progreso
 
+## Corrección del usuario sintético del smoke RAG — 9 de noviembre de 2026
+
+El CI del commit c82fe04 construye las imágenes pero falla en el smoke RAG:
+`GET /auth/me` devuelve 500 porque el nuevo contrato EmailStr rechaza el correo
+`smoke@example.invalid` insertado directamente por `scripts/rag_smoke.py`.
+Se sustituye por `smoke@example.com`, centralizado en SMOKE_USER_EMAIL.
+No se relajan contratos de API ni se modifican datos reales. Una regresión HTTP
+usa el correo compartido, la creación directa y el hash sintético del smoke;
+comprueba respuesta 200 e identidad del usuario autenticado en `/auth/me`.
+
+Validación aislada con dotenv y demo desactivados, SQLite en memoria y JWT
+sintético: 21 pruebas de contratos aprobadas; suite completa con 138 pruebas
+y once subtests aprobados, seis omisiones Linux y tres avisos previos.
+Docker local sin daemon: no se ejecuta aquí el smoke con contenedores.
+Se prepara commit y push en `feature/serialization-audit` para repetir CI
+por solicitud del desarrollador; sin merge ni despliegue.
+Siguiente paso: comprobar smoke RAG en GitHub Actions antes de afirmar que la
+integración completa pasa. Archivos ajenos fuera del commit.
+
+## Acciones Docker con Node.js 24 — 9 de noviembre de 2026
+
+Con autorización explícita del desarrollador para modificar el workflow protegido,
+se actualizan en `.github/workflows/deploy.yml` las referencias de
+`docker/setup-buildx-action` a v4.4.1 (SHA
+`f87e5991a6d7451dcb8d9637bfbc97413f497069`) y `docker/build-push-action` a
+v7.4.0 (SHA `c3c9e263c25d99ce0380d002d59b67737d91b0dc`, tres builds).
+Los SHA se contrastan con las releases oficiales y sus action.yml declaran
+`runs.using: node24`. Las notas de las versiones mayores requieren runner
+v2.327.1 o posterior; los jobs usan `ubuntu-latest`. No se utilizan los parámetros
+retirados en las versiones mayores. Se conserva el Node 22 de los contenedores.
+
+Validación: YAML parseado con PyYAML y comparación semántica con HEAD confirman
+que solo cambian esas cuatro referencias; parámetros, triggers, permisos y
+condiciones de despliegue se conservan. Las 40 comprobaciones AI y siete pruebas
+aprueban mediante `npm.cmd` (PowerShell bloquea el wrapper npm.ps1).
+Diff revisado sin secretos ni datos personales nuevos y `git diff --check` limpio.
+El desarrollador autoriza commit y push en `feature/serialization-audit`;
+se prepara la publicación de estos dos archivos con las comprobaciones AI
+repetidas y aprobadas. Sin merge ni despliegue.
+Pendiente ejecutar GitHub Actions tras publicar el cambio para comprobar los
+builds y la desaparición del aviso en el runner; no se presenta CI remoto como
+verificado. Archivos ajenos de `.tmp/` y `.vscode/` fuera del trabajo.
+
+## Ajuste documental de auditoría — 9 de noviembre de 2026
+
+Por solicitud del desarrollador, se eliminan las referencias al archivo local
+de requisitos en `docs/serialization-audit.md`. Se conserva el contenido técnico
+y los resultados de las tres fases. Se prepara commit local en la rama
+`feature/serialization-audit`; sin cambios de código ni de fuentes protegidas.
+Validación: 40 comprobaciones AI y siete pruebas aprobadas; búsqueda de referencias
+al archivo retirado sin coincidencias y `git diff --check` limpio. Diff sin secretos
+ni datos personales nuevos. No se repiten suites de aplicación sin cambios de código.
+
+## Entrega de auditoría de serialización — 9 de noviembre de 2026
+
+Tres fases completadas en `feature/serialization-audit`, commit de implementación
+`ec6a286`. Rama publicada y [PR #33](https://github.com/4GeeksAcademy/maxifer-TrackFlow/pull/33)
+abierta contra `main` con el título exacto `feat: serialization audit and implementation`,
+enlace a AGENTS.md de la rama, auditoría y resultados. El conector GitHub permitió
+lectura pero rechazó crear la PR con 403 por permisos de integración; se creó
+mediante la autenticación Git existente sin imprimir ni guardar credenciales.
+
+Validación final: backend con 137 pruebas y once subtests aprobados, seis omisiones
+Linux documentadas; backoffice con 17 pruebas, lint y build aprobados; configuración
+AI con 40 comprobaciones y siete pruebas aprobadas. Tres operaciones comprobadas
+desde Swagger real, con API y navegador temporales ya cerrados. Diff revisado,
+whitespace limpio y sin secretos nuevos; solo veinte rutas del trabajo incluidas.
+Este registro de entrega actualiza únicamente documentación. Siguiente paso:
+revisión humana de la PR y de sus comprobaciones CI. No fusionar ni desplegar.
+
+## Auditoría de serialización — fase 3, 9 de noviembre de 2026
+
+El desarrollador autoriza seguir con fase 3 en `feature/serialization-audit`.
+La suite completa repetida con uv, dotenv desactivado, SQLite en memoria, JWT
+sintético y demo desactivada termina con 137 pruebas y once subtests aprobados,
+seis omisiones de plataforma y tres avisos de deprecación, en 39,45 s. Los seis
+casos omitidos pertenecen a scripts/test_deployment.py y requieren Linux/Bash/flock;
+Docker local no tiene daemon disponible, por lo que no se presentan como probados.
+Los 17 tests, lint y build de backoffice de fase 2 siguen vigentes sin cambios UI.
+
+Verificación interactiva asistida en Swagger real `/docs` con Chrome headless y
+perfil temporal mediante CDP, usando Try it out, Execute y el diálogo Authorize:
+POST /users devuelve 201, sin email/password/hash ni profile.user_id;
+POST /auth/login devuelve 200 con solo access_token y token_type bearer;
+GET /auth/me devuelve 200 con email propio y perfil acotado, sin campos internos.
+Se contrastan campos requeridos y permitidos contra el OpenAPI de la API aislada.
+Se usa TinyDB temporal, inventario en memoria, seeds y dotenv desactivados, sin
+gateway ni correo. No se copian JWT ni contraseñas a evidencia versionada.
+Se cierran los procesos temporales de API y navegador tras la comprobación.
+
+Auditoría final con clasificaciones originales preservadas, contrato aplicado y
+estado final en las 33 operaciones; CSV mantiene su excepción de transporte.
+Se registran los resultados interactivos y las limitaciones de plataforma.
+Validaciones finales: 40 comprobaciones AI y siete pruebas aprobadas;
+`git diff --check` limpio. Revisión del diff y archivos nuevos sin secretos ni
+datos personales nuevos. Main remoto sigue en `91350ab3`, sin cambios de base.
+Procesos de prueba cerrados; perfil Chrome y almacenamiento sintético exclusivos
+de fase 3 eliminados tras verificar su ruta dentro del workspace.
+Siguiente paso de entrega: comprobaciones documentales finales, revisión de
+secretos/diff, commit de rutas explícitas, push y PR contra main con el título
+exacto del reto y enlace a AGENTS.md. No fusionar ni desplegar. Los archivos
+ajenos de `.tmp/` y `.vscode/` quedan fuera de la entrega.
+
+## Auditoría de serialización — fase 2, 9 de noviembre de 2026
+
+El desarrollador autoriza comenzar fase 2 en `feature/serialization-audit`.
+Se implementan contratos explícitos para las 33 operaciones (32 JSON, una CSV
+con response_model=None y esquema text/csv en OpenAPI). Registro sin email,
+perfil acotado sin user_id, email propio en `/auth/me`, usuarios planos,
+proveedores reducidos en listado y SKUReference id/name/sku en movimientos.
+Se conserva user_uuid para atribución operativa. Entradas y salidas separadas;
+RAG rechaza extras. Se tipan análisis CSV, desgloses, satisfacción y fuentes RAG,
+y se documentan errores sin alterar su forma. Perfil ausente en PUT devuelve 404.
+
+Se retiran del listado de movimientos las dos consultas agregadas de stock
+innecesarias con la proyección nueva, conservando cálculo de productos y rechazo
+de salidas sin stock. Se ajustan los tipos de proveedores y movimientos del
+backoffice. Sin dependencias, migraciones, zonas protegidas ni datos reales.
+
+Nueva suite HTTP con veinte casos parametrizados y TestClient: filtrado de
+campos internos, auth pública sin email/hash, cuenta propia, listados y CRUD,
+SKU proyectado, errores, CSV, abstención RAG, rechazo de campos no escribibles
+y esquemas OpenAPI para las 33 operaciones. El test existente de movimientos
+comprueba proyección y stock de dominio, en lugar del stock anidado retirado.
+
+Validaciones: suite completa `uv run --frozen pytest -q -p no:cacheprovider
+--basetemp .tmp/serialization-phase2-full`, con dotenv desactivado, SQLite en
+memoria, JWT sintético y demo desactivada: 137 pruebas y once subtests aprobados,
+seis pruebas Linux omitidas en Windows y tres avisos de deprecación existentes.
+uv se ejecuta fuera del sandbox con autorización. Tests del backoffice: 17
+aprobados; lint y build aprobados, persiste aviso previo de múltiples lockfiles.
+Inspección estática: 33/33 decoradores con response_model explícito.
+
+Validación documental con skill validate-ai-setup: 40 comprobaciones y siete
+pruebas aprobadas. Revisión del diff y archivos nuevos sin secretos ni datos
+personales nuevos; `git diff --check` limpio.
+
+Auditoría actualizada con estado original preservado, contrato final por operación
+y evidencia automática; fase 3 y pruebas manuales de `/docs` pendientes. No se
+marca todo el inventario como completado ni se afirma mejora de latencia medida.
+Siguiente paso: revisión humana de fase 2 antes de comenzar fase 3. Sin commit,
+push, PR, merge ni despliegue. Archivos ajenos de `.tmp/` y `.vscode/` intactos.
+
+## Auditoría de serialización — fase 1, 9 de noviembre de 2026
+
+Por solicitud del desarrollador se actualiza `origin/main` y se crea `main` local
+con seguimiento, seguido de `feature/serialization-audit` desde `91350ab3`.
+GitHub confirma el merge RAG por PR #32; la referencia local previa estaba
+desactualizada. Fetch y creación de ramas requieren ejecución autorizada fuera
+del sandbox, completada correctamente. Los archivos ajenos de `.tmp/` y `.vscode/`
+permanecen fuera del trabajo; no se cambia `.gitignore`.
+
+Creado `docs/serialization-audit.md`: 33 operaciones de negocio con ruta, método,
+propósito, entrada, respuesta y modelo originales, clasificación y propuesta.
+Diez ya serializadas, cuatro parciales y diecinueve sin contrato explícito,
+incluida descarga CSV. Comparación estática AST contra el documento: 33/33,
+sin omisiones ni operaciones adicionales. Se registran aparte cuatro rutas
+automáticas de documentación/OpenAPI. Hallazgos: email en registro público,
+perfiles TinyDB sin whitelist, listados sobredimensionados y proyección SKU;
+JWT público de login y UUID del operario se conservan con justificación.
+
+Solo cambios documentales; sin implementación, arranque API, bases de datos,
+correo, gateway, secretos ni infraestructura. Se corrige la afirmación obsoleta
+de merge RAG pendiente en projectbrief; no se afirma configuración o despliegue
+verificados en VPS. Se mantiene la discrepancia del nombre del CEO del briefing.
+
+Validaciones de fase 1: 40 comprobaciones de `npm run validate:ai-setup` y siete
+pruebas de `npm run test:ai-setup` aprobadas; `git diff --check` limpio. Revisión
+de los cambios documentales sin secretos ni datos personales nuevos. No se
+ejecutan tests del backend ni builds de interfaces al no modificar código.
+
+Siguiente paso: revisión humana de fase 1 antes de implementar fase 2; nueva
+revisión al cerrar implementación y después fase 3 con tests y tres pruebas
+manuales mediante `/docs`. Sin commit, push ni PR en esta revisión intermedia.
+
 ## Integración RAG en producción — 9 de noviembre de 2026
 
 Implementada en `feature/rag-knowledge-base` por solicitud explícita del

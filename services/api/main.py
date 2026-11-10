@@ -17,6 +17,11 @@ from packages.incidents_analysis import (
     summary_to_csv,
 )
 from services.api.auth import router as auth_router
+from services.api.schemas_auth import MessageResponse
+from services.api.schemas_responses import (
+    ApiErrorResponse, HTTPErrorResponse, IncidentAnalysisResponse,
+    ValidationErrorResponse,
+)
 from services.api.routers.profiles import router as profiles_router
 from services.api.routers.suppliers import (
     router as suppliers_router,
@@ -36,6 +41,10 @@ validate_jwt_secret()
 app = FastAPI(
     title="TrackFlow Incidents API",
     version="1.0.0",
+    responses={
+        400: {"model": ValidationErrorResponse | HTTPErrorResponse},
+        500: {"model": ApiErrorResponse},
+    },
 )
 
 app.include_router(auth_router)
@@ -101,14 +110,14 @@ async def unexpected_error(request: Request, exc: Exception):
 LAST_ANALYSIS = None
 
 
-@app.get("/")
+@app.get("/", response_model=MessageResponse)
 def root():
     return {
         "message": "TrackFlow Incidents API is running",
     }
 
 
-@app.post("/api/incidents/analyze")
+@app.post("/api/incidents/analyze", response_model=IncidentAnalysisResponse)
 async def analyze_incidents(
     file: UploadFile = File(...),
     current_user: dict = Depends(get_current_user),
@@ -158,7 +167,18 @@ async def analyze_incidents(
     return result
 
 
-@app.get("/api/incidents/results/export")
+@app.get(
+    "/api/incidents/results/export",
+    response_model=None,
+    response_class=Response,
+    responses={
+        200: {
+            "description": "Descarga CSV del último análisis.",
+            "content": {"text/csv": {"schema": {"type": "string"}}},
+        },
+        404: {"model": HTTPErrorResponse},
+    },
+)
 def export_results(
     current_user: dict = Depends(get_current_user),
 ):

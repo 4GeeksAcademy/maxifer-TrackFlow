@@ -25,7 +25,8 @@ No se han fijado objetivos numéricos de mejora: no inventar compromisos de serv
 El repositorio ya ofrece landing, gestión de incidencias, inventario, autenticación
 y tracker de contratación. El RAG comercial está implementado y probado en
 desarrollo; su integración de producción incorpora indexación automática y
-verificación en el despliegue, pendiente de merge y configuración privada del VPS.
+verificación en el despliegue, integrada en `main` mediante la PR #32. La
+configuración privada y el estado operativo del VPS no se verifican en esta sesión.
 Integración real con transportistas, agentes de soporte, automatización de
 devoluciones e informes ejecutivos siguen siendo objetivos futuros.
 

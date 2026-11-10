@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+from services.api.schemas_responses import HTTPErrorResponse, RAGQueryResponse
 
 from services.api.security import get_current_user
 
@@ -8,6 +10,7 @@ router = APIRouter(prefix="/api/rag", tags=["rag"])
 
 
 class RAGQueryRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     question: str = Field(max_length=2000)
 
     @field_validator("question")
@@ -19,7 +22,7 @@ class RAGQueryRequest(BaseModel):
         return value
 
 
-@router.post("/query")
+@router.post("/query", response_model=RAGQueryResponse, responses={503: {"model": HTTPErrorResponse}})
 def query_knowledge(
     payload: RAGQueryRequest,
     current_user: dict = Depends(get_current_user),
