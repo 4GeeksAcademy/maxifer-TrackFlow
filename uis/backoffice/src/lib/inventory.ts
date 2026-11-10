@@ -26,7 +26,7 @@ export type InventoryOrder = {
   reference?: string | null;
   exit_type?: "dispatch" | "loss" | null;
   tracking_number?: string | null;
-  sku: InventoryProduct;
+  sku: Pick<InventoryProduct, "id" | "name" | "sku">;
 };
 
 export const INVENTORY_LOW_STOCK_THRESHOLD = 10;

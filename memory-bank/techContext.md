@@ -27,6 +27,30 @@ Los manifiestos y lockfiles prevalecen sobre mínimos desactualizados del README
 El briefing describe necesidades del negocio, no impone un stack nuevo. No cambiar
 frameworks ni bases de datos para completar este hito.
 
+## Auditoría de serialización — tres fases, 9 de noviembre de 2026
+
+Inventario estático en `docs/serialization-audit.md`, sobre `main` actualizado
+(`91350ab3`, incluye RAG), rama `feature/serialization-audit`: 33 operaciones de
+negocio, diez serializadas, cuatro parcialmente serializadas y diecinueve sin
+contrato explícito (incluye CSV) en su estado original. Fase 2 implementada:
+33 decoradores con response_model explícito, 32 contratos JSON y una descarga CSV
+con None/Response y text/csv documentado. Registro sin email, perfiles sin user_id,
+listados acotados y SKUReference id/name/sku en movimientos, sin sku_id de salida.
+Se mantienen email propio en `/auth/me`, JWT de acceso y user_uuid operativo;
+no se introducen usuarios SQL. Modelos de entrada/salida separados; RAG rechaza
+extras. Se eliminan agregados de stock del listado de movimientos, conservando
+cálculo de stock de productos y validación de salidas. Los tipos UI se ajustan.
+Esquemas de incidencias, análisis, RAG y errores en schemas_responses.py. Las rutas
+automáticas de documentación/OpenAPI se registran separadas del inventario de negocio.
+Suite aislada: 137 pruebas y once subtests aprobados, seis omitidas en Windows;
+backoffice: 17 pruebas, lint y build aprobados. Fase 3 autorizada y verificada:
+la suite completa repite los mismos resultados; tres operaciones ejecutadas
+interactivamente en Swagger mediante Chrome headless/CDP (registro 201, login 200,
+cuenta propia 200) coinciden con OpenAPI. API y perfil de navegador temporales,
+sin seeds, dotenv ni datos del proyecto. Se conserva la excepción CSV. Los seis
+tests de despliegue requieren Linux; no se ejecutan allí porque Docker no está
+disponible. Auditoría con estado original y 33 estados finales registrados.
+
 ## Restricciones
 Código público únicamente en `uis/website`, interfaces internas bajo
 `uis/backoffice`, backend en `services`. No crear carpetas paralelas. El tracker
@@ -37,8 +61,9 @@ Credenciales, datos reales y volúmenes de producción están protegidos por
 [AGENTS.md](../AGENTS.md). Usar datos sintéticos y almacenamiento temporal para pruebas.
 
 Inventario calcula stock por SKU/almacén como entradas menos salidas, rechaza
-stock negativo y mantiene usuarios en TinyDB; no crear usuarios SQL. Esta entrega
-no modifica estas reglas de negocio ni endpoints existentes.
+stock negativo y mantiene usuarios en TinyDB; no crear usuarios SQL. La auditoría
+conserva estas reglas y las rutas existentes; los cambios de forma de respuesta
+se documentan en `docs/serialization-audit.md`.
 
 ## Comprobaciones reproducibles (desde raíz)
 Instalación: `npm ci --prefix uis/website`, `npm ci`, `npm ci --prefix uis/backoffice`,
@@ -50,5 +75,6 @@ Instalación: `npm ci --prefix uis/website`, `npm ci`, `npm ci --prefix uis/back
 - Tracker: `npm --prefix uis/backoffice/talent-pipeline-tracker run lint` y `npm --prefix uis/backoffice/talent-pipeline-tracker run build`.
 - Contenedores: validar ambos Compose y construir imágenes. Ejecutar smoke tests de landing/assets/login/tracker con proyecto Compose y datos temporales exclusivos; jamás limpiar volúmenes existentes.
 
-No hay cambios de API pública por esta migración. Las interfaces nuevas de tooling
-son comandos npm de validación y el CLI documentado en la skill.
+Las interfaces de tooling son comandos npm de validación y el CLI documentado
+en la skill. La auditoría de serialización acota campos de respuesta y declara
+sus contratos sin añadir rutas ni cambiar métodos HTTP.

@@ -1,6 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from services.api.schemas_auth import UserCreate, UserUpdate
+from services.api.schemas_auth import (
+    RegistrationResponse, UserCreate, UserDeleteResponse, UserListItem,
+    UserPublic, UserUpdate,
+)
 from services.api.security import get_current_user, hash_password
 from services.api.user_service import (
     create_user_with_profile,
@@ -24,7 +27,7 @@ def require_owner_or_admin(user_id: str, current_user: dict) -> None:
         )
 
 
-@router.post("", status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=RegistrationResponse, status_code=status.HTTP_201_CREATED)
 def register_user(payload: UserCreate):
     if get_user_by_email(str(payload.email)):
         raise HTTPException(status_code=400, detail="El email ya esta registrado.")
@@ -39,15 +42,15 @@ def register_user(payload: UserCreate):
         },
     )
 
-    return {"user": public_user(user), "profile": profile}
+    return RegistrationResponse(user=user, profile=profile).model_dump(mode="json")
 
 
-@router.get("")
+@router.get("", response_model=list[UserListItem])
 def list_users(current_user: dict = Depends(get_current_user)):
     return [public_user(user) for user in get_all_users()]
 
 
-@router.get("/{user_id}")
+@router.get("/{user_id}", response_model=UserPublic)
 def get_user(user_id: str, current_user: dict = Depends(get_current_user)):
     require_owner_or_admin(user_id, current_user)
 
@@ -58,7 +61,7 @@ def get_user(user_id: str, current_user: dict = Depends(get_current_user)):
     return public_user(user)
 
 
-@router.put("/{user_id}")
+@router.put("/{user_id}", response_model=UserPublic)
 def edit_user(user_id: str, payload: UserUpdate, current_user: dict = Depends(get_current_user)):
     require_owner_or_admin(user_id, current_user)
 
@@ -85,7 +88,7 @@ def edit_user(user_id: str, payload: UserUpdate, current_user: dict = Depends(ge
     return public_user(updated)
 
 
-@router.delete("/{user_id}")
+@router.delete("/{user_id}", response_model=UserDeleteResponse)
 def remove_user(user_id: str, current_user: dict = Depends(get_current_user)):
     require_owner_or_admin(user_id, current_user)
 

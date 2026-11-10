@@ -11,6 +11,8 @@ from services.api.models import (
 	SupplierCategory,
 	SupplierCountry,
 	SupplierCreate,
+	SupplierDeleteResponse,
+	SupplierListItem,
 	SupplierRateUpdate,
 	SupplierResponse,
 	SupplierStatusUpdate,
@@ -61,7 +63,7 @@ def create_supplier(
 
 @router.get(
 	"",
-	response_model=list[SupplierResponse],
+	response_model=list[SupplierListItem],
 )
 def list_suppliers(
 	country: SupplierCountry | None = Query(default=None),
@@ -86,7 +88,7 @@ def list_suppliers(
 			& (query.categories.any([category.value]))
 		)
 
-	return [SupplierResponse(**document_to_record(doc)) for doc in docs]
+	return [SupplierListItem(**document_to_record(doc)) for doc in docs]
 
 
 @router.get(
@@ -163,6 +165,7 @@ def update_supplier_status(
 
 @router.delete(
 	"/{supplier_id}",
+	response_model=SupplierDeleteResponse,
 )
 def delete_supplier(
 	supplier_id: int,

@@ -91,6 +91,21 @@ class SupplierResponse(SupplierBase):
 	updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
+class SupplierListItem(BaseModel):
+    id: str
+    name: str
+    country: SupplierCountry
+    categories: list[SupplierCategory]
+    rate_per_shipment: float
+    currency: SupplierCurrency
+    status: SupplierStatus
+
+
+class SupplierDeleteResponse(BaseModel):
+    deleted: bool
+    id: str
+
+
 class SupplierRateUpdate(BaseModel):
 	model_config = ConfigDict(
 		extra="forbid",

@@ -9,6 +9,7 @@ from services.api.schemas import (
 	OrderResponse,
 	SKUCreate,
 	SKUResponse,
+	SKUReference,
 	StockEntryCreate,
 	StockEntryResponse,
 	StockExitCreate,
@@ -103,7 +104,11 @@ def create_inbound_order(
 	db.add(order)
 	db.commit()
 	db.refresh(order)
-	return StockEntryResponse.model_validate(order)
+	return StockEntryResponse(
+		id=order.id, created_at=order.created_at, user_uuid=order.user_uuid,
+		quantity=order.quantity, warehouse=order.warehouse,
+		reference=order.reference, sku=SKUReference.model_validate(product),
+	)
 
 
 @router.post("/orders/outbound", response_model=StockExitResponse, status_code=201)
@@ -137,28 +142,18 @@ def create_outbound_order(
 	db.add(order)
 	db.commit()
 	db.refresh(order)
-	return StockExitResponse.model_validate(order)
+	return StockExitResponse(
+		id=order.id, created_at=order.created_at, user_uuid=order.user_uuid,
+		quantity=order.quantity, warehouse=order.warehouse,
+		exit_type=order.exit_type, tracking_number=order.tracking_number,
+		sku=SKUReference.model_validate(product),
+	)
 
 
 @router.get("/orders", response_model=list[OrderResponse])
 def get_orders(db: Session = Depends(get_inventory_db)):
 	entry_rows = db.exec(select(StockEntry, SKU).join(SKU)).all()
 	exit_rows = db.exec(select(StockExit, SKU).join(SKU)).all()
-
-	inbound_totals = db.exec(
-		select(StockEntry.sku_id, StockEntry.warehouse, func.sum(StockEntry.quantity))
-		.group_by(StockEntry.sku_id, StockEntry.warehouse)
-	).all()
-	outbound_totals = db.exec(
-		select(StockExit.sku_id, StockExit.warehouse, func.sum(StockExit.quantity))
-		.group_by(StockExit.sku_id, StockExit.warehouse)
-	).all()
-	stock_by_location = {}
-	for sku_id, warehouse, quantity in inbound_totals:
-		stock_by_location[(sku_id, warehouse)] = int(quantity)
-	for sku_id, warehouse, quantity in outbound_totals:
-		key = (sku_id, warehouse)
-		stock_by_location[key] = stock_by_location.get(key, 0) - int(quantity)
 
 	movements = []
 	for entry, product in entry_rows:
@@ -170,15 +165,7 @@ def get_orders(db: Session = Depends(get_inventory_db)):
 			user_uuid=entry.user_uuid,
 			warehouse=entry.warehouse,
 			reference=entry.reference,
-			sku=SKUResponse(
-				id=product.id,
-				name=product.name,
-				sku=product.sku,
-				client_name=product.client_name,
-				category=product.category,
-				warehouse=product.warehouse,
-				current_stock=stock_by_location.get((product.id, product.warehouse), 0),
-			),
+			sku=SKUReference.model_validate(product),
 		))
 	for order, product in exit_rows:
 		movements.append(OrderResponse(
@@ -190,15 +177,7 @@ def get_orders(db: Session = Depends(get_inventory_db)):
 			warehouse=order.warehouse,
 			exit_type=order.exit_type,
 			tracking_number=order.tracking_number,
-			sku=SKUResponse(
-				id=product.id,
-				name=product.name,
-				sku=product.sku,
-				client_name=product.client_name,
-				category=product.category,
-				warehouse=product.warehouse,
-				current_stock=stock_by_location.get((product.id, product.warehouse), 0),
-			),
+			sku=SKUReference.model_validate(product),
 		))
 
 	return sorted(movements, key=lambda movement: movement.created_at)

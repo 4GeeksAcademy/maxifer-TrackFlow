@@ -10,8 +10,15 @@ from packages.shared.incidents import (
     VALID_CATEGORIES, validate_choice, validate_incident,
 )
 from services.api.incident_store import get_incident as find_incident, list_incidents as find_incidents, insert_incident, update_status
+from services.api.schemas_responses import (
+    ApiErrorResponse, IncidentListItem, IncidentResponse,
+    IncidentSummaryResponse, ValidationErrorResponse,
+)
 
-router = APIRouter(prefix="/api/incidents", tags=["incidents"])
+router = APIRouter(
+    prefix="/api/incidents", tags=["incidents"],
+    responses={400: {"model": ValidationErrorResponse}, 404: {"model": ApiErrorResponse}},
+)
 
 
 class IncidentCreate(BaseModel):
@@ -37,7 +44,7 @@ def not_found():
     return JSONResponse(status_code=404, content={"error": "not_found", "message": "Incidencia no encontrada"})
 
 
-@router.post("", status_code=201)
+@router.post("", response_model=IncidentResponse, status_code=201)
 def create_incident(payload: IncidentCreate):
     try:
         record = validate_incident(payload.model_dump())
@@ -48,7 +55,7 @@ def create_incident(payload: IncidentCreate):
     return insert_incident(record)
 
 
-@router.get("")
+@router.get("", response_model=list[IncidentListItem])
 def list_incidents(status: str | None = None, origin: str | None = None, branch: str | None = None, category: str | None = None):
     try:
         for field, value, choices in (("status", status, VALID_STATUS), ("origin", origin, VALID_ORIGINS), ("branch", branch, VALID_BRANCHES), ("category", category, VALID_CATEGORIES)):
@@ -59,7 +66,7 @@ def list_incidents(status: str | None = None, origin: str | None = None, branch:
     return find_incidents({"status": status, "origin": origin, "branch": branch, "category": category})
 
 
-@router.get("/summary")
+@router.get("/summary", response_model=IncidentSummaryResponse)
 def incidents_summary():
     rows = find_incidents()
     result = {"total": len(rows), "by_status": {}, "by_category": {}, "by_origin": {}, "by_branch": {}}
@@ -70,13 +77,13 @@ def incidents_summary():
     return result
 
 
-@router.get("/{incident_id}")
+@router.get("/{incident_id}", response_model=IncidentResponse)
 def get_incident(incident_id: int):
     doc = find_incident(incident_id)
     return doc if doc else not_found()
 
 
-@router.patch("/{incident_id}/status")
+@router.patch("/{incident_id}/status", response_model=IncidentResponse)
 def update_incident_status(incident_id: int, payload: IncidentStatusUpdate):
     try:
         updated = update_status(incident_id, payload.status, datetime.now(timezone.utc).isoformat())
