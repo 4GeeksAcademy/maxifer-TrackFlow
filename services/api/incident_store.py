@@ -8,6 +8,7 @@ from threading import Lock
 
 from packages.shared.incidents import validate_transition
 from services.api.incident_model import Incident
+from services.api.incident_cache import incident_cache
 
 DATA_DIR = Path(__file__).resolve().parent / "data"
 DB_FILE_PATH = DATA_DIR / "incidents.sqlite3"
@@ -101,32 +102,41 @@ def list_incidents(filters=None):
 def insert_incident(values):
     _initialize()
     incident = Incident.model_validate(values).model_dump(mode="json")
-    with _connection() as connection:
-        cursor = connection.execute(
-            f"INSERT INTO incidents ({', '.join(FIELDS)}) VALUES ({', '.join('?' for _ in FIELDS)})",
-            tuple(incident[field] for field in FIELDS),
-        )
-        return _record(connection.execute("SELECT * FROM incidents WHERE id = ?", (cursor.lastrowid,)).fetchone())
+    with incident_cache.write_lock:
+        with _connection() as connection:
+            cursor = connection.execute(
+                f"INSERT INTO incidents ({', '.join(FIELDS)}) VALUES ({', '.join('?' for _ in FIELDS)})",
+                tuple(incident[field] for field in FIELDS),
+            )
+            result = _record(connection.execute("SELECT * FROM incidents WHERE id = ?", (cursor.lastrowid,)).fetchone())
+        incident_cache.clear()
+        return result
 
 
 def insert_seed_incident(values):
     _initialize()
     incident = Incident.model_validate(values).model_dump(mode="json")
-    with _connection() as connection:
-        cursor = connection.execute(
-            f"INSERT INTO incidents ({', '.join(FIELDS)}) VALUES ({', '.join('?' for _ in FIELDS)}) ON CONFLICT(source_id) DO NOTHING",
-            tuple(incident[field] for field in FIELDS),
-        )
-        return cursor.rowcount == 1
+    with incident_cache.write_lock:
+        with _connection() as connection:
+            cursor = connection.execute(
+                f"INSERT INTO incidents ({', '.join(FIELDS)}) VALUES ({', '.join('?' for _ in FIELDS)}) ON CONFLICT(source_id) DO NOTHING",
+                tuple(incident[field] for field in FIELDS),
+            )
+            result = cursor.rowcount == 1
+        incident_cache.clear()
+        return result
 
 
 def update_status(incident_id: int, target: str, updated_at: str):
     _initialize()
-    with _connection() as connection:
-        connection.execute("BEGIN IMMEDIATE")
-        row = connection.execute("SELECT * FROM incidents WHERE id = ?", (incident_id,)).fetchone()
-        if row is None:
-            return None
-        validate_transition(row["status"], target)
-        connection.execute("UPDATE incidents SET status = ?, updated_at = ? WHERE id = ?", (target, updated_at, incident_id))
-        return _record(connection.execute("SELECT * FROM incidents WHERE id = ?", (incident_id,)).fetchone())
+    with incident_cache.write_lock:
+        with _connection() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            row = connection.execute("SELECT * FROM incidents WHERE id = ?", (incident_id,)).fetchone()
+            if row is None:
+                return None
+            validate_transition(row["status"], target)
+            connection.execute("UPDATE incidents SET status = ?, updated_at = ? WHERE id = ?", (target, updated_at, incident_id))
+            result = _record(connection.execute("SELECT * FROM incidents WHERE id = ?", (incident_id,)).fetchone())
+        incident_cache.clear()
+        return result

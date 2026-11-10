@@ -1,7 +1,7 @@
 """Centralized incident management endpoints."""
 
 from datetime import datetime, timezone
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict
 
@@ -12,8 +12,10 @@ from packages.shared.incidents import (
 from services.api.incident_store import get_incident as find_incident, list_incidents as find_incidents, insert_incident, update_status
 from services.api.schemas_responses import (
     ApiErrorResponse, IncidentListItem, IncidentResponse,
-    IncidentSummaryResponse, ValidationErrorResponse,
+    IncidentSummaryResponse, ValidationErrorResponse, HTTPErrorResponse,
 )
+from services.api.incident_cache import incident_cache
+from services.api.security import get_current_user
 
 router = APIRouter(
     prefix="/api/incidents", tags=["incidents"],
@@ -55,19 +57,25 @@ def create_incident(payload: IncidentCreate):
     return insert_incident(record)
 
 
-@router.get("", response_model=list[IncidentListItem])
-def list_incidents(status: str | None = None, origin: str | None = None, branch: str | None = None, category: str | None = None):
+@router.get("", response_model=list[IncidentListItem], responses={401: {"model": HTTPErrorResponse}})
+def list_incidents(status: str | None = None, origin: str | None = None, branch: str | None = None, category: str | None = None, current_user: dict = Depends(get_current_user)):
     try:
         for field, value, choices in (("status", status, VALID_STATUS), ("origin", origin, VALID_ORIGINS), ("branch", branch, VALID_BRANCHES), ("category", category, VALID_CATEGORIES)):
             if value is not None:
                 validate_choice(value, choices, field)
     except IncidentValidationError as error:
         return validation_response(error)
-    return find_incidents({"status": status, "origin": origin, "branch": branch, "category": category})
+    filters = {"status": status, "origin": origin, "branch": branch, "category": category}
+    key = ("list", str(current_user["id"]), tuple(sorted((key, value) for key, value in filters.items() if value is not None)))
+    return incident_cache.get_or_load(key, lambda: find_incidents(filters))
 
 
-@router.get("/summary", response_model=IncidentSummaryResponse)
-def incidents_summary():
+@router.get("/summary", response_model=IncidentSummaryResponse, responses={401: {"model": HTTPErrorResponse}})
+def incidents_summary(current_user: dict = Depends(get_current_user)):
+    return incident_cache.get_or_load(("summary", str(current_user["id"])), _build_summary)
+
+
+def _build_summary():
     rows = find_incidents()
     result = {"total": len(rows), "by_status": {}, "by_category": {}, "by_origin": {}, "by_branch": {}}
     for row in rows:

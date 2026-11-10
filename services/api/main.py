@@ -8,6 +8,7 @@ if str(ROOT_DIR) not in sys.path:
     sys.path.append(str(ROOT_DIR))
 
 import logging
+from time import perf_counter
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import Response, JSONResponse
@@ -46,6 +47,24 @@ app = FastAPI(
         500: {"model": ApiErrorResponse},
     },
 )
+
+timing_logger = logging.getLogger("api.timing")
+
+
+@app.middleware("http")
+async def timing_middleware(request: Request, call_next):
+    start = perf_counter()
+    status = 500
+    try:
+        response = await call_next(request)
+        status = response.status_code
+        return response
+    finally:
+        # Route templates prevent identifiers from entering the timing log.
+        route = request.scope.get("route")
+        path = getattr(route, "path", "<unmatched>")
+        timing_logger.info("%s %s → %s | %.1f ms", request.method, path, status, (perf_counter() - start) * 1000)
+
 
 app.include_router(auth_router)
 app.include_router(profiles_router)
