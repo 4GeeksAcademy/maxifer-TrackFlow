@@ -1,5 +1,39 @@
 # Progreso
 
+## Configuración del tracker en el VPS — 10 de noviembre de 2026
+
+El desarrollador autoriza conectar por SSH, actualizar únicamente `uis` y
+consultar `/records` en lectura para diagnosticar, sin mostrar ni guardar
+datos de candidaturas. La revisión automática bloqueó inicialmente esa consulta;
+se ejecutó tras la autorización explícita adicional y respondió HTTP 200.
+`NEXT_PUBLIC_API_URL` y `TALENT_PORT` ya coincidían entre los `.env` local y remoto,
+pero el contenedor activo carecía de la URL y mostraba servicio no configurado.
+Se conservan JWT, base de datos, puertos y demás ajustes de producción.
+
+La reconstrucción inicial falló al prerenderizar `/`, con un error traducido por
+el catch de consultas como fallo de conexión. La API respondía desde el host y
+Node. Se añade `dynamic = "force-dynamic"` a la página del tracker: build y
+TypeScript aprobados, ruta `/` dinámica. Lint local aprobado. La imagen parte
+de la versión desplegada `dd1b99618189f5858113fa9e20c5fc18b6cf013f`, conserva
+el backoffice y recompila solo el tracker. Prueba temporal y activación inicial:
+login 3001 y tracker 3002 con HTTP 200, sin aviso de configuración; los cuatro
+servicios saludables y los otros tres contenedores sin recreación.
+
+Solo cambia `UIS_IMAGE` en el `.env` remoto para persistir la imagen corregida;
+respaldo privado y referencia de imagen anterior conservados bajo
+`/opt/trackflow/maintenance/`. Se compacta la imagen para evitar duplicar
+dependencias, dada la capacidad limitada del VPS. Imagen compacta activada y
+probada: HTTP 200 en ambos servicios, tracker sin aviso y contenedor saludable.
+Retirada solo la imagen intermedia y la caché identificada de esta tarea;
+quedan aproximadamente 1,4 GB libres y se conserva la imagen original.
+Validación AI: 40 comprobaciones y siete pruebas aprobadas; diff sin errores
+de whitespace. El desarrollador autoriza publicar la corrección. Se prepara
+commit y PR hacia `main` desde `fix/tracker-dynamic-rendering`, basada en
+`origin/main` (`dd1b996`, con la PR de caché ya integrada). La entrega incluye
+únicamente la página del tracker y este registro; no incorpora credenciales,
+scripts temporales ni cambios de infraestructura. Pendiente revisión e
+integración de la PR antes del próximo despliegue; no se autoriza merge.
+
 ## Caching de incidencias y backoffice — 10 de noviembre de 2026
 
 Rama `feature/caching-optimisation` creada desde `origin/main` actualizado,
