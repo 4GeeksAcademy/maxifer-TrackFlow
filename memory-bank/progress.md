@@ -1,5 +1,26 @@
 # Progreso
 
+## Actualización de README — 11 de noviembre de 2026
+
+Revisión documental en la rama local `dev`: actualizados once README de raíz,
+servicios/API, interfaces/backoffice/tracker y pipelines. Las parejas existentes
+en español e inglés conservan el mismo alcance. Requisitos alineados con Python
+3.12 y Node 22 como referencia; instalación con lockfiles y puertos explícitos
+3001/3002. Se documentan inventario, RAG, proxy del backoffice y configuración
+externa del tracker con rutas `/records`, incluida edición por PUT. Los pipelines
+explican indexación local y flujo de alias de producción según el código vigente.
+
+Validación: 40 comprobaciones AI, siete pruebas del validador y 34 enlaces locales
+en los once README aprobados; `git diff --check` sin errores. Revisión del diff
+sin secretos ni datos personales nuevos. No se ejecutan builds ni suites de las
+aplicaciones porque solo cambia documentación. Se conserva el cambio ajeno en
+`.gitignore` y los temporales locales.
+
+El desarrollador autoriza después publicar estos cambios en la PR #39 (`dev`
+hacia `main`). Se prepara un commit limitado a los once README y este registro,
+con las mismas comprobaciones documentales; la fusión queda a cargo del
+desarrollador. Sin despliegue manual.
+
 ## Publicación de favicon y texto de login en dev — 11 de noviembre de 2026
 
 El desarrollador autoriza commit, push a `dev` y nueva PR hacia `main`.

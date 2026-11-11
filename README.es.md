@@ -14,6 +14,7 @@ English documentation is available in [README.md](./README.md).
 | Backoffice de incidencias | `uis/backoffice` | Disponible |
 | Talent Pipeline Tracker | `uis/backoffice/talent-pipeline-tracker` | Disponible |
 | Servicio FastAPI | `services/api` | Disponible |
+| Inventario y movimientos de stock | `uis/backoffice`, `services/api` | SQLModel; stock por SKU y almacén |
 | Asistente comercial RAG | `uis/backoffice`, `data/pipelines` | LiteLLM y Qdrant; requiere indexación |
 | Lógica compartida de incidencias | `packages/incidents_analysis` | Disponible |
 | Datos, agentes, workflows, infraestructura | `data/`, `agents/`, `workflows/`, `infra/` | Estructura del proyecto |
@@ -27,7 +28,7 @@ TrackFlow/
 ├── AGENTS.md                  # Protocolo del asistente
 ├── memory-bank/               # Contexto de negocio, técnico y progreso
 ├── .agents/                   # Reglas y skills del asistente
-├── CONTEXT.md                 # Brief de empresa de TrackFlow
+├── BRIEFING.md                # Brief de empresa de TrackFlow
 ├── TrackFlow.md               # Elección de empresa y reto de automatización
 ├── agents/                    # Prototipos, templates y tools de agentes
 ├── data/                      # Datos raw, procesados, pipelines y evaluación
@@ -154,7 +155,7 @@ Después, instalar todas las dependencias del proyecto:
 
 ```bash
 # API Python y herramientas locales. Crea o actualiza .venv.
-uv sync
+uv sync --frozen
 
 # Website público (exportación estática de Next.js)
 npm ci --prefix uis/website
@@ -224,16 +225,16 @@ Este flujo tiene dos partes:
 Primero iniciar la API:
 
 ```bash
-uv sync
-uv run uvicorn services.api.main:app --host 0.0.0.0 --port 8000 --reload
+uv sync --frozen
+uv run --frozen uvicorn services.api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 Después iniciar la UI:
 
 ```bash
 cd uis/backoffice
-npm install
-npm run dev
+npm ci
+npm run dev -- --port 3001
 ```
 
 ## Talent Pipeline Tracker
@@ -242,8 +243,8 @@ El dashboard de reclutamiento vive en [uis/backoffice/talent-pipeline-tracker](.
 
 ```bash
 cd uis/backoffice/talent-pipeline-tracker
-npm install
-npm run dev
+npm ci
+npm run dev -- --port 3002
 ```
 
 ## Convenciones de documentación

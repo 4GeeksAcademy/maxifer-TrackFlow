@@ -14,6 +14,7 @@ Spanish documentation is available in [README.es.md](./README.es.md).
 | Incidents backoffice | `uis/backoffice` | Available |
 | Talent pipeline tracker | `uis/backoffice/talent-pipeline-tracker` | Available |
 | FastAPI service | `services/api` | Available |
+| Inventory and stock movements | `uis/backoffice`, `services/api` | SQLModel; stock by SKU and warehouse |
 | Commercial RAG assistant | `uis/backoffice`, `data/pipelines` | LiteLLM and Qdrant; indexing required |
 | Shared incidents logic | `packages/incidents_analysis` | Available |
 | Data, agents, workflows, infra | `data/`, `agents/`, `workflows/`, `infra/` | Project structure |
@@ -27,7 +28,7 @@ TrackFlow/
 ├── AGENTS.md                  # Protocolo del asistente
 ├── memory-bank/               # Contexto de negocio, técnico y progreso
 ├── .agents/                   # Reglas y skills del asistente
-├── CONTEXT.md                 # TrackFlow company brief
+├── BRIEFING.md                # TrackFlow company brief
 ├── TrackFlow.md               # Company choice and selected automation challenge
 ├── agents/                    # Agent prototypes, templates and tools
 ├── data/                      # Raw, processed, pipeline and evaluation data
@@ -152,7 +153,7 @@ Then install all project dependencies:
 
 ```bash
 # Python API and local tooling. Creates or updates .venv.
-uv sync
+uv sync --frozen
 
 # Public website (Next.js static export)
 npm ci --prefix uis/website
@@ -222,16 +223,16 @@ This flow has two parts:
 Start the API first:
 
 ```bash
-uv sync
-uv run uvicorn services.api.main:app --host 0.0.0.0 --port 8000 --reload
+uv sync --frozen
+uv run --frozen uvicorn services.api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 Then start the UI:
 
 ```bash
 cd uis/backoffice
-npm install
-npm run dev
+npm ci
+npm run dev -- --port 3001
 ```
 
 ## Talent Pipeline Tracker
@@ -240,8 +241,8 @@ The recruiting dashboard lives in [uis/backoffice/talent-pipeline-tracker](./uis
 
 ```bash
 cd uis/backoffice/talent-pipeline-tracker
-npm install
-npm run dev
+npm ci
+npm run dev -- --port 3002
 ```
 
 ## Documentation Conventions
