@@ -1,5 +1,39 @@
 # Contexto técnico
 
+## Verificación RAG del deploy — 10 de noviembre de 2026
+
+Corrección incorporada a la preparación de PR #37 en `scripts/verify_deployment.py`:
+hasta tres intentos solo ante HTTP 503, pausas de 1 y 2 s, mismo timeout de
+40 s por petición y validación obligatoria de respuesta, fuentes y recuperación.
+Otros errores HTTP fallan inmediatamente; el detalle final se acota y redacta.
+No cambia los presupuestos ni los reintentos del endpoint RAG de producto.
+Regresiones en `scripts/test_deployment.py`; el deploy de PR #36 usa todavía
+el verificador original de `main`, sin esta tolerancia a fallos transitorios.
+
+## Retención de despliegues — 10 de noviembre de 2026
+
+En `feature/vps-image-retention`, `scripts/deploy.sh` incorpora simulación de
+preflight (`--dry-run`) y de limpieza (`--retention-dry-run`) como quinto argumento.
+Exige al menos 2 GiB antes del login y después del pull; el umbral puede aumentarse
+con `TRACKFLOW_MIN_FREE_BYTES`. Tras verificar salud, datos y RAG registra los IDs
+reales de los cuatro servicios en `retention-history.json`. Solo limpia etiquetas
+GHCR del proyecto con SHA completo cuando dispone de activa y dos versiones
+anteriores distintas verificadas. Protege cualquier contenedor y la original del
+tracker (`trackflow-uis:before-tracker-env-*`) por ID compartido. Los rollbacks que
+no coinciden con una versión retenida completa caducan en `retention-status.json`,
+escrito antes de eliminar referencias; no modifica los backups. También retira
+aliases obsoletos de rollback y correcciones temporales reconocidas en mantenimiento.
+La simulación muestra las caducidades sin escribirlas. Consultar el registro antes
+de restauraciones manuales. Historial/formatos inválidos detienen la limpieza.
+No establece un techo absoluto de disco ni elimina respaldos de datos o volúmenes.
+Compose de producción añade logs `json-file`, 10 MB × 3 por contenedor, efectivos
+en futuras recreaciones. La automatización no está desplegada en esta sesión.
+
+Operación y evidencia detalladas en `docs/vps-retention.md`. Pruebas aisladas:
+`python3 -m unittest scripts.test_deployment scripts.test_retention -v` en Linux;
+Docker simulado y directorios temporales. La retención queda embebida en el shell
+para conservar el artefacto autónomo que transfiere el workflow actual.
+
 ## Caching de incidencias y backoffice — 10 de noviembre de 2026
 
 En `feature/caching-optimisation`, desde `origin/main` (`e005162`), las lecturas
