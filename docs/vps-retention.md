@@ -1,9 +1,8 @@
 # Retención de imágenes y mantenimiento del VPS
 
-La política conserva **al menos** la versión activa y dos versiones anteriores
-completas verificadas. Además protege imágenes de cualquier contenedor (también
-detenido), referencias de `backups/*/rollback-images.yml`, estados de mantenimiento
-y todas las etiquetas `trackflow-uis:*`, incluida la imagen original del tracker.
+La política conserva la versión activa y dos versiones anteriores completas
+verificadas. Además protege imágenes de cualquier contenedor (también detenido)
+y la original del tracker, identificada por `trackflow-uis:before-tracker-env-*`.
 La protección se aplica al ID: varias etiquetas no equivalen a varias copias.
 
 `scripts/deploy.sh` registra los cuatro IDs realmente activos en
@@ -11,19 +10,36 @@ La protección se aplica al ID: varias etiquetas no equivalen a varias copias.
 El historial se escribe atómicamente bajo el bloqueo de despliegue. Hasta reunir
 tres versiones distintas verificadas con esta política, no elimina imágenes.
 No importa registros antiguos suponiendo que un intento de despliegue fue exitoso.
+Durante ese arranque puede hacer falta margen adicional de disco; el control de
+espacio puede detener un despliegue antes de reunir las tres versiones.
 
 Solo elimina etiquetas `ghcr.io/<organización>/<proyecto>/{landing,uis,services}:<SHA de 40 caracteres>`
-del prefijo indicado al despliegue, no protegidas. Comunica el plan antes de usar
+del prefijo indicado, aliases `trackflow-rollback-*` de archivos reconocidos y
+correcciones `trackflow-uis:tracker-env-*` identificadas en estados de mantenimiento,
+si sus IDs ya no están protegidos. Comunica el plan antes de usar
 `docker image rm` por referencia, sin `--force`. Revalida ID y uso antes de cada
 eliminación. No usa prune ni elimina cachés, archivos de Docker, volúmenes o backups.
 Imágenes retenidas ausentes, historial inválido, formatos de rollback desconocidos
-o servicios no saludables impiden la limpieza. Las referencias históricas ya
-ausentes se notifican; sus backups permanecen intactos.
+o servicios no saludables impiden la limpieza.
 
-Los archivos de rollback son protecciones permanentes. Por ello pueden conservarse
-más de tres versiones y puede no recuperarse espacio de imágenes. Retirar backups
-o caducar sus referencias requiere una política y autorización separadas. Esta
-entrega no implementa esa caducidad ni garantiza un techo de uso de disco.
+Los archivos de rollback dejan de ser protecciones permanentes. Se comparan los
+tres IDs de aplicación de cada archivo con las versiones retenidas. Si coinciden
+con una versión completa, su estado es `retained`; en caso contrario es `expired`,
+incluidas referencias que ya faltaban. El formato admitido es el generado por
+`deploy.sh`; un archivo distinto bloquea la limpieza para evitar interpretaciones.
+
+Antes de borrar referencias se publica atómicamente `retention-status.json`, fuera
+de los backups, con el estado de cada rollback y el plan de eliminación. Los
+archivos de configuración, respaldos de datos y estados de mantenimiento originales
+no se modifican. **Consultar ese registro antes de restaurar:** `expired` significa
+fuera de la ventana de restauración, aunque alguna imagen siga compartida o una
+eliminación haya fallado. El registro es informativo; no intercepta comandos Docker
+manuales. Un reintento vuelve a calcular inventario y ventana.
+
+La excepción original del tracker no caduca automáticamente. Los contenedores
+detenidos y etiquetas ajenas también pueden retener capas; no hay un techo absoluto
+de disco. La caducidad limita las versiones de despliegue gestionadas, no los
+respaldos de datos, cachés, imágenes ajenas o volúmenes.
 
 ## Simulación y espacio
 
@@ -39,7 +55,8 @@ bash scripts/deploy.sh /opt/trackflow "$COMMIT" \
 `--dry-run` comprueba argumentos, archivos requeridos y espacio; describe los pasos
 sin login, descarga ni despliegue. No certifica la validez de la configuración,
 disponibilidad del registro ni salud futura. `--retention-dry-run` consulta salud,
-historial e inventario y muestra referencias candidatas sin eliminarlas. Ambos
+historial e inventario y muestra referencias candidatas y rollbacks que caducarían,
+sin escribir el registro de estado ni eliminarlas. Ambos
 toman el bloqueo `.deploy.lock`; no requieren token en stdin.
 
 El despliegue exige como mínimo 2 GiB disponibles antes del login y después del
@@ -109,9 +126,10 @@ esté incorporado en `main`. La automatización de esta entrega no se desplegó.
 
 ## Validación de la propuesta
 
-- 24 pruebas Linux de despliegue y retención aprobadas, con Docker simulado y
+- 27 pruebas Linux de despliegue y retención aprobadas, con Docker simulado y
   almacenamiento temporal; incluye fallos de salud, rollback, espacio insuficiente,
-  historial inválido, IDs compartidos, mantenimiento y exclusión de otros proyectos.
+  historial inválido, IDs compartidos, caducidad de rollback, integridad de backups,
+  simulación sin escritura, fallo/reintento de eliminación y exclusión de otros proyectos.
 - Sintaxis Bash y ambos Compose válidos con entorno de ejemplo y valores sintéticos.
 - Tres imágenes construidas; smoke local con Qdrant real y gateway sintético
   aprobado antes/después de reiniciar el Qdrant temporal. El proyecto exclusivo

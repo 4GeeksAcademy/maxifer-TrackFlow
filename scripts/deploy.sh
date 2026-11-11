@@ -20,7 +20,7 @@ exec 9>"$APP_DIR/.deploy.lock"
 flock -n 9 || { echo 'Another deployment is running'; exit 1; }
 
 # Kept inline because CI copies deploy.sh as a standalone release artifact.
-# Never expire backups here: their image references are permanent pins.
+# Backup contents stay intact; retention-status.json records rollback expiry.
 retention() {
     python3 - "$APP_DIR" "$IMAGE_PREFIX" "$1" "$COMMIT" <<'RETENTION_PY'
 import json, pathlib, re, subprocess, sys
@@ -70,34 +70,52 @@ for version in versions:
 ids = docker('image', 'ls', '-aq', '--no-trunc').split()
 images = json.loads(docker('image', 'inspect', *sorted(set(ids)))) if ids else []
 by_ref = {tag: image['Id'] for image in images for tag in (image.get('RepoTags') or [])}
-pins = set()
-for file in (root / 'backups').glob('*/rollback-images.yml'):
+originals = {tag for tag in by_ref if tag.startswith('trackflow-uis:before-tracker-env-')}
+protected.update(by_ref[tag] for tag in originals)
+rollback_refs = set()
+rollback_status = {}
+application_services = {'landing', 'uis', 'services'}
+for file in sorted((root / 'backups').glob('*/rollback-images.yml')):
     content = file.read_text()
-    refs = re.findall(r'^\s+image:\s*(\S+)\s*$', content, re.M)
-    assert len(refs) >= 3 and all(re.fullmatch(r'[a-zA-Z0-9_./:@-]+', r) for r in refs), 'Unrecognized rollback file'
-    pins.update(r if ':' in r.rsplit('/', 1)[-1] else r + ':latest' for r in refs)
-# Preserve maintenance originals, compact fixes and all aliases sharing their IDs.
-pins.update(tag for tag in by_ref if tag.startswith('trackflow-uis:'))
+    # Accept only the exact three-service format produced by this deploy script.
+    pattern = r'  (landing|uis|services):\n    image: ([a-zA-Z0-9_./:@-]+)\n'
+    entries = re.findall(pattern, content)
+    assert content == 'services:\n' + ''.join(f'  {s}:\n    image: {r}\n' for s, r in entries), 'Unrecognized rollback file'
+    assert len(entries) == 3 and {s for s, _ in entries} == application_services, 'Incomplete rollback file'
+    refs = {s: r if ':' in r.rsplit('/', 1)[-1] else r + ':latest' for s, r in entries}
+    resolved = {s: by_ref.get(r) for s, r in refs.items()}
+    retained = any(all(resolved[s] == version[s] for s in application_services) for version in versions)
+    rollback_status[file.relative_to(root).as_posix()] = {
+        'status': 'retained' if retained else 'expired',
+        'reason': 'verified-version-in-window' if retained else 'outside-verified-window-or-already-missing',
+        'images': refs,
+    }
+    # Only recognized rollback aliases belong to the cleanup scope.
+    rollback_refs.update(r for r in refs.values() if re.fullmatch(
+        r'trackflow-rollback-[a-f0-9]{40}-[0-9]+-(landing|uis|services):latest', r))
+maintenance_refs = set()
 for file in (root / 'maintenance').glob('*/state.json'):
     state = json.loads(file.read_text())
     for key in ('image', 'rollback'):
         ref = state.get(key)
         if ref:
             assert isinstance(ref, str) and re.fullmatch(r'[a-zA-Z0-9_./:@-]+', ref), 'Invalid maintenance image'
-            pins.add(ref if ':' in ref.rsplit('/', 1)[-1] else ref + ':latest')
-for ref in pins:
-    if ref in by_ref:
-        protected.add(by_ref[ref])
-    elif ref.startswith('sha256:'):
-        protected.add(inspect(ref))
-    else:
-        print('Historical rollback image already missing:', ref)
+            if re.fullmatch(r'trackflow-uis:tracker-env-[0-9]{8}t[0-9]{6}z(?:-compact)?', ref):
+                maintenance_refs.add(ref)
 candidate_pattern = re.compile(re.escape(prefix) + r'/(landing|uis|services):[a-f0-9]{40}$')
 plan = sorted((ref, image) for ref, image in by_ref.items()
-              if candidate_pattern.fullmatch(ref) and image not in protected)
-print(json.dumps({'mode': mode, 'retained_versions': versions, 'remove_references': [r for r, _ in plan]}, sort_keys=True))
+              if (candidate_pattern.fullmatch(ref) or ref in rollback_refs or ref in maintenance_refs)
+              and image not in protected)
+report = {'retained_versions': versions, 'original_tracker_references': sorted(originals),
+          'rollbacks': rollback_status, 'remove_references': [r for r, _ in plan]}
+print(json.dumps({'mode': mode, **report}, sort_keys=True), flush=True)
 # No forced removal, no prune, no size sum: layers and tags may be shared.
 if mode == 'apply':
+    # Publish expiry BEFORE removing aliases. Never rewrite/delete backup files.
+    status_file = root / 'retention-status.json'
+    temporary = status_file.with_suffix('.tmp')
+    temporary.write_text(json.dumps(report, indent=2) + '\n')
+    temporary.replace(status_file)
     for ref, expected in plan:
         assert inspect(ref) == expected, 'Image changed after planning'
         assert expected not in {c['Image'] for c in containers()}, 'Image now used'
@@ -119,7 +137,7 @@ if [[ "$MODE" == --retention-dry-run ]]; then
 fi
 check_space
 if [[ "$MODE" == --dry-run ]]; then
-    echo "Simulation: validate/pull $COMMIT, verify services and RAG, then retain active + two verified versions and rollback pins. No deployment performed."
+    echo "Simulation: validate/pull $COMMIT, verify services and RAG, then retain active + two verified versions and original tracker; expire older rollback references. No deployment performed."
     exit 0
 fi
 

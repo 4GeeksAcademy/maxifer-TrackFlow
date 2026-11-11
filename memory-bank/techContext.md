@@ -8,10 +8,14 @@ Exige al menos 2 GiB antes del login y después del pull; el umbral puede aument
 con `TRACKFLOW_MIN_FREE_BYTES`. Tras verificar salud, datos y RAG registra los IDs
 reales de los cuatro servicios en `retention-history.json`. Solo limpia etiquetas
 GHCR del proyecto con SHA completo cuando dispone de activa y dos versiones
-anteriores distintas verificadas. Protege cualquier contenedor, referencias de
-rollback, estados de mantenimiento e imágenes `trackflow-uis:*` por ID compartido.
-No elimina backups ni caduca sus referencias: puede conservar más de tres versiones
-y no establece un techo de disco. Historial/formatos inválidos detienen la limpieza.
+anteriores distintas verificadas. Protege cualquier contenedor y la original del
+tracker (`trackflow-uis:before-tracker-env-*`) por ID compartido. Los rollbacks que
+no coinciden con una versión retenida completa caducan en `retention-status.json`,
+escrito antes de eliminar referencias; no modifica los backups. También retira
+aliases obsoletos de rollback y correcciones temporales reconocidas en mantenimiento.
+La simulación muestra las caducidades sin escribirlas. Consultar el registro antes
+de restauraciones manuales. Historial/formatos inválidos detienen la limpieza.
+No establece un techo absoluto de disco ni elimina respaldos de datos o volúmenes.
 Compose de producción añade logs `json-file`, 10 MB × 3 por contenedor, efectivos
 en futuras recreaciones. La automatización no está desplegada en esta sesión.
 

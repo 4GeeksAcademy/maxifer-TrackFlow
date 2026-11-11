@@ -75,16 +75,42 @@ class RetentionTests(unittest.TestCase):
         self.assertFalse(self.removed)
         self.assertEqual(before, (self.root/'retention-history.json').read_bytes())
 
-    def test_rollback_and_shared_aliases_are_protected(self):
+    def rollback(self, version):
         directory = self.root/'backups'/'deploy-old'
         directory.mkdir(parents=True)
         text = 'services:\n'
-        for image in self.images[:3]:
-            tag = 'trackflow-rollback-'+image['Id'].split(':')[1]
+        aliases = []
+        for service in SERVICES[:3]:
+            image = next(x for x in self.images if x['Id'] == self.versions[version][service])
+            tag = 'trackflow-rollback-'+'a'*40+'-123-'+service
             image['RepoTags'].append(tag+':latest')
-            text += '  service:\n    image: '+tag+'\n'
+            aliases.append(tag+':latest')
+            text += '  '+service+':\n    image: '+tag+'\n'
         (directory/'rollback-images.yml').write_text(text)
+        (directory/'database-backup').write_bytes(b'synthetic-backup')
+        return directory, aliases
+
+    def test_expired_rollback_releases_aliases_without_touching_backup(self):
+        directory, aliases = self.rollback(0)
+        before = {p.name: p.read_bytes() for p in directory.iterdir()}
         self.run_policy()
+        self.assertTrue(all([tag] in self.removed for tag in aliases))
+        self.assertEqual(before, {p.name: p.read_bytes() for p in directory.iterdir()})
+        report = json.loads((self.root/'retention-status.json').read_text())
+        self.assertEqual(report['rollbacks']['backups/deploy-old/rollback-images.yml']['status'], 'expired')
+
+    def test_retained_rollback_and_shared_aliases_remain_available(self):
+        _, aliases = self.rollback(1)
+        self.run_policy()
+        self.assertTrue(all([tag] not in self.removed for tag in aliases))
+        report = json.loads((self.root/'retention-status.json').read_text())
+        self.assertEqual(report['rollbacks']['backups/deploy-old/rollback-images.yml']['status'], 'retained')
+
+    def test_dry_run_reports_expiry_without_writing_status(self):
+        self.rollback(0)
+        output = self.run_policy('dry-run')
+        self.assertIn('expired', output)
+        self.assertFalse((self.root/'retention-status.json').exists())
         self.assertFalse(self.removed)
 
     def test_original_tracker_image_protects_shared_id(self):
@@ -92,12 +118,31 @@ class RetentionTests(unittest.TestCase):
         self.run_policy()
         self.assertNotIn([f'{PREFIX}/uis:'+'0'*40], self.removed)
 
-    def test_maintenance_reference_protects_registry_image(self):
+    def test_obsolete_maintenance_fix_can_expire(self):
         directory = self.root/'maintenance'/'repair'
         directory.mkdir(parents=True)
-        (directory/'state.json').write_text(json.dumps({'rollback': f'{PREFIX}/uis:'+'0'*40}))
+        ref = 'trackflow-uis:tracker-env-20261110t233827z-compact'
+        self.images[1]['RepoTags'].append(ref)
+        (directory/'state.json').write_text(json.dumps({'image': ref}))
+        before = (directory/'state.json').read_bytes()
         self.run_policy()
-        self.assertNotIn([f'{PREFIX}/uis:'+'0'*40], self.removed)
+        self.assertIn([ref], self.removed)
+        self.assertEqual(before, (directory/'state.json').read_bytes())
+
+    def test_expiry_status_written_before_deletion_and_failure_is_recoverable(self):
+        self.rollback(0)
+        original = self.docker
+        def failing_docker(args, **kwargs):
+            if args[1:3] == ['image', 'rm']:
+                self.assertTrue((self.root/'retention-status.json').exists())
+                raise subprocess.CalledProcessError(1, args)
+            return original(args, **kwargs)
+        self.docker = failing_docker
+        with self.assertRaises(subprocess.CalledProcessError):
+            self.run_policy()
+        self.docker = original
+        self.run_policy()
+        self.assertEqual(len(self.removed), 6)
 
     def test_other_projects_are_not_candidates(self):
         self.images.append({'Id': 'sha256:unrelated', 'RepoTags': ['ghcr.io/other/tool/uis:'+'0'*40]})

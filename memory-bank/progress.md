@@ -1,5 +1,33 @@
 # Progreso
 
+## Caducidad de rollbacks en PR #37 — 10 de noviembre de 2026
+
+El desarrollador acepta ajustar la política antes de fusionar. Se sustituye la
+protección indefinida de todos los rollbacks por activa + dos versiones anteriores
+distintas verificadas, manteniendo la original del tracker como excepción y
+protegiendo imágenes utilizadas por cualquier contenedor, incluso detenido.
+Los archivos de rollback de tres servicios se comparan con la ventana completa;
+los que no coinciden se marcan `expired` en `retention-status.json`, fuera de los
+backups. El registro se publica atómicamente antes de retirar referencias y debe
+consultarse antes de una restauración manual. No se modifica ningún backup.
+
+También se retiran aliases obsoletos de rollback reconocidos y fixes temporales
+del tracker identificados en mantenimiento, sin modificar sus archivos de estado.
+La simulación muestra caducidades y borrados sin escribirlos. Hasta registrar tres
+versiones verificadas distintas no se limpia; puede requerirse margen adicional
+de disco durante ese arranque. No se garantiza un techo de disco para volúmenes,
+backups, imágenes ajenas ni capas protegidas por contenedores detenidos.
+
+27 pruebas Linux de despliegue/retención aprobadas, incluidas caducidad, integridad
+byte a byte de backups sintéticos, aliases compartidos, simulación y fallo/reintento
+de eliminación. Sintaxis Bash aprobada; quince pruebas de retención pasan también
+en Windows tras normalizar a POSIX las rutas del registro. No cambia Compose ni
+las imágenes: los builds y smoke aislados anteriores siguen vigentes. Se actualiza
+la misma rama/PR #37. Las 40 comprobaciones AI, siete pruebas del validador y
+revisión de diff/secretos/whitespace pasan; solo cinco rutas de esta revisión.
+Sin acceso al VPS, limpieza remota, merge ni despliegue.
+Siguiente paso: CI de la revisión nueva y revisión humana antes de fusionar.
+
 ## Limpieza selectiva y política de retención — 10 de noviembre de 2026
 
 Autorización explícita para limpiar cachés/versiones sin uso, modificar deploy y
