@@ -1,5 +1,68 @@
 # Contexto técnico
 
+## Verificación RAG del deploy — 10 de noviembre de 2026
+
+Corrección incorporada a la preparación de PR #37 en `scripts/verify_deployment.py`:
+hasta tres intentos solo ante HTTP 503, pausas de 1 y 2 s, mismo timeout de
+40 s por petición y validación obligatoria de respuesta, fuentes y recuperación.
+Otros errores HTTP fallan inmediatamente; el detalle final se acota y redacta.
+No cambia los presupuestos ni los reintentos del endpoint RAG de producto.
+Regresiones en `scripts/test_deployment.py`; el deploy de PR #36 usa todavía
+el verificador original de `main`, sin esta tolerancia a fallos transitorios.
+
+## Retención de despliegues — 10 de noviembre de 2026
+
+En `feature/vps-image-retention`, `scripts/deploy.sh` incorpora simulación de
+preflight (`--dry-run`) y de limpieza (`--retention-dry-run`) como quinto argumento.
+Exige al menos 2 GiB antes del login y después del pull; el umbral puede aumentarse
+con `TRACKFLOW_MIN_FREE_BYTES`. Tras verificar salud, datos y RAG registra los IDs
+reales de los cuatro servicios en `retention-history.json`. Solo limpia etiquetas
+GHCR del proyecto con SHA completo cuando dispone de activa y dos versiones
+anteriores distintas verificadas. Protege cualquier contenedor y la original del
+tracker (`trackflow-uis:before-tracker-env-*`) por ID compartido. Los rollbacks que
+no coinciden con una versión retenida completa caducan en `retention-status.json`,
+escrito antes de eliminar referencias; no modifica los backups. También retira
+aliases obsoletos de rollback y correcciones temporales reconocidas en mantenimiento.
+La simulación muestra las caducidades sin escribirlas. Consultar el registro antes
+de restauraciones manuales. Historial/formatos inválidos detienen la limpieza.
+No establece un techo absoluto de disco ni elimina respaldos de datos o volúmenes.
+Compose de producción añade logs `json-file`, 10 MB × 3 por contenedor, efectivos
+en futuras recreaciones. La automatización no está desplegada en esta sesión.
+
+Operación y evidencia detalladas en `docs/vps-retention.md`. Pruebas aisladas:
+`python3 -m unittest scripts.test_deployment scripts.test_retention -v` en Linux;
+Docker simulado y directorios temporales. La retención queda embebida en el shell
+para conservar el artefacto autónomo que transfiere el workflow actual.
+
+## Caching de incidencias y backoffice — 10 de noviembre de 2026
+
+En `feature/caching-optimisation`, desde `origin/main` (`e005162`), las lecturas
+`GET /api/incidents` y `GET /api/incidents/summary` exigen usuario autenticado
+(cambio de acceso autorizado; 401 declarado en OpenAPI). Conservan filtros y
+cuerpos 200. Caché por proceso con TTL 30 s, reloj monotónico, máximo 128 entradas
+LRU, claves por UUID y filtros normalizados, copias defensivas y bloqueo de cargas
+y escrituras. El repositorio invalida todas las variantes tras commits de altas,
+seeds y cambios de estado; rollback y errores no publican datos nuevos.
+La configuración actual ejecuta un proceso API; escalar exige invalidación
+compartida. Los cambios SQL externos pueden verse hasta 30 s después.
+
+El middleware `api.timing` registra a nivel INFO método, plantilla de ruta, estado
+y milisegundos, sin query, identificadores ni cuerpos. El colector debe habilitar
+ese nivel. Los formularios de incidencias/proveedores se cargan bajo demanda con
+`next/dynamic`; `useMemo([suppliers])` prepara filas y contadores, sin memoizar
+la elección trivial de moneda. Cancelar y reabrir inicia un formulario nuevo.
+
+Evidencia y auditoría de las 33 operaciones en `CACHING_REPORT.md` (raíz).
+Benchmark aislado: `uv run --frozen python -m scripts.benchmark_caching --uncached`
+y el mismo comando sin `--uncached`; seeder determinista en TemporaryDirectory,
+dotenv/demo desactivados y auth sintética MemoryStorage. Se observó una carrera
+previa del cursor JSON de TinyDB auth al leer concurrentemente: no se modifica
+su almacenamiento y no se certifica con el benchmark su concurrencia real.
+Medición UI: `node scripts/benchmark_supplier_view.mjs`; smoke Chrome/Windows:
+`uv run --frozen python -m scripts.check_caching_browser --port 3103`, contra
+backoffice de producción temporal en ese puerto y con backend sintético.
+No hay dependencias, migraciones, cambios de stock, secretos ni infraestructura.
+
 ## Arquitectura comprobada
 - Público: Next.js 16.4.3, React 19.2.8, TypeScript 5 y Tailwind CSS 3 en `uis/website`, con exportación estática y `trailingSlash: true`. Las rutas `/` y `/application/` se renderizan desde componentes React en `app/`; los módulos cliente de idioma, navegación y formulario se empaquetan con Next y se inicializan tras montar el contenido. Los antiguos HTML y scripts públicos no son fuentes ni dependencias del build. Nginx sirve `uis/website/out`; Docker y Netlify redirigen con 301 `/index.html` y `/application.html` a las rutas sin extensión.
 - Backoffice: Next.js 16.3.1, React 19.2.8, TypeScript 5 y Tailwind CSS 4 en `uis/backoffice`.

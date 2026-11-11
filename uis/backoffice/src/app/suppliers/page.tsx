@@ -5,17 +5,15 @@ import {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 
 
-import type {
-  FormEvent,
-} from "react";
+import dynamic from "next/dynamic";
 
 import { apiFetch } from "@/lib/auth";
 import { LoadingSkeleton } from "@/components/LoadingSkeleton";
+import { prepareSuppliers } from "@/lib/supplier-view";
 
 
 type SupplierCountry =
@@ -53,18 +51,6 @@ type SupplierListItem = {
   rate_per_shipment: number;
   currency: SupplierCurrency;
   status: SupplierStatus;
-};
-
-
-type NewSupplierForm = {
-  name: string;
-  country: SupplierCountry;
-  category: SupplierCategory;
-  rate_per_shipment: string;
-  status: SupplierStatus;
-  service_zone: string;
-  contact_email: string;
-  notes: string;
 };
 
 
@@ -110,16 +96,6 @@ function parseCategory(
 }
 
 
-function parseStatus(
-  value: string,
-): SupplierStatus {
-  return value
-    === "suspended"
-    ? "suspended"
-    : "active";
-}
-
-
 function parseErrorDetail(
   detail: unknown,
 ): string {
@@ -147,8 +123,10 @@ function parseErrorDetail(
 }
 
 
+const SupplierCreateDialog = dynamic(() => import("@/components/SupplierCreateDialog"), { loading: () => <p role="status">Cargando formulario de proveedor...</p> });
+
 export default function SuppliersPage() {
-  const dialogRef = useRef<HTMLDialogElement>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [createMessage, setCreateMessage] = useState("");
 
   const [
@@ -168,15 +146,9 @@ export default function SuppliersPage() {
     setPageError,
   ] = useState("");
 
-  const [
-    formError,
-    setFormError,
-  ] = useState("");
 
-  const [
-    formLoading,
-    setFormLoading,
-  ] = useState(false);
+
+
 
   const [
     actionLoading,
@@ -210,34 +182,7 @@ export default function SuppliersPage() {
     Record<string, string>
   >({});
 
-  const [
-    newSupplier,
-    setNewSupplier,
-  ] = useState<
-    NewSupplierForm
-  >({
-    name: "",
-    country: "USA",
-    category:
-      "carrier_last_mile",
-    rate_per_shipment: "",
-    status: "active",
-    service_zone: "",
-    contact_email: "",
-    notes: "",
-  });
-
-
-  const inferredCurrency =
-    useMemo(() => {
-      return newSupplier.country
-        === "USA"
-        ? "USD"
-        : "EUR";
-    }, [
-      newSupplier.country,
-    ]);
-
+  const prepared = useMemo(() => prepareSuppliers(suppliers), [suppliers]);
 
   const loadSuppliers =
     useCallback(async () => {
@@ -348,7 +293,7 @@ export default function SuppliersPage() {
 
   useEffect(() => {
     const openFromHash = () => {
-      if (window.location.hash === "#new-supplier" && !dialogRef.current?.open) dialogRef.current?.showModal();
+      if (window.location.hash === "#new-supplier") setDialogOpen(true);
     };
     openFromHash();
     window.addEventListener("hashchange", openFromHash);
@@ -356,118 +301,9 @@ export default function SuppliersPage() {
   }, []);
 
   function closeDialog() {
-    dialogRef.current?.close();
+    setDialogOpen(false);
     if (window.location.hash === "#new-supplier") history.replaceState(null, "", window.location.pathname + window.location.search);
   }
-
-  function handleDialogClick(event: React.MouseEvent<HTMLDialogElement>) {
-    if (event.target !== event.currentTarget) return;
-    const bounds = event.currentTarget.getBoundingClientRect();
-    if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) closeDialog();
-  }
-
-
-  async function handleCreateSupplier(
-    event:
-      FormEvent<HTMLFormElement>,
-  ) {
-
-    event.preventDefault();
-
-    setFormLoading(true);
-    setFormError("");
-
-    try {
-      const response =
-        await apiFetch(
-          "/backend/suppliers",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              name:
-                newSupplier.name,
-              country:
-                newSupplier.country,
-              categories: [
-                newSupplier.category,
-              ],
-              rate_per_shipment:
-                Number(
-                  newSupplier.rate_per_shipment,
-                ),
-              currency:
-                inferredCurrency,
-              status:
-                newSupplier.status,
-              service_zone:
-                newSupplier.service_zone
-                || undefined,
-              contact_email:
-                newSupplier.contact_email
-                || undefined,
-              notes:
-                newSupplier.notes
-                || undefined,
-            }),
-          },
-        );
-
-      const data =
-        await response
-          .json()
-          .catch(
-            () => null,
-          );
-
-      if (!response.ok) {
-        throw new Error(
-          parseErrorDetail(
-            data?.detail,
-          ),
-        );
-      }
-
-      setNewSupplier({
-        name: "",
-        country: "USA",
-        category:
-          "carrier_last_mile",
-        rate_per_shipment: "",
-        status: "active",
-        service_zone: "",
-        contact_email: "",
-        notes: "",
-      });
-
-      await loadSuppliers();
-      setCreateMessage("Proveedor creado correctamente.");
-      closeDialog();
-
-    } catch (error) {
-
-      if (
-        error
-        instanceof Error
-      ) {
-        setFormError(
-          error.message,
-        );
-      } else {
-        setFormError(
-          "No fue posible "
-          + "crear el proveedor.",
-        );
-      }
-
-    } finally {
-      setFormLoading(false);
-    }
-
-  }
-
 
   async function updateRate(
     supplierId: string,
@@ -674,7 +510,7 @@ export default function SuppliersPage() {
 
         <div className="pageHeaderTitleRow">
           <h1>Gestión integrada de proveedores</h1>
-          <button id="new-supplier" type="button" className="button" onClick={() => { setCreateMessage(""); setFormError(""); dialogRef.current?.showModal(); }}>Crear proveedor</button>
+          <button id="new-supplier" type="button" className="button" onClick={() => { setCreateMessage(""); setDialogOpen(true); }}>Crear proveedor</button>
         </div>
 
 
@@ -692,263 +528,12 @@ export default function SuppliersPage() {
       <div className="mb-5 grid gap-3 sm:grid-cols-3">
         {[
           ["Proveedores mostrados", suppliers.length, "tone-info"],
-          ["Activos", suppliers.filter((supplier) => supplier.status === "active").length, "tone-success"],
-          ["Suspendidos", suppliers.filter((supplier) => supplier.status === "suspended").length, "tone-danger"],
+          ["Activos", prepared.counts.active, "tone-success"],
+          ["Suspendidos", prepared.counts.suspended, "tone-danger"],
         ].map(([label, count, tone]) => <div key={label} className={`metricPanel ${tone}`}><span>{label}</span>{loading ? <div className="skeletonLine skeletonMetric" aria-label="Cargando proveedores" /> : <strong>{count}</strong>}</div>)}
       </div>
 
-      <dialog ref={dialogRef} className="incidentDialog" aria-labelledby="supplier-dialog-title" onClick={handleDialogClick} onCancel={event => { event.preventDefault(); closeDialog(); }} onClose={() => { if (window.location.hash === "#new-supplier") history.replaceState(null, "", window.location.pathname + window.location.search); }}>
-
-        <div className="incidentDialogHeader"><h2 id="supplier-dialog-title">Registrar proveedor</h2><button type="button" className="incidentDialogClose" aria-label="Cerrar formulario" onClick={closeDialog}>×</button></div>
-
-
-        <form
-          onSubmit={handleCreateSupplier}
-          className="supplierForm"
-        >
-
-          <label>
-            Nombre
-            <input
-              required
-              value={newSupplier.name}
-              onChange={(
-                event,
-              ) => {
-                setNewSupplier(
-                  (previous) => ({
-                    ...previous,
-                    name:
-                      event
-                        .target
-                        .value,
-                  }),
-                );
-              }}
-            />
-          </label>
-
-
-          <label>
-            País
-            <select
-              value={newSupplier.country}
-              onChange={(
-                event,
-              ) => {
-                setNewSupplier(
-                  (previous) => ({
-                    ...previous,
-                    country:
-                        parseCountry(
-                          event
-                            .target
-                            .value,
-                        ),
-                  }),
-                );
-              }}
-            >
-              <option value="USA">
-                USA
-              </option>
-              <option value="Spain">
-                Spain
-              </option>
-            </select>
-          </label>
-
-
-          <label>
-            Categoría
-            <select
-              value={newSupplier.category}
-              onChange={(
-                event,
-              ) => {
-                setNewSupplier(
-                  (previous) => ({
-                    ...previous,
-                    category:
-                        parseCategory(
-                          event
-                            .target
-                            .value,
-                        ),
-                  }),
-                );
-              }}
-            >
-              {CATEGORY_OPTIONS
-                .map(
-                  (category) => (
-                    <option
-                      key={category}
-                      value={category}
-                    >
-                      {category}
-                    </option>
-                  ),
-                )}
-            </select>
-          </label>
-
-
-          <label>
-            Tarifa por envío
-            <input
-              required
-              type="number"
-              step="0.01"
-              min="0.01"
-              value={
-                newSupplier
-                  .rate_per_shipment
-              }
-              onChange={(
-                event,
-              ) => {
-                setNewSupplier(
-                  (previous) => ({
-                    ...previous,
-                    rate_per_shipment:
-                      event
-                        .target
-                        .value,
-                  }),
-                );
-              }}
-            />
-          </label>
-
-
-          <label>
-            Moneda
-            <input
-              value={inferredCurrency}
-              readOnly
-            />
-          </label>
-
-
-          <label>
-            Estado
-            <select
-              value={newSupplier.status}
-              onChange={(
-                event,
-              ) => {
-                setNewSupplier(
-                  (previous) => ({
-                    ...previous,
-                    status:
-                        parseStatus(
-                          event
-                            .target
-                            .value,
-                        ),
-                  }),
-                );
-              }}
-            >
-              <option value="active">
-                active
-              </option>
-              <option value="suspended">
-                suspended
-              </option>
-            </select>
-          </label>
-
-
-          <label>
-            Zona de servicio
-            <input
-              value={newSupplier.service_zone}
-              onChange={(
-                event,
-              ) => {
-                setNewSupplier(
-                  (previous) => ({
-                    ...previous,
-                    service_zone:
-                      event
-                        .target
-                        .value,
-                  }),
-                );
-              }}
-            />
-          </label>
-
-
-          <label>
-            Contact email
-            <input
-              type="email"
-              value={newSupplier.contact_email}
-              onChange={(
-                event,
-              ) => {
-                setNewSupplier(
-                  (previous) => ({
-                    ...previous,
-                    contact_email:
-                      event
-                        .target
-                        .value,
-                  }),
-                );
-              }}
-            />
-          </label>
-
-
-          <label className="supplierFormWide">
-            Notas
-            <textarea
-              value={newSupplier.notes}
-              onChange={(
-                event,
-              ) => {
-                setNewSupplier(
-                  (previous) => ({
-                    ...previous,
-                    notes:
-                      event
-                        .target
-                        .value,
-                  }),
-                );
-              }}
-            />
-          </label>
-
-
-          <div className="supplierFormWide flex flex-wrap gap-2">
-            <button
-              type="submit"
-              disabled={formLoading}
-            >
-              {
-                formLoading
-                ? "Guardando..."
-                : "Guardar proveedor"
-              }
-            </button>
-            <button type="button" className="button secondaryButton" onClick={closeDialog}>Cancelar</button>
-          </div>
-
-        </form>
-
-
-        {formError && (
-          <p role="alert" className="error">
-            {formError}
-          </p>
-        )}
-
-      </dialog>
+      {dialogOpen && <SupplierCreateDialog onClose={closeDialog} onCreated={async () => { await loadSuppliers(); setCreateMessage("Proveedor creado correctamente."); }} />}
 
 
       <section className="card">
@@ -1051,7 +636,7 @@ export default function SuppliersPage() {
                 </tr>
               </thead>
               <tbody>
-                {suppliers.map(
+                {prepared.rows.map(
                   (supplier) => {
                     const rowLoading =
                       actionLoading[
@@ -1075,8 +660,7 @@ export default function SuppliersPage() {
                           {supplier.country}
                         </td>
                         <td>
-                          {supplier.categories
-                            .join(", ")}
+                          {supplier.categoryLabel}
                         </td>
                         <td>
                           <div className="rateEditor">

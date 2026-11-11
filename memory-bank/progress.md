@@ -1,5 +1,214 @@
 # Progreso
 
+## Preparación final de PR #37 — 10 de noviembre de 2026
+
+El desarrollador autoriza resolver la fusión pendiente con `origin/main`,
+incorporar la tolerancia RAG y publicar la rama de PR #37 para fusionarla después.
+Se conserva el historial completo de ambas ramas y la corrección dinámica del
+tracker de PR #36, sin diferencias de esa página frente a `main` (`a2b0f27`).
+Se incorporan el verificador, sus regresiones y documentación operativa.
+
+Validación Linux aislada, sin red y con scripts montados en solo lectura:
+30 pruebas de despliegue/retención aprobadas, sin omisiones, y sintaxis Bash
+aprobada. 40 comprobaciones AI y siete tests del validador aprobados; revisión
+del diff sin secretos nuevos ni datos personales y whitespace limpio.
+No cambia Compose ni las imágenes respecto de la revisión previa: sus builds
+y smoke aislados anteriores siguen vigentes; CI verificará la rama integrada.
+Solo se añaden rutas explícitas de este trabajo; temporales y `.vscode` excluidos.
+Se prepara commit de integración y publicación en `feature/vps-image-retention`.
+Siguiente paso: comprobar CI y estado de PR #37; la fusión hacia `main` queda
+para el desarrollador. Sin acceso al VPS ni despliegues en esta preparación.
+
+## Incidencia de deploy tras PR #36 — 10 de noviembre de 2026
+
+PR #36 fusionada en `a2b0f27b25e90cbe8b1bf6e3912caf9355b56076`.
+El workflow 42930752956 aprobó tests, imágenes y smoke RAG sintético, pero
+falló en la verificación RAG real con HTTP 503; restauró las imágenes anteriores.
+Diagnóstico SSH: cuatro servicios saludables, `current-release` en `dd1b996`
+y consulta RAG real aprobada en 8,95 s. El log no conserva el detalle del 503;
+no se atribuye una causa específica al proveedor.
+
+El desarrollador autoriza explícitamente reintentar el job de deploy con rollback.
+Tras el rechazo inicial de aprobación automática, se obtuvo esa autorización;
+el conector devolvió 403 y se relanzó el mismo job mediante autenticación Git
+existente solo en memoria. Reintento aprobado: job 130244592939 con éxito;
+tests e imágenes también aprobados. No se fusiona ni despliega PR #37.
+
+Se conserva el cambio local previo de `scripts/verify_deployment.py`: máximo
+tres intentos ante 503 y detalle acotado con redacción de credenciales. Se añaden
+regresiones de recuperación, agotamiento y errores no reintentables/redacción.
+Ocho pruebas Python aprobadas y siete de shell omitidas por requerir Linux.
+40 comprobaciones AI, siete tests del validador y `git diff --check` aprobados.
+La fusión local de `origin/main` en `feature/vps-image-retention` ya estaba
+pendiente al iniciar esta sesión; se conserva sin crear commit ni publicar.
+Verificación SSH posterior: las tres imágenes GHCR y `current-release` coinciden
+con `a2b0f27`; los cuatro contenedores están saludables. Existe verification.json
+del nuevo backup y el hash del `.env` coincide con el respaldo previo al deploy.
+URL del tracker presente y coincidente con el manifiesto de la release.
+El job completó verificación RAG y preservación de datos; quedan 3.490.029.568
+bytes libres (87 % ocupado). HEAD externos de landing, login 3001 y tracker
+3002 responden HTTP 200, sin descargar cuerpos. Siguiente paso: revisar PR #37
+y publicar por separado la tolerancia del verificador cuando corresponda.
+
+## Caducidad de rollbacks en PR #37 — 10 de noviembre de 2026
+
+El desarrollador acepta ajustar la política antes de fusionar. Se sustituye la
+protección indefinida de todos los rollbacks por activa + dos versiones anteriores
+distintas verificadas, manteniendo la original del tracker como excepción y
+protegiendo imágenes utilizadas por cualquier contenedor, incluso detenido.
+Los archivos de rollback de tres servicios se comparan con la ventana completa;
+los que no coinciden se marcan `expired` en `retention-status.json`, fuera de los
+backups. El registro se publica atómicamente antes de retirar referencias y debe
+consultarse antes de una restauración manual. No se modifica ningún backup.
+
+También se retiran aliases obsoletos de rollback reconocidos y fixes temporales
+del tracker identificados en mantenimiento, sin modificar sus archivos de estado.
+La simulación muestra caducidades y borrados sin escribirlos. Hasta registrar tres
+versiones verificadas distintas no se limpia; puede requerirse margen adicional
+de disco durante ese arranque. No se garantiza un techo de disco para volúmenes,
+backups, imágenes ajenas ni capas protegidas por contenedores detenidos.
+
+27 pruebas Linux de despliegue/retención aprobadas, incluidas caducidad, integridad
+byte a byte de backups sintéticos, aliases compartidos, simulación y fallo/reintento
+de eliminación. Sintaxis Bash aprobada; quince pruebas de retención pasan también
+en Windows tras normalizar a POSIX las rutas del registro. No cambia Compose ni
+las imágenes: los builds y smoke aislados anteriores siguen vigentes. Se actualiza
+la misma rama/PR #37. Las 40 comprobaciones AI, siete pruebas del validador y
+revisión de diff/secretos/whitespace pasan; solo cinco rutas de esta revisión.
+Sin acceso al VPS, limpieza remota, merge ni despliegue.
+Siguiente paso: CI de la revisión nueva y revisión humana antes de fusionar.
+
+## Limpieza selectiva y política de retención — 10 de noviembre de 2026
+
+Autorización explícita para limpiar cachés/versiones sin uso, modificar deploy y
+Compose, publicar rama y PR; sin merge, despliegue de automatización, reinicios,
+cambios de secretos, datos, backups o volúmenes. Rama `feature/vps-image-retention`
+desde `origin/main` (`dd1b996`); archivos ajenos de `.tmp/` y `.vscode/` excluidos.
+PR #36 comprobada abierta y sin fusionar; imagen compacta corregida todavía activa.
+
+VPS: espacio disponible de 1.440.813.056 a 4.877.258.752 bytes; recuperados
+3.436.445.696 bytes (3,44 GB / 3,20 GiB), ocupación de 95 % a 82 %. Retiradas
+cuatro instalaciones VS Code 1.144.1/1.145.0/1.145.1/1.145.2, caché npm `_cacache`
+y dos índices binarios APT, tras comprobar ausencia de uso en procesos y archivos
+abiertos. Conservados VS Code 1.145.3, procesos CLI, extensiones y configuración.
+Referencias exactas y mediciones en `docs/vps-retention.md`.
+
+No se borran imágenes: todas las antiguas adicionales están referenciadas por
+rollback. Conservadas activa dd1b996 con UIS compacta 33677808dcc1, original UIS
+7abc9ef884b8 y versiones completas e005162/91350ab, con imágenes resueltas y
+registros históricos de verificación. No se ensaya restauración contra datos reales.
+Se detectan seis referencias ausentes en rollbacks del 23/27 de octubre, previas
+a esta limpieza; no se afirma que esos backups sean restaurables. La referencia
+intermedia de compactación también era histórica; la original permanece presente.
+
+Hashes de `.env`, backups y mantenimiento iguales antes/después; cuatro IDs de
+contenedor sin cambios y servicios saludables. HEAD públicos de landing, login
+y tracker: 200, sin descargar cuerpos ni candidaturas. Credencial leída solo en
+memoria por SSH; no incorporada a comandos, logs o archivos del repositorio.
+
+Implementada retención conservadora con simulación, margen de espacio y logs
+acotados. Las referencias de rollback son protecciones permanentes, por lo que
+conservar activa + dos anteriores es un mínimo, no un máximo. La política no
+se instala ni ejecuta en producción.
+
+Validación: 24 pruebas Linux de despliegue/retención aprobadas (22 iniciales y
+repetición de las doce de retención tras añadir dos casos); sintaxis Bash y ambos
+Compose aprobados. Tres imágenes locales construidas con entorno sintético;
+smoke con proyecto exclusivo, Qdrant real y gateway sintético aprobado antes y
+después de reiniciar solo el Qdrant temporal. Límites de logs comprobados en los
+cuatro contenedores de prueba; recursos temporales retirados. Persisten avisos
+previos de dependencias UI y compatibilidad de versiones cliente/servidor Qdrant.
+40 comprobaciones AI y siete pruebas aprobadas; diff sin secretos nuevos ni
+errores de whitespace. El primer intento de pruebas Linux fue bloqueado por un
+límite de uso de la revisión automática; reintento autorizado tras «continua»
+completado correctamente. Commit `23ea0e7` publicado con siete rutas explícitas;
+[PR #37](https://github.com/4GeeksAcademy/maxifer-TrackFlow/pull/37) abierta hacia
+main con evidencia y enlace a AGENTS.md de la rama. El conector devolvió 403;
+la creación se completó con autenticación Git existente solo en memoria, sin
+imprimir ni guardar credenciales. Siguiente paso: revisar CI y PR #36 antes de
+cualquier futuro despliegue autorizado; sin merge ni instalación de automatización.
+
+## Configuración del tracker en el VPS — 10 de noviembre de 2026
+
+El desarrollador autoriza conectar por SSH, actualizar únicamente `uis` y
+consultar `/records` en lectura para diagnosticar, sin mostrar ni guardar
+datos de candidaturas. La revisión automática bloqueó inicialmente esa consulta;
+se ejecutó tras la autorización explícita adicional y respondió HTTP 200.
+`NEXT_PUBLIC_API_URL` y `TALENT_PORT` ya coincidían entre los `.env` local y remoto,
+pero el contenedor activo carecía de la URL y mostraba servicio no configurado.
+Se conservan JWT, base de datos, puertos y demás ajustes de producción.
+
+La reconstrucción inicial falló al prerenderizar `/`, con un error traducido por
+el catch de consultas como fallo de conexión. La API respondía desde el host y
+Node. Se añade `dynamic = "force-dynamic"` a la página del tracker: build y
+TypeScript aprobados, ruta `/` dinámica. Lint local aprobado. La imagen parte
+de la versión desplegada `dd1b99618189f5858113fa9e20c5fc18b6cf013f`, conserva
+el backoffice y recompila solo el tracker. Prueba temporal y activación inicial:
+login 3001 y tracker 3002 con HTTP 200, sin aviso de configuración; los cuatro
+servicios saludables y los otros tres contenedores sin recreación.
+
+Solo cambia `UIS_IMAGE` en el `.env` remoto para persistir la imagen corregida;
+respaldo privado y referencia de imagen anterior conservados bajo
+`/opt/trackflow/maintenance/`. Se compacta la imagen para evitar duplicar
+dependencias, dada la capacidad limitada del VPS. Imagen compacta activada y
+probada: HTTP 200 en ambos servicios, tracker sin aviso y contenedor saludable.
+Retirada solo la imagen intermedia y la caché identificada de esta tarea;
+quedan aproximadamente 1,4 GB libres y se conserva la imagen original.
+Validación AI: 40 comprobaciones y siete pruebas aprobadas; diff sin errores
+de whitespace. El desarrollador autoriza publicar la corrección. Se prepara
+commit y PR hacia `main` desde `fix/tracker-dynamic-rendering`, basada en
+`origin/main` (`dd1b996`, con la PR de caché ya integrada). La entrega incluye
+únicamente la página del tracker y este registro; no incorpora credenciales,
+scripts temporales ni cambios de infraestructura. Pendiente revisión e
+integración de la PR antes del próximo despliegue; no se autoriza merge.
+
+## Caching de incidencias y backoffice — 10 de noviembre de 2026
+
+Rama `feature/caching-optimisation` creada desde `origin/main` actualizado,
+`e005162`; auditoría de serialización integrada. Archivos ajenos de `.tmp/` y
+`.vscode/` excluidos. El desarrollador autoriza implementar el plan, exigir sesión
+en listado/resumen de incidencias y preparar commit, push y PR hacia main.
+
+Implementadas dos cachés TTL 30 s por usuario/filtros, límite 128 entradas,
+copias defensivas y coordinación de cargas/escrituras. Invalidación global desde
+el repositorio después del commit, también para seeds; sin cachear errores ni
+identidad. Middleware timing con ruta normalizada y sin datos sensibles.
+Formularios de incidencias/proveedores extraídos a chunks bajo demanda, con foco,
+Escape, hash, validación y avisos conservados. Preparación O(n) del listado de
+proveedores memoizada; elección de moneda directa.
+
+Seeder y benchmark exclusivos de almacenamiento temporal: 10.000 incidencias,
+5.000 proveedores, 1.000 SKU y 20.000 movimientos. En control/caché con idéntica
+autenticación, 20 peticiones por escenario: mediana secuencial listado 202,15 a
+114,87 ms, resumen 168,47 a 4,47 ms; 20 SELECT a cero en cada escenario caliente.
+Respuestas iguales de 2.512.785 y 159 bytes. Informe completo en
+`CACHING_REPORT.md` (raíz), con auditoría de 33 operaciones,
+trade-offs y límites. No se atribuyen estas cifras a producción.
+
+Chrome verifica descarga de ambos formularios después del clic: 3.696 y 5.143 B
+diferidos. El JS inicial total aumenta ligeramente por el runtime de carga;
+se documenta sin afirmar reducción inicial ni mejora LCP. Preparar 5.000
+proveedores cuesta 1,63 ms de mediana en el benchmark Node; test React verifica
+reutilización durante edición y recálculo tras mutación. La prueba concurrente
+descubrió una carrera previa en lecturas TinyDB auth por archivo; control y caché
+usan MemoryStorage sintético para aislar esa variable. No se cambia auth real.
+
+Validación final: 146 tests backend y once subtests aprobados, seis omisiones
+Linux en Windows y tres avisos previos; 21 tests backoffice, lint y build aprobados.
+40 comprobaciones AI y siete pruebas aprobadas; revisión de diff sin secretos
+ni datos personales nuevos y whitespace limpio. Sin contenedores ni despliegue.
+Implementación publicada en `origin/feature/caching-optimisation`, commit
+`166a598`. [PR #35](https://github.com/4GeeksAcademy/maxifer-TrackFlow/pull/35)
+abierta hacia `main`, con informe, resultados y enlace a AGENTS.md de la rama.
+El conector GitHub respondió 403 por permisos de integración y la revisión
+automática bloqueó inicialmente el método alternativo. Tras autorización
+explícita del desarrollador, se utilizó la credencial de Git solo en memoria
+para crear la PR mediante la API; no se imprimió ni guardó la credencial.
+Archivos temporales del trámite eliminados. Esta actualización es documental;
+las comprobaciones de aplicación anteriores siguen vigentes sin cambios de código.
+Siguientes pasos: comprobar CI remoto y revisión humana. Sin merge ni despliegue.
+Datos persistentes e infraestructura intactos.
+
 ## Corrección del usuario sintético del smoke RAG — 9 de noviembre de 2026
 
 El CI del commit c82fe04 construye las imágenes pero falla en el smoke RAG:

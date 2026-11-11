@@ -10,6 +10,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from urllib.error import HTTPError
 from unittest.mock import patch
 
 from scripts.verify_deployment import compare, verify_rag
@@ -19,6 +20,38 @@ STATE = {"active_user_available": True, "users": ["registered-user"], "suppliers
 
 
 class RAGVerificationTests(unittest.TestCase):
+    def unavailable(self, status=503, detail="Servicio temporalmente no disponible"):
+        return HTTPError("http://uis:3001/backend/api/rag/query", status, "Unavailable", {},
+                         io.BytesIO(json.dumps({"detail": detail}).encode()))
+
+    def test_transient_503_is_retried_and_validated(self):
+        payload = {"answer": "Synthetic", "sources": [{"source_document": "returns-policy"}],
+                   "retrieved_count": 1, "abstained": False}
+        with patch("urllib.request.urlopen", side_effect=[self.unavailable(), self.response(payload)]) as request:
+            with patch("scripts.verify_deployment.time.sleep") as sleep:
+                verify_rag({"Authorization": "Bearer synthetic"})
+        self.assertEqual(request.call_count, 2)
+        sleep.assert_called_once_with(1)
+
+    def test_persistent_503_blocks_release_after_three_attempts(self):
+        with patch("urllib.request.urlopen", side_effect=[self.unavailable() for _ in range(3)]) as request:
+            with patch("scripts.verify_deployment.time.sleep") as sleep:
+                with self.assertRaisesRegex(RuntimeError, "HTTP 503"):
+                    verify_rag({})
+        self.assertEqual(request.call_count, 3)
+        self.assertEqual([call.args[0] for call in sleep.call_args_list], [1, 2])
+
+    def test_other_http_errors_are_not_retried_and_credentials_are_redacted(self):
+        error = self.unavailable(401, "Bearer private-token api_key=private-key https://user:private-password@example.com sk-abcdefghijklmnop")
+        with patch("urllib.request.urlopen", side_effect=error) as request:
+            with self.assertRaises(RuntimeError) as raised:
+                verify_rag({})
+        self.assertEqual(request.call_count, 1)
+        message = str(raised.exception)
+        self.assertIn("HTTP 401", message)
+        for secret in ["private-token", "private-key", "private-password", "sk-abcdefghijklmnop"]:
+            self.assertNotIn(secret, message)
+
     def response(self, payload):
         response = io.BytesIO(json.dumps(payload).encode())
         response.status = 200
@@ -75,7 +108,11 @@ if os.environ.get('FAIL_RESTORE_AND_VERIFY')=='1':
 a=sys.argv[1:]
 with open(os.environ['DOCKER_CALLS'],'a') as stream:stream.write(json.dumps(a)+'\n')
 if a[0]=='login':sys.stdin.read();sys.exit(0)
-if a[0]=='inspect':print('sha256:previous-image');sys.exit(0)
+if a[0]=='inspect':
+    if '--format' in a:print('sha256:previous-image')
+    else:print(json.dumps([{'Image':'sha256:current-'+s,'Config':{'Labels':{'com.docker.compose.project':'trackflow-prod','com.docker.compose.service':s}},'State':{'Status':'running','Health':{'Status':'healthy'}}} for s in ['landing','uis','services','qdrant']]))
+    sys.exit(0)
+if a[0]=='ps':print('synthetic-container');sys.exit(0)
 if a[0]!='compose':sys.exit(0)
 if 'run' in a:
     action=a[a.index('data.pipelines.production_rag')+1]
@@ -106,7 +143,7 @@ if 'up' in a and a[-1]!='qdrant' and os.environ.get('FAIL_UP')=='1' and not any(
 
 @unittest.skipUnless(sys.platform == "linux" and shutil.which("bash") and shutil.which("flock"), "Deployment script runs on Linux")
 class DeploymentScriptTests(unittest.TestCase):
-    def run_deployment(self, failure=None, existing_rag=False):
+    def run_deployment(self, failure=None, existing_rag=False, mode=None, minimum=None):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         app = Path(temporary.name)
@@ -129,10 +166,16 @@ class DeploymentScriptTests(unittest.TestCase):
             env[failure] = "1"
         if existing_rag:
             env["EXISTING_RAG"] = "1"
-        result = subprocess.run(["bash", str(Path(__file__).with_name("deploy.sh")), str(app), commit, "ghcr.io/example/trackflow", "ci-user"], input="short-lived-token\n", text=True, capture_output=True, env=env)
-        log = [json.loads(line) for line in calls.read_text().splitlines()]
+        if minimum:
+            env['TRACKFLOW_MIN_FREE_BYTES'] = str(minimum)
+        command = ["bash", str(Path(__file__).with_name("deploy.sh")), str(app), commit, "ghcr.io/example/trackflow", "ci-user"]
+        if mode:
+            command.append(mode)
+        result = subprocess.run(command, input="short-lived-token\n", text=True, capture_output=True, env=env)
+        call_text = calls.read_text() if calls.exists() else ''
+        log = [json.loads(line) for line in call_text.splitlines()]
         self.assertEqual((app / ".env").read_text(), "JWT_SECRET=unchanged\nDATABASE_URL=unchanged\n")
-        self.assertNotIn("short-lived-token", result.stdout + result.stderr + calls.read_text())
+        self.assertNotIn("short-lived-token", result.stdout + result.stderr + call_text)
         self.assertFalse(any("down" in call for call in log))
         return result, log, app, original
 
@@ -141,12 +184,23 @@ class DeploymentScriptTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertEqual((app / "current-release").read_text().strip(), "a" * 40)
         self.assertIn("ghcr.io/example/trackflow/services:", (app / "docker-compose.prod.yml").read_text())
+        self.assertEqual(len(json.loads((app/'retention-history.json').read_text())), 1)
+
+    def test_dry_run_and_insufficient_space_do_not_deploy(self):
+        for mode, minimum, expected in [('--dry-run', None, 0), (None, 999999999999999, 1)]:
+            with self.subTest(mode=mode):
+                result, calls, app, original = self.run_deployment(mode=mode, minimum=minimum)
+                self.assertEqual(result.returncode, expected, result.stderr)
+                self.assertEqual(calls, [])
+                self.assertEqual((app/'docker-compose.prod.yml').read_bytes(), original)
+                self.assertFalse((app/'backups').exists())
 
     def test_pull_failure_keeps_running_stack(self):
         result, calls, app, original = self.run_deployment("FAIL_PULL")
         self.assertNotEqual(result.returncode, 0)
         self.assertFalse(any("stop" in call or "up" in call for call in calls))
         self.assertEqual((app / "docker-compose.prod.yml").read_bytes(), original)
+        self.assertFalse((app/'retention-history.json').exists())
 
     def test_startup_and_verification_failures_restore_previous_images(self):
         for failure in ["FAIL_UP", "FAIL_VERIFY", "FAIL_ACTIVATE"]:
@@ -156,6 +210,7 @@ class DeploymentScriptTests(unittest.TestCase):
                 self.assertTrue(any("up" in call and any(v.endswith("rollback-images.yml") for v in call) for call in calls))
                 self.assertEqual((app / "docker-compose.prod.yml").read_bytes(), original)
                 self.assertFalse((app / "current-release").exists())
+                self.assertFalse((app/'retention-history.json').exists())
                 self.assertTrue(any("restore" in call for call in calls))
 
     def test_configuration_or_preparation_failure_does_not_stop_api(self):

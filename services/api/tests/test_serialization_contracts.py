@@ -203,7 +203,7 @@ def test_inventory_movement_projections_preserve_stock_and_operational_attributi
     assert client.get("/inventory/products").json()[0]["current_stock"] == 5
 
 
-def test_incident_contract_filters_import_id_and_preserves_errors(client):
+def test_incident_contract_filters_import_id_and_preserves_errors(client, account):
     payload = {
         "title": "Synthetic incident", "description": "Synthetic description",
         "category": "carrier_issue", "origin": "internal", "branch": "central",
@@ -214,18 +214,18 @@ def test_incident_contract_filters_import_id_and_preserves_errors(client):
     with incident_store._connection() as connection:
         connection.execute("UPDATE incidents SET source_id = ? WHERE id = ?", ("internal-import-id", incident_id))
     for path in ("/api/incidents", f"/api/incidents/{incident_id}"):
-        response = client.get(path)
+        response = client.get(path, headers=headers(account))
         assert response.status_code == 200
         items = response.json() if isinstance(response.json(), list) else [response.json()]
         assert all("source_id" not in item and item["description"] == payload["description"] for item in items)
-    assert client.get("/api/incidents/summary").json()["by_status"] == {"open": 1}
+    assert client.get("/api/incidents/summary", headers=headers(account)).json()["by_status"] == {"open": 1}
     updated = client.patch(f"/api/incidents/{incident_id}/status", json={"status": "in_progress"})
     assert updated.status_code == 200
     assert "source_id" not in updated.json()
     invalid = client.patch(f"/api/incidents/{incident_id}/status", json={"status": "open"})
     assert invalid.status_code == 400
     assert invalid.json()["error"] == "invalid_status_transition"
-    invalid = client.get("/api/incidents?status=unknown")
+    invalid = client.get("/api/incidents?status=unknown", headers=headers(account))
     assert invalid.status_code == 400
     assert set(invalid.json()) == {"error", "field", "message"}
     missing = client.get("/api/incidents/9999")
