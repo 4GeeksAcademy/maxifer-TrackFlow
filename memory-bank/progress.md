@@ -1,5 +1,52 @@
 # Progreso
 
+## Limpieza selectiva y política de retención — 10 de noviembre de 2026
+
+Autorización explícita para limpiar cachés/versiones sin uso, modificar deploy y
+Compose, publicar rama y PR; sin merge, despliegue de automatización, reinicios,
+cambios de secretos, datos, backups o volúmenes. Rama `feature/vps-image-retention`
+desde `origin/main` (`dd1b996`); archivos ajenos de `.tmp/` y `.vscode/` excluidos.
+PR #36 comprobada abierta y sin fusionar; imagen compacta corregida todavía activa.
+
+VPS: espacio disponible de 1.440.813.056 a 4.877.258.752 bytes; recuperados
+3.436.445.696 bytes (3,44 GB / 3,20 GiB), ocupación de 95 % a 82 %. Retiradas
+cuatro instalaciones VS Code 1.144.1/1.145.0/1.145.1/1.145.2, caché npm `_cacache`
+y dos índices binarios APT, tras comprobar ausencia de uso en procesos y archivos
+abiertos. Conservados VS Code 1.145.3, procesos CLI, extensiones y configuración.
+Referencias exactas y mediciones en `docs/vps-retention.md`.
+
+No se borran imágenes: todas las antiguas adicionales están referenciadas por
+rollback. Conservadas activa dd1b996 con UIS compacta 33677808dcc1, original UIS
+7abc9ef884b8 y versiones completas e005162/91350ab, con imágenes resueltas y
+registros históricos de verificación. No se ensaya restauración contra datos reales.
+Se detectan seis referencias ausentes en rollbacks del 23/27 de octubre, previas
+a esta limpieza; no se afirma que esos backups sean restaurables. La referencia
+intermedia de compactación también era histórica; la original permanece presente.
+
+Hashes de `.env`, backups y mantenimiento iguales antes/después; cuatro IDs de
+contenedor sin cambios y servicios saludables. HEAD públicos de landing, login
+y tracker: 200, sin descargar cuerpos ni candidaturas. Credencial leída solo en
+memoria por SSH; no incorporada a comandos, logs o archivos del repositorio.
+
+Implementada retención conservadora con simulación, margen de espacio y logs
+acotados. Las referencias de rollback son protecciones permanentes, por lo que
+conservar activa + dos anteriores es un mínimo, no un máximo. La política no
+se instala ni ejecuta en producción.
+
+Validación: 24 pruebas Linux de despliegue/retención aprobadas (22 iniciales y
+repetición de las doce de retención tras añadir dos casos); sintaxis Bash y ambos
+Compose aprobados. Tres imágenes locales construidas con entorno sintético;
+smoke con proyecto exclusivo, Qdrant real y gateway sintético aprobado antes y
+después de reiniciar solo el Qdrant temporal. Límites de logs comprobados en los
+cuatro contenedores de prueba; recursos temporales retirados. Persisten avisos
+previos de dependencias UI y compatibilidad de versiones cliente/servidor Qdrant.
+40 comprobaciones AI y siete pruebas aprobadas; diff sin secretos nuevos ni
+errores de whitespace. El primer intento de pruebas Linux fue bloqueado por un
+límite de uso de la revisión automática; reintento autorizado tras «continua»
+completado correctamente. Se prepara commit y PR con siete rutas explícitas.
+Siguiente paso: revisar CI y PR #36 antes de cualquier futuro despliegue autorizado;
+sin merge ni instalación de la automatización.
+
 ## Caching de incidencias y backoffice — 10 de noviembre de 2026
 
 Rama `feature/caching-optimisation` creada desde `origin/main` actualizado,

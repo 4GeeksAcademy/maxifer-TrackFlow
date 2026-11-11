@@ -1,7 +1,14 @@
 name: trackflow-prod
 
+x-logging: &bounded-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
   landing:
+    logging: *bounded-logging
     image: ${LANDING_IMAGE:-trackflow-prod-landing:latest}
     build:
       context: .
@@ -17,6 +24,7 @@ services:
     networks: [trackflow]
 
   uis:
+    logging: *bounded-logging
     image: ${UIS_IMAGE:-trackflow-prod-uis:latest}
     build:
       context: ./uis
@@ -43,6 +51,7 @@ services:
     networks: [trackflow]
 
   services:
+    logging: *bounded-logging
     image: ${API_IMAGE:-trackflow-prod-services:latest}
     build:
       context: .
@@ -71,6 +80,7 @@ services:
     networks: [trackflow]
 
   qdrant:
+    logging: *bounded-logging
     image: qdrant/qdrant:v1.15.3
     volumes:
       - qdrant_data:/qdrant/storage

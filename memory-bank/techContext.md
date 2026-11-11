@@ -1,5 +1,25 @@
 # Contexto técnico
 
+## Retención de despliegues — 10 de noviembre de 2026
+
+En `feature/vps-image-retention`, `scripts/deploy.sh` incorpora simulación de
+preflight (`--dry-run`) y de limpieza (`--retention-dry-run`) como quinto argumento.
+Exige al menos 2 GiB antes del login y después del pull; el umbral puede aumentarse
+con `TRACKFLOW_MIN_FREE_BYTES`. Tras verificar salud, datos y RAG registra los IDs
+reales de los cuatro servicios en `retention-history.json`. Solo limpia etiquetas
+GHCR del proyecto con SHA completo cuando dispone de activa y dos versiones
+anteriores distintas verificadas. Protege cualquier contenedor, referencias de
+rollback, estados de mantenimiento e imágenes `trackflow-uis:*` por ID compartido.
+No elimina backups ni caduca sus referencias: puede conservar más de tres versiones
+y no establece un techo de disco. Historial/formatos inválidos detienen la limpieza.
+Compose de producción añade logs `json-file`, 10 MB × 3 por contenedor, efectivos
+en futuras recreaciones. La automatización no está desplegada en esta sesión.
+
+Operación y evidencia detalladas en `docs/vps-retention.md`. Pruebas aisladas:
+`python3 -m unittest scripts.test_deployment scripts.test_retention -v` en Linux;
+Docker simulado y directorios temporales. La retención queda embebida en el shell
+para conservar el artefacto autónomo que transfiere el workflow actual.
+
 ## Caching de incidencias y backoffice — 10 de noviembre de 2026
 
 En `feature/caching-optimisation`, desde `origin/main` (`e005162`), las lecturas
