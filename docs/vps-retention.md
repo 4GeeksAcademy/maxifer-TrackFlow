@@ -41,6 +41,16 @@ detenidos y etiquetas ajenas también pueden retener capas; no hay un techo abso
 de disco. La caducidad limita las versiones de despliegue gestionadas, no los
 respaldos de datos, cachés, imágenes ajenas o volúmenes.
 
+## Verificación RAG antes de confirmar el despliegue
+
+El verificador admite hasta tres intentos cuando la consulta RAG devuelve HTTP
+503, con pausas de 1 y 2 segundos. Cada petición mantiene su timeout de 40 s;
+otros errores HTTP fallan inmediatamente. La respuesta debe contener texto,
+fuentes y resultados recuperados, sin abstención. Si los tres intentos fallan,
+el despliegue sigue fallando y conserva el rollback automático.
+El error final muestra estado HTTP y detalle acotado con credenciales redactadas.
+Estos reintentos pertenecen al smoke de despliegue, no al endpoint de producto.
+
 ## Simulación y espacio
 
 Con un directorio de aplicación y release ya preparados, añadir un quinto argumento:

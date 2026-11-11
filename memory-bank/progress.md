@@ -1,5 +1,55 @@
 # Progreso
 
+## Preparación final de PR #37 — 10 de noviembre de 2026
+
+El desarrollador autoriza resolver la fusión pendiente con `origin/main`,
+incorporar la tolerancia RAG y publicar la rama de PR #37 para fusionarla después.
+Se conserva el historial completo de ambas ramas y la corrección dinámica del
+tracker de PR #36, sin diferencias de esa página frente a `main` (`a2b0f27`).
+Se incorporan el verificador, sus regresiones y documentación operativa.
+
+Validación Linux aislada, sin red y con scripts montados en solo lectura:
+30 pruebas de despliegue/retención aprobadas, sin omisiones, y sintaxis Bash
+aprobada. 40 comprobaciones AI y siete tests del validador aprobados; revisión
+del diff sin secretos nuevos ni datos personales y whitespace limpio.
+No cambia Compose ni las imágenes respecto de la revisión previa: sus builds
+y smoke aislados anteriores siguen vigentes; CI verificará la rama integrada.
+Solo se añaden rutas explícitas de este trabajo; temporales y `.vscode` excluidos.
+Se prepara commit de integración y publicación en `feature/vps-image-retention`.
+Siguiente paso: comprobar CI y estado de PR #37; la fusión hacia `main` queda
+para el desarrollador. Sin acceso al VPS ni despliegues en esta preparación.
+
+## Incidencia de deploy tras PR #36 — 10 de noviembre de 2026
+
+PR #36 fusionada en `a2b0f27b25e90cbe8b1bf6e3912caf9355b56076`.
+El workflow 42930752956 aprobó tests, imágenes y smoke RAG sintético, pero
+falló en la verificación RAG real con HTTP 503; restauró las imágenes anteriores.
+Diagnóstico SSH: cuatro servicios saludables, `current-release` en `dd1b996`
+y consulta RAG real aprobada en 8,95 s. El log no conserva el detalle del 503;
+no se atribuye una causa específica al proveedor.
+
+El desarrollador autoriza explícitamente reintentar el job de deploy con rollback.
+Tras el rechazo inicial de aprobación automática, se obtuvo esa autorización;
+el conector devolvió 403 y se relanzó el mismo job mediante autenticación Git
+existente solo en memoria. Reintento aprobado: job 130244592939 con éxito;
+tests e imágenes también aprobados. No se fusiona ni despliega PR #37.
+
+Se conserva el cambio local previo de `scripts/verify_deployment.py`: máximo
+tres intentos ante 503 y detalle acotado con redacción de credenciales. Se añaden
+regresiones de recuperación, agotamiento y errores no reintentables/redacción.
+Ocho pruebas Python aprobadas y siete de shell omitidas por requerir Linux.
+40 comprobaciones AI, siete tests del validador y `git diff --check` aprobados.
+La fusión local de `origin/main` en `feature/vps-image-retention` ya estaba
+pendiente al iniciar esta sesión; se conserva sin crear commit ni publicar.
+Verificación SSH posterior: las tres imágenes GHCR y `current-release` coinciden
+con `a2b0f27`; los cuatro contenedores están saludables. Existe verification.json
+del nuevo backup y el hash del `.env` coincide con el respaldo previo al deploy.
+URL del tracker presente y coincidente con el manifiesto de la release.
+El job completó verificación RAG y preservación de datos; quedan 3.490.029.568
+bytes libres (87 % ocupado). HEAD externos de landing, login 3001 y tracker
+3002 responden HTTP 200, sin descargar cuerpos. Siguiente paso: revisar PR #37
+y publicar por separado la tolerancia del verificador cuando corresponda.
+
 ## Caducidad de rollbacks en PR #37 — 10 de noviembre de 2026
 
 El desarrollador acepta ajustar la política antes de fusionar. Se sustituye la
@@ -77,6 +127,40 @@ main con evidencia y enlace a AGENTS.md de la rama. El conector devolvió 403;
 la creación se completó con autenticación Git existente solo en memoria, sin
 imprimir ni guardar credenciales. Siguiente paso: revisar CI y PR #36 antes de
 cualquier futuro despliegue autorizado; sin merge ni instalación de automatización.
+
+## Configuración del tracker en el VPS — 10 de noviembre de 2026
+
+El desarrollador autoriza conectar por SSH, actualizar únicamente `uis` y
+consultar `/records` en lectura para diagnosticar, sin mostrar ni guardar
+datos de candidaturas. La revisión automática bloqueó inicialmente esa consulta;
+se ejecutó tras la autorización explícita adicional y respondió HTTP 200.
+`NEXT_PUBLIC_API_URL` y `TALENT_PORT` ya coincidían entre los `.env` local y remoto,
+pero el contenedor activo carecía de la URL y mostraba servicio no configurado.
+Se conservan JWT, base de datos, puertos y demás ajustes de producción.
+
+La reconstrucción inicial falló al prerenderizar `/`, con un error traducido por
+el catch de consultas como fallo de conexión. La API respondía desde el host y
+Node. Se añade `dynamic = "force-dynamic"` a la página del tracker: build y
+TypeScript aprobados, ruta `/` dinámica. Lint local aprobado. La imagen parte
+de la versión desplegada `dd1b99618189f5858113fa9e20c5fc18b6cf013f`, conserva
+el backoffice y recompila solo el tracker. Prueba temporal y activación inicial:
+login 3001 y tracker 3002 con HTTP 200, sin aviso de configuración; los cuatro
+servicios saludables y los otros tres contenedores sin recreación.
+
+Solo cambia `UIS_IMAGE` en el `.env` remoto para persistir la imagen corregida;
+respaldo privado y referencia de imagen anterior conservados bajo
+`/opt/trackflow/maintenance/`. Se compacta la imagen para evitar duplicar
+dependencias, dada la capacidad limitada del VPS. Imagen compacta activada y
+probada: HTTP 200 en ambos servicios, tracker sin aviso y contenedor saludable.
+Retirada solo la imagen intermedia y la caché identificada de esta tarea;
+quedan aproximadamente 1,4 GB libres y se conserva la imagen original.
+Validación AI: 40 comprobaciones y siete pruebas aprobadas; diff sin errores
+de whitespace. El desarrollador autoriza publicar la corrección. Se prepara
+commit y PR hacia `main` desde `fix/tracker-dynamic-rendering`, basada en
+`origin/main` (`dd1b996`, con la PR de caché ya integrada). La entrega incluye
+únicamente la página del tracker y este registro; no incorpora credenciales,
+scripts temporales ni cambios de infraestructura. Pendiente revisión e
+integración de la PR antes del próximo despliegue; no se autoriza merge.
 
 ## Caching de incidencias y backoffice — 10 de noviembre de 2026
 

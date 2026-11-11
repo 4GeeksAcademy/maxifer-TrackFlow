@@ -1,5 +1,15 @@
 # Contexto técnico
 
+## Verificación RAG del deploy — 10 de noviembre de 2026
+
+Corrección incorporada a la preparación de PR #37 en `scripts/verify_deployment.py`:
+hasta tres intentos solo ante HTTP 503, pausas de 1 y 2 s, mismo timeout de
+40 s por petición y validación obligatoria de respuesta, fuentes y recuperación.
+Otros errores HTTP fallan inmediatamente; el detalle final se acota y redacta.
+No cambia los presupuestos ni los reintentos del endpoint RAG de producto.
+Regresiones en `scripts/test_deployment.py`; el deploy de PR #36 usa todavía
+el verificador original de `main`, sin esta tolerancia a fallos transitorios.
+
 ## Retención de despliegues — 10 de noviembre de 2026
 
 En `feature/vps-image-retention`, `scripts/deploy.sh` incorpora simulación de

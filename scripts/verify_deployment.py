@@ -10,9 +10,30 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import sqlite3
 import time
+import urllib.error
 import urllib.request
+
+
+def _safe_error_detail(error):
+    try:
+        payload = json.loads(error.read().decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return "No structured error detail returned"
+    detail = payload.get("detail") if isinstance(payload, dict) else None
+    if not isinstance(detail, str) or not detail.strip():
+        return "No structured error detail returned"
+    detail = re.sub(r"(?i)\b(bearer\s+)[A-Za-z0-9._~+/-]+=*", r"\1[REDACTED]", detail)
+    detail = re.sub(
+        r"(?i)\b(api[_-]?key|token|secret|password|authorization)\b(\s*[:=]\s*)(?:\"[^\"]*\"|'[^']*'|[^\s,;]+)",
+        r"\1\2[REDACTED]",
+        detail,
+    )
+    detail = re.sub(r"(?i)(https?://)[^/@\s]+@", r"\1[REDACTED]@", detail)
+    detail = re.sub(r"\bsk-[A-Za-z0-9_-]{12,}\b", "[REDACTED]", detail)
+    return " ".join(detail.split())[:320]
 
 
 def read_table(path, table):
@@ -34,9 +55,19 @@ def verify_rag(headers):
         data=json.dumps({"question": "¿Cuál es la ventana estándar para solicitar una devolución?"}).encode(),
         headers={**headers, "Content-Type": "application/json"}, method="POST",
     )
-    with urllib.request.urlopen(request, timeout=40) as response:
-        result = json.load(response)
-        assert response.status == 200
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(request, timeout=40) as response:
+                result = json.load(response)
+                assert response.status == 200
+            break
+        except urllib.error.HTTPError as error:
+            if error.code == 503 and attempt < 2:
+                error.close()
+                time.sleep(attempt + 1)
+                continue
+            detail = _safe_error_detail(error)
+            raise RuntimeError(f"RAG verification failed with HTTP {error.code}: {detail}") from error
     assert result.get("answer", "").strip() and result.get("sources")
     assert result.get("retrieved_count", 0) > 0 and result.get("abstained") is False
 

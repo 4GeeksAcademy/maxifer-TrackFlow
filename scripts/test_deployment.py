@@ -10,6 +10,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from urllib.error import HTTPError
 from unittest.mock import patch
 
 from scripts.verify_deployment import compare, verify_rag
@@ -19,6 +20,38 @@ STATE = {"active_user_available": True, "users": ["registered-user"], "suppliers
 
 
 class RAGVerificationTests(unittest.TestCase):
+    def unavailable(self, status=503, detail="Servicio temporalmente no disponible"):
+        return HTTPError("http://uis:3001/backend/api/rag/query", status, "Unavailable", {},
+                         io.BytesIO(json.dumps({"detail": detail}).encode()))
+
+    def test_transient_503_is_retried_and_validated(self):
+        payload = {"answer": "Synthetic", "sources": [{"source_document": "returns-policy"}],
+                   "retrieved_count": 1, "abstained": False}
+        with patch("urllib.request.urlopen", side_effect=[self.unavailable(), self.response(payload)]) as request:
+            with patch("scripts.verify_deployment.time.sleep") as sleep:
+                verify_rag({"Authorization": "Bearer synthetic"})
+        self.assertEqual(request.call_count, 2)
+        sleep.assert_called_once_with(1)
+
+    def test_persistent_503_blocks_release_after_three_attempts(self):
+        with patch("urllib.request.urlopen", side_effect=[self.unavailable() for _ in range(3)]) as request:
+            with patch("scripts.verify_deployment.time.sleep") as sleep:
+                with self.assertRaisesRegex(RuntimeError, "HTTP 503"):
+                    verify_rag({})
+        self.assertEqual(request.call_count, 3)
+        self.assertEqual([call.args[0] for call in sleep.call_args_list], [1, 2])
+
+    def test_other_http_errors_are_not_retried_and_credentials_are_redacted(self):
+        error = self.unavailable(401, "Bearer private-token api_key=private-key https://user:private-password@example.com sk-abcdefghijklmnop")
+        with patch("urllib.request.urlopen", side_effect=error) as request:
+            with self.assertRaises(RuntimeError) as raised:
+                verify_rag({})
+        self.assertEqual(request.call_count, 1)
+        message = str(raised.exception)
+        self.assertIn("HTTP 401", message)
+        for secret in ["private-token", "private-key", "private-password", "sk-abcdefghijklmnop"]:
+            self.assertNotIn(secret, message)
+
     def response(self, payload):
         response = io.BytesIO(json.dumps(payload).encode())
         response.status = 200
