@@ -1,5 +1,41 @@
 # Progreso
 
+## Publicación de favicon y texto de login en dev — 11 de noviembre de 2026
+
+El desarrollador autoriza commit, push a `dev` y nueva PR hacia `main`.
+Rama local actualizada a `origin/dev` (`756a25b`), cuyo árbol coincide con
+`origin/main` (`2880cb7`). Se incluyen los favicon descritos abajo y el enlace
+«¿Olvidaste tu contraseña?» con eñe y signos de interrogación. Se excluyen el
+cambio ajeno de `.gitignore`, `.tmp/` y `.vscode/`. No se modifican zonas protegidas.
+
+Validación repetida: 40 comprobaciones AI, siete pruebas del validador,
+21 pruebas de backoffice, lint y builds de backoffice y tracker aprobados.
+El build del tracker requiere reintento con acceso ampliado a Google Fonts
+para descargar Inter; el primer intento falla por conexión. Se usa `npm.cmd`
+porque PowerShell bloquea el wrapper `npm.ps1`. Ambos HTML generados declaran
+un único icono al logo y el login conserva el texto corregido.
+Revisión del diff sin secretos ni datos personales nuevos y whitespace limpio.
+Siguiente paso: publicar el commit y abrir la PR `dev` → `main` con estos
+resultados y enlace a AGENTS.md; revisión e integración a cargo del desarrollador.
+Sin merge ni despliegue manual.
+
+## Favicon de interfaces internas — 10 de noviembre de 2026
+
+Backoffice y talent pipeline declaran `/trackflow-logo.svg` como icono en sus
+layouts raíz, reutilizando los SVG públicos idénticos al del website. Se retiran
+los dos `favicon.ico` predeterminados de Next.js para evitar iconos en conflicto.
+Cambio local en la rama existente `feature/vps-image-retention`, sin commit ni
+despliegue; se conserva el cambio previo ajeno en la página de login.
+
+Backoffice: lint, 21 pruebas y build aprobados; HTML generado de login con un
+único enlace de icono al logo. Configuración AI: 40 comprobaciones y siete
+pruebas aprobadas. Tracker: lint y build con Next.js 16.2.10 aprobados tras
+instalar sus dependencias con el lockfile propio; descarga de dependencias y
+fuente Inter requirieron reintentos con permisos ampliados por bloqueos del
+sandbox. HTML generado de su página de error con un único enlace al logo.
+Diff revisado sin secretos nuevos ni errores de whitespace. Siguiente paso:
+revisión del desarrollador; sin publicación ni despliegue en esta solicitud.
+
 ## Preparación final de PR #37 — 10 de noviembre de 2026
 
 El desarrollador autoriza resolver la fusión pendiente con `origin/main`,
