@@ -9,6 +9,10 @@ import "./globals.css";
 
 export const metadata: Metadata = {
 
+  icons: {
+    icon: "/trackflow-logo.svg",
+  },
+
   title:
     "TrackFlow Backoffice",
 

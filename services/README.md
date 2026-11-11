@@ -6,7 +6,7 @@ This folder contains backend services for TrackFlow.
 
 | Service | Path | Purpose | Stack |
 | --- | --- | --- | --- |
-| TrackFlow API | `services/api` | Auth, suppliers and incidents analysis endpoints used by the internal backoffice | FastAPI, TinyDB |
+| TrackFlow API | `services/api` | Authentication, suppliers, incidents, inventory and commercial RAG for the backoffice | FastAPI, TinyDB, SQLite, SQLModel, Qdrant |
 
 ## Conventions
 

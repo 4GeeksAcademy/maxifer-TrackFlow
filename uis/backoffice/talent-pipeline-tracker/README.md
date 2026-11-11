@@ -42,7 +42,7 @@ Permite al equipo de Recursos Humanos y Operations:
 
 ### Requisitos
 
-- **Node.js** >= 18
+- **Node.js** >= 22 (versión de referencia del proyecto)
 - **npm** >= 9
 
 ### Instalación
@@ -53,13 +53,22 @@ git clone https://github.com/4GeeksAcademy/maxifer-TrackFlow.git
 cd maxifer-TrackFlow/uis/backoffice/talent-pipeline-tracker
 
 # Instalar dependencias
-npm install
+npm ci
 
 # Iniciar servidor de desarrollo
-npm run dev
+npm run dev -- --port 3002
 ```
 
-Abrir [http://localhost:3000](http://localhost:3000) en el navegador.
+Abrir [http://localhost:3002](http://localhost:3002) en el navegador.
+Sin `--port`, Next.js usa 3000, reservado al website en la distribución del proyecto.
+
+Antes de iniciar, define `NEXT_PUBLIC_API_URL` con la URL base de la API externa
+de candidaturas, sin barra final, por ejemplo en `.env.local` de esta aplicación.
+La URL debe ser accesible tanto desde el servidor Next.js como desde el navegador;
+las peticiones del navegador requieren que la API permita su origen mediante CORS.
+Es una variable pública: no incluyas claves ni credenciales en ella. Configúrala
+antes del build para las operaciones cliente y mantenla disponible al arrancar el
+servidor. Sin ella, la página muestra que el servicio no está disponible.
 
 ### Scripts disponibles
 
@@ -126,17 +135,27 @@ uis/backoffice/talent-pipeline-tracker/
 
 ## 🔌 API
 
-La aplicación consume una API REST mock desplegada de forma centralizada. Los endpoints principales:
+La aplicación consume una API REST externa configurada con `NEXT_PUBLIC_API_URL`.
+El FastAPI de este repositorio no implementa estos endpoints. Las rutas relativas
+a la URL base usadas por `lib/candidates.ts` son:
 
 | Método | Endpoint                                    | Descripción                 |
 | ------ | ------------------------------------------- | --------------------------- |
-| `GET`  | `/api/v1/candidates`                        | Listar candidaturas         |
-| `GET`  | `/api/v1/candidates/:id`                    | Detalle de candidato        |
-| `POST` | `/api/v1/candidates`                        | Crear candidatura           |
-| `PATCH`| `/api/v1/candidates/:id`                    | Actualizar candidatura      |
-| `GET`  | `/api/v1/candidates/:id/notes`              | Obtener notas               |
-| `POST` | `/api/v1/candidates/:id/notes`              | Añadir nota                 |
-| `DELETE`| `/api/v1/candidates/:id/notes/:noteId`     | Eliminar nota               |
+| `GET` | `/records?page=1&limit=100` | Listar candidaturas con paginación |
+| `GET` | `/records/:id` | Detalle de candidato |
+| `POST` | `/records` | Crear candidatura |
+| `PATCH` | `/records/:id` | Cambiar estado o etapa |
+| `PUT` | `/records/:id` | Guardar los datos editados |
+| `GET` | `/records/:id/notes` | Obtener notas |
+| `POST` | `/records/:id/notes` | Añadir nota |
+| `DELETE` | `/records/:id/notes/:noteId` | Eliminar nota |
+
+El listado espera `{ data, total, limit }` y recupera todas las páginas para
+filtrar localmente. Las notas admiten un array o `{ data: [...] }`.
+
+La aplicación mantiene dependencias y lockfile propios. Ejecuta `npm run lint`
+y `npm run build` en esta carpeta; el build necesita acceso a Google Fonts para
+la fuente Inter. El tracker queda fuera de las comprobaciones del backoffice padre.
 
 ---
 

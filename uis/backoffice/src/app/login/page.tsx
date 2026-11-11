@@ -80,7 +80,7 @@ export default function LoginPage() {
           </label>
 
           <p style={{ margin: 0, textAlign: "right" }}>
-            <Link href="/forgot-password">Olvidaste tu contrasena?</Link>
+            <Link href="/forgot-password">¿Olvidaste tu contraseña?</Link>
           </p>
 
           {error ? (

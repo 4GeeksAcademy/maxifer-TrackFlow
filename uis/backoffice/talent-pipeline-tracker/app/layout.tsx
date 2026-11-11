@@ -9,6 +9,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  icons: {
+    icon: "/trackflow-logo.svg",
+  },
   title: "TrackFlow Talent Pipeline",
   description: "Seguimiento de candidaturas para TrackFlow",
 };
